@@ -1,5 +1,4 @@
 class PdfsController < ApplicationController
-  AVATAR_URL = "https://media.licdn.com/dms/image/C4D03AQFrwBey7t9h5w/profile-displayphoto-shrink_200_200/0?e=1539216000&v=beta&t=ZNMpq2sTW9zR3nBXV9KcK7hqq1cfCScFTGwswFKC_YU"
 
   def index
     pdf = WickedPdf.new.pdf_from_string(
@@ -8,7 +7,7 @@ class PdfsController < ApplicationController
                                                  locals: {
                                                    first_name: params[:firstName],
                                                    last_name: params[:lastName] || '',
-                                                   avatar_url: params[:avatarUrl] || AVATAR_URL,
+                                                   avatar_url: params[:avatarUrl] || '',
                                                    current_year: params[:currentYear],
                                                    next_year: params[:nextYear],
                                                    courses: params[:courses],
