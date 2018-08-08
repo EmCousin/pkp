@@ -1,0 +1,59 @@
+/*
+ * This is a manifest file that'll be compiled into invoices.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ * WARNING : this file is required for pdf generation of invoices. Do NOT delete it. Thanks :)
+ *
+
+ *= require_self
+ */
+
+ body {
+   font-size: 24px;
+ }
+
+.avatar {
+  height: 200px;
+}
+
+.logo {
+  width: 40%;
+  float: right;
+}
+
+.title {
+  margin-top: 20px;
+  font-size: 40px;
+  text-align: center;
+}
+
+.fullname-container {
+  border: 2px solid #000;
+  padding: 0 20px;
+}
+
+.member-info {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+td {
+  border-bottom: 1px solid #000;
+  padding-left: : 30px;
+}
+
+.label-warning {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.signature {
+  margin-top: 20px;
+  height: 150px;
+}

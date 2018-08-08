@@ -1,0 +1,94 @@
+<div id="header">
+  <%= wicked_pdf_image_tag avatar_url, class: 'avatar' %>
+  <%= wicked_pdf_image_tag 'parkourparis.jpg', class: 'logo' %>
+</div>
+
+<h1 class="title">
+  Inscription <%= current_year %> / <%= next_year %>
+</h1>
+
+<div class="fullname-container">
+  <h2 class="fullname">
+    <%= last_name.upcase %> <%= first_name %>
+  </h2>
+</div>
+
+<table class="member-info">
+  <tr>
+    <td>Type de cours choisi</td>
+    <td><%= courses %></td>
+  </tr>
+  <tr>
+    <td>Date de naissance</td>
+    <td><%= date_of_birth %></td>
+  </tr>
+  <tr>
+    <td>Nationalité</td>
+    <td><%= citizenship %></td>
+  </tr>
+  <tr>
+    <td>Adresse</td>
+    <td><%= address %></td>
+  </tr>
+  <tr>
+    <td>Code postal</td>
+    <td><%= zip_code %></td>
+  </tr>
+  <tr>
+    <td>Ville</td>
+    <td><%= city %></td>
+  </tr>
+  <tr>
+    <td>Pays</td>
+    <td><%= country %>
+  </tr>
+  <tr>
+    <td>Téléphone fixe</td>
+    <td><%= phone_number %></td>
+  </tr>
+  <tr>
+    <td>Téléphone portable</td>
+    <td><%= cellphone_number %></td>
+  </tr>
+  <tr>
+    <td>E-mail</td>
+    <td><%= email %></td>
+  </tr>
+  <tr>
+    <td>Contact</td>
+    <td><%= contact_person_name %></td>
+  </tr>
+  <tr>
+    <td>Lien de parenté</td>
+    <td><%= contact_relationship %></td>
+  </tr>
+  <tr>
+    <td>Téléphone du contact</td>
+    <td><%= contact_phone_number %></td>
+  </tr>
+  <tr>
+    <td>Droit à l'image</td>
+    <td><%= agreed_to_publicity_right %></td>
+  </tr>
+  <tr>
+    <td>Tarif</td>
+    <td><%= fee %></td>
+  </tr>
+</table>
+
+<p class "terms">
+  Je certifie avoir pris connaissance des activités proposées
+  par l'Association ParKour Paris et déclare qu'elles n'engagent
+  que ma seule responsabilité en cas d'accident ou d'incident
+</p>
+
+<label class="label-warning">
+  Merci de bien vouloir apporter cette fiche signée
+  lors de votre premier cours.
+</label>
+
+<fieldset class="signature">
+  <legend>
+    Signature de l'adhérent ou de son représentant légal
+  </legend>
+</fieldset>
