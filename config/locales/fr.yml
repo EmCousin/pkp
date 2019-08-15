@@ -30,4 +30,23 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 fr:
-  hello: "Hello world"
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            first_name:
+              blank: doit être rempli.
+            last_name:
+              blank: doit être rempli.
+            password_confirmation:
+              confirmation: ne correspond pas.
+    models:
+      user:
+        one: Utilisateur
+        other: Utilisateurs
+    attributes:
+      user:
+        first_name: Prénom
+        last_name: Nom
+        admin: Admnistrateur
