@@ -5,4 +5,8 @@ Rails.application.routes.draw do
       post :notify
     end
   end
+
+  resources :admin, only: :index
+
+  root "admin#index"
 end
