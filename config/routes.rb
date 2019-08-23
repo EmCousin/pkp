@@ -7,7 +7,12 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :admin do
+    resources :courses
+  end
+
   resources :admin, only: :index
 
   root "admin#index"
+
 end
