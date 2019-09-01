@@ -12,7 +12,7 @@ class ApplicationMailer < ActionMailer::Base
                                                  locals: {
                                                    first_name: params[:firstName],
                                                    last_name: params[:lastName] || '',
-                                                   avatar_url: params[:avatarUrl] || '',
+                                                   avatar_url: params[:avatarUrl] || params[:avatarPath] || '',
                                                    current_year: params[:currentYear],
                                                    next_year: params[:nextYear],
                                                    courses: params[:courses],
