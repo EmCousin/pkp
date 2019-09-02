@@ -16,15 +16,15 @@ class Admin::CoursesController < AdminController
   end
 
   def edit
-    @course = Course.find_by(id: params[:id])
+    @course = Course.find(params[:id])
   end
 
   def update
-    @course = Course.find_by(id: params[:id])
+    @course = Course.find(params[:id])
   end
 
   def destroy
-    @course = Course.find_by(id: params[:id])
+    @course = Course.find(params[:id])
     @course.destroy
   end
 end
