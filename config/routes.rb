@@ -12,7 +12,6 @@ Rails.application.routes.draw do
   end
 
   resources :admin, only: :index
-
   root "admin#index"
 
 end
