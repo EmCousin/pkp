@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+<br />
+
+<table class="table">
+  <thead>
+    <tr>
+    </tr>
+  </thead>
+
+  <div class="container">
+    <tbody>
+      <% if @courses.empty? %>
+        <tr>
+          <td colspan="9" class="text-center">
+            <%= link_to t('.add_course'), new_admin_course_path %>
+          </td>
+        </tr>
+      <% else %>
+        <% @courses.each do |course| %>
+          <tr>
+            <td><%= course.title %></td>
+            <td><%= course.description %></td>
+            <td><%= course.capacity %></td>
+            <td><%= course.category %></td>
+            <td><%= link_to t('defaults.show'), method: :show %></td>
+            <td><%= link_to t('defaults.edit'), edit_admin_course_path %></td>
+            <td><%= link_to t('defaults.destroy'), admin_course_path, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </div>
+</table>
+
+<br />
+
+<% if @courses.any? %>
+  <%= link_to t('defaults.new', new_admin_course_path) %>
+<% end %>
