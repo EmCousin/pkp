@@ -1,11 +1,16 @@
 <p id="notice"><%= notice %></p>
 <br />
 
+<% if @courses.any? %>
+  <%= link_to t('defaults.new'), new_admin_course_path %>
+<% end %>
+<br/>
 <table class="table">
+  <div class="container">
   <thead>
-    <tr>
-    </tr>
+    <tr>Liste des cours de Parkour</tr>
   </thead>
+  </div>
 
   <div class="container">
     <tbody>
@@ -22,9 +27,9 @@
             <td><%= course.description %></td>
             <td><%= course.capacity %></td>
             <td><%= course.category %></td>
-            <td><%= link_to t('defaults.show'), method: :show %></td>
-            <td><%= link_to t('defaults.edit'), edit_admin_course_path %></td>
-            <td><%= link_to t('defaults.destroy'), admin_course_path, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            <td><%= link_to t('defaults.show'), admin_course_path(course.id) %></td>
+            <td><%= link_to t('defaults.edit'), edit_admin_course_path(course.id) %></td>
+            <td><%= link_to t('defaults.destroy'), admin_course_path(course.id), method: :delete, data: { confirm: 'Are you sure?' } %></td>
           </tr>
         <% end %>
       <% end %>
@@ -34,6 +39,4 @@
 
 <br />
 
-<% if @courses.any? %>
-  <%= link_to t('defaults.new', new_admin_course_path) %>
-<% end %>
+
