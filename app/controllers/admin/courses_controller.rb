@@ -12,7 +12,7 @@ class Admin::CoursesController < AdminController
   end
 
   def create
-    @course = Course.create(course_params)
+    @course = Course.new(course_params)
     if @course.save
       redirect_to admin_courses_path, notice: 'Cours créé avec succès !'
     else

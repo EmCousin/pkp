@@ -1,15 +1,14 @@
-<p id="notice"><%= notice %></p>
-<br />
-
-<% if @courses.any? %>
-  <%= link_to t('defaults.new'), new_admin_course_path %>
-<% end %>
 <br/>
+
+<%= link_to t('defaults.new'), new_admin_course_path %>
+
+<br/>
+
 <table class="table">
   <div class="container">
-  <thead>
-    <tr>Liste des cours de Parkour</tr>
-  </thead>
+    <thead>
+      <tr>Liste des cours de Parkour</tr>
+    </thead>
   </div>
 
   <div class="container">
@@ -36,7 +35,3 @@
     </tbody>
   </div>
 </table>
-
-<br />
-
-

@@ -28,7 +28,7 @@
 
   <div class="form-group">
     <%= form.label :category %>
-    <%= form.text_field :category, required: true, class: "form-control" %>
+    <%= form.select(:category, options_for_select(Course::CATEGORIES), required: true, class: "form-control") %>
   </div>
 
   <div class="actions">
