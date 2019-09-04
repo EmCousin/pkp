@@ -1,0 +1,24 @@
+<p>
+  <strong><%= Course.human_attribute_name(:title) %> :</strong>
+  <%= @course.title %>
+</p>
+
+<p>
+  <strong><%= Course.human_attribute_name(:description) %> :</strong>
+  <%= @course.description %>
+</p>
+
+<p>
+  <strong><%= Course.human_attribute_name(:capacity) %> :</strong>
+  <%= @course.capacity %>
+</p>
+
+<p>
+  <strong><%= Course.human_attribute_name(:category) %> :</strong>
+  <%= @course.category %>
+</p>
+
+<br/>
+
+<%= link_to t('defaults.edit'), edit_admin_course_path(@course.id) %>
+<%= link_to t('defaults.destroy'), admin_course_path(@course.id), method: :delete, data: { confirm: 'Are you sure?' } %>

@@ -1,0 +1,9 @@
+<div class="row">
+  <div class="col-md-6 offset-md-3">
+    <h1><%= t('.title') %></h1>
+
+    <%= render 'form', course: @course, url: admin_course_path(@course.id) %>
+
+    <%= link_to t('defaults.back'), admin_courses_path %>
+  </div>
+</div>

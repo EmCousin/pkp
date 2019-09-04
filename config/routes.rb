@@ -11,7 +11,7 @@ Rails.application.routes.draw do
     resources :courses
   end
 
-  resources :admin, only: :index
+  resources :admin, only: [:index, :show, :create]
   root "admin#index"
 
 end
