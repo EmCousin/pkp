@@ -41,6 +41,10 @@ fr:
               blank: doit être rempli
             password_confirmation:
               confirmation: ne correspond pas
+            email:
+              blank: doit être rempli
+            password:
+              blank: doit être rempli
         course:
           attributes:
             title:
