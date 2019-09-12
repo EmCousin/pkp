@@ -30,6 +30,24 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 fr:
+  defaults:
+    show: Voir
+    new: Nouveau %{resource}
+    edit: Modifier
+    update: Mettre à jour
+    destroy: Supprimer
+    back: Retour
+    send: Envoyer
+    from: de
+    to: à
+    login: Connexion
+    signup: Inscription
+    forgot_your_password: Mot de passe oublié ?
+    did_not_receive_confirmation_intructions: "Vous n'avez pas reçu les instructions de confirmation ?"
+    did_not_receive_unlock_instructions: "Vous n'avez pas reçu les instructions pour débloquer votre compte ?"
+    signin_with: Connexion avec %{provider}
+    characters_minimum: "%{minimum_password_length} caractères minimum"
+    send_reset_password_instructions: "M'envoyer les instructions pour réinitialiser mon mot de passe"
   activerecord:
     errors:
       models:
@@ -41,6 +59,10 @@ fr:
               blank: doit être rempli
             password_confirmation:
               confirmation: ne correspond pas
+            email:
+              blank: doit être rempli
+            password:
+              blank: doit être rempli
         course:
           attributes:
             title:

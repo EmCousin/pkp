@@ -32,6 +32,8 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'devise'
 gem 'devise-i18n'
+gem 'bootstrap', '~> 4.3.1'
+gem 'jquery-rails'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 gem 'rack-cors', require: 'rack/cors'
