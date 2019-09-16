@@ -25,7 +25,7 @@ class Admin::UsersController < AdminController
   end
 
   def update
-    @course = User.find(params[:id])
+    @user = User.find(params[:id])
     if @user.update(user_params)
       redirect_to admin_users_path, notice: 'Membre modifié avec succès !'
     else
@@ -42,6 +42,6 @@ class Admin::UsersController < AdminController
   private
 
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :phone_number, :address, :zip_code, :city, :country, :contact_name, :contact_phone_number, :contact_relationship, :agreed_to_publicity_right, :avatar)
+    params.require(:user).permit(:email, :first_name, :last_name, :phone_number, :address, :zip_code, :city, :country, :contact_name, :contact_phone_number, :contact_relationship, :agreed_to_publicity_right, :avatar)
   end
 end
