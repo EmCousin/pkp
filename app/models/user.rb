@@ -7,14 +7,14 @@ class User < ApplicationRecord
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :birthdate, presence: true
-  validates :phone_number, presence: true
+  validates :phone_number, presence: true, phone: true
   validates :address, presence: true
   validates :zip_code, presence: true
   validates :city, presence: true
   validates :country, presence: true
   validates :contact_name, presence: true
-  validates :contact_phonering, presence: true
-  validates :contact_relatring, presence: true, inclusion: { in: CONTACTS }
-  validates :agreed_to_pub, :boolean, presence: true
+  validates :contact_phone_number, presence: true, phone: true
+  validates :contact_relationship, presence: true, inclusion: { in: CONTACTS }
+  validates :agreed_to_publicity_right, presence: true
   validates :avatar, presence: true
 end
