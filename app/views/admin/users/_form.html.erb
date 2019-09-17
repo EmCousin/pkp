@@ -1,0 +1,97 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <%= form_with(model: user, local: true, url: url) do |form| %>
+        <% if user.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= pluralize(user.errors.count, "error") %> prohibited this member from being saved:</h2>
+
+            <ul>
+            <% user.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="form-group">
+          <%= form.label :email %><br />
+          <%= form.email_field :email, autocomplete: "email", required: true, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :first_name %><br />
+          <%= form.text_field :first_name, autofocus: true, required: true, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :last_name %><br />
+          <%= form.text_field :last_name, required: true, class: "form-control" %>
+        </div>
+
+
+        <div class="form-group">
+          <%= form.label :birthdate %>
+          <%= form.date_field :birthdate, required: true, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :phone_number %><br />
+          <%= form.telephone_field :phone_number, required: true, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :address %>
+          <%= form.text_field :address, required: true, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :zip_code %>
+          <%= form.text_field :zip_code, required: true, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :city %>
+          <%= form.text_field :city, required: true, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :country %>
+          <%= form.text_field :country, required: true, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :contact_name %>
+          <%= form.text_field :contact_name, required: true, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :contact_phone_number %><br />
+          <%= form.telephone_field :contact_phone_number, required: true, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :contact_relationship %>
+          <%= form.select(:contact_relationship, options_for_select(User::CONTACTS), required: true, class: "form-control") %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :agreed_to_publicity_right %><br />
+          <%= form.check_box :agreed_to_publicity_right, required: true, class: "form-control" %>
+        </div>
+<!--
+        <div class="form-group"> -->
+          <%#= form_with avatar: @user do |f| %>
+          <%#= f.file_field :picture %>
+          <%# end %>
+
+          <%#= form. :avatar, required: true, class: "form-control" %>
+   <!--     </div>
+ -->
+        <div class="actions">
+          <%= form.submit "Sauveguarder", class: "btn btn-dark btn-lg" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
