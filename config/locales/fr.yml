@@ -63,6 +63,10 @@ fr:
               blank: doit être rempli
             password:
               blank: doit être rempli
+            birthdate:
+              blank: doit être rempli
+            avatar:
+               blank: doit être rempli
         course:
           attributes:
             title:

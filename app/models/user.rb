@@ -5,6 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   CONTACTS = ['Père', 'Mère', 'Tuteur / Tutrice', 'Conjoint(e)', 'Frère', 'Sœur', 'Grand-père', 'Grand-mère', 'Oncle', 'Tante', 'Cousin(e)', 'Ami(e)', 'Autre'].freeze
   validates :email, presence: true
+  validates :password, presence: true
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :birthdate, presence: true
