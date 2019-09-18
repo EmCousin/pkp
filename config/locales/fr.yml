@@ -48,6 +48,7 @@ fr:
     signin_with: Connexion avec %{provider}
     characters_minimum: "%{minimum_password_length} caractères minimum"
     send_reset_password_instructions: "M'envoyer les instructions pour réinitialiser mon mot de passe"
+    are_you_sure: "Vous êtes sûr ?"
   activerecord:
     errors:
       models:
