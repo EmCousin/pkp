@@ -48,6 +48,8 @@ fr:
     signin_with: Connexion avec %{provider}
     characters_minimum: "%{minimum_password_length} caractères minimum"
     send_reset_password_instructions: "M'envoyer les instructions pour réinitialiser mon mot de passe"
+    are_you_sure: "Vous êtes sûr ?"
+    save: Sauvegarder
   activerecord:
     errors:
       models:
@@ -63,6 +65,15 @@ fr:
               blank: doit être rempli
             password:
               blank: doit être rempli
+              too_short: trop curt
+            birthdate:
+              blank: doit être rempli
+            avatar:
+              blank: doit être rempli
+            phone_number:
+              invalid: "n'est pas valide"
+            contact_phone_number:
+              invalid: "n'est pas valide"
         course:
           attributes:
             title:
@@ -76,8 +87,8 @@ fr:
               inclusion: "%{value} n'est pas une valeur valide"
     models:
       user:
-        one: Utilisateur
-        other: Utilisateurs
+        one: Membre
+        other: Membres
       course:
         one: Cours
         other: Cours
@@ -86,8 +97,25 @@ fr:
         first_name: Prénom
         last_name: Nom
         admin: Admnistrateur
+        birthdate: Date de naissance
+        address: Adresse
+        zip_code: Code Postal
+        city: Ville
+        country: Pays
+        phone_number: Numéro de téléphone
+        contact_name: Personne à contacter
+        contact_phone_number: Numéro de téléphone du contact
+        contact_relationship: Lien de parenté du contact
+        agreed_to_publicity_right: "Droit à l'image"
       course:
         title: Titre du cours
         description: description
         capacity: Capacité
         category: Catégorie
+  admin:
+    users:
+      new:
+        title: Ajouter un membre
+    courses:
+      new:
+        title: Creer un cours

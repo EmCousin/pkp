@@ -1,17 +1,13 @@
-<br/>
+<div class="container">
+  <%= link_to t('defaults.new', resource: Course.model_name.human.downcase), new_admin_course_path %>
 
-<%= link_to t('defaults.new'), new_admin_course_path %>
+  <hr />
 
-<br/>
-
-<table class="table">
-  <div class="container">
+  <table class="table">
     <thead>
       <tr>Liste des cours de Parkour</tr>
     </thead>
-  </div>
 
-  <div class="container">
     <tbody>
       <% if @courses.empty? %>
         <tr>
@@ -28,10 +24,10 @@
             <td><%= course.category %></td>
             <td><%= link_to t('defaults.show'), admin_course_path(course.id) %></td>
             <td><%= link_to t('defaults.edit'), edit_admin_course_path(course.id) %></td>
-            <td><%= link_to t('defaults.destroy'), admin_course_path(course.id), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            <td><%= link_to t('defaults.destroy'), admin_course_path(course.id), method: :delete, data: { confirm: t('defaults.are_you_sure') } %></td>
           </tr>
         <% end %>
       <% end %>
     </tbody>
-  </div>
-</table>
+  </table>
+</div>
