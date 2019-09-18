@@ -15,22 +15,22 @@
         <% end %>
 
         <div class="form-group">
-          <%= form.label :email %><br />
+          <%= form.label :email %>
           <%= form.email_field :email, autocomplete: "email", required: true, class: "form-control" %>
         </div>
 
         <div class="form-group">
-          <%= form.label :password %><br />
+          <%= form.label :password %>
           <%= form.password_field :password, autocomplete: "password", required: true, class: "form-control" %>
         </div>
 
         <div class="form-group">
-          <%= form.label :first_name %><br />
+          <%= form.label :first_name %>
           <%= form.text_field :first_name, autofocus: true, required: true, class: "form-control" %>
         </div>
 
         <div class="form-group">
-          <%= form.label :last_name %><br />
+          <%= form.label :last_name %>
           <%= form.text_field :last_name, required: true, class: "form-control" %>
         </div>
 
@@ -40,7 +40,7 @@
         </div>
 
         <div class="form-group">
-          <%= form.label :phone_number %><br />
+          <%= form.label :phone_number %>
           <%= form.telephone_field :phone_number, required: true, class: "form-control" %>
         </div>
 
@@ -70,30 +70,27 @@
         </div>
 
         <div class="form-group">
-          <%= form.label :contact_phone_number %><br />
+          <%= form.label :contact_phone_number %>
           <%= form.telephone_field :contact_phone_number, required: true, class: "form-control" %>
         </div>
 
         <div class="form-group">
-          <%= form.label :contact_relationship %>
-          <%= form.select(:contact_relationship, options_for_select(User::CONTACTS), required: true, class: "form-control") %>
+          <%= form.label :contact_relationship %><br />
+          <%= form.select(:contact_relationship, options_for_select(User::CONTACTS), { include_blank: true }, required: true, class: "form-control") %>
         </div>
 
         <div class="form-group">
-          <%= form.label :agreed_to_publicity_right %><br />
-          <%= form.check_box :agreed_to_publicity_right, required: true, class: "form-control" %>
+          <%= form.label :agreed_to_publicity_right %>
+          <%= form.check_box :agreed_to_publicity_right, required: true %>
         </div>
-<!--
-        <div class="form-group"> -->
-          <%#= form_with avatar: @user do |f| %>
-          <%#= f.file_field :picture %>
-          <%# end %>
 
-          <%#= form. :avatar, required: true, class: "form-control" %>
-   <!--     </div>
- -->
+        <div class="form-group">
+          <%= form.label :avatar %>
+          <%= form.file_field :avatar, required: true %>
+        </div>
+
         <div class="actions">
-          <%= form.submit "Sauveguarder", class: "btn btn-dark btn-lg" %>
+          <%= form.submit t('defaults.save'), class: "btn btn-dark btn-lg" %>
         </div>
       <% end %>
     </div>
