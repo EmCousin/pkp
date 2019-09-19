@@ -17,4 +17,6 @@ class User < ApplicationRecord
   validates :contact_relationship, presence: true, inclusion: { in: CONTACTS }
   validates :agreed_to_publicity_right, presence: true
   validates :avatar, presence: true
+
+  has_one_attached :avatar
 end
