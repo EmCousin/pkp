@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  member: one
+  year: 1
+  fee: 9.99
+
+two:
+  member: two
+  year: 1
+  fee: 9.99
