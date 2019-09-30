@@ -5,7 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   CONTACTS = ['Père', 'Mère', 'Tuteur / Tutrice', 'Conjoint(e)', 'Frère', 'Sœur', 'Grand-père', 'Grand-mère', 'Oncle', 'Tante', 'Cousin(e)', 'Ami(e)', 'Autre'].freeze
 
-  has_many :subscriptions
+  has_many :subscriptions, foreign_key: :member_id, dependent: :destroy
   has_many :courses, through: :subscriptions
 
   validates :first_name, presence: true
