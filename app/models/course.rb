@@ -5,8 +5,6 @@ class Course < ApplicationRecord
   has_many :subscriptions, through: :courses_subscriptions
   has_many :members, through: :subscriptions
 
-
-
   validates :title, :capacity, :category, presence: true
 
   validates :capacity, numericality: { greater_than_or_equal_to: 1, only_integer: true }
