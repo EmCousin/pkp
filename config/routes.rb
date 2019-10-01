@@ -10,9 +10,9 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :courses
     resources :users
+    resources :subscriptions
   end
 
   resources :admin, only: [:index, :show, :create]
   root "admin#index"
-
 end
