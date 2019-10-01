@@ -16,14 +16,16 @@
 
         <div class="form-group">
           <%= form.label :member_id %>
-          <%= form.collection_select(:member_id, User.all, :id, :full_name, {}, class: "form-control") %>
+          <%= form.collection_select(:member_id, User.all, :id, :full_name, { include_blank: true }, class: "form-control") %>
         </div>
 
         <div class="form-group">
           <%= form.label :course_ids %>
           <%= form.collection_check_boxes :course_ids, Course.all, :id, :title do |b| %>
-            <%= b.check_box(class: "form-check-input") %>
-            <%= b.label(class: "form-check-label") %>
+            <div class="form-check">
+              <%= b.check_box(class: "form-check-input") %>
+              <%= b.label(class: "form-check-label") %>
+            </div>
           <% end %>
         </div>
 
