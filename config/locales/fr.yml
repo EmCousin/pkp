@@ -91,6 +91,8 @@ fr:
               required: est requis
             member_id:
               taken: est dejà pris
+            courses:
+              must_exist: ":  minimum un"
     models:
       user:
         one: Membre
