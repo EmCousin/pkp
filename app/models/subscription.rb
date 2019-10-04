@@ -9,6 +9,30 @@ class Subscription < ApplicationRecord
   validate :year_is_current, on: :create
   validate :at_least_one_is_checked
 
+
+  def compute_fee
+    courses_count = courses.count
+    category = courses.first.category
+
+    if courses_count == 1 && category == 'Adulte'
+      175
+    elsif courses_count == 2 && category == 'Adulte'
+      285
+    elsif courses_count == 3 && category == 'Adulte'
+      330
+    elsif courses_count == 1 && category == 'Adolescent (10 - 12 ans)'
+      175
+    elsif courses_count == 1 && category == 'Adolescent (13 - 15 ans)'
+      175
+    elsif courses_count == 2 && category == 'Adolescent (10 - 12 ans)'
+      300
+    elsif courses_count == 2 && category == 'Adolescent (13 - 15 ans)'
+      300
+    elsif courses_count == 1 && category == 'Kidz (6 - 9 ans)'
+      175
+    end
+  end
+
   private
 
   def year_is_current
