@@ -85,6 +85,14 @@ fr:
             category:
               blank: doit être rempli
               inclusion: "%{value} n'est pas une valeur valide"
+        subscription:
+          attributes:
+            member:
+              required: est requis
+            member_id:
+              taken: est dejà pris
+            courses:
+              must_exist: ":  minimum un"
     models:
       user:
         one: Membre
