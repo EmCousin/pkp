@@ -22,6 +22,7 @@
             <td><%= course.description %></td>
             <td><%= course.capacity %></td>
             <td><%= course.category %></td>
+            <td><%= course.weekday %></td>
             <td><%= link_to t('defaults.show'), admin_course_path(course.id) %></td>
             <td><%= link_to t('defaults.edit'), edit_admin_course_path(course.id) %></td>
             <td><%= link_to t('defaults.destroy'), admin_course_path(course.id), method: :delete, data: { confirm: t('defaults.are_you_sure') } %></td>

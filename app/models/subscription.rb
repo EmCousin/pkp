@@ -10,6 +10,7 @@ class Subscription < ApplicationRecord
   validate :has_at_least_one_course
   validate :has_maximum_three_courses
   validate :courses_are_of_the_same_category
+  validate :maximum_one_course_per_day
 
 
   def compute_fee
@@ -63,5 +64,21 @@ class Subscription < ApplicationRecord
       end
     end  
     errors.add(:courses, :unique_category) unless unique_category
+  end
+
+  def maximum_one_course_per_day
+    unique_weekday = false
+    previous_weekday = nil
+    courses.each do |course|
+      if previous_weekday == nil 
+        previous_weekday = course.weekday
+      else
+        if course.weekday == previous_weekday
+          unique_weekday = true
+          break
+        end
+      end
+    end  
+    errors.add(:courses, :unique_weekday) if unique_weekday
   end
 end
