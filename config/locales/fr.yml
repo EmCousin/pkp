@@ -95,6 +95,7 @@ fr:
               must_exist: ":  minimum un"
               limit_exceeded: ": maximum trois"
               unique_category: ": doivent être de la même catégorie"
+              unique_weekday: ": ne doivent pas être le même jour"
     models:
       user:
         one: Membre
@@ -122,6 +123,7 @@ fr:
         description: description
         capacity: Capacité
         category: Catégorie
+        weekday: Jour de la semaine
   admin:
     users:
       new:

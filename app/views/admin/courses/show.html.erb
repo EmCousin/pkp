@@ -18,6 +18,11 @@
   <%= @course.category %>
 </p>
 
+<p>
+  <strong><%= Course.human_attribute_name(:weekday) %> :</strong>
+  <%= @course.weekday %>
+</p>
+
 <br/>
 
 <%= link_to t('defaults.edit'), edit_admin_course_path(@course.id) %>
