@@ -93,6 +93,8 @@ fr:
               taken: est dejà pris
             courses:
               must_exist: ":  minimum un"
+              limit_exceeded: ": maximum trois"
+              unique_category: ": doivent être de la même catégorie"
     models:
       user:
         one: Membre
