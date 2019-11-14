@@ -13,9 +13,11 @@ class Admin::SubscriptionsController < AdminController
 
   def create
     @subscription = Subscription.new(subscription_params)
-    @subscription.fee = 0
     @subscription.year = Time.now.year
+    @subscription.fee = 0
     if @subscription.save
+      @subscription.fee = @subscription.compute_fee
+      @subscription.save
       redirect_to admin_subscriptions_path, notice: 'Inscription créée avec succès !'
     else
       render :new
@@ -29,6 +31,8 @@ class Admin::SubscriptionsController < AdminController
   def update
     @subscription = Subscription.find(params[:id])
     if @subscription.update(subscription_params)
+      @subscription.fee = @subscription.compute_fee
+      @subscription.save
       redirect_to admin_subscriptions_path, notice: 'Inscription modifiée avec succès !'
     else
       render :edit
