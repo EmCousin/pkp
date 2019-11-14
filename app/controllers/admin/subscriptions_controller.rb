@@ -31,6 +31,8 @@ class Admin::SubscriptionsController < AdminController
   def update
     @subscription = Subscription.find(params[:id])
     if @subscription.update(subscription_params)
+      @subscription.fee = @subscription.compute_fee
+      @subscription.save
       redirect_to admin_subscriptions_path, notice: 'Inscription modifiée avec succès !'
     else
       render :edit
