@@ -1,6 +1,5 @@
 class Course < ApplicationRecord
   CATEGORIES = ['Adulte', 'Adolescent (13 - 15 ans)', 'Adolescent (10 - 12 ans)', 'Kidz (6 - 9 ans)'].freeze
-  DAYS = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'].freeze
   
   has_many :courses_subscriptions, dependent: :destroy
   has_many :subscriptions, through: :courses_subscriptions
