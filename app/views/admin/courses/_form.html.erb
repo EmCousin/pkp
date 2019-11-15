@@ -1,48 +1,46 @@
-<div class="container">
-  <div class="row">
-    <div class="col-md-6 offset-md-3">
-      <%= form_with(model: course, local: true, url: url) do |form| %>
-        <% if course.errors.any? %>
-          <div id="error_explanation">
-            <h2><%= pluralize(course.errors.count, "error") %> prohibited this course from being saved:</h2>
+<div class="row">
+  <div class="col-md-6 offset-md-3">
+    <%= form_with(model: course, local: true, url: url) do |form| %>
+      <% if course.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(course.errors.count, "error") %> prohibited this course from being saved:</h2>
 
-            <ul>
-            <% course.errors.full_messages.each do |message| %>
-              <li><%= message %></li>
-            <% end %>
-            </ul>
-          </div>
-        <% end %>
-
-        <div class="form-group">
-          <%= form.label :title %>
-          <%= form.text_field :title, required: true, class: "form-control" %>
-        </div>
-
-        <div class="form-group">
-          <%= form.label :descrition %>
-          <%= form.text_area :description, class: "form-control" %>
-        </div>
-
-        <div class="form-group">
-          <%= form.label :capacity %>
-          <%= form.number_field :capacity, required: true, class: "form-control", min: 1 %>
-        </div>
-
-        <div class="form-group">
-          <%= form.label :category %>
-          <%= form.collection_select(:category, Course::CATEGORIES, :to_s, :to_s, required: true, class: "form-control") %>
-        </div>
-
-        <div class="form-group">
-          <%= form.label :weekday %>
-          <%= form.collection_select(:weekday, Course.weekdays.to_a, :first, :first, required: true, class: "form-control") %>
-        </div>
-
-        <div class="actions">
-          <%= form.submit t('defaults.save'), class: "btn btn-dark btn-lg" %>
+          <ul>
+          <% course.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+          </ul>
         </div>
       <% end %>
-    </div>
+
+      <div class="form-group">
+        <%= form.label :title %>
+        <%= form.text_field :title, required: true, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :descrition %>
+        <%= form.text_area :description, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :capacity %>
+        <%= form.number_field :capacity, required: true, class: "form-control", min: 1 %>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :category %>
+        <%= form.collection_select(:category, Course::CATEGORIES, :to_s, :to_s, required: true, class: "form-control") %>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :weekday %>
+        <%= form.collection_select(:weekday, Course.weekdays.to_a, :first, :first, required: true, class: "form-control") %>
+      </div>
+
+      <div class="actions">
+        <%= form.submit t('defaults.save'), class: "btn btn-dark btn-lg" %>
+      </div>
+    <% end %>
   </div>
 </div>

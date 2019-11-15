@@ -1,34 +1,32 @@
-<div class="container">
-  <%= link_to t('defaults.new', resource: Course.model_name.human.downcase), new_admin_course_path %>
+<%= link_to t('defaults.new', resource: Course.model_name.human.downcase), new_admin_course_path %>
 
-  <hr />
+<hr />
 
-  <table class="table">
-    <thead>
-      <tr>Liste des cours de Parkour</tr>
-    </thead>
+<table class="table">
+  <thead>
+    <tr>Liste des cours de Parkour</tr>
+  </thead>
 
-    <tbody>
-      <% if @courses.empty? %>
+  <tbody>
+    <% if @courses.empty? %>
+      <tr>
+        <td colspan="9" class="text-center">
+          <%= link_to t('.add_course'), new_admin_course_path %>
+        </td>
+      </tr>
+    <% else %>
+      <% @courses.each do |course| %>
         <tr>
-          <td colspan="9" class="text-center">
-            <%= link_to t('.add_course'), new_admin_course_path %>
-          </td>
+          <td><%= course.title %></td>
+          <td><%= course.description %></td>
+          <td><%= course.capacity %></td>
+          <td><%= course.category %></td>
+          <td><%= course.weekday %></td>
+          <td><%= link_to t('defaults.show'), admin_course_path(course.id) %></td>
+          <td><%= link_to t('defaults.edit'), edit_admin_course_path(course.id) %></td>
+          <td><%= link_to t('defaults.destroy'), admin_course_path(course.id), method: :delete, data: { confirm: t('defaults.are_you_sure') } %></td>
         </tr>
-      <% else %>
-        <% @courses.each do |course| %>
-          <tr>
-            <td><%= course.title %></td>
-            <td><%= course.description %></td>
-            <td><%= course.capacity %></td>
-            <td><%= course.category %></td>
-            <td><%= course.weekday %></td>
-            <td><%= link_to t('defaults.show'), admin_course_path(course.id) %></td>
-            <td><%= link_to t('defaults.edit'), edit_admin_course_path(course.id) %></td>
-            <td><%= link_to t('defaults.destroy'), admin_course_path(course.id), method: :delete, data: { confirm: t('defaults.are_you_sure') } %></td>
-          </tr>
-        <% end %>
       <% end %>
-    </tbody>
-  </table>
-</div>
+    <% end %>
+  </tbody>
+</table>
