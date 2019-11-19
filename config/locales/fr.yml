@@ -120,7 +120,7 @@ fr:
         agreed_to_publicity_right: "Droit à l'image"
       course:
         title: Titre du cours
-        description: description
+        description: Description
         capacity: Capacité
         category: Catégorie
         weekday: Jour de la semaine
