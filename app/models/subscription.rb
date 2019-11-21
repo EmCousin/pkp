@@ -12,7 +12,6 @@ class Subscription < ApplicationRecord
   validate :courses_are_of_the_same_category
   validate :maximum_one_course_per_day
 
-
   def compute_fee
     courses_count = courses.count
     category = courses.first.category
