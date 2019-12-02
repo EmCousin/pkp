@@ -126,6 +126,9 @@ fr:
         capacity: Capacité
         category: Catégorie
         weekday: Jour de la semaine
+      subscription:
+        fee: Cotisation
+        year: Année
   admin:
     users:
       new:

@@ -1,30 +1,32 @@
-<%= link_to t('defaults.new', resource: Subscription.model_name.human.downcase), new_admin_subscription_path %>
+<div class="container">
+  <%= link_to t('defaults.new', resource: Subscription.model_name.human.downcase), new_admin_subscription_path %>
 
-<hr />
+  <hr />
 
-<table class="table">
-  <thead>
-    <tr>Liste des inscriptions </tr>
-  </thead>
+  <table class="table">
+    <thead>
+      <tr>Liste des inscriptions </tr>
+    </thead>
 
-  <tbody>
-    <% if @subscriptions.empty? %>
-      <tr>
-        <td colspan="9" class="text-center">
-          <%= link_to t('.add_subscription'), new_admin_subscription_path %>
-        </td>
-      </tr>
-    <% else %>
-      <% @subscriptions.each do |subscription| %>
+    <tbody>
+      <% if @subscriptions.empty? %>
         <tr>
-          <td><%= subscription.member.full_name %></td>
-          <td><%= subscription.fee %></td>
-          <td><%= subscription.year %></td>
-          <td><%= link_to t('defaults.show'), admin_subscription_path(subscription.id) %></td>
-          <td><%= link_to t('defaults.edit'), edit_admin_subscription_path(subscription.id) %></td>
-          <td><%= link_to t('defaults.destroy'), admin_subscription_path(subscription.id), method: :delete, data: { confirm: t('defaults.are_you_sure') } %></td>
+          <td colspan="9" class="text-center">
+            <%= link_to t('.add_subscription'), new_admin_subscription_path %>
+          </td>
         </tr>
+      <% else %>
+        <% @subscriptions.each do |subscription| %>
+          <tr>
+            <td><%= subscription.member.full_name %></td>
+            <td><%= subscription.fee %></td>
+            <td><%= subscription.year %></td>
+            <td><%= link_to t('defaults.show'), admin_subscription_path(subscription.id) %></td>
+            <td><%= link_to t('defaults.edit'), edit_admin_subscription_path(subscription.id) %></td>
+            <td><%= link_to t('defaults.destroy'), admin_subscription_path(subscription.id), method: :delete, data: { confirm: t('defaults.are_you_sure') } %></td>
+          </tr>
+        <% end %>
       <% end %>
-    <% end %>
-  </tbody>
-</table>
+    </tbody>
+  </table>
+</div>
