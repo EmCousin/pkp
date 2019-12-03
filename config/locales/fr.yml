@@ -118,12 +118,17 @@ fr:
         contact_phone_number: Numéro de téléphone du contact
         contact_relationship: Lien de parenté du contact
         agreed_to_publicity_right: "Droit à l'image"
+        avatar: Photo
+        full_name: Nom complet
       course:
         title: Titre du cours
-        description: description
+        description: Description
         capacity: Capacité
         category: Catégorie
         weekday: Jour de la semaine
+      subscription:
+        fee: Cotisation
+        year: Année
   admin:
     users:
       new:

@@ -14,3 +14,18 @@
 
 /* Custom bootstrap variables must be set or imported *before* bootstrap. */
 @import "bootstrap";
+
+
+body {
+  // object-position: 50% 50%;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  height: 100%;
+  background-image: url("pkp.webp");
+
+  .container.background-white {
+    background-color: white;
+    opacity: 0.95;
+  }
+}
