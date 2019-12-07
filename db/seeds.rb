@@ -6,6 +6,12 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+## Default user
+
+Subscription.destroy_all
+Course.destroy_all
+User.destroy_all
+
 user = User.new
 user.email = "monemail@mail.fr"
 user.first_name = "Maria"
@@ -24,3 +30,6 @@ user.contact_phone_number = "0123456987"
 user.contact_relationship = User::CONTACTS.sample
 user.password = "coucou"
 user.save!
+
+## Default courses
+Rake::Task["courses:seed"].invoke
