@@ -2,15 +2,15 @@ namespace :courses do
   desc 'Seed default courses'
   task seed: :environment do
     def create_courses!(category, weekdays, slots)
-      weekdays.to_a.foreach do |weekday_name, weekday_index|
-        slots.foreach do |slot|
+      weekdays.to_a.each do |weekday_name, weekday_index|
+        slots.each do |slot|
           title = "#{weekday_name.capitalize} #{category} #{slot}"
           puts "Creating course #{title}..."
           Course.create!(
             title: title,
             description: title,
             capacity: 60,
-            weekday: weekdayz_index,
+            weekday: weekday_index,
             category: category
           )
           puts "Course #{title} created."
@@ -34,7 +34,7 @@ namespace :courses do
         slots = ['11h - 12h']
       end
 
-      create_courses!(category, weekdays, slots, 60)
+      create_courses!(category, weekdays, slots)
     end
   end
 end
