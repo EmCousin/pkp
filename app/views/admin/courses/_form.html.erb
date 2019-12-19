@@ -19,7 +19,7 @@
       </div>
 
       <div class="form-group">
-        <%= form.label :descrition %>
+        <%= form.label :description %>
         <%= form.text_area :description, class: "form-control" %>
       </div>
 
@@ -30,16 +30,17 @@
 
       <div class="form-group">
         <%= form.label :category %>
-        <%= form.collection_select(:category, Course::CATEGORIES, :to_s, :to_s, required: true, class: "form-control") %>
+        <%= form.collection_select(:category, Course::CATEGORIES, :to_s, :to_s, {}, required: true, class: "form-control") %>
       </div>
 
       <div class="form-group">
         <%= form.label :weekday %>
-        <%= form.collection_select(:weekday, Course.weekdays.to_a, :first, :first, required: true, class: "form-control") %>
+        <%= form.collection_select(:weekday, Course.weekdays.to_a, :first, :first, {}, required: true, class: "form-control") %>
       </div>
 
       <div class="actions">
-        <%= form.submit t('defaults.save'), class: "btn btn-dark btn-lg" %>
+        <%= link_to t('defaults.back'), admin_courses_path, class: "btn btn-link float-left" %>
+        <%= form.submit t('defaults.save'), class: "btn btn-dark float-lg-right" %>
       </div>
     <% end %>
   </div>

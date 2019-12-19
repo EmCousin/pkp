@@ -136,3 +136,5 @@ fr:
     courses:
       new:
         title: Creer un cours
+      edit:
+        title: Modifier le cours  
