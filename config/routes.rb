@@ -10,7 +10,11 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :courses
     resources :users
-    resources :subscriptions
+    resources :subscriptions do
+      member do
+        delete :unlink_course
+      end
+    end
   end
 
   resources :admin, only: [:index, :show, :create]
