@@ -49,7 +49,7 @@ class Admin::SubscriptionsController < AdminController
     @subscription = Subscription.find(params[:id])
     @course = @subscription.courses.find(params[:course_id])
     @subscription.course_ids -= [@course.id]
-    redirect_to admin_user_path(@subscription.member_id), notice: 'Cours retiré avec succès !'
+    redirect_back fallback_location: root_path, notice: 'Cours retiré avec succès !'
   end
 
   private
