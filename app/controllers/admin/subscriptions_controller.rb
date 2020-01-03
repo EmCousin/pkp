@@ -45,6 +45,13 @@ class Admin::SubscriptionsController < AdminController
     redirect_to admin_subscriptions_path, notice: 'Inscription supprimée avec succès !'
   end
 
+  def unlink_course
+    @subscription = Subscription.find(params[:id])
+    @course = @subscription.courses.find(params[:course_id])
+    @subscription.course_ids -= [@course.id]
+    redirect_back fallback_location: root_path, notice: 'Cours retiré avec succès !'
+  end
+
   private
 
   def subscription_params

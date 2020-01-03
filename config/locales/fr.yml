@@ -129,12 +129,20 @@ fr:
       subscription:
         fee: Cotisation
         year: Année
+
+  #views
   admin:
     users:
       new:
         title: Ajouter un membre
+      show:
+        remove_from_course: Retirer du cours
+        remove_from_course_are_you_sure: Êtes-vous sûr(e) de vouloir retirer %{member_full_name} du cours %{course_title} ?
     courses:
       new:
-        title: Creer un cours
+        title: Créer un cours
       edit:
-        title: Modifier le cours  
+        title: Modifier le cours
+      show:
+        remove_from_course: Retirer du cours
+        remove_from_course_are_you_sure: Êtes-vous sûr(e) de vouloir retirer %{member_full_name} du cours %{course_title} ?
