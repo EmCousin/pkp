@@ -1,0 +1,31 @@
+require:
+  - rubocop-rails
+  - rubocop-performance
+
+inherit_mode:
+  merge:
+    - Exclude
+
+AllCops:
+  Exclude:
+    - bin/**/*
+    - config/**/*
+    - db/**/*
+    - lib/tasks/**/*
+    - test/**/*
+    - spec/**/*
+
+Documentation:
+  Enabled: false
+
+Rails:
+  Enabled: false
+
+Metrics/ClassLength:
+  Max: 160
+
+Metrics/LineLength:
+  Max: 160
+
+Style/HashSyntax:
+  EnforcedStyle: 'ruby19_no_mixed_keys'
