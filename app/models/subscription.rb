@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Subscription < ApplicationRecord
   belongs_to :member, class_name: 'User'
   has_many :courses_subscriptions, dependent: :destroy
@@ -53,7 +55,7 @@ class Subscription < ApplicationRecord
     unique_category = true
     previous_category = nil
     courses.each do |course|
-      if previous_category == nil 
+      if previous_category.nil?
         previous_category = course.category
       else
         if course.category != previous_category
@@ -61,7 +63,7 @@ class Subscription < ApplicationRecord
           break
         end
       end
-    end  
+    end
     errors.add(:courses, :unique_category) unless unique_category
   end
 
@@ -69,7 +71,7 @@ class Subscription < ApplicationRecord
     unique_weekday = false
     previous_weekday = nil
     courses.each do |course|
-      if previous_weekday == nil 
+      if previous_weekday.nil?
         previous_weekday = course.weekday
       else
         if course.weekday == previous_weekday
@@ -77,7 +79,7 @@ class Subscription < ApplicationRecord
           break
         end
       end
-    end  
+    end
     errors.add(:courses, :unique_weekday) if unique_weekday
   end
 end

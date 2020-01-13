@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApplicationMailer < ActionMailer::Base
   default from: 'inscriptions@parkourparis.fr'
   layout 'mailer'
@@ -7,7 +9,7 @@ class ApplicationMailer < ActionMailer::Base
     @current_year = params[:currentYear]
     @next_year = params[:nextYear]
     pdf = WickedPdf.new.pdf_from_string(
-      render_to_string 'templates/pdf.html.erb', layout: 'pdf.html.erb',
+      render_to_string('templates/pdf.html.erb', layout: 'pdf.html.erb',
                                                  encoding: 'UTF-8',
                                                  locals: {
                                                    first_name: params[:firstName],
@@ -30,8 +32,7 @@ class ApplicationMailer < ActionMailer::Base
                                                    contact_phone_number: params[:contactPhoneNumber],
                                                    agreed_to_publicity_right: params[:agreedToPublicityRight],
                                                    fee: params[:fee]
-                                                 }
-
+                                                 })
     )
 
     attachments['fiche.pdf'] = { mime_type: 'application/pdf', content: pdf.force_encoding('UTF-8') }

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::SubscriptionsController < AdminController
   def index
     @subscriptions = Subscription.all
