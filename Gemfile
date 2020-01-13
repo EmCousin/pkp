@@ -58,6 +58,11 @@ group :development, :test do
   gem 'shoulda-matchers'
 end
 
+group :test do
+  gem 'rspec_junit_formatter'
+  gem 'shoulda-callback-matchers', '~> 1.1.1'
+end
+
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
   gem 'listen', '>= 3.0.5', '< 3.2'
