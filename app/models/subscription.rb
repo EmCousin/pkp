@@ -9,8 +9,8 @@ class Subscription < ApplicationRecord
   validates :fee, numericality: { greater_than_or_equal_to: 0 }, presence: true
   validates :member_id, uniqueness: { scope: :year }
   validate :year_is_current, on: :create
-  validate :has_at_least_one_course
-  validate :has_maximum_three_courses
+  validate :at_least_one_course?
+  validate :maximum_three_courses?
   validate :courses_are_of_the_same_category
   validate :maximum_one_course_per_day
 
@@ -43,11 +43,11 @@ class Subscription < ApplicationRecord
     errors.add(:year, :must_be_current) unless year == Time.now.year
   end
 
-  def has_at_least_one_course
+  def at_least_one_course?
     errors.add(:courses, :must_exist) if course_ids.empty?
   end
 
-  def has_maximum_three_courses
+  def maximum_three_courses?
     errors.add(:courses, :limit_exceeded) if course_ids.count > 3
   end
 
