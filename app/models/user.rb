@@ -5,7 +5,22 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
-  CONTACTS = ['Père', 'Mère', 'Tuteur / Tutrice', 'Conjoint(e)', 'Frère', 'Sœur', 'Grand-père', 'Grand-mère', 'Oncle', 'Tante', 'Cousin(e)', 'Ami(e)', 'Autre'].freeze
+
+  CONTACTS = [
+    'Père',
+    'Mère',
+    'Tuteur / Tutrice',
+    'Conjoint(e)',
+    'Frère',
+    'Sœur',
+    'Grand-père',
+    'Grand-mère',
+    'Oncle',
+    'Tante',
+    'Cousin(e)',
+    'Ami(e)',
+    'Autre'
+  ].freeze
 
   has_many :subscriptions, foreign_key: :member_id, dependent: :destroy
   has_many :courses, through: :subscriptions

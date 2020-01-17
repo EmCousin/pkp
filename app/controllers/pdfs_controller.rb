@@ -31,7 +31,6 @@ class PdfsController < ApplicationController
                                                  })
     )
 
-    save_path = Rails.root.join('pdfs', 'filename.pdf')
     file = Tempfile.open(['fiche', '.pdf']) do |f|
       f << pdf.force_encoding('UTF-8')
     end
