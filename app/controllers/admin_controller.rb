@@ -9,9 +9,9 @@ class AdminController < ApplicationController
   private
 
   def ensure_current_user_is_admin!
-    unless current_user.admin
-      sign_out current_user
-      redirect_to after_sign_out_path_for(:user)
-    end
+    return if current_user.admin
+
+    sign_out current_user
+    redirect_to after_sign_out_path_for(:user)
   end
 end

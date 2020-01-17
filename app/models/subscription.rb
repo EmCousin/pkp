@@ -15,25 +15,11 @@ class Subscription < ApplicationRecord
   validate :maximum_one_course_per_day
 
   def compute_fee
-    courses_count = courses.count
-    category = courses.first.category
-
-    if courses_count == 1 && category == 'Adulte'
-      175
-    elsif courses_count == 2 && category == 'Adulte'
-      285
-    elsif courses_count == 3 && category == 'Adulte'
-      330
-    elsif courses_count == 1 && category == 'Adolescent (10 - 12 ans)'
-      175
-    elsif courses_count == 1 && category == 'Adolescent (13 - 15 ans)'
-      175
-    elsif courses_count == 2 && category == 'Adolescent (10 - 12 ans)'
-      300
-    elsif courses_count == 2 && category == 'Adolescent (13 - 15 ans)'
-      300
-    elsif courses_count == 1 && category == 'Kidz (6 - 9 ans)'
-      175
+    case [courses.count, courses.first.category]
+    when [1, 'Adulte'], [1, 'Adulte Féminin'], [1, 'Adolescent (10 - 12 ans)'], [1, 'Adolescent (13 - 15 ans)'], [1, 'Kidz (6 - 9 ans)'] then 175
+    when [2, 'Adulte'] then 285
+    when [3, 'Adulte'] then 330
+    when [2, 'Adolescent (10 - 12 ans)'], [2, 'Adolescent (13 - 15 ans)'] then 300
     end
   end
 
@@ -52,34 +38,14 @@ class Subscription < ApplicationRecord
   end
 
   def courses_are_of_the_same_category
-    unique_category = true
-    previous_category = nil
-    courses.each do |course|
-      if previous_category.nil?
-        previous_category = course.category
-      else
-        if course.category != previous_category
-          unique_category = false
-          break
-        end
-      end
-    end
+    unique_category = courses.pluck(:category).uniq.size == 1
+
     errors.add(:courses, :unique_category) unless unique_category
   end
 
   def maximum_one_course_per_day
-    unique_weekday = false
-    previous_weekday = nil
-    courses.each do |course|
-      if previous_weekday.nil?
-        previous_weekday = course.weekday
-      else
-        if course.weekday == previous_weekday
-          unique_weekday = true
-          break
-        end
-      end
-    end
-    errors.add(:courses, :unique_weekday) if unique_weekday
+    weekdays = courses.pluck(:weekday)
+
+    errors.add(:courses, :unique_weekday) unless weekdays.uniq == weekdays
   end
 end
