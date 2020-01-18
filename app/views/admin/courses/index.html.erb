@@ -20,7 +20,6 @@
           </td>
         </tr>
       <% else %>
-        <% 3.times do %>
         <% @courses.each do |course| %>
           <tr>
             <td><%= link_to course.title, admin_course_path(course.id) %></td>
@@ -30,7 +29,6 @@
             <td><%= link_to t('defaults.edit'), edit_admin_course_path(course.id), class: "btn btn-outline-warning btn-sm" %></td>
             <td><%= link_to t('defaults.destroy'), admin_course_path(course.id), method: :delete, data: { confirm: t('defaults.are_you_sure') }, class: "btn btn-outline-danger btn-sm" %></td>
           </tr>
-        <% end %>
         <% end %>
       <% end %>
     </tbody>
