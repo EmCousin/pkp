@@ -38,13 +38,13 @@ class Subscription < ApplicationRecord
   end
 
   def courses_are_of_the_same_category
-    unique_category = courses.pluck(:category).uniq.size == 1
+    unique_category = courses.map(&:category).uniq.size == 1
 
     errors.add(:courses, :unique_category) unless unique_category
   end
 
   def maximum_one_course_per_day
-    weekdays = courses.pluck(:weekday)
+    weekdays = courses.map(&:weekday)
 
     errors.add(:courses, :unique_weekday) unless weekdays.uniq == weekdays
   end
