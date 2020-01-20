@@ -50,6 +50,7 @@ fr:
     send_reset_password_instructions: "M'envoyer les instructions pour réinitialiser mon mot de passe"
     are_you_sure: "Vous êtes sûr ?"
     save: Sauvegarder
+    welcome: Bienvenue
   activerecord:
     errors:
       models:
@@ -146,3 +147,6 @@ fr:
       show:
         remove_from_course: Retirer du cours
         remove_from_course_are_you_sure: Êtes-vous sûr(e) de vouloir retirer %{member_full_name} du cours %{course_title} ?
+  dashboard:
+    index:
+      choose_my_courses: Choisir mes cours
