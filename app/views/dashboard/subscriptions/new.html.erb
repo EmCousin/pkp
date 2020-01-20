@@ -1,0 +1,20 @@
+<%= form_tag(new_dashboard_subscription_path, method: :get) do %>
+  <div class="form-group">
+    <%= label_tag :category %>
+    <%= collection_select(nil, :category, Course::CATEGORIES, :to_s, :to_s, { include_blank: true }, required: true, class: "form-control") %>
+  </div>
+  <div class="actions">
+    <%= link_to t('defaults.back'), dashboard_index_path, class: "btn btn-link float-left" %>
+    <%= submit_tag t('defaults.save'), class: "btn btn-dark float-lg-right" %>
+  </div>
+<% end %>
+
+<% if @courses.present? %>
+  <%= form_with(model: Subscription.new, local: true, url: dashboard_subscriptions_path) do |form| %>
+    <%= form.collection_check_boxes(:course_ids, @courses, :id, :title, required: true) %>
+    <div class="actions">
+      <%= link_to t('defaults.back'), dashboard_index_path, class: "btn btn-primary float-left" %>
+      <%= form.submit t('defaults.save'), class: "btn btn-dark float-lg-right" %>
+    </div>
+  <% end %>
+<% end %>

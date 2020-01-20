@@ -18,7 +18,10 @@ Rails.application.routes.draw do
   end
 
   resources :admin, only: [:index]
-  root "admin#index"
+
+  namespace :dashboard do
+    resources :subscriptions, only: [:new, :create]
+  end
 
   resources :dashboard, only: [:index]
   root "dashboard#index"
