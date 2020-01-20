@@ -2,14 +2,11 @@
 
 module Dashboard
   class SubscriptionsController < DashboardController
-
     def new
       @subscription = Subscription.new
 
       category = params[:category]
-      if category.present?
-        @courses = Course.where(category: category)
-      end
+      @courses = Course.where(category: category) if category.present?
     end
 
     def create
