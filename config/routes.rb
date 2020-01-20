@@ -17,6 +17,9 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :admin, only: [:index, :show, :create]
+  resources :admin, only: [:index]
   root "admin#index"
+
+  resources :dashboard, only: [:index]
+  root "dashboard#index"
 end
