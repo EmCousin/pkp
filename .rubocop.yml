@@ -8,7 +8,6 @@ inherit_mode:
 
 AllCops:
   Exclude:
-    - node_modules/**/*
     - bin/**/*
     - config/**/*
     - db/**/*
@@ -28,7 +27,7 @@ Rails:
 Metrics/ClassLength:
   Max: 160
 
-Layout/LineLength:
+Metrics/LineLength:
   Max: 160
 
 Style/HashSyntax:

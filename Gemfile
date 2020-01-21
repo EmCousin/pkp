@@ -41,7 +41,6 @@ gem 'jquery-rails'
 # gem 'capistrano-rails', group: :development
 gem 'phonelib'
 gem 'rack-cors', require: 'rack/cors'
-gem 'rails-letsencrypt'
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary'
 
