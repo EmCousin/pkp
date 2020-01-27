@@ -2,25 +2,26 @@
 
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Description
 
-Things you may want to cover:
+Back-Office interface for Parkour Paris
 
-* Ruby version
+## Prerequisites
+* Ruby 2.6.3 or later
+* PostgreSQL 9.4 or later
+* Yarn
+* Foreman
 
-* System dependencies
+## Installation
+* Clone with Git
+* run `gem install bundler && bundle install`
+* run `rake db:create`
+* run `rake db:migrate`
+* run `rake db:seed`
+* Run `yarn install`
 
-* Configuration
+## Booting
+* Run `foreman start -f Procfile.dev`
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Running tests
+* Run `rspec`
