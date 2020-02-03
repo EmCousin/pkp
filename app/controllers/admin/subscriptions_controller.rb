@@ -15,12 +15,9 @@ module Admin
     end
 
     def create
-      @subscription = Subscription.new(subscription_params)
-      @subscription.year = Time.now.year
-      @subscription.fee = 0
-      if @subscription.save
-        @subscription.fee = @subscription.compute_fee
-        @subscription.save
+      subscription = Subscription.new(subscription_params)
+      @subscription = CreateSubscriptionService.new(subscription).perform!
+      if @subscription.valid?
         redirect_to admin_subscriptions_path, notice: 'Inscription créée avec succès !'
       else
         render :new
