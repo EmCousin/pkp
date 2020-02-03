@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateSubscriptionService
   def initialize(subscription)
     @subscription = subscription
@@ -11,6 +13,6 @@ class CreateSubscriptionService
       @subscription.save
     end
 
-    return @subscription
+    @subscription
   end
 end
