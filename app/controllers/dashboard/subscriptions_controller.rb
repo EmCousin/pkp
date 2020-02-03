@@ -10,12 +10,9 @@ module Dashboard
     end
 
     def create
-      @subscription = current_user.subscriptions.new(subscription_params)
-      @subscription.year = Time.now.year
-      @subscription.fee = 0
-      if @subscription.save
-        @subscription.fee = @subscription.compute_fee
-        @subscription.save
+      subscription = current_user.subscriptions.new(subscription_params)
+      @subscription = CreateSubscriptionService.new(subscription).perform!
+      if @subscription.valid?
         redirect_to dashboard_index_path, notice: 'Inscription créée avec succès !'
       else
         render :new
