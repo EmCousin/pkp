@@ -35,6 +35,7 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'webpacker', '~> 4.x'
 
+gem "aws-sdk-s3", require: false
 gem 'devise'
 gem 'devise-i18n'
 gem 'jquery-rails'
