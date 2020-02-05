@@ -19,13 +19,13 @@ console.log('Hello World from Webpacker')
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 
-import ActionCable from 'actioncable'
-window.Cable = ActionCable.createConsumer()
+import * as ActionCable from '@rails/actioncable';
+window.Cable = ActionCable.createConsumer();
 
-import * as ActiveStorage from 'activestorage'
-ActiveStorage.start()
+import * as ActiveStorage from '@rails/activestorage';
+ActiveStorage.start();
 
-import Rails from "@rails/ujs"
+import Rails from '@rails/ujs';
 Rails.start();
 
 import Turbolinks from "turbolinks";
