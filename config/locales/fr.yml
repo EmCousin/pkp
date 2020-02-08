@@ -69,6 +69,7 @@ fr:
               too_short: trop curt
             birthdate:
               blank: doit être rempli
+              inclusion: "%{value} n'est pas une date valide"
             avatar:
               blank: doit être rempli
             phone_number:
