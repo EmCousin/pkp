@@ -19,9 +19,6 @@ AllCops:
     - app/controllers/pdfs_controller.rb
     - app/mailers/application_mailer.rb
 
-Documentation:
-  Enabled: false
-
 Rails:
   Enabled: false
 
@@ -30,6 +27,9 @@ Metrics/ClassLength:
 
 Layout/LineLength:
   Max: 160
+
+Style/Documentation:
+  Enabled: false
 
 Style/HashSyntax:
   EnforcedStyle: 'ruby19_no_mixed_keys'

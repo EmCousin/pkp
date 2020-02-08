@@ -1,4 +1,7 @@
 Rails.application.configure do
+  # Prepare the ingress controller used to receive mail
+  config.action_mailbox.ingress = :mailgun
+
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
@@ -74,7 +77,7 @@ Rails.application.configure do
       :address        => ENV['MAILGUN_SMTP_SERVER'],
       :user_name      => ENV['MAILGUN_SMTP_LOGIN'],
       :password       => ENV['MAILGUN_SMTP_PASSWORD'],
-      :domain         => 'http://intense-thicket-53437.herokuapp.com/',
+      :domain         => 'https://inscriptions.parkourparis.fr/',
       :authentication => :plain,
   }
   config.action_mailer.delivery_method = :smtp

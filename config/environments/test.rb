@@ -42,4 +42,7 @@ Rails.application.configure do
 
   # Store files locally.
   config.active_storage.service = :test
+
+  # Run Active Job in test mode.
+  config.active_job.queue_adapter = :test
 end
