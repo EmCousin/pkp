@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe User, type: :model do
+  let(:user) { create :user }
+
   it { is_expected.to have_many(:subscriptions).dependent(:destroy).with_foreign_key(:member_id) }
   it { is_expected.to have_many(:courses).through(:subscriptions) }
 
@@ -39,10 +41,9 @@ describe User, type: :model do
   end
 
   describe '#full_name' do
-    it 'returns the first_name followed by the last_name' do
-      user = described_class.new
-      user.first_name = 'Mickey'
-      user.last_name = 'Mouse'
+    it 'returns the first_name followed by the last_name in a proper formatted way' do
+      user.first_name = 'mickey'
+      user.last_name = 'MoUsE'
       expect(user.full_name).to eq 'Mickey Mouse'
     end
   end

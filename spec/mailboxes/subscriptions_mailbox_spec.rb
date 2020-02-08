@@ -1,3 +1,5 @@
+require 'rails_helper'
+
 describe SubscriptionsMailbox, type: :mailbox do
   let(:user) { create :user }
   let(:email) { user.email }

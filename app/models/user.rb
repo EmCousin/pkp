@@ -27,7 +27,7 @@ class User < ApplicationRecord
 
   validates :first_name, presence: true
   validates :last_name, presence: true
-  validates :birthdate, presence: true
+  validates :birthdate, presence: true, inclusion: { in: (99.years.ago)..(8.years.ago), on: :create }
   validates :phone_number, presence: true, phone: true
   validates :address, presence: true
   validates :zip_code, presence: true
@@ -42,6 +42,6 @@ class User < ApplicationRecord
   has_one_attached :avatar
 
   def full_name
-    "#{first_name} #{last_name}"
+    "#{first_name} #{last_name}".downcase.titleize
   end
 end
