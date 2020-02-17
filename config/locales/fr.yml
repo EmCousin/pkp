@@ -41,6 +41,7 @@ fr:
     from: de
     to: à
     login: Connexion
+    logout: Déconnexion
     signup: Inscription
     forgot_your_password: Mot de passe oublié ?
     did_not_receive_confirmation_intructions: "Vous n'avez pas reçu les instructions de confirmation ?"
@@ -153,3 +154,9 @@ fr:
   dashboard:
     index:
       choose_my_courses: Choisir mes cours
+  layouts:
+    navbar:
+      admin: Admin
+      users: Membres
+      courses: Cours
+      subscriptions: Inscriptions
