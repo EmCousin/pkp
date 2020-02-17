@@ -1,3 +1,29 @@
 <%= t('defaults.welcome') %>, <%= current_user.first_name %> !
 <br/>
 <%= link_to t('.choose_my_courses'), new_dashboard_subscription_path, class: "btn btn-primary" %>
+
+
+<div class="container">
+  <p>
+    <strong><%= User.human_attribute_name(:first_name) %> :</strong>
+    <%= @subscription.member.first_name %>
+  </p>
+
+  <p>
+    <strong><%= User.human_attribute_name(:last_name) %> :</strong>
+    <%= @subscription.member.last_name %>
+  </p>
+
+  <p>
+    <strong><%= Subscription.human_attribute_name(:fee) %> :</strong>
+    <%= @subscription.fee %>
+  </p>
+
+  <p>
+    <strong><%= Subscription.human_attribute_name(:year) %> :</strong>
+    <%= @subscription.year %>
+  </p>
+
+  <br/>
+</div>
+
