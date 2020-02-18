@@ -151,6 +151,11 @@ fr:
       show:
         remove_from_course: Retirer du cours
         remove_from_course_are_you_sure: Êtes-vous sûr(e) de vouloir retirer %{member_full_name} du cours %{course_title} ?
+    subscriptions:
+      new:
+        title: Inscrire un membre
+      form:
+        users: Membres
   dashboard:
     index:
       choose_my_courses: Choisir mes cours
