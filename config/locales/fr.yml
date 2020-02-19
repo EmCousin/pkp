@@ -52,6 +52,7 @@ fr:
     are_you_sure: "Vous êtes sûr ?"
     save: Sauvegarder
     welcome: Bienvenue
+    select: Sèlectionner
   activerecord:
     errors:
       models:
@@ -106,6 +107,9 @@ fr:
       course:
         one: Cours
         other: Cours
+      subscription:
+        one: Inscription
+        other: Inscriptions
     attributes:
       user:
         first_name: Prénom
@@ -132,6 +136,8 @@ fr:
       subscription:
         fee: Cotisation
         year: Année
+        member_id: Membre
+        course_ids: Cours
 
   #views
   admin:
@@ -156,6 +162,8 @@ fr:
         title: Inscrire un membre
       form:
         users: Membres
+      edit:
+        title: Modifier l'inscription
   dashboard:
     index:
       choose_my_courses: Choisir mes cours
