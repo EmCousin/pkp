@@ -1,3 +1,38 @@
-<%= t('defaults.welcome') %>, <%= current_user.first_name %> !
-<br/>
-<%= link_to t('.choose_my_courses'), new_dashboard_subscription_path, class: "btn btn-primary" %>
+<div class="container">
+  <%= t('defaults.welcome') %>, <%= current_user.first_name %> !
+  <br/>
+  <% if @subscription.present? %>
+    <p>Voici les informations detaillés de votre inscription pour l'ané <%= @subscription.year %>:</p>
+
+    <br/>
+
+    <div class="table-responsive mt-3">
+      <table class="table">
+        <thead>
+          <tr>
+            <th><%= User.human_attribute_name(:full_name) %></th>
+            <th><%= Course.human_attribute_name(:title) %></th>
+            <th><%= Course.human_attribute_name(:category) %></th>
+            <th><%= Course.human_attribute_name(:weekday) %></th>
+            <th><%= Subscription.human_attribute_name(:fee) %></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @subscription.courses.each do |course| %>
+            <tr>
+              <td><%= @subscription.member.full_name %></td>
+              <td><%= course.title %></td>
+              <td><%= course.category %></td>
+              <td><%= course.weekday %></td>
+              <td><%= @subscription.fee %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <p>Vous n'etes pas encore incrit pour l'ané <%= @subscription.year %>! Cliquez sur le button pour choisir votre courses:</p>
+    <%= link_to t('.choose_my_courses'), new_dashboard_subscription_path, class: "btn btn-primary" %>
+  <% end %>
+</div>
