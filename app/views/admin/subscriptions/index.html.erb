@@ -19,7 +19,7 @@
         <% @subscriptions.each do |subscription| %>
           <tr>
             <td><%= subscription.member.full_name %></td>
-            <td><%= subscription.fee %></td>
+            <td><%= number_to_currency(subscription.fee, unit: "€", separator: ",", format: "%n %u") %></td>
             <td><%= subscription.year %></td>
             <td><%= link_to t('defaults.show'), admin_subscription_path(subscription.id) %></td>
             <td><%= link_to t('defaults.edit'), edit_admin_subscription_path(subscription.id) %></td>

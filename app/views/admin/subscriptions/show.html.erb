@@ -11,7 +11,7 @@
 
 	<p>
 	  <strong><%= Subscription.human_attribute_name(:fee) %> :</strong>
-	  <%= @subscription.fee %>
+	  <%= number_to_currency(@subscription.fee, unit: "€", separator: ",", format: "%n %u") %>
 	</p>
 
 	<p>

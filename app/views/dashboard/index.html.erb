@@ -1,38 +1,42 @@
 <div class="container">
-  <%= t('defaults.welcome') %>, <%= current_user.first_name %> !
+  <h1 class="text-center"><%= t('defaults.welcome') %>, <%= current_user.first_name %> !</h1>
   <br/>
   <% if @subscription.present? %>
-    <p>Voici les informations detaillées de votre inscription pour l'année <%= @subscription.year %>:</p>
+    <p><%=t('.subscription_detailed_info', year: @subscription.year) %></p>
 
-    <br/>
+    <div class="mt-3">
+      <div class="row p-2">
+        <div class="col-3"><strong><%= User.human_attribute_name(:full_name) %></strong></div>
+        <div class="col-3"><%= @subscription.member.full_name %></div>
+      </div>
+      <div class="row p-2">
+        <div class="col-3"><strong><%= Subscription.human_attribute_name(:fee) %></strong></div>
+        <div class="col-3"><%= number_to_currency(@subscription.fee, unit: "€", separator: ",", format: "%n %u") %></div>
+      </div>
+    </div>
 
     <div class="table-responsive mt-3">
       <table class="table">
         <thead>
           <tr>
-            <th><%= User.human_attribute_name(:full_name) %></th>
             <th><%= Course.human_attribute_name(:title) %></th>
-            <th><%= Course.human_attribute_name(:category) %></th>
             <th><%= Course.human_attribute_name(:weekday) %></th>
-            <th><%= Subscription.human_attribute_name(:fee) %></th>
+            <th><%= Course.human_attribute_name(:category) %></th>
           </tr>
         </thead>
-
         <tbody>
           <% @subscription.courses.each do |course| %>
             <tr>
-              <td><%= @subscription.member.full_name %></td>
               <td><%= course.title %></td>
-              <td><%= course.category %></td>
               <td><%= course.weekday %></td>
-              <td><%= @subscription.fee %></td>
+              <td><%= course.category %></td>
             </tr>
           <% end %>
         </tbody>
       </table>
     </div>
   <% else %>
-    <p>Vous n'êtes pas encore inscrit(e) pour l'année <%= @subscription.year %> ! Cliquez sur le bouton pour choisir vous inscrire :</p>
+    <p><%=t('.not_yet_subscribed', year: @subscription.year) %></p>
     <%= link_to t('.choose_my_courses'), new_dashboard_subscription_path, class: "btn btn-primary" %>
   <% end %>
 </div>
