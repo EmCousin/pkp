@@ -3,5 +3,7 @@
 class DashboardController < ApplicationController
   before_action :authenticate_user!
 
-  def index; end
+  def index
+    @subscription = current_user.subscriptions.find_by(year: Time.now.year)
+  end
 end
