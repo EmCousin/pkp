@@ -32,7 +32,7 @@
       </table>
     </div>
   <% else %>
-    <p>Vous n'etes pas encore incrit pour l'ané <%= @subscription.year %>! Cliquez sur le button pour choisir votre courses:</p>
+    <p>Vous n'êtes pas encore inscrit(e) pour l'année <%= @subscription.year %> ! Cliquez sur le bouton pour choisir vous inscrire :</p>
     <%= link_to t('.choose_my_courses'), new_dashboard_subscription_path, class: "btn btn-primary" %>
   <% end %>
 </div>
