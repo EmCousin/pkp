@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   resources :admin, only: [:index]
 
   namespace :dashboard do
+    resource :profile, only: [:edit, :update]
     resources :subscriptions, only: [:new, :create]
   end
 

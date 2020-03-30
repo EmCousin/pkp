@@ -10,16 +10,19 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <% if user_signed_in? %>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <%= t('.admin') %>
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <%= link_to t('.users'), admin_users_path, class: "dropdown-item" %>
-              <%= link_to t('.courses'), admin_courses_path, class: "dropdown-item" %>
-              <%= link_to t('.subscriptions'), admin_subscriptions_path, class: "dropdown-item" %>
-            </div>
-          </li>
+          <% if current_user.admin %>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <%= t('.admin') %>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <%= link_to t('.users'), admin_users_path, class: "dropdown-item" %>
+                <%= link_to t('.courses'), admin_courses_path, class: "dropdown-item" %>
+                <%= link_to t('.subscriptions'), admin_subscriptions_path, class: "dropdown-item" %>
+              </div>
+            </li>
+          <% end %>
+          <%= link_to t('.my_account'), edit_dashboard_profile_path, class: "nav-link" %>
         <% end %>
       </ul>
       <div class="menu-container">
