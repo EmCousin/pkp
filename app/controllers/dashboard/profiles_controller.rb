@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 module Dashboard
   class ProfilesController < DashboardController
-
     def edit; end
 
     def update
@@ -10,6 +11,7 @@ module Dashboard
         render :edit
       end
     end
+
     private
 
     def user_params
