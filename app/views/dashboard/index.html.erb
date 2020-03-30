@@ -2,7 +2,7 @@
   <h1 class="text-center"><%= t('defaults.welcome') %>, <%= current_user.first_name %> !</h1>
   <br/>
   <% if @subscription.present? %>
-    <p><%=t('.subscription_detailed_info', year: @subscription.year) %></p>
+    <p><%= t('.subscription_detailed_info', year: @subscription.year) %></p>
 
     <div class="mt-3">
       <div class="row p-2">
@@ -36,7 +36,7 @@
       </table>
     </div>
   <% else %>
-    <p><%=t('.not_yet_subscribed', year: @subscription.year) %></p>
+    <p><%= t('.not_yet_subscribed', year: Time.now.year) %></p>
     <%= link_to t('.choose_my_courses'), new_dashboard_subscription_path, class: "btn btn-primary" %>
   <% end %>
 </div>

@@ -3,7 +3,7 @@
 module Dashboard
   class SubscriptionsController < DashboardController
     def new
-      @subscription = Subscription.new
+      @subscription = current_user.subscriptions.new
 
       category = params[:category]
       @courses = Course.where(category: category) if category.present?
