@@ -169,9 +169,15 @@ fr:
       choose_my_courses: Choisir mes cours
       not_yet_subscribed: "Vous n'êtes pas encore inscrit(e) pour l'année %{year} ! Cliquez sur le bouton pour vous inscrire :"
       subscription_detailed_info: "Voici les informations detaillées de votre inscription pour l'année %{year} :"
+    profiles:
+      update:
+        edit_success: Membre modifié avec succès !
+    edit:
+      title: Mes informations personelles
   layouts:
     navbar:
       admin: Admin
       users: Membres
       courses: Cours
       subscriptions: Inscriptions
+      my_account: Mon compte
