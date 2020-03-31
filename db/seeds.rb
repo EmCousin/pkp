@@ -17,8 +17,8 @@ user.email = "monemail@mail.fr"
 user.first_name = "Maria"
 user.last_name = "Silva"
 user.admin = true
-user.birthdate = 20.years.from_now
-user.phone_number = "0123456987"
+user.birthdate = 20.years.ago
+user.phone_number = "+33299506779"
 user.address = "1 rue des Halles"
 user.zip_code = "75001"
 user.city = "Paris"
@@ -26,9 +26,10 @@ user.country = "France"
 user.agreed_to_publicity_right = true
 user.avatar = Rack::Test::UploadedFile.new(Rails.root.join('public', 'pkp.jpg'), "image/jpeg")
 user.contact_name = "Maria"
-user.contact_phone_number = "0123456987"
+user.contact_phone_number = "+33299506779"
 user.contact_relationship = User::CONTACTS.sample
 user.password = "coucou"
+
 user.save!
 
 ## Default courses
