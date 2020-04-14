@@ -181,3 +181,14 @@ fr:
       courses: Cours
       subscriptions: Inscriptions
       my_account: Mon compte
+  kaminari:
+    gap:
+      truncate: '...'
+    first_page:
+      pagination_first: Première
+    next_page:
+      pagination_next: Prochain
+    prev_page:
+      pagination_previous: Prècedent
+    last_page:
+      pagination_last: Derniére
