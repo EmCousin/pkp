@@ -13,6 +13,8 @@ module Dashboard
       subscription = current_user.subscriptions.new(subscription_params)
       @subscription = CreateSubscriptionService.new(subscription).perform!
       if @subscription.valid?
+        SubscriptionMailer.confirm_subscription(@subscription).deliver_now
+
         redirect_to dashboard_index_path, notice: 'Inscription créée avec succès !'
       else
         render :new
