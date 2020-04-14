@@ -1,15 +1,15 @@
 <div id="header">
-  <%= wicked_pdf_image_tag URI.decode(avatar_url), class: 'avatar' %>
+  <%= wicked_pdf_image_tag url_for(subscription.member.avatar), class: 'avatar' %>
   <%= wicked_pdf_image_tag 'parkourparis.jpg', class: 'logo' %>
 </div>
 
 <h1 class="title">
-  Inscription <%= current_year %> / <%= next_year %>
+  Inscription <%= subscription.year %> / <%= subscription.year + 1 %>
 </h1>
 
 <div class="fullname-container">
   <h2 class="fullname">
-    <%= last_name.upcase %> <%= first_name %>
+    <%= subscription.member.last_name.upcase %> <%= subscription.member.first_name %>
   </h2>
 </div>
 
@@ -20,55 +20,47 @@
   </tr>
   <tr>
     <td>Date de naissance</td>
-    <td><%= subscription.member.brirthdate %></td>
-  </tr>
-  <tr>
-    <td>Nationalité</td>
-    <td><%= citizenship %></td>
+    <td><%= subscription.member.birthdate %></td>
   </tr>
   <tr>
     <td>Adresse</td>
-    <td><%= subscritpion.member.address %></td>
+    <td><%= subscription.member.address %></td>
   </tr>
   <tr>
     <td>Code postal</td>
-    <td><%= subscritpion.member.zip_code %></td>
+    <td><%= subscription.member.zip_code %></td>
   </tr>
   <tr>
     <td>Ville</td>
-    <td><%= subscritpion.member.city %></td>
+    <td><%= subscription.member.city %></td>
   </tr>
   <tr>
     <td>Pays</td>
-    <td><%= subscritpion.member.country %>
+    <td><%= subscription.member.country %>
   </tr>
   <tr>
-    <td>Téléphone fixe</td>
-    <td><%= subscritpion.member.phone_number %></td>
-  </tr>
-  <tr>
-    <td>Téléphone portable</td>
-    <td><%= cellphone_number %></td>
+    <td>Téléphone</td>
+    <td><%= subscription.member.phone_number %></td>
   </tr>
   <tr>
     <td>E-mail</td>
-    <td><%= subscritpion.member.email %></td>
+    <td><%= subscription.member.email %></td>
   </tr>
   <tr>
     <td>Contact</td>
-    <td><%= subscritpion.member.contact_name %></td>
+    <td><%= subscription.member.contact_name %></td>
   </tr>
   <tr>
     <td>Lien de parenté</td>
-    <td><%= subscritpion.member.contact_relationship %></td>
+    <td><%= subscription.member.contact_relationship %></td>
   </tr>
   <tr>
     <td>Téléphone du contact</td>
-    <td><%= subscritpion.member.contact_phone_number %></td>
+    <td><%= subscription.member.contact_phone_number %></td>
   </tr>
   <tr>
     <td>Droit à l'image</td>
-    <td><%= subscritpion.member.agreed_to_publicity_right %></td>
+    <td><%= subscription.member.agreed_to_publicity_right %></td>
   </tr>
   <tr>
     <td>Tarif</td>
