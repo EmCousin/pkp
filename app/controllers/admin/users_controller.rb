@@ -3,7 +3,7 @@
 module Admin
   class UsersController < AdminController
     def index
-      @users = User.all
+      @users = User.page(params[:page]).per(50)
     end
 
     def show

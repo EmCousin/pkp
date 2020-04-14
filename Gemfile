@@ -30,17 +30,16 @@ gem 'jbuilder', '~> 2.5'
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
-
-gem 'webpacker', '~> 4.x'
-
 gem 'aws-sdk-s3', require: false
 gem 'devise'
 gem 'devise-i18n'
 gem 'jquery-rails'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
+gem 'kaminari'
 gem 'phonelib'
 gem 'rack-cors', require: 'rack/cors'
+gem 'webpacker', '~> 4.x'
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary'
 
