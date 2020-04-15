@@ -3,7 +3,7 @@
 module Admin
   class SubscriptionsController < AdminController
     def index
-      @subscriptions = Subscription.all
+      @subscriptions = Subscription.page(params[:page]).per(50)
     end
 
     def show
