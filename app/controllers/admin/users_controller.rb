@@ -4,14 +4,14 @@ module Admin
   class UsersController < AdminController
     def index
       @search = params[:q]
-      if @search.present?
-        @users = User.where(
-          "first_name LIKE :search OR last_name LIKE :search",
-          search: "%#{@search}%"
-        ).page(params[:page]).per(50)
-      else
-        @users = User.page(params[:page]).per(50)
-      end
+      @users =  if @search.present?
+                  User.where(
+                    'first_name LIKE :search OR last_name LIKE :search',
+                    search: "%#{@search}%"
+                  ).page(params[:page]).per(50)
+                else
+                  User.page(params[:page]).per(50)
+                end
     end
 
     def show
