@@ -1,6 +1,11 @@
 <div class="container">
   <%= link_to t('defaults.new', resource: User.model_name.human.downcase), new_admin_user_path, class: "btn btn-primary" %>
 
+  <%= form_with(url: admin_users_path, local: true, method: "get", class: "form-inline") do %>
+    <%= text_field_tag(:q, @search, class: "form-control mr-sm-2", placeholder: "Search") %>
+    <%= submit_tag("Search", class: "btn btn-success") %>
+  <% end %>
+
   <table class="table">
     <thead>
       <tr>
