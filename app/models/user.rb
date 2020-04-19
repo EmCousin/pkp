@@ -41,7 +41,15 @@ class User < ApplicationRecord
 
   has_one_attached :avatar
 
+  after_create :create_stripe_customer_id
+
   def full_name
     "#{first_name} #{last_name}".downcase.titleize
+  end
+
+  private
+
+  def create_stripe_customer_id
+    Stripe::CreateCustomerJob.perform_later(self)
   end
 end
