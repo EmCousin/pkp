@@ -53,6 +53,14 @@ fr:
     save: Sauvegarder
     welcome: Bienvenue
     select: Sèlectionner
+  activemodel:
+    errors:
+      models:
+        create_subscription_form:
+          attributes:
+            category:
+              blank: doit être rempli
+              course_ids: doit être rempli
   activerecord:
     errors:
       models:
