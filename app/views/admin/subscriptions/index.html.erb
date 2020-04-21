@@ -5,7 +5,11 @@
 
   <table class="table">
     <thead>
-      <tr>Liste des inscriptions </tr>
+      <tr>
+        <th colspan="3" class="text-center">Details des inscriptions</th>
+        <th colspan="3" class="text-center">Action</th>
+      </tr>
+
     </thead>
 
     <tbody>
@@ -18,12 +22,22 @@
       <% else %>
         <% @subscriptions.each do |subscription| %>
           <tr>
-            <td><%= subscription.member.full_name %></td>
+            <td><%= link_to subscription.member.full_name, admin_subscription_path(subscription.id) %></td>
             <td><%= number_to_currency(subscription.fee, unit: "€", separator: ",", format: "%n %u") %></td>
             <td><%= subscription.year %></td>
-            <td><%= link_to t('defaults.show'), admin_subscription_path(subscription.id) %></td>
-            <td><%= link_to t('defaults.edit'), edit_admin_subscription_path(subscription.id) %></td>
-            <td><%= link_to t('defaults.destroy'), admin_subscription_path(subscription.id), method: :delete, data: { confirm: t('defaults.are_you_sure') } %></td>
+            <td><%= subscription.status %></td>
+            <td>
+              <div class="dropdown mr-1">
+                <button type="button" class="btn btn-primary dropdown-toggle" id="dropdownMenuOffset" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choisir</button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
+                  <%= link_to t('defaults.edit'), edit_admin_subscription_path(subscription.id), class: "dropdown-item" %>
+                  <%= link_to t('defaults.confirm'), confirm_admin_subscription_path(subscription.id), method: :put, class: "dropdown-item" %>
+                  <%= link_to t('defaults.archive'), archive_admin_subscription_path(subscription.id), method: :put, class: "dropdown-item" %>
+                  <%= link_to t('defaults.destroy'), admin_subscription_path(subscription.id), method: :delete, data: { confirm: t('defaults.are_you_sure') }, class: "dropdown-item" %>
+
+                </div>
+              </div>
+            </td>
           </tr>
         <% end %>
       <% end %>

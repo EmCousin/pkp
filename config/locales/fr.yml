@@ -53,6 +53,9 @@ fr:
     save: Sauvegarder
     welcome: Bienvenue
     select: Sèlectionner
+    confirm: Confirmer
+    archive: Archiver
+    choose: Choisir
   activerecord:
     errors:
       models:

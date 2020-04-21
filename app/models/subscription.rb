@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Subscription < ApplicationRecord
+
   belongs_to :member, class_name: 'User'
   has_many :courses_subscriptions, dependent: :destroy
   has_many :courses, through: :courses_subscriptions
@@ -13,6 +14,8 @@ class Subscription < ApplicationRecord
   validate :maximum_three_courses?
   validate :courses_are_of_the_same_category
   validate :maximum_one_course_per_day
+
+  enum status: [:pending, :confirmed, :archived]
 
   def compute_fee
     case [courses.count, courses.first.category]
