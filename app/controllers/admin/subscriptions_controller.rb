@@ -55,7 +55,7 @@ module Admin
     def confirm
       subscription = Subscription.find(params[:id])
       if subscription.confirmed?
-         redirect_to admin_subscriptions_path, alert: "L'inscription est deja confirmée !"
+        redirect_to admin_subscriptions_path, alert: "L'inscription est deja confirmée !"
       else
         subscription.confirmed!
         redirect_to admin_subscriptions_path, notice: 'Inscription confirmée avec succès !'
@@ -65,7 +65,7 @@ module Admin
     def archive
       subscription = Subscription.find(params[:id])
       if subscription.archived?
-         redirect_to admin_subscriptions_path, alert: "L'inscription est deja archivée !"
+        redirect_to admin_subscriptions_path, alert: "L'inscription est deja archivée !"
       else
         subscription.archived!
         redirect_to admin_subscriptions_path, notice: 'Inscription archivée avec succès !'
