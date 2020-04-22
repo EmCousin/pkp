@@ -55,27 +55,27 @@ module Admin
     def confirm
       subscription = Subscription.find(params[:id])
       if subscription.confirmed?
-        redirect_to admin_subscriptions_path, alert: "L'inscription est deja confirmée !"
+        redirect_to admin_subscriptions_path, alert: t('.confirmation_failure')
       else
         subscription.confirmed!
-        redirect_to admin_subscriptions_path, notice: 'Inscription confirmée avec succès !'
+        redirect_to admin_subscriptions_path, notice: t('.confirmation_success')
       end
     end
 
     def archive
       subscription = Subscription.find(params[:id])
       if subscription.archived?
-        redirect_to admin_subscriptions_path, alert: "L'inscription est deja archivée !"
+        redirect_to admin_subscriptions_path, alert: t('.archivation_failure')
       else
         subscription.archived!
-        redirect_to admin_subscriptions_path, notice: 'Inscription archivée avec succès !'
+        redirect_to admin_subscriptions_path, notice: t('.archivation_success')
       end
     end
 
     private
 
     def subscription_params
-      params.require(:subscription).permit(:member_id, :status, course_ids: [])
+      params.require(:subscription).permit(:member_id, course_ids: [])
     end
   end
 end

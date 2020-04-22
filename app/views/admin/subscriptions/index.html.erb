@@ -32,7 +32,6 @@
                   <%= link_to t('defaults.confirm'), confirm_admin_subscription_path(subscription.id), method: :put, class: "dropdown-item" %>
                   <%= link_to t('defaults.archive'), archive_admin_subscription_path(subscription.id), method: :put, class: "dropdown-item" %>
                   <%= link_to t('defaults.destroy'), admin_subscription_path(subscription.id), method: :delete, data: { confirm: t('defaults.are_you_sure') }, class: "dropdown-item" %>
-
                 </div>
               </div>
             </td>
