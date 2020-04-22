@@ -17,6 +17,8 @@ Rails.application.routes.draw do
     resources :subscriptions do
       member do
         delete :unlink_course
+        put :confirm
+        put :archive
       end
     end
   end

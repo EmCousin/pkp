@@ -3,7 +3,7 @@
 module Admin
   class SubscriptionsController < AdminController
     def index
-      @subscriptions = Subscription.page(params[:page]).per(50)
+      @subscriptions = Subscription.includes(:member).order(created_at: :desc).page(params[:page]).per(50)
     end
 
     def show
@@ -50,6 +50,26 @@ module Admin
       @course = @subscription.courses.find(params[:course_id])
       @subscription.course_ids -= [@course.id]
       redirect_back fallback_location: root_path, notice: 'Cours retiré avec succès !'
+    end
+
+    def confirm
+      subscription = Subscription.find(params[:id])
+      if subscription.confirmed?
+        redirect_to admin_subscriptions_path, alert: t('.confirmation_failure')
+      else
+        subscription.confirmed!
+        redirect_to admin_subscriptions_path, notice: t('.confirmation_success')
+      end
+    end
+
+    def archive
+      subscription = Subscription.find(params[:id])
+      if subscription.archived?
+        redirect_to admin_subscriptions_path, alert: t('.archivation_failure')
+      else
+        subscription.archived!
+        redirect_to admin_subscriptions_path, notice: t('.archivation_success')
+      end
     end
 
     private
