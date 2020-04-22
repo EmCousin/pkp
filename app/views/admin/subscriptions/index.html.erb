@@ -1,13 +1,11 @@
 <div class="container">
-  <%= link_to t('defaults.new', resource: Subscription.model_name.human.downcase), new_admin_subscription_path %>
+  <%= link_to t('defaults.new', resource: Subscription.model_name.human.downcase), new_admin_subscription_path, class: "btn btn-primary" %>
 
-  <hr />
-
-  <table class="table">
+  <table class="table mt-5">
     <thead>
       <tr>
-        <th colspan="3" class="text-center">Details des inscriptions</th>
-        <th colspan="3" class="text-center">Action</th>
+        <th class="text-center">Details des inscriptions</th>
+        <th colspan="6" class="text-center">Status</th>
       </tr>
 
     </thead>
@@ -15,7 +13,7 @@
     <tbody>
       <% if @subscriptions.empty? %>
         <tr>
-          <td colspan="9" class="text-center">
+          <td class="text-center">
             <%= link_to t('.add_subscription'), new_admin_subscription_path %>
           </td>
         </tr>
@@ -25,10 +23,10 @@
             <td><%= link_to subscription.member.full_name, admin_subscription_path(subscription.id) %></td>
             <td><%= number_to_currency(subscription.fee, unit: "€", separator: ",", format: "%n %u") %></td>
             <td><%= subscription.year %></td>
-            <td><%= subscription.status %></td>
+            <td><%= Subscription.human_attribute_name(subscription.status) %></td>
             <td>
               <div class="dropdown mr-1">
-                <button type="button" class="btn btn-primary dropdown-toggle" id="dropdownMenuOffset" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choisir</button>
+                <button type="button" class="btn btn-primary dropdown-toggle" id="dropdownMenuOffset" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%= t('defaults.action') %></button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
                   <%= link_to t('defaults.edit'), edit_admin_subscription_path(subscription.id), class: "dropdown-item" %>
                   <%= link_to t('defaults.confirm'), confirm_admin_subscription_path(subscription.id), method: :put, class: "dropdown-item" %>

@@ -55,7 +55,7 @@ fr:
     select: Sèlectionner
     confirm: Confirmer
     archive: Archiver
-    choose: Choisir
+    action: Action
   activerecord:
     errors:
       models:
@@ -141,6 +141,10 @@ fr:
         year: Année
         member_id: Membre
         course_ids: Cours
+        status: Statut
+        pending: En attente
+        confirmed: Confirmée
+        archived: Archivée
 
   #views
   admin:
