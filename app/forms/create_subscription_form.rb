@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateSubscriptionForm
   include ActiveModel::Model
 
@@ -20,7 +22,7 @@ class CreateSubscriptionForm
 
     errors.merge!(@subscription.errors)
 
-    return false
+    false
   end
 
   private
