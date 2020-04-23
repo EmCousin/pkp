@@ -14,6 +14,8 @@ class Subscription < ApplicationRecord
   validate :courses_are_of_the_same_category
   validate :maximum_one_course_per_day
 
+  enum status: %i[pending confirmed archived]
+
   def compute_fee
     case [courses.count, courses.first.category]
     when [1, 'Adulte'], [1, 'Adulte Féminin'], [1, 'Adolescent (10 - 12 ans)'], [1, 'Adolescent (13 - 15 ans)'], [1, 'Kidz (6 - 9 ans)'] then 175

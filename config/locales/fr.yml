@@ -52,7 +52,10 @@ fr:
     are_you_sure: "Vous êtes sûr ?"
     save: Sauvegarder
     welcome: Bienvenue
-    select: Sèlectionner
+    select: Sélectionner
+    confirm: Confirmer
+    archive: Archiver
+    action: Action
   activemodel:
     errors:
       models:
@@ -146,6 +149,10 @@ fr:
         year: Année
         member_id: Membre
         course_ids: Cours
+        status: Statut
+        pending: En attente
+        confirmed: Confirmée
+        archived: Archivée
 
   #views
   admin:
@@ -172,6 +179,13 @@ fr:
         users: Membres
       edit:
         title: Modifier l'inscription
+      confirm:
+        confirmation_success: 'Inscription confirmée avec succès !'
+        confirmation_failure: "L'inscription est déjà confirmée !"
+      archive:
+        archivation_success: 'Inscription archivée avec succès !'
+        archivation_failure: "L'inscription est déjà archivée !"
+
   dashboard:
     index:
       choose_my_courses: Choisir mes cours
