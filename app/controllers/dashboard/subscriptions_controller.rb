@@ -3,18 +3,13 @@
 module Dashboard
   class SubscriptionsController < DashboardController
     def new
-      @subscription = current_user.subscriptions.new
-
-      category = params[:category]
-      @courses = Course.where(category: category) if category.present?
+      @form = CreateSubscriptionForm.new(subscription_params)
     end
 
     def create
-      subscription = current_user.subscriptions.new(subscription_params)
-      @subscription = CreateSubscriptionService.new(subscription).perform!
-      if @subscription.valid?
-        SubscriptionMailer.confirm_subscription(@subscription).deliver_now
-
+      @form = CreateSubscriptionForm.new(subscription_params)
+      if @form.submit
+        SubscriptionMailer.confirm_subscription(@form.subscription).deliver_now
         redirect_to dashboard_index_path, notice: 'Inscription créée avec succès !'
       else
         render :new
@@ -24,7 +19,11 @@ module Dashboard
     private
 
     def subscription_params
-      params.require(:subscription).permit(course_ids: [])
+      if params[:create_subscription_form].present?
+        params.require(:create_subscription_form).permit(:category, course_ids: []).merge(user: current_user)
+      else
+        {}
+      end
     end
   end
 end

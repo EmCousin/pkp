@@ -56,6 +56,14 @@ fr:
     confirm: Confirmer
     archive: Archiver
     action: Action
+  activemodel:
+    errors:
+      models:
+        create_subscription_form:
+          attributes:
+            category:
+              blank: doit être rempli
+              course_ids: doit être rempli
   activerecord:
     errors:
       models:
