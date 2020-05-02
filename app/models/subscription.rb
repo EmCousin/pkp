@@ -25,6 +25,10 @@ class Subscription < ApplicationRecord
     end
   end
 
+  def paid?
+    false
+  end
+
   private
 
   def year_is_current

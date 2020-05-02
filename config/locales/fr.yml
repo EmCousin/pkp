@@ -191,6 +191,7 @@ fr:
       choose_my_courses: Choisir mes cours
       not_yet_subscribed: "Vous n'êtes pas encore inscrit(e) pour l'année %{year} ! Cliquez sur le bouton pour vous inscrire :"
       subscription_detailed_info: "Voici les informations detaillées de votre inscription pour l'année %{year} :"
+      pay: Payer
     profiles:
       update:
         edit_success: Membre modifié avec succès !

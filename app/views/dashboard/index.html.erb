@@ -12,9 +12,11 @@
       <div class="row p-2">
         <div class="col-3"><strong><%= Subscription.human_attribute_name(:fee) %></strong></div>
         <div class="col-3"><%= number_to_currency(@subscription.fee, unit: "€", separator: ",", format: "%n %u") %></div>
+        <% unless @subscription.paid? %>
+          <%= link_to t('.pay'), new_dashboard_subscription_path, class: "btn btn-primary float-right" %>
+        <% end %>
       </div>
     </div>
-
     <div class="table-responsive mt-3">
       <table class="table">
         <thead>
