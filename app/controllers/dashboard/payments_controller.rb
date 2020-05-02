@@ -17,12 +17,12 @@ module Dashboard
     private
 
     def set_subscription!
-      @subscription = current_user.subscriptions.find_by(
+      @subscription = current_user.subscriptions.find_by!(
         id: params[:subscription_id],
         year: Time.now.year
       )
 
-      redirect_back fallback_location: root_path, alert: t('.already_paid')
+      redirect_back fallback_location: root_path, alert: t('.already_paid') if @subscription.paid?
     end
   end
 end
