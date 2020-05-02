@@ -31,10 +31,6 @@ class Subscription < ApplicationRecord
     stripe_charge.paid && stripe_charge.amount == fee_cents
   end
 
-  def stripe_charge
-    @stripe_charge ||= stripe_charge_id && Stripe::Charge.retrieve(stripe_charge_id)
-  end
-
   def fee_cents
     (fee * 100).to_i
   end
@@ -67,5 +63,9 @@ class Subscription < ApplicationRecord
     weekdays = courses.map(&:weekday)
 
     errors.add(:courses, :unique_weekday) unless weekdays.uniq == weekdays
+  end
+
+  def stripe_charge
+    @stripe_charge ||= stripe_charge_id && Stripe::Charge.retrieve(stripe_charge_id)
   end
 end
