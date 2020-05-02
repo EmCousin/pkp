@@ -26,7 +26,21 @@ class Subscription < ApplicationRecord
   end
 
   def paid?
-    false
+    return false unless stripe_charge.present?
+
+    stripe_charge.paid && stripe_charge.amount == fee_cents
+  end
+
+  def stripe_charge
+    @stripe_charge ||= stripe_charge_id && Stripe::Charge.retrieve(stripe_charge_id)
+  end
+
+  def fee_cents
+    (fee * 100).to_i
+  end
+
+  def description
+    courses.pluck(:title).join(', ')
   end
 
   private

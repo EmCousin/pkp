@@ -1,0 +1,23 @@
+<div class="row">
+  <div class="col-md-6 offset-md-3">
+    <%= form_with model: @subscription, local: true, url: dashboard_subscription_payment_path(@subscription.id), method: :post, data: { controller: 'stripe', target: 'stripe.form', 'stripe-key': Rails.application.credentials.stripe[:public_key], action: "submit->form-remote#submit" } do |f| %>
+      <label for="card-element" class="mb-2">
+        <%= t('.payment_by_card')%>
+      </label>
+      <br />
+
+      <div class="mb-3" data-target="stripe.cardElement">
+        <!-- A Stripe Element will be inserted here. -->
+      </div>
+
+      <!-- Used to display form errors. -->
+      <div data-target="stripe.cardErrors" role="alert">
+      </div>
+
+      <div class="actions">
+        <%= link_to t('defaults.back'), dashboard_index_path, class: "btn btn-link float-left" %>
+        <%= f.submit t('.pay', amount: number_to_currency(@subscription.fee, unit: "€", separator: ",", format: "%n %u")), class: 'btn btn-primary float-right', data: { target: "stripe.submit" } %>
+      </div>
+    <% end %>
+  </div>
+</div>

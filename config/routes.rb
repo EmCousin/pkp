@@ -27,7 +27,9 @@ Rails.application.routes.draw do
 
   namespace :dashboard do
     resource :profile, only: [:edit, :update]
-    resources :subscriptions, only: [:new, :create]
+    resources :subscriptions, only: [:new, :create] do
+      resource :payment, only: [:new, :create]
+    end
   end
 
   resources :dashboard, only: [:index]

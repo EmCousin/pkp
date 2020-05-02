@@ -192,11 +192,20 @@ fr:
       not_yet_subscribed: "Vous n'êtes pas encore inscrit(e) pour l'année %{year} ! Cliquez sur le bouton pour vous inscrire :"
       subscription_detailed_info: "Voici les informations detaillées de votre inscription pour l'année %{year} :"
       pay: Payer
+    edit:
+      title: Mes informations personnelles
+    payments:
+      new:
+        payment_by_card: Paiement par carte bancaire
+        pay: Payer %{amount}
+        already_paid: Vous avez déjà payé votre commande.
+      create:
+        payment_success: Inscription payée avec succès !
+        payment_error: Une erreur est survenue. Votre carte n'a pas été débitée. Si le problème persiste, contactez-nous.
+        already_paid: Votre commande est déjà payée. Votre carte n'a donc pas été débitée.
     profiles:
       update:
         edit_success: Membre modifié avec succès !
-    edit:
-      title: Mes informations personelles
   layouts:
     navbar:
       admin: Admin
