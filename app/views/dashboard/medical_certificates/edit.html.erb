@@ -1,0 +1,25 @@
+<div class="container">
+  <%= form_with(model: @subscription, local: true, url:  dashboard_subscription_medical_certificate_path(@subscription.id)) do |form| %>
+    <% if @subscription.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@subscription.errors.count, "error") %> prohibited this subscription from being saved:</h2>
+
+        <ul>
+        <% @subscription.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= form.label :medical_certificate %>
+      <%= form.file_field :medical_certificate, required: true %>
+    </div>
+
+    <div class="actions">
+      <%= form.submit t('defaults.save'), class: "btn btn-dark float-lg-right" %>
+      <%= link_to t('defaults.back'), dashboard_index_path, class: "btn btn-link float-left" %>
+    </div>
+  <% end %>
+</div>

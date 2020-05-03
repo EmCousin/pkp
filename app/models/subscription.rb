@@ -14,6 +14,9 @@ class Subscription < ApplicationRecord
   validate :courses_are_of_the_same_category
   validate :maximum_one_course_per_day
 
+  has_one_attached :signed_form
+  has_one_attached :medical_certificate
+
   enum status: %i[pending confirmed archived]
 
   def compute_fee
