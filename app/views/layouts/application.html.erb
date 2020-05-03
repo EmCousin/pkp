@@ -10,16 +10,7 @@
 
   <body>
     <%= render 'layouts/navbar' %>
-    <% if alert.present? %>
-      <div class="alert alert-warning text-center mb-0" role="alert">
-        <span id="alert"><%= alert %></span>
-      </div>
-    <% end %>
-    <% if notice.present? %>
-      <div class="alert alert-info text-center mb-0" role="alert">
-        <span id="notice"><%= notice %></span>
-      </div>
-    <% end %>
+    <%= render 'layouts/flash' %>
     <div class="container background-white pt-5">
       <%= yield %>
     </div>
