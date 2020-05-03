@@ -36,6 +36,18 @@
           <% end %>
         </tbody>
       </table>
+      <% unless @subscription.signed_form.attached? %>
+        <%= link_to t('.upload_signed_form'), edit_dashboard_subscription_signed_form_path(@subscription.id), class: "btn btn-primary" %>
+        <% else %>
+        <p>Vous avez dejá ajouté un formulaire signé. </p>
+        <%= link_to t('.change_signed_form'), edit_dashboard_subscription_signed_form_path(@subscription.id), class: "btn btn-success" %>
+      <% end %>
+      <% unless @subscription.medical_certificate.attached? %>
+        <%= link_to t('.upload_medical_certificate'), edit_dashboard_subscription_medical_certificate_path(@subscription.id), class: "btn btn-primary" %>
+      <% else %>
+        <p>Vous avez dejá ajouté un certificat médical. </p>
+         <%= link_to t('.change_medical_certificate'), edit_dashboard_subscription_medical_certificate_path(@subscription.id), class: "btn btn-success" %>
+      <% end %>
     </div>
   <% else %>
     <p><%= t('.not_yet_subscribed', year: Time.now.year) %></p>

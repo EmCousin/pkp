@@ -153,6 +153,8 @@ fr:
         pending: En attente
         confirmed: Confirmée
         archived: Archivée
+        signed_form: Formulaire signé
+        medical_certificate: Certificat médical
 
   #views
   admin:
@@ -192,8 +194,15 @@ fr:
       not_yet_subscribed: "Vous n'êtes pas encore inscrit(e) pour l'année %{year} ! Cliquez sur le bouton pour vous inscrire :"
       subscription_detailed_info: "Voici les informations detaillées de votre inscription pour l'année %{year} :"
       pay: Payer
+      upload_signed_form: Retourner le formulaire signé
+      upload_medical_certificate: Joindre le certificat médical
+      change_signed_form: Remplacer le formulaire
+      change_medical_certificate: Remplacer le certificat médical
     edit:
       title: Mes informations personnelles
+    profiles:
+      update:
+        edit_success: Profil modifié avec succès !
     payments:
       new:
         payment_by_card: Paiement par carte bancaire
@@ -203,9 +212,12 @@ fr:
         payment_success: Inscription payée avec succès !
         payment_error: Une erreur est survenue. Votre carte n'a pas été débitée. Si le problème persiste, contactez-nous.
         already_paid: Votre commande est déjà payée. Votre carte n'a donc pas été débitée.
-    profiles:
+    medical_certificates:
       update:
-        edit_success: Membre modifié avec succès !
+        edit_success: Certificat médical ajuté avec succès !
+    signed_forms:
+      update:
+        edit_success: Formulaire signé ajuté avec succès !
   layouts:
     navbar:
       admin: Admin
