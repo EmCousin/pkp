@@ -31,6 +31,8 @@ Rails.start();
 import Turbolinks from "turbolinks";
 Turbolinks.start();
 
+import '@stripe/stripe-js';
+
 import 'stylesheets/application.scss';
 
 import "bootstrap";

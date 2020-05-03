@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_02_093733) do
+ActiveRecord::Schema.define(version: 2020_05_02_160928) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -73,6 +73,7 @@ ActiveRecord::Schema.define(version: 2020_05_02_093733) do
     t.integer "status", default: 0
     t.string "medical_certificate"
     t.string "signed_form"
+    t.string "stripe_charge_id"
     t.index ["member_id"], name: "index_subscriptions_on_member_id"
   end
 
