@@ -71,9 +71,9 @@ ActiveRecord::Schema.define(version: 2020_05_02_160928) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "status", default: 0
+    t.string "stripe_charge_id"
     t.string "medical_certificate"
     t.string "signed_form"
-    t.string "stripe_charge_id"
     t.index ["member_id"], name: "index_subscriptions_on_member_id"
   end
 
