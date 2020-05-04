@@ -64,6 +64,10 @@ fr:
             category:
               blank: doit être rempli
               course_ids: doit être rempli
+    attributes:
+      create_subscription_form:
+        category: Type de cours
+        course_ids: Cours
   activerecord:
     errors:
       models:
@@ -107,10 +111,10 @@ fr:
             member_id:
               taken: est dejà pris
             courses:
-              must_exist: ":  minimum un"
-              limit_exceeded: ": maximum trois"
-              unique_category: ": doivent être de la même catégorie"
-              unique_weekday: ": ne doivent pas être le même jour"
+              must_exist: ":  minimum un cours"
+              limit_exceeded: ": maximum trois cours"
+              unique_category: ": Les cours doivent être de la même catégorie"
+              unique_weekday: ": Les cours ne doivent pas être le même jour"
     models:
       user:
         one: Membre
