@@ -22,19 +22,22 @@
           </ul>
         </div>
       <% end %>
-      <div class="form-group">
-        <%= f.label :course_ids %>
-        <%= f.collection_check_boxes :course_ids, @form.courses, :id, :title, required: true do |b| %>
-          <div class="form-check">
-            <%= b.check_box(class: "form-check-input") %>
-            <%= b.label(class: "form-check-label") %>
-          </div>
-        <% end %>
-      </div>
-      <div class="actions">
-        <%= link_to t('defaults.back'), dashboard_index_path, class: "btn btn-primary float-left" %>
-        <%= f.submit t('defaults.save'), class: "btn btn-dark float-lg-right" %>
-      </div>
+
+      <% if @form.courses.any? %>
+        <div class="form-group">
+          <%= f.label :course_ids %>
+          <%= f.collection_check_boxes :course_ids, @form.courses, :id, :title, required: true do |b| %>
+            <div class="form-check">
+              <%= b.check_box(class: "form-check-input") %>
+              <%= b.label(class: "form-check-label") %>
+            </div>
+          <% end %>
+        </div>
+        <div class="actions d-flex mt-3">
+          <%= link_to t('defaults.back'), dashboard_index_path, class: "btn btn-link flex-fill" %>
+          <%= f.submit t('defaults.save'), class: "btn btn-dark flex-fill" %>
+        </div>
+      <% end %>
     <% end %>
   </div>
 </div>
