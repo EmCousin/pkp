@@ -11,6 +11,7 @@
     "bootstrap": "^4.4.1",
     "file-loader": "^5.0.2",
     "jquery": "^3.5.0",
+    "places.js": "^1.18.2",
     "popper.js": "^1.16.0",
     "resolve-url-loader": "^3.1.1",
     "stimulus": "^1.1.1",
