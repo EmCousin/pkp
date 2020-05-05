@@ -11,9 +11,12 @@ export default class PlacesController extends Controller {
       container: this.addressTarget,
       type: 'address',
       templates: {
-        value: suggestion => suggestion.name,
+        value: ({name}) => name,
+        suggestion: ({name, postcode, city, country}) => `${name}, ${postcode} ${city}, ${country}`,
+        footer: null,
       },
       userHasOptedOut: true,
+      debounce: 200,
     });
 
     let controller = this;

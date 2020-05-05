@@ -5348,10 +5348,9 @@ pkg-up@^2.0.0:
   dependencies:
     find-up "^2.1.0"
 
-places.js@^1.18.2:
+"places.js@https://github.com/EmCousin/places":
   version "1.18.2"
-  resolved "https://registry.yarnpkg.com/places.js/-/places.js-1.18.2.tgz#e9974f67c401da4849b27fda2f7bb2528f4718c1"
-  integrity sha512-/9XG+bo53mnld8b7UO0d/IsapnI/+EqQcsBO60GjpTvNjA+mz2jMazgbagmnXt8mIOuhO+j/VbABsxtW6/fQ7Q==
+  resolved "https://github.com/EmCousin/places#d112f541e55fc2d1eb70eb3e6937b0887e28a88f"
   dependencies:
     algoliasearch "^3.35.1"
     autocomplete.js "^0.37.0"
