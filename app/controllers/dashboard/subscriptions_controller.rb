@@ -29,7 +29,7 @@ module Dashboard
     end
 
     def check_vacation_time!
-      return unless [7, 8].exclude?(Time.now.month)
+      return unless [7, 8].include?(Time.now.month)
 
       redirect_to dashboard_vacations_path
     end
