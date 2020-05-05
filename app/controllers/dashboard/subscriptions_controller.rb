@@ -2,6 +2,8 @@
 
 module Dashboard
   class SubscriptionsController < DashboardController
+    before_action :check_vacation_time!, only: %i[new create]
+
     def new
       @form = CreateSubscriptionForm.new(subscription_params)
     end
@@ -24,6 +26,12 @@ module Dashboard
       else
         {}
       end
+    end
+
+    def check_vacation_time!
+      return unless [7, 8].include?(Time.now.month)
+
+      redirect_to dashboard_vacations_path
     end
   end
 end

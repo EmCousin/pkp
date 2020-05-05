@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       resource :signed_form, only: [:edit, :update]
       resource :payment, only: [:new, :create]
     end
+    resources :vacations, only: [:index]
   end
 
   resources :dashboard, only: [:index]
