@@ -64,6 +64,10 @@ fr:
             category:
               blank: doit être rempli
               course_ids: doit être rempli
+    attributes:
+      create_subscription_form:
+        category: Type de cours
+        course_ids: Cours
   activerecord:
     errors:
       models:
@@ -107,10 +111,10 @@ fr:
             member_id:
               taken: est dejà pris
             courses:
-              must_exist: ":  minimum un"
-              limit_exceeded: ": maximum trois"
-              unique_category: ": doivent être de la même catégorie"
-              unique_weekday: ": ne doivent pas être le même jour"
+              must_exist: ":  minimum un cours"
+              limit_exceeded: ": maximum trois cours"
+              unique_category: ": Les cours doivent être de la même catégorie"
+              unique_weekday: ": Les cours ne doivent pas être le même jour"
     models:
       user:
         one: Membre
@@ -157,6 +161,17 @@ fr:
         medical_certificate: Certificat médical
 
   #views
+  devise:
+    registrations:
+      edit:
+        edit_my_account: Modifier mon compte
+        delete_my_account: Supprimer mon compte
+        click_below_to_delete_your_account: Pour supprimer votre compte, cliquez sur le bouton ci-dessous.
+        warning_cannot_be_undone: Les données relatives à votre compte seront immédiatement détruites. Cette action est irréversible.
+        leave_blank_if_you_wont_change_it: Uniquement si vous souhaitez le modifier
+        current_password_needed: nécessaire pour confirmer vos modifications
+        minimum_characters: "%{length} caractères minimum"
+        are_you_sure: Cette action est irréversible. Cliquez sur OK pour supprimer définivement votre compte.
   admin:
     users:
       new:
