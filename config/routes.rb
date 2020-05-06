@@ -32,6 +32,7 @@ Rails.application.routes.draw do
       resource :payment, only: [:new, :create]
     end
     resources :vacations, only: [:index]
+    resources :capacities, only: [:index]
   end
 
   resources :dashboard, only: [:index]
