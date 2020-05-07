@@ -16,7 +16,7 @@
 
   <p>
     <strong><%= User.human_attribute_name(:avatar) %> :</strong>
-    <%= image_tag url_for(@user.avatar) %>
+    <%= image_tag url_for(@user.avatar), width: "300" %>
   </p>
 
   <br/>
