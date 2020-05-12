@@ -4,6 +4,7 @@ class Subscription < ApplicationRecord
   belongs_to :member, class_name: 'User'
   has_many :courses_subscriptions, dependent: :destroy
   has_many :courses, through: :courses_subscriptions
+  has_one :invoice, dependent: :nullify
 
   validates :year, numericality: { only_integer: true }, presence: true
   validates :fee, numericality: { greater_than_or_equal_to: 0 }, presence: true

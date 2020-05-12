@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_02_160928) do
+ActiveRecord::Schema.define(version: 2020_05_12_164050) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,6 +64,14 @@ ActiveRecord::Schema.define(version: 2020_05_02_160928) do
     t.index ["subscription_id"], name: "index_courses_subscriptions_on_subscription_id"
   end
 
+  create_table "invoices", force: :cascade do |t|
+    t.bigint "subscription_id", null: false
+    t.string "file"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["subscription_id"], name: "index_invoices_on_subscription_id"
+  end
+
   create_table "subscriptions", force: :cascade do |t|
     t.bigint "member_id"
     t.integer "year", null: false
@@ -71,9 +79,9 @@ ActiveRecord::Schema.define(version: 2020_05_02_160928) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "status", default: 0
-    t.string "stripe_charge_id"
     t.string "medical_certificate"
     t.string "signed_form"
+    t.string "stripe_charge_id"
     t.index ["member_id"], name: "index_subscriptions_on_member_id"
   end
 
@@ -108,5 +116,6 @@ ActiveRecord::Schema.define(version: 2020_05_02_160928) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "courses_subscriptions", "courses"
   add_foreign_key "courses_subscriptions", "subscriptions"
+  add_foreign_key "invoices", "subscriptions"
   add_foreign_key "subscriptions", "users", column: "member_id"
 end

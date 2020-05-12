@@ -23,6 +23,13 @@
   </p>
 
   <p>
+    <% if @subscription.paid? %>
+      <strong><%= t('.invoice') %> :</strong>
+      <%= link_to t('.generate_invoice'), admin_subscription_invoices_path(@subscription.id), method: :post, class: "btn btn-outline-success btn-sm" %>
+    <% end %>
+  </p>
+
+  <p>
     <strong><%= Subscription.human_attribute_name(:year) %> :</strong>
     <%= @subscription.year %>
   </p>
