@@ -15,11 +15,11 @@
 	</p>
 	<p>
 	  <strong><%= t('.payment') %> :</strong>
-	  <% if @subscription.paid? %>
-	  	<%= t('.paid') %>
-		<% else %>
-			<%= t('.not_paid_yet') %>
-		<% end %>
+    <% if @subscription.paid? %>
+      <%= t('.paid') %>
+    <% else %>
+      <%= t('.not_paid_yet') %>
+    <% end %>
 	</p>
 
 	<p>
