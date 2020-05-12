@@ -30,7 +30,7 @@
 	<p>
 	  <strong><%= Subscription.human_attribute_name(:medical_certificate) %> :</strong>
 	  <% if @subscription.medical_certificate.attached? %>
-	  	<%= link_to t('defaults.download'), rails_blob_path(@subscription.medical_certificate, disposition: "attachment") %>
+      <%= link_to t('defaults.download'), rails_blob_path(@subscription.medical_certificate, disposition: "attachment") %>
 	  <% else %>
 	  	<%= t('defaults.none') %>
 	  <% end %>
