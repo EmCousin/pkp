@@ -56,6 +56,8 @@ fr:
     confirm: Confirmer
     archive: Archiver
     action: Action
+    download: Télécharger
+    none: Aucun
   activemodel:
     errors:
       models:
@@ -192,6 +194,10 @@ fr:
     subscriptions:
       new:
         title: Inscrire un membre
+      show:
+        payment: Paiement
+        paid: Payé
+        not_paid_yet: En attente de paiement
       form:
         users: Membres
       edit:
