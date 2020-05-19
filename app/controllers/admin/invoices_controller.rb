@@ -2,15 +2,16 @@
 
 module Admin
   class InvoicesController < AdminController
-    before_action :set_subscription!, only: %i[create]
+    before_action :set_subscription!, only: %i[edit update]
 
-    def create
-      invoice = @subscription.create_invoice
+    def edit
+    end
 
-      if invoice.valid?
-        redirect_back fallback_location: admin_subscription_path(@subscription.id), notice: t('.invoice_success')
+    def update
+      if @subscription.update(subscription_params)
+        redirect_to admin_subscription_path(@subscription.id), notice: t('.edit_success')
       else
-        redirect_back fallback_location: admin_subscription_path(@subscription.id), alert: invoice.errors.full_messages.join(', ')
+        render :edit
       end
     end
 
@@ -20,6 +21,12 @@ module Admin
       @subscription = Subscription.find_by!(
         id: params[:subscription_id],
         year: Time.now.year
+      )
+    end
+
+    def subscription_params
+      params.require(:subscription).permit(
+        :invoice
       )
     end
   end

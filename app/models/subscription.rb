@@ -4,7 +4,6 @@ class Subscription < ApplicationRecord
   belongs_to :member, class_name: 'User'
   has_many :courses_subscriptions, dependent: :destroy
   has_many :courses, through: :courses_subscriptions
-  has_one :invoice, dependent: :nullify
 
   validates :year, numericality: { only_integer: true }, presence: true
   validates :fee, numericality: { greater_than_or_equal_to: 0 }, presence: true
@@ -17,6 +16,7 @@ class Subscription < ApplicationRecord
 
   has_one_attached :signed_form
   has_one_attached :medical_certificate
+  has_one_attached :invoice
 
   enum status: %i[pending confirmed archived]
 

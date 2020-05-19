@@ -1,0 +1,25 @@
+<div class="container">
+  <%= form_with(model: @subscription, local: true, url:  admin_subscription_invoice_path(@subscription.id)) do |form| %>
+    <% if @subscription.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@subscription.errors.count, "error") %> prohibited this subscription from being saved:</h2>
+
+        <ul>
+        <% @subscription.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= form.label :invoice %>
+      <%= form.file_field :invoice, required: true %>
+    </div>
+
+    <div class="actions">
+      <%= form.submit t('defaults.save'), class: "btn btn-dark float-lg-right" %>
+      <%= link_to t('defaults.back'), admin_subscription_path(@subscription.id), class: "btn btn-link float-left" %>
+    </div>
+  <% end %>
+</div>

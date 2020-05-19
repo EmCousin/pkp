@@ -20,7 +20,7 @@ Rails.application.routes.draw do
         put :confirm
         put :archive
       end
-      resources :invoices, only: [:create]
+      resource :invoice, only: [:edit, :update]
     end
   end
 
