@@ -2,7 +2,9 @@
 
 module Admin
   class InvoicesController < AdminController
-    before_action :set_subscription!, only: %i[edit update]
+    before_action :set_subscription!, only: %i[show edit update]
+
+    def show; end
 
     def edit; end
 

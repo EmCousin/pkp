@@ -1,5 +1,6 @@
+
 <div class="container">
-  <%= form_with(model: @subscription, local: true, url:  admin_subscription_invoice_path(@subscription.id)) do |form| %>
+  <%= form_with(model: @subscription, local: true, url:   admin_subscription_invoice_path(@subscription.id)) do |form| %>
     <% if @subscription.errors.any? %>
       <div id="error_explanation">
         <h2><%= pluralize(@subscription.errors.count, "error") %> prohibited this invoice from being generated:</h2>
@@ -10,15 +11,19 @@
         </ul>
       </div>
     <% end %>
-    <div>
-      <p>Parkour Paris</p>
-      <p>ID société : 750 838 609 00014</p>
-      <p>parkour.paris@gmail.com</p>
-      <p>International School of Paris</p>
-      <p>E-mail: lhudson@isparis.edu</p>
-      <p>E-mail: lhudson@isparis.edu</p>
-      <p>Adresse: Rue Beethoven, Paris</p>
-    </div>
+
+    <p>Parkour Paris</p>
+    <p>ID société : 750 838 609 00014</p>
+    <p>parkour.paris@gmail.com</p>
+
+
+    <p>International School of Paris</p>
+    <p>E-mail: lhudson@isparis.edu</p>
+    <p>Adresse: Rue BeethovenParis</p>
+
+        <h1>C'est la facture!</h1>
+
+
     <div class="form-group">
       <%= form.label :invoice %>
       <%= form.file_field :invoice, required: true %>

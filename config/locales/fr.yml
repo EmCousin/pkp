@@ -206,7 +206,7 @@ fr:
         payment: Paiement
         paid: Payé
         not_paid_yet: En attente de paiement
-        generate_invoice: Générer une facture
+        preview_invoice: Prévisualiser la facture
       form:
         users: Membres
       edit:
