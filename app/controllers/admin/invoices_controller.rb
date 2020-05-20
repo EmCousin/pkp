@@ -4,8 +4,7 @@ module Admin
   class InvoicesController < AdminController
     before_action :set_subscription!, only: %i[edit update]
 
-    def edit
-    end
+    def edit; end
 
     def update
       if @subscription.update(subscription_params)
