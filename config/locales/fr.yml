@@ -117,6 +117,13 @@ fr:
               limit_exceeded: ": maximum trois cours"
               unique_category: ": Les cours doivent être de la même catégorie"
               unique_weekday: ": Les cours ne doivent pas être le même jour"
+        invoice:
+          attributes:
+            subscription:
+              must_be_paid: doit être payée
+              required: est requis
+            subscription_id:
+              taken: a déjà une facture
     models:
       user:
         one: Membre
@@ -161,6 +168,7 @@ fr:
         archived: Archivée
         signed_form: Formulaire signé
         medical_certificate: Certificat médical
+        invoice: Facture
 
   #views
   devise:
@@ -198,6 +206,7 @@ fr:
         payment: Paiement
         paid: Payé
         not_paid_yet: En attente de paiement
+        generate_invoice: Générer une facture
       form:
         users: Membres
       edit:
@@ -208,7 +217,9 @@ fr:
       archive:
         archivation_success: 'Inscription archivée avec succès !'
         archivation_failure: "L'inscription est déjà archivée !"
-
+    invoices:
+      update:
+        edit_success: Facture générée
   dashboard:
     index:
       choose_my_courses: Choisir mes cours
