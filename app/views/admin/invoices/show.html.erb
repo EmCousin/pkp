@@ -12,6 +12,7 @@
       </div>
     <% end %>
 
+    <%= image_pack_tag "Logo_PKP.webp" %>
     <p>Parkour Paris</p>
     <p>ID société : 750 838 609 00014</p>
     <p>parkour.paris@gmail.com</p>
@@ -19,10 +20,34 @@
 
     <p>International School of Paris</p>
     <p>E-mail: lhudson@isparis.edu</p>
-    <p>Adresse: Rue BeethovenParis</p>
+    <p>Adresse: Rue Beethoven</p>
+    <p>Paris</p>
 
-        <h1>C'est la facture!</h1>
+    <p>Facture: #<%= @subscription.year %><%= @subscription.id %></p>
+    <p>Payée le: <%= @subscription.paid_at %>
+    <p>Date de délivrance : <%= Time.now %></p>
 
+
+    <table class="table mt-5">
+      <thead>
+        <tr class="text-center">
+          <th>Article ou Service</th>
+          <th>Prix</th>
+          <th>Quantité</th>
+          <th>Total</th>
+        </tr>
+
+      </thead>
+
+      <tbody>
+          <tr class="text-center">
+            <td><%= @subscription %></td>
+            <td><%= number_to_currency(@subscription.fee, unit: "€", separator: ",", format: "%n %u") %></td>
+            <td>1</td>
+            <td><%= number_to_currency(@subscription.fee, unit: "€", separator: ",", format: "%n %u") %></td>
+          </tr>
+        </tbody>
+    </table>
 
     <div class="form-group">
       <%= form.label :invoice %>

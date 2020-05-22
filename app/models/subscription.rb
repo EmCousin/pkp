@@ -43,6 +43,10 @@ class Subscription < ApplicationRecord
     courses.pluck(:title).join(', ')
   end
 
+  def paid_at
+    Time.at(stripe_charge.created)
+  end
+
   private
 
   def year_is_current
