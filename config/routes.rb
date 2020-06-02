@@ -20,6 +20,7 @@ Rails.application.routes.draw do
         put :confirm
         put :archive
       end
+      resource :invoice, only: [:edit, :update]
     end
   end
 

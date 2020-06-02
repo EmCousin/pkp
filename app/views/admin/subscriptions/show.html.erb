@@ -22,6 +22,17 @@
     <% end %>
   </p>
 
+  <% if @subscription.paid? %>
+    <p>
+      <strong><%= Subscription.human_attribute_name(:invoice) %> :</strong>
+      <% if @subscription.invoice.attached? %>
+        <%= link_to t('defaults.download'), rails_blob_path(@subscription.invoice, disposition: "attachment") %>
+      <% else %>
+        <%= link_to t('.generate_invoice'), edit_admin_subscription_invoice_path(@subscription.id), class: "btn btn-outline-success btn-sm" %>
+      <% end %>
+    </p>
+  <% end %>
+
   <p>
     <strong><%= Subscription.human_attribute_name(:year) %> :</strong>
     <%= @subscription.year %>
