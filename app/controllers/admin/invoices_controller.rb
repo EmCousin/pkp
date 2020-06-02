@@ -4,7 +4,16 @@ module Admin
   class InvoicesController < AdminController
     before_action :set_subscription!, only: %i[show edit update]
 
-    def show; end
+    def show
+      def pdf_convertion
+        respond_to do |format|
+          format.html
+          format.pdf do
+            render pdf: "facture"
+          end
+        end
+      end
+    end
 
     def edit; end
 
@@ -15,6 +24,8 @@ module Admin
         render :edit
       end
     end
+
+
 
     private
 

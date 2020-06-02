@@ -47,6 +47,14 @@ class Subscription < ApplicationRecord
     Time.at(stripe_charge.created)
   end
 
+  def paid_amount
+    stripe_charge.amount / 100.0
+  end
+
+  def balance
+    fee - paid_amount
+  end
+
   private
 
   def year_is_current
