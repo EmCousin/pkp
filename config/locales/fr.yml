@@ -220,6 +220,8 @@ fr:
     invoices:
       update:
         edit_success: Facture générée
+      show:
+        generate_invoice: Génerer cette facture
   dashboard:
     index:
       choose_my_courses: Choisir mes cours

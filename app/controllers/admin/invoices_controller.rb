@@ -5,14 +5,7 @@ module Admin
     before_action :set_subscription!, only: %i[show edit update]
 
     def show
-      def pdf_convertion
-        respond_to do |format|
-          format.html
-          format.pdf do
-            render pdf: "facture"
-          end
-        end
-      end
+      generate_facture = pdf_convertion
     end
 
     def edit; end
@@ -24,8 +17,6 @@ module Admin
         render :edit
       end
     end
-
-
 
     private
 
@@ -40,6 +31,14 @@ module Admin
       params.require(:subscription).permit(
         :invoice
       )
+    end
+    def pdf_convertion
+      respond_to do |format|
+        format.html
+        format.pdf do
+          render pdf: "facture"
+        end
+      end
     end
   end
 end

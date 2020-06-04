@@ -53,34 +53,36 @@
           <td>1</td>
           <td><%= total_amount %></td>
         </tr>
-        <tr class="col-md-2">
+        <tr>
+          <td colspan="4"></td>
+        </tr>
+        <tr>
           <td>Sous-total :</td>
           <td><%= total_amount %></td>
         </tr>
         <tr>
-          <td colspan="2"></td>
           <td>Total facture :</td>
           <td><%= total_amount %></td>
         </tr>
-        <tr>
-          <td colspan="2"></td>
+        <tr colspan="2">
           <td>Montant payé :</td>
           <td><%= number_to_euros(@subscription.paid_amount) %></td>
         </tr>
-        <tr>
-          <td colspan="2"></td>
+        <tr colspan="2">
           <td>Solde :</td>
           <td><%= number_to_euros(@subscription.balance) %></td>
         </tr>
       </tbody>
     </table>
+    <div>
+        <%= form.submit t('.generate_invoice'), class: "btn btn-success float-lg-right" %>
+      </div>
     <div class="container mt-5">
       <div class="form-group">
         <p>Charger une facture:</p>
         <%= form.label :invoice %>
         <%= form.file_field :invoice, required: true %>
       </div>
-
       <div class="actions">
         <%= form.submit t('defaults.save'), class: "btn btn-dark float-lg-right" %>
         <%= link_to t('defaults.back'), admin_subscription_path(@subscription.id), class: "btn btn-link float-left" %>
