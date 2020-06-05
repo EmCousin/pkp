@@ -75,7 +75,7 @@
       </tbody>
     </table>
     <div>
-        <%= form.submit t('.generate_invoice'), class: "btn btn-success float-lg-right" %>
+        <%= link_to t('.generate_invoice'), admin_subscription_invoice_path(@subscription.id), method: :post, class: "btn btn-success float-lg-right" %>
       </div>
     <div class="container mt-5">
       <div class="form-group">

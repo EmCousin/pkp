@@ -2,10 +2,14 @@
 
 module Admin
   class InvoicesController < AdminController
-    before_action :set_subscription!, only: %i[show edit update]
+    before_action :set_subscription!, only: %i[show create edit update]
 
-    def show
-      generate_facture = pdf_convertion
+    def show; end
+
+    def create
+      pdf = pdf_from_subscription
+      @subscription.invoice.attach(pdf)
+      redirect_to admin_subscription_path(@subscription.id), notice: t('.success')
     end
 
     def edit; end
@@ -27,18 +31,23 @@ module Admin
       )
     end
 
+    def pdf_from_subscription
+      WickedPdf.new.pdf_from_string(
+        render_to_string(
+          'templates/invoice.html.erb',
+          layout: 'pdf.html.erb',
+          encoding: 'UTF-8',
+          locals: {
+            subscription: @subscription
+          }
+        )
+      )
+    end
+
     def subscription_params
       params.require(:subscription).permit(
         :invoice
       )
-    end
-    def pdf_convertion
-      respond_to do |format|
-        format.html
-        format.pdf do
-          render pdf: "facture"
-        end
-      end
     end
   end
 end

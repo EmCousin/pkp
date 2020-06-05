@@ -218,6 +218,8 @@ fr:
         archivation_success: 'Inscription archivée avec succès !'
         archivation_failure: "L'inscription est déjà archivée !"
     invoices:
+      create:
+        success: Facture générée
       update:
         edit_success: Facture générée
       show:
