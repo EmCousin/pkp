@@ -7,12 +7,10 @@ module Admin
     def show; end
 
     def create
-      pdf = Tempfile.open('invoice.pdf') do |f|
-        f << pdf_from_subscription
-      end
+      pdf = pdf_from_subscription
 
       @subscription.invoice.attach(
-        io: File.open(pdf),
+        io: StringIO.new(pdf),
         filename: 'invoice.pdf',
         content_type: Mime[:pdf]
       )
