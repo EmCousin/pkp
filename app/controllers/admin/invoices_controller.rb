@@ -7,8 +7,16 @@ module Admin
     def show; end
 
     def create
-      pdf = pdf_from_subscription
-      @subscription.invoice.attach(pdf)
+      pdf = Tempfile.open('invoice.pdf') do |f|
+        f << pdf_from_subscription
+      end
+
+      @subscription.invoice.attach(
+        io: File.open(pdf),
+        filename: 'invoice.pdf',
+        content_type: Mime[:pdf]
+      )
+
       redirect_to admin_subscription_path(@subscription.id), notice: t('.success')
     end
 
@@ -41,7 +49,7 @@ module Admin
             subscription: @subscription
           }
         )
-      )
+      ).force_encoding('UTF-8')
     end
 
     def subscription_params
