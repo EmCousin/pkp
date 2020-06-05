@@ -1,65 +1,73 @@
-<div class="container">
-  <p>
-    <strong><%= Course.human_attribute_name(:title) %> :</strong>
-    <%= @course.title %>
-  </p>
+<h1 class="page-title"><%= @course.title %></h1>
+<hr />
 
-  <p>
-    <strong><%= Course.human_attribute_name(:description) %> :</strong>
-    <%= @course.description %>
-  </p>
+<div class="row pt-2">
+  <div class="col-8 offset-2">
+    <div class="float-right">
+      <%= link_to t('defaults.edit'), edit_admin_course_path(@course.id), class: "btn btn-outline-warning btn-sm" %>
+      <%= link_to t('defaults.destroy'), admin_course_path(@course.id), method: :delete, data: { confirm: t('defaults.are_you_sure') }, class: "btn btn-outline-danger btn-sm" %>
+    </div>
 
-  <p>
-    <strong><%= Course.human_attribute_name(:capacity) %> :</strong>
-    <%= @course.capacity %>
-  </p>
+    <p>
+      <strong><%= Course.human_attribute_name(:title) %> :</strong>
+      <%= @course.title %>
+    </p>
 
-  <p>
-    <strong><%= Course.human_attribute_name(:category) %> :</strong>
-    <%= @course.category %>
-  </p>
+    <p>
+      <strong><%= Course.human_attribute_name(:description) %> :</strong>
+      <%= @course.description %>
+    </p>
 
-  <p>
-    <strong><%= Course.human_attribute_name(:weekday) %> :</strong>
-    <%= @course.weekday %>
-  </p>
+    <p>
+      <strong><%= Course.human_attribute_name(:capacity) %> :</strong>
+      <%= @course.capacity %>
+    </p>
 
-  <br/>
+    <p>
+      <strong><%= Course.human_attribute_name(:category) %> :</strong>
+      <%= @course.category %>
+    </p>
 
-  <%= link_to t('defaults.edit'), edit_admin_course_path(@course.id), class: "btn btn-outline-warning btn-sm" %>
-  <%= link_to t('defaults.destroy'), admin_course_path(@course.id), method: :delete, data: { confirm: t('defaults.are_you_sure') }, class: "btn btn-outline-danger btn-sm" %>
-  <hr />
-  <%= link_to t('defaults.new', resource: Subscription.model_name.human.downcase), new_admin_subscription_path, class: "btn btn-primary" %>
+    <p>
+      <strong><%= Course.human_attribute_name(:weekday) %> :</strong>
+      <%= @course.weekday %>
+    </p>
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th><%= User.human_attribute_name(:full_name) %></th>
-        <th><%= User.human_attribute_name(:avatar) %></th>
-        <th><%= Subscription.human_attribute_name(:fee) %></th>
-        <th><%= Subscription.human_attribute_name(:year) %></th>
-        <th></th>
-      </tr>
-    </thead>
+    <hr />
+    <%= link_to t('.new_subscription', resource: Subscription.model_name.human.downcase), new_admin_subscription_path, class: "btn btn-primary" %>
 
-    <tbody>
-      <% if @course.subscriptions.empty? %>
+    <table class="table mt-4">
+      <thead>
         <tr>
-          <td colspan="9" class="text-center">
-            <%= link_to t('.add_subscription'), new_admin_subscription_path, class: "btn btn-primary" %>
-          </td>
+          <th><%= User.human_attribute_name(:full_name) %></th>
+          <th><%= User.human_attribute_name(:avatar) %></th>
+          <th><%= Subscription.human_attribute_name(:fee) %></th>
+          <th><%= Subscription.human_attribute_name(:year) %></th>
+          <th></th>
         </tr>
-      <% else %>
-        <% @course.subscriptions.includes(:member).each do |subscription| %>
+      </thead>
+
+      <tbody>
+        <% if @course.subscriptions.empty? %>
           <tr>
-            <td><%= link_to subscription.member.full_name , admin_user_path(subscription.member_id) %></td>
-            <td><%= image_tag url_for(subscription.member.avatar), width: "30" %></td>
-            <td><%= number_to_currency(subscription.fee, unit: "€", separator: ",", format: "%n %u") %></td>
-            <td><%= subscription.year %></td>
-           <td><%= link_to t('.remove_from_course'),unlink_course_admin_subscription_path(subscription.id, course_id: @course.id), method: :delete, data: { confirm: t('.remove_from_course_are_you_sure', member_full_name: subscription.member.full_name, course_title: @course.title) }, class: "btn btn-outline-danger btn-sm" %></td>
+            <td colspan="9" class="text-center">
+              <%= link_to t('.new_subscription'), new_admin_subscription_path, class: "btn btn-primary" %>
+            </td>
           </tr>
+        <% else %>
+          <% @course.subscriptions.includes(:member).each do |subscription| %>
+            <tr>
+              <td><%= link_to subscription.member.full_name , admin_user_path(subscription.member_id) %></td>
+              <td><%= image_tag url_for(subscription.member.avatar), width: "30" %></td>
+              <td><%= number_to_currency(subscription.fee, unit: "€", separator: ",", format: "%n %u") %></td>
+              <td><%= subscription.year %></td>
+              <td><%= link_to t('.remove_from_course'),unlink_course_admin_subscription_path(subscription.id, course_id: @course.id), method: :delete, data: { confirm: t('.remove_from_course_are_you_sure', member_full_name: subscription.member.full_name, course_title: @course.title) }, class: "btn btn-outline-danger btn-sm" %></td>
+            </tr>
+          <% end %>
         <% end %>
-      <% end %>
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+
+  </div>
 </div>
+

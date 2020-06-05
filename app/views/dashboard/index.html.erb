@@ -1,56 +1,60 @@
-<div class="container">
-  <h1 class="text-center"><%= t('defaults.welcome') %>, <%= current_user.first_name %> !</h1>
-  <br/>
-  <% if @subscription.present? %>
-    <p><%= t('.subscription_detailed_info', year: @subscription.year) %></p>
+<h1 class="page-title"><%= t('defaults.welcome') %>, <%= current_user.first_name %> !</h1>
+<hr/>
 
-    <div class="mt-3">
-      <div class="row p-2">
-        <div class="col-3"><strong><%= User.human_attribute_name(:full_name) %></strong></div>
-        <div class="col-3"><%= @subscription.member.full_name %></div>
+<div class="row">
+  <div class="col-md-6 offset-md-3">
+    <% if @subscription.present? %>
+      <p><%= t('.subscription_detailed_info', year: @subscription.year) %></p>
+
+      <div class="mt-3">
+        <div class="row p-2">
+          <div class="col-3"><strong><%= User.human_attribute_name(:full_name) %></strong></div>
+          <div class="col-3"><%= @subscription.member.full_name %></div>
+        </div>
+        <div class="row p-2">
+          <div class="col-3"><strong><%= Subscription.human_attribute_name(:fee) %></strong></div>
+          <div class="col-3"><%= number_to_currency(@subscription.fee, unit: "€", separator: ",", format: "%n %u") %></div>
+          <% unless @subscription.paid? %>
+            <%= link_to t('.pay'), new_dashboard_subscription_payment_path(@subscription.id), class: "btn btn-primary float-right" %>
+          <% end %>
+        </div>
       </div>
-      <div class="row p-2">
-        <div class="col-3"><strong><%= Subscription.human_attribute_name(:fee) %></strong></div>
-        <div class="col-3"><%= number_to_currency(@subscription.fee, unit: "€", separator: ",", format: "%n %u") %></div>
-        <% unless @subscription.paid? %>
-          <%= link_to t('.pay'), new_dashboard_subscription_payment_path(@subscription.id), class: "btn btn-primary float-right" %>
+      <div class="table-responsive mt-3">
+        <table class="table">
+          <thead>
+            <tr>
+              <th><%= Course.human_attribute_name(:title) %></th>
+              <th><%= Course.human_attribute_name(:weekday) %></th>
+              <th><%= Course.human_attribute_name(:category) %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @subscription.courses.each do |course| %>
+              <tr>
+                <td><%= course.title %></td>
+                <td><%= course.weekday %></td>
+                <td><%= course.category %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <% unless @subscription.signed_form.attached? %>
+          <%= link_to t('.upload_signed_form'), edit_dashboard_subscription_signed_form_path(@subscription.id), class: "btn btn-primary" %>
+          <% else %>
+          <p>Vous avez dejá ajouté un formulaire signé. </p>
+          <%= link_to t('.change_signed_form'), edit_dashboard_subscription_signed_form_path(@subscription.id), class: "btn btn-success" %>
+        <% end %>
+        <% unless @subscription.medical_certificate.attached? %>
+          <%= link_to t('.upload_medical_certificate'), edit_dashboard_subscription_medical_certificate_path(@subscription.id), class: "btn btn-primary" %>
+        <% else %>
+          <p>Vous avez dejá ajouté un certificat médical. </p>
+          <%= link_to t('.change_medical_certificate'), edit_dashboard_subscription_medical_certificate_path(@subscription.id), class: "btn btn-success" %>
         <% end %>
       </div>
-    </div>
-    <div class="table-responsive mt-3">
-      <table class="table">
-        <thead>
-          <tr>
-            <th><%= Course.human_attribute_name(:title) %></th>
-            <th><%= Course.human_attribute_name(:weekday) %></th>
-            <th><%= Course.human_attribute_name(:category) %></th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @subscription.courses.each do |course| %>
-            <tr>
-              <td><%= course.title %></td>
-              <td><%= course.weekday %></td>
-              <td><%= course.category %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-      <% unless @subscription.signed_form.attached? %>
-        <%= link_to t('.upload_signed_form'), edit_dashboard_subscription_signed_form_path(@subscription.id), class: "btn btn-primary" %>
-        <% else %>
-        <p>Vous avez dejá ajouté un formulaire signé. </p>
-        <%= link_to t('.change_signed_form'), edit_dashboard_subscription_signed_form_path(@subscription.id), class: "btn btn-success" %>
-      <% end %>
-      <% unless @subscription.medical_certificate.attached? %>
-        <%= link_to t('.upload_medical_certificate'), edit_dashboard_subscription_medical_certificate_path(@subscription.id), class: "btn btn-primary" %>
-      <% else %>
-        <p>Vous avez dejá ajouté un certificat médical. </p>
-         <%= link_to t('.change_medical_certificate'), edit_dashboard_subscription_medical_certificate_path(@subscription.id), class: "btn btn-success" %>
-      <% end %>
-    </div>
-  <% else %>
-    <p><%= t('.not_yet_subscribed', year: Time.now.year) %></p>
-    <%= link_to t('.choose_my_courses'), new_dashboard_subscription_path, class: "btn btn-primary" %>
-  <% end %>
+    <% else %>
+      <p><%= t('.not_yet_subscribed', year: Time.now.year) %></p>
+      <%= link_to t('.choose_my_courses'), new_dashboard_subscription_path, class: "btn btn-primary" %>
+    <% end %>
+  </div>
 </div>
+
