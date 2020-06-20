@@ -1,7 +1,8 @@
+<h1 class="page-title"><%= t('.title') %></h1>
+<hr />
+
 <div class="row">
   <div class="col-md-6 offset-md-3">
-    <h1><%= t('.title') %></h1>
-
     <%= render 'form', user: @user, url: admin_user_path(@user.id) %>
   </div>
 </div>

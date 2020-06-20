@@ -44,7 +44,7 @@ class PdfsController < ApplicationController
   end
 
   def notify
-    ApplicationMailer.confirm_subscription(params).deliver_now
+    ApplicationMailer.confirm_subscription(params).deliver_later
     render 'templates/pdf', locals: {
       first_name: params[:firstName],
       last_name: params[:lastName] || '',

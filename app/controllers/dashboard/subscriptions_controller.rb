@@ -12,7 +12,7 @@ module Dashboard
     def create
       @form = CreateSubscriptionForm.new(subscription_params)
       if @form.submit
-        SubscriptionMailer.confirm_subscription(@form.subscription).deliver_now
+        SubscriptionMailer.confirm_subscription(@form.subscription).deliver_later
         redirect_to dashboard_index_path, notice: 'Inscription créée avec succès !'
       else
         render :new

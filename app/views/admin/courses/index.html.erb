@@ -1,36 +1,43 @@
-<%= link_to t('defaults.new', resource: Course.model_name.human.downcase), new_admin_course_path, class: "btn btn-primary" %>
+<h1 class="page-title"><%= t(".title") %></h1>
+<hr />
 
-<div class="table-responsive mt-3">
-  <table class="table">
-    <thead>
-      <tr>
-        <th><%= Course.human_attribute_name(:title) %></th>
-        <th><%= Course.human_attribute_name(:capacity) %></th>
-        <th><%= Course.human_attribute_name(:category) %></th>
-        <th><%= Course.human_attribute_name(:weekday) %></th>
-        <th colspan="2" class="text-center">Action</th>
-      </tr>
-    </thead>
+<div class="row">
+  <div class="col-8 offset-2">
+    <%= link_to t('defaults.new', resource: Course.model_name.human.downcase), new_admin_course_path, class: "btn btn-primary float-right mb-4" %>
 
-    <tbody>
-      <% if @courses.empty? %>
-        <tr>
-          <td colspan="9" class="text-center">
-            <%= link_to t('.add_course'), new_admin_course_path %>
-          </td>
-        </tr>
-      <% else %>
-        <% @courses.each do |course| %>
+    <div class="table-responsive mt-3">
+      <table class="table">
+        <thead>
           <tr>
-            <td><%= link_to course.title, admin_course_path(course.id) %></td>
-            <td><%= course.capacity %></td>
-            <td><%= course.category %></td>
-            <td><%= course.weekday %></td>
-            <td><%= link_to t('defaults.edit'), edit_admin_course_path(course.id), class: "btn btn-outline-warning btn-sm" %></td>
-            <td><%= link_to t('defaults.destroy'), admin_course_path(course.id), method: :delete, data: { confirm: t('defaults.are_you_sure') }, class: "btn btn-outline-danger btn-sm" %></td>
+            <th><%= Course.human_attribute_name(:title) %></th>
+            <th><%= Course.human_attribute_name(:capacity) %></th>
+            <th><%= Course.human_attribute_name(:category) %></th>
+            <th><%= Course.human_attribute_name(:weekday) %></th>
+            <th colspan="2" class="text-center">Action</th>
           </tr>
-        <% end %>
-      <% end %>
-    </tbody>
-  </table>
+        </thead>
+
+        <tbody>
+          <% if @courses.empty? %>
+            <tr>
+              <td colspan="9" class="text-center">
+                <%= link_to t('.add_course'), new_admin_course_path %>
+              </td>
+            </tr>
+          <% else %>
+            <% @courses.each do |course| %>
+              <tr>
+                <td><%= link_to course.title, admin_course_path(course.id) %></td>
+                <td><%= course.capacity %></td>
+                <td><%= course.category %></td>
+                <td><%= course.weekday %></td>
+                <td><%= link_to t('defaults.edit'), edit_admin_course_path(course.id), class: "btn btn-outline-warning btn-sm" %></td>
+                <td><%= link_to t('defaults.destroy'), admin_course_path(course.id), method: :delete, data: { confirm: t('defaults.are_you_sure') }, class: "btn btn-outline-danger btn-sm" %></td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
