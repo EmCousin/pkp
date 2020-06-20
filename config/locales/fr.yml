@@ -184,6 +184,8 @@ fr:
         are_you_sure: Cette action est irréversible. Cliquez sur OK pour supprimer définivement votre compte.
   admin:
     users:
+      index:
+        title: Liste des membres
       new:
         title: Ajouter un membre
       show:
@@ -192,14 +194,21 @@ fr:
       edit:
         title: Modifier un membre
     courses:
+      index:
+        title: Liste des cours
       new:
         title: Créer un cours
       edit:
         title: Modifier le cours
       show:
+        new_subscription: Nouvelle inscription
         remove_from_course: Retirer du cours
         remove_from_course_are_you_sure: Êtes-vous sûr(e) de vouloir retirer %{member_full_name} du cours %{course_title} ?
     subscriptions:
+      index:
+        title: Liste des inscriptions
+        new: Nouvelle inscription
+        details: Détails des inscriptions
       new:
         title: Inscrire un membre
       show:
