@@ -44,7 +44,7 @@ fr:
     logout: Déconnexion
     signup: Inscription
     forgot_your_password: Mot de passe oublié ?
-    did_not_receive_confirmation_intructions: "Vous n'avez pas reçu les instructions de confirmation ?"
+    did_not_receive_confirmation_intructions: "Vous n'avez pas reçu les instructions pour débloquer votre compte ?"
     did_not_receive_unlock_instructions: "Vous n'avez pas reçu les instructions pour débloquer votre compte ?"
     signin_with: Connexion avec %{provider}
     send_reset_password_instructions: "Réinitialiser mon mot de passe"
@@ -59,68 +59,43 @@ fr:
     none: Aucun
   activemodel:
     errors:
-      models:
-        create_subscription_form:
-          attributes:
-            category:
-              blank: doit être rempli
-              course_ids: doit être rempli
+      messages:
+        blank: doit être rempli
     attributes:
       create_subscription_form:
         category: Type de cours
         course_ids: Cours
   activerecord:
     errors:
+      messages:
+        blank: doit être rempli
+        confirmation: ne correspond pas
+        not_a_number: doit être un nombre
+        greater_than_or_equal_to: doit être supérieur ou égal à %{count}
+        inclusion: "%{value} n'est pas une valeur valide"
+        invalid: "n'est pas valide"
+        required: est requis
+        taken: est dejà pris
       models:
         user:
           attributes:
-            first_name:
-              blank: doit être rempli
-            last_name:
-              blank: doit être rempli
-            password_confirmation:
-              confirmation: ne correspond pas
-            email:
-              blank: doit être rempli
             password:
-              blank: doit être rempli
-              too_short: trop curt
+              too_short: trop court
             birthdate:
-              blank: doit être rempli
               inclusion: "%{value} n'est pas une date valide"
-            avatar:
-              blank: doit être rempli
-            phone_number:
-              invalid: "n'est pas valide"
-            contact_phone_number:
-              invalid: "n'est pas valide"
-        course:
-          attributes:
-            title:
-              blank: doit être rempli
-            capacity:
-              blank: doit être rempli
-              not_a_number: doit être un nombre
-              greater_than_or_equal_to: doit être supérieur ou égal à %{count}
-            category:
-              blank: doit être rempli
-              inclusion: "%{value} n'est pas une valeur valide"
         subscription:
           attributes:
-            member:
-              required: est requis
-            member_id:
-              taken: est dejà pris
             courses:
               must_exist: ":  minimum un cours"
               limit_exceeded: ": maximum trois cours"
               unique_category: ": Les cours doivent être de la même catégorie"
               unique_weekday: ": Les cours ne doivent pas être le même jour"
+            year:
+              must_be_current: "doit être l'année en cours"
         invoice:
           attributes:
             subscription:
               must_be_paid: doit être payée
-              required: est requis
             subscription_id:
               taken: a déjà une facture
     models:
@@ -145,11 +120,13 @@ fr:
         country: Pays
         phone_number: Numéro de téléphone
         contact_name: Personne à contacter en cas d'urgence
-        contact_phone_number: Numéro de téléphone du contact
+        contact_phone_number: Téléphone du contact
         contact_relationship: Lien de parenté du contact
         agreed_to_publicity_right: "Droit à l'image"
         avatar: Photo
         full_name: Nom complet
+        email: E-mail
+        email_confirmation: Confirmation de l'E-mail
       course:
         title: Titre du cours
         description: Description

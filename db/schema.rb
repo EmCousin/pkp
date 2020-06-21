@@ -81,6 +81,13 @@ ActiveRecord::Schema.define(version: 2020_06_02_092126) do
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string "unconfirmed_email"
+    t.integer "failed_attempts", default: 0, null: false
+    t.string "unlock_token"
+    t.datetime "locked_at"
     t.string "first_name", null: false
     t.string "last_name", null: false
     t.boolean "admin", default: false, null: false
@@ -97,10 +104,12 @@ ActiveRecord::Schema.define(version: 2020_06_02_092126) do
     t.string "contact_relationship", null: false
     t.boolean "agreed_to_publicity_right", null: false
     t.string "stripe_customer_id"
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["first_name"], name: "index_users_on_first_name"
     t.index ["last_name"], name: "index_users_on_last_name"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
