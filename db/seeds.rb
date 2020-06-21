@@ -14,6 +14,7 @@ User.destroy_all
 
 user = User.new
 user.email = "monemail@mail.fr"
+user.email_confirmation = "monemail@mail.fr"
 user.first_name = "Maria"
 user.last_name = "Silva"
 user.admin = true
