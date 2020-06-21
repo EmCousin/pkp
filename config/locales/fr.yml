@@ -68,6 +68,7 @@ fr:
   activerecord:
     errors:
       messages:
+        record_invalid: "n'est pas valide"
         blank: doit être rempli
         confirmation: ne correspond pas
         not_a_number: doit être un nombre
