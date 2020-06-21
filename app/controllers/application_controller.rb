@@ -18,6 +18,7 @@ class ApplicationController < ActionController::Base
     contact_relationship
     agreed_to_publicity_right
     avatar
+    email_confirmation
   ].freeze
 
   protected

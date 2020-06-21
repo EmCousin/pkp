@@ -1,0 +1,71 @@
+# Additional translations at https://github.com/plataformatec/devise/wiki/I18n
+
+fr:
+  devise:
+    confirmations:
+      confirmed: "Votre adresse E-mail est confirmée."
+      send_instructions: "Vous allez recevoir par E-mail les instructions pour confirmer votre adresse E-mail dans un instant."
+      send_paranoid_instructions: "Si votre adresse E-mail existe dans notre base de données, vous allez recevoir par E-mail les instructions pour confirmer votre adresse E-mail dans un instant."
+      new:
+        title: "Confirmer votre compte"
+        submit: "Envoyer les instructions de confirmation"
+    failure:
+      already_authenticated: "Vous êtes déjà connecté(e)."
+      inactive: "Votre compte n'est pas encore activé."
+      invalid: "%{authentication_keys} ou mot de passe incorrect."
+      locked: "Votre compte est bloqué."
+      last_attempt: "Si votre prochaine tentative échoue, votre compte sera bloqué."
+      not_found_in_database: "%{authentication_keys} ou mot de passe incorrect."
+      timeout: "Votre session a expiré. Veuillez vous reconnecter."
+      unauthenticated: "Vous devez vous connecter ou vous inscrire pour continuer."
+      unconfirmed: "Vous devez confirmer votre adresse E-mail pour continuer."
+    mailer:
+      confirmation_instructions:
+        subject: "Instructions de confirmation"
+      reset_password_instructions:
+        subject: "Instructions pour réinitialiser votre mot de passe"
+      unlock_instructions:
+        subject: "Instructions pour débloquer votre compte"
+      email_changed:
+        subject: "Adresse E-mail mise à jour"
+      password_change:
+        subject: "Mot de passe modifié"
+    omniauth_callbacks:
+      failure: "Échec de la connection via %{kind} : \"%{reason}\"."
+      success: "Connecté(e) via %{kind}."
+    passwords:
+      no_token: "Vous ne pouvez pas accéder à cette page sans provenir d'un E-mail de réinitialisation de mot de passe. Si c'est le cas, assurez-vous que l'URL de votre navigateur correspond à celle indiquer dans l'E-mail."
+      send_instructions: "Vous allez recevoir un E-mail comportant des instructions pour réinitialiser votre mot de passe dans un instant."
+      send_paranoid_instructions: "Si votre adresse E-mail existe dans notre système, vous allez recevoir un E-mail comportant des instructions pour réinitialiser votre compte."
+      updated: "Votre mot de passe a bien été modifié. Vous êtes désormais connecté(e)."
+      updated_not_active: "Votre mot de passe a bien été modifié."
+    registrations:
+      destroyed: "Votre compte a bien été supprimé. À bientôt !"
+      signed_up: "Inscription réussie. Bienvenue !"
+      signed_up_but_inactive: "Inscription réussie. Vous devez activer votre compte pour vous connecter."
+      signed_up_but_locked: "Inscription réussie. Vous devez débloquer votre compte pour vous connecter."
+      signed_up_but_unconfirmed: "Un E-mail comportant un lien de confirmation vous a été envoyé. Cliquez sur ce lien pour confirmer votre compte."
+      update_needs_confirmation: "Vos modifications ont bien été prises en compte, vous devez les valider en confirmant votre adresse E-mail. Veuillez consulter vos E-mails et cliquer sur le lien de confirmation."
+      updated: "Vos modifications ont bien été enregistrées."
+      updated_but_not_signed_in: "Vos modifications ont bien été enregistrées, mais vous devez désormais vous reconnecter avec votre nouveau mot de passe."
+    sessions:
+      signed_in: Connecté(e)."
+      signed_out: "Déconnecté(e)"
+      already_signed_out: "Déconnecté(e)"
+    unlocks:
+      send_instructions: "Vous allez recevoir par E-mail des instructions pour débloquer votre compte."
+      send_paranoid_instructions: "Si votre compte existe, vous allez recevoir des instructions pour le débloquer dans un instant."
+      unlocked: "Votre compte est débloqué. Veuillez vous connecter pour continuer."
+      new:
+        title: Débloquer votre compte
+        submit: Envoyer les instructions pour débloquer mon compte
+  errors:
+    messages:
+      already_confirmed: "est déjà confirmé. Veuillez vous connecter pour continuer."
+      confirmation_period_expired: "doit être confirmé dans les %{period}, veuillez redemander un E-mail de confirmation"
+      expired: "a expiré, veuillez en demander un autre"
+      not_found: "introuvable"
+      not_locked: "n'était pas bloqué"
+      not_saved:
+        one: "1 erreur :"
+        other: "%{count} erreurs :"

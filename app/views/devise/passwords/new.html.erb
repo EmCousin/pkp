@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-md-6 offset-md-3">
-    <h2 class="text-center"><%= t('defaults.forgot_your_password')%></h2>
+    <h1 class="page-title"><%= t('defaults.forgot_your_password')%></h1>
 
     <hr />
 
@@ -13,10 +13,11 @@
       </div>
 
       <div class="actions mt-2">
-        <div class="float-left">
-          <%= render "devise/shared/links" %>
-        </div>
-        <%= f.submit t('defaults.send_reset_password_instructions'), class: "btn btn-dark btn-lg float-right" %>
+        <%= f.submit t('defaults.send_reset_password_instructions'), class: "btn btn-dark btn-lg w-100" %>
+      </div>
+
+      <div class="mt-2">
+        <%= render "devise/shared/links" %>
       </div>
     <% end %>
   </div>
