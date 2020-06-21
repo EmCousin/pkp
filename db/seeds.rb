@@ -29,7 +29,7 @@ user.avatar = Rack::Test::UploadedFile.new(Rails.root.join('public', 'pkp.jpg'),
 user.contact_name = "Maria"
 user.contact_phone_number = "+33299506779"
 user.contact_relationship = User::CONTACTS.sample
-user.password = "coucou"
+user.password = "s3cr3tp4$$w0rd"
 
 user.save!
 
