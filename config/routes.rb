@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: {
+    registrations: 'registrations'
+  }
 
   authenticate :user, ->(user) { user.admin? } do
     mount Sidekiq::Web => '/sidekiq'
@@ -37,5 +39,6 @@ Rails.application.routes.draw do
   end
 
   resources :dashboard, only: [:index]
+
   root "dashboard#index"
 end
