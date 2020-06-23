@@ -9,7 +9,7 @@ class CreateSubscriptionForm
   attr_reader :subscription
 
   def courses
-    @courses ||= category.present? ? Course.where(category: category) : Course.none
+    @courses ||= category.present? ? Course.available(Time.now.year).where(category: category).order(:created_at) : Course.none
   end
 
   def submit
