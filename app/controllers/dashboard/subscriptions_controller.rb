@@ -44,10 +44,7 @@ module Dashboard
     end
 
     def full?
-      Course.all.all? do |course|
-        active_subscriptions = course.subscriptions.where(year: Time.now.year).where.not(status: 'archived')
-        course.capacity <= active_subscriptions.count
-      end
+      Course.available(Time.now.year).empty?
     end
   end
 end
