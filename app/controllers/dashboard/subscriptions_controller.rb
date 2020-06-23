@@ -5,8 +5,6 @@ module Dashboard
     before_action :filter_vacation_time!, only: %i[new create], if: :vacation_time?
     before_action :filter_full!, only: %i[new create], if: :full?
 
-    VACATION_MONTHS = (7..8).freeze
-
     def new
       @form = CreateSubscriptionForm.new(subscription_params)
     end
@@ -36,11 +34,11 @@ module Dashboard
     end
 
     def vacation_time?
-      Time.now.month.in?(VACATION_MONTHS)
+      Time.now.month.in?(Course::VACATION_MONTHS)
     end
 
     def filter_full!
-      return redirect_to dashboard_capacities_path
+      redirect_to dashboard_capacities_path
     end
 
     def full?

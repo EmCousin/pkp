@@ -13,7 +13,13 @@ class Course < ApplicationRecord
 
   enum weekday: { lundi: 1, mardi: 2, mercredi: 3, jeudi: 4, vendredi: 5, samedi: 6, dimanche: 7 }
 
+  VACATION_MONTHS = (7..8).to_a.freeze
+
   def self.available(year)
+    now = Time.now
+    year -= 1 if now.month > VACATION_MONTHS.last
+    return none if year < now.year
+
     ids = includes(:subscriptions).select do |course|
       course.available?(year)
     end
