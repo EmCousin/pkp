@@ -44,7 +44,7 @@ fr:
     logout: Déconnexion
     signup: Inscription
     forgot_your_password: Mot de passe oublié ?
-    did_not_receive_confirmation_intructions: "Vous n'avez pas reçu les instructions pour débloquer votre compte ?"
+    did_not_receive_confirmation_intructions: "Vous n'avez pas reçu les instructions pour confirmer votre compte ?"
     did_not_receive_unlock_instructions: "Vous n'avez pas reçu les instructions pour débloquer votre compte ?"
     signin_with: Connexion avec %{provider}
     send_reset_password_instructions: "Réinitialiser mon mot de passe"
