@@ -72,7 +72,7 @@
 
         <div class="form-group col">
           <%= form.label :contact_relationship %><br />
-          <%= form.select(:contact_relationship, options_for_select(User::CONTACTS), { include_blank: true }, required: true, class: "form-control") %>
+          <%= form.collection_select(:contact_relationship, User::CONTACTS, :to_s, :to_s, { include_blank: true }, required: true, class: "form-control") %>
         </div>
       </div>
 
@@ -94,9 +94,9 @@
           <%= form.email_field :email, autocomplete: "email", required: true, class: "form-control" %>
         </div>
 
-        <div class="form-group col mb-2">
+        <div class="form-group col mb-2" data-controller="input">
           <%= form.label :email_confirmation %>
-          <%= form.email_field :email_confirmation, autocomplete: "email", required: true, class: "form-control" %>
+          <%= form.email_field :email_confirmation, autocomplete: "email", required: true, class: "form-control", data: { action: "paste->input#prevent" } %>
         </div>
       </div>
 

@@ -52,8 +52,8 @@
         <% end %>
       </div>
     <% else %>
-      <p><%= t('.not_yet_subscribed', year: Time.now.year) %></p>
-      <%= link_to t('.choose_my_courses'), new_dashboard_subscription_path, class: "btn btn-primary" %>
+      <p><%= t('.not_yet_subscribed', year: Subscription.current_year) %></p>
+      <%= link_to t('.choose_my_courses'), new_dashboard_subscription_path, class: "btn btn-primary w-100" %>
     <% end %>
   </div>
 </div>

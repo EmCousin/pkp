@@ -5,7 +5,7 @@ fr:
     confirmations:
       confirmed: "Votre adresse E-mail est confirmée."
       send_instructions: "Vous allez recevoir par E-mail les instructions pour confirmer votre adresse E-mail dans un instant."
-      send_paranoid_instructions: "Si votre adresse E-mail existe dans notre base de données, vous allez recevoir par E-mail les instructions pour confirmer votre adresse E-mail dans un instant."
+      send_paranoid_instructions: "Si votre adresse E-mail existe dans notre base de données, vous allez y recevoir des instructions pour confirmer votre compte."
       new:
         title: "Confirmer votre compte"
         submit: "Envoyer les instructions de confirmation"
@@ -36,7 +36,7 @@ fr:
     passwords:
       no_token: "Vous ne pouvez pas accéder à cette page sans provenir d'un E-mail de réinitialisation de mot de passe. Si c'est le cas, assurez-vous que l'URL de votre navigateur correspond à celle indiquer dans l'E-mail."
       send_instructions: "Vous allez recevoir un E-mail comportant des instructions pour réinitialiser votre mot de passe dans un instant."
-      send_paranoid_instructions: "Si votre adresse E-mail existe dans notre système, vous allez recevoir un E-mail comportant des instructions pour réinitialiser votre compte."
+      send_paranoid_instructions: "Si votre adresse E-mail existe dans notre système, vous allez y recevoir des instructions pour réinitialiser votre compte."
       updated: "Votre mot de passe a bien été modifié. Vous êtes désormais connecté(e)."
       updated_not_active: "Votre mot de passe a bien été modifié."
     registrations:
@@ -49,7 +49,7 @@ fr:
       updated: "Vos modifications ont bien été enregistrées."
       updated_but_not_signed_in: "Vos modifications ont bien été enregistrées, mais vous devez désormais vous reconnecter avec votre nouveau mot de passe."
     sessions:
-      signed_in: Connecté(e)."
+      signed_in: "Connecté(e)."
       signed_out: "Déconnecté(e)"
       already_signed_out: "Déconnecté(e)"
     unlocks:

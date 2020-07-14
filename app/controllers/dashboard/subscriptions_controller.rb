@@ -2,8 +2,8 @@
 
 module Dashboard
   class SubscriptionsController < DashboardController
-    before_action :check_vacation_time!, only: %i[new create]
-    before_action :check_availability!, only: %i[new create]
+    before_action :filter_vacation_time!, only: %i[new create], unless: :vacation_time?
+    before_action :filter_full!, only: %i[new create], if: :full?
 
     def new
       @form = CreateSubscriptionForm.new(subscription_params)
@@ -29,22 +29,20 @@ module Dashboard
       end
     end
 
-    def check_vacation_time!
-      return unless [7, 8].include?(Time.now.month)
-
+    def filter_vacation_time!
       redirect_to dashboard_vacations_path
     end
 
-    def check_availability!
-      course_available = false
-      Course.all.each do |course|
-        active_subscriptions = course.subscriptions.where(year: Time.now.year).where.not(status: 'archived')
-        count = active_subscriptions.count
-        course_available = true if course.capacity > count
-      end
-      return if course_available
+    def vacation_time?
+      Time.current.month.in?(Course::VACATION_MONTHS)
+    end
 
+    def filter_full!
       redirect_to dashboard_capacities_path
+    end
+
+    def full?
+      Course.available.empty?
     end
   end
 end

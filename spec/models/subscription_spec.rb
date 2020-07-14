@@ -14,27 +14,7 @@ describe Subscription, type: :model do
   it { is_expected.to have_many(:courses_subscriptions).dependent(:destroy) }
   it { is_expected.to have_many(:courses).through(:courses_subscriptions) }
 
-  it { is_expected.to validate_presence_of(:year) }
-  it { is_expected.to validate_presence_of(:fee) }
   it { is_expected.to validate_numericality_of(:fee).is_greater_than_or_equal_to(0) }
-
-  describe 'validating the year is the current year on creation' do
-    it 'should invalidate a subscription in the future' do
-      subscription.year = Time.now.year + 1
-      expect(subscription).to be_invalid
-      expect(subscription.errors[:year]).not_to be_empty
-    end
-
-    it 'should invalidate a subscription in the past' do
-      subscription.year = Time.now.year - 1
-      expect(subscription).to be_invalid
-      expect(subscription.errors[:year]).not_to be_empty
-    end
-
-    it 'should validate a subscription in the present' do
-      expect(subscription).to be_valid
-    end
-  end
 
   describe 'validating courses' do
     before { subscription.valid? }
