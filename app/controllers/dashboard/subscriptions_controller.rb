@@ -2,7 +2,7 @@
 
 module Dashboard
   class SubscriptionsController < DashboardController
-    before_action :filter_vacation_time!, only: %i[new create], if: :vacation_time?
+    before_action :filter_vacation_time!, only: %i[new create], unless: :vacation_time?
     before_action :filter_full!, only: %i[new create], if: :full?
 
     def new
@@ -34,7 +34,7 @@ module Dashboard
     end
 
     def vacation_time?
-      Time.now.month.in?(Course::VACATION_MONTHS)
+      Time.current.month.in?(Course::VACATION_MONTHS)
     end
 
     def filter_full!
@@ -42,7 +42,7 @@ module Dashboard
     end
 
     def full?
-      Course.available(Time.now.year).empty?
+      Course.available.empty?
     end
   end
 end

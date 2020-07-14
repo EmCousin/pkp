@@ -15,15 +15,14 @@ class Course < ApplicationRecord
 
   VACATION_MONTHS = (7..8).to_a.freeze
 
-  def self.available(year)
-    now = Time.now
-    year -= 1 if now.month > VACATION_MONTHS.last
-    return none if year < now.year
+  class << self
+    def available(year = Subscription.current_year)
+      return none if year > Subscription.current_year
 
-    ids = includes(:subscriptions).select do |course|
-      course.available?(year)
+      where(id: includes(:subscriptions).select do |course|
+        course.available?(year)
+      end)
     end
-    ids.any? ? where(id: ids) : none
   end
 
   def available?(year)

@@ -19,7 +19,7 @@ module Admin
     def set_subscription!
       @subscription = Subscription.find_by!(
         id: params[:subscription_id],
-        year: Time.now.year
+        year: Time.current.year
       )
     end
 

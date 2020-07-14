@@ -3,11 +3,11 @@
 module Dashboard
   class MedicalCertificatesController < DashboardController
     def edit
-      @subscription = current_user.subscriptions.find_by!(id: params[:subscription_id], year: Time.now.year)
+      @subscription = current_user.subscriptions.find_by!(id: params[:subscription_id], year: Time.current.year)
     end
 
     def update
-      @subscription = current_user.subscriptions.find_by!(id: params[:subscription_id], year: Time.now.year)
+      @subscription = current_user.subscriptions.find_by!(id: params[:subscription_id], year: Time.current.year)
       if @subscription.update(subscription_params)
         redirect_to dashboard_index_path, notice: t('.edit_success')
       else

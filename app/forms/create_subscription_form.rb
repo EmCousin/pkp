@@ -9,16 +9,14 @@ class CreateSubscriptionForm
   attr_reader :subscription
 
   def courses
-    @courses ||= category.present? ? Course.available(Time.now.year).where(category: category).order(:created_at) : Course.none
+    @courses ||= category.present? ? Course.available.where(category: category).order(:created_at) : Course.none
   end
 
   def submit
     return false unless valid?
 
-    subscription = user.subscriptions.new(subscription_attributes)
-    @subscription = CreateSubscriptionService.new(subscription).perform!
-
-    return true if @subscription.valid?
+    @subscription = user.subscriptions.new(subscription_attributes)
+    return true if @subscription.save
 
     errors.merge!(@subscription.errors)
 
