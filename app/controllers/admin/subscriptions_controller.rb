@@ -15,9 +15,8 @@ module Admin
     end
 
     def create
-      subscription = Subscription.new(subscription_params)
-      @subscription = CreateSubscriptionService.new(subscription).perform!
-      if @subscription.valid?
+      @subscription = Subscription.new(subscription_params)
+      if @subscription.save
         redirect_to admin_subscriptions_path, notice: 'Inscription créée avec succès !'
       else
         render :new
@@ -31,8 +30,6 @@ module Admin
     def update
       @subscription = Subscription.find(params[:id])
       if @subscription.update(subscription_params)
-        @subscription.fee = @subscription.compute_fee
-        @subscription.save
         redirect_to admin_subscriptions_path, notice: 'Inscription modifiée avec succès !'
       else
         render :edit

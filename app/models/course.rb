@@ -12,4 +12,22 @@ class Course < ApplicationRecord
   validates :category, inclusion: { in: CATEGORIES }
 
   enum weekday: { lundi: 1, mardi: 2, mercredi: 3, jeudi: 4, vendredi: 5, samedi: 6, dimanche: 7 }
+
+  VACATION_MONTHS = (7..8).to_a.freeze
+
+  class << self
+    def available(year = Subscription.current_year)
+      return none if year > Subscription.current_year
+
+      where(id: includes(:subscriptions).select do |course|
+        course.available?(year)
+      end)
+    end
+  end
+
+  def available?(year)
+    capacity > subscriptions.count do |subscription|
+      !subscription.archived? && subscription.year == year
+    end
+  end
 end

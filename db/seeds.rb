@@ -14,6 +14,7 @@ User.destroy_all
 
 user = User.new
 user.email = "monemail@mail.fr"
+user.email_confirmation = "monemail@mail.fr"
 user.first_name = "Maria"
 user.last_name = "Silva"
 user.admin = true
@@ -28,7 +29,7 @@ user.avatar = Rack::Test::UploadedFile.new(Rails.root.join('public', 'pkp.jpg'),
 user.contact_name = "Maria"
 user.contact_phone_number = "+33299506779"
 user.contact_relationship = User::CONTACTS.sample
-user.password = "coucou"
+user.password = "s3cr3tp4$$w0rd"
 
 user.save!
 

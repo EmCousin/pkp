@@ -10,6 +10,16 @@ body {
   background-image: url("../images/pkp.webp");
   background-color: lightgrey;
 
+  h1.page-title {
+    color:#EB8D00;
+    font-family: lulo-clean-w01-one-bold,sans-serif;
+    font-size: 3em;
+    font-weight: bold;
+    letter-spacing: 0.075em;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
   .background-white {
     background-color: white;
     opacity: 0.93;
@@ -21,15 +31,21 @@ body {
     height: 100%;
   }
 
-  h1.edit-course-title {
-    text-align: center;
-    margin-bottom: 2rem;
-    margin-top: 2rem;
-  }
-
   footer {
     span {
       color: #EB8D00;
     }
+  }
+
+  p {
+    font-family: din-next-w01-light,din-next-w02-light,din-next-w10-light,sans-serif;
+    font-size: 18px;
+    line-height: 22px;
+  }
+
+  .image {
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(255, 255, 255, 1);
   }
 }

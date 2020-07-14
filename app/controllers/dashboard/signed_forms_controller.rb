@@ -2,12 +2,11 @@
 
 module Dashboard
   class SignedFormsController < DashboardController
-    def edit
-      @subscription = current_user.subscriptions.find_by!(id: params[:subscription_id], year: Time.now.year)
-    end
+    before_action :set_subscription, only: %i[edit update]
+
+    def edit; end
 
     def update
-      @subscription = current_user.subscriptions.find_by!(id: params[:subscription_id], year: Time.now.year)
       if @subscription.update(subscription_params)
         redirect_to dashboard_index_path, notice: t('.edit_success')
       else
@@ -16,6 +15,13 @@ module Dashboard
     end
 
     private
+
+    def set_subscription
+      @subscription = current_user.subscriptions.find_by!(
+        id: params[:subscription_id],
+        year: Subscription.current_year
+      )
+    end
 
     def subscription_params
       params.require(:subscription).permit(

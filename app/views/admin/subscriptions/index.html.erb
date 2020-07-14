@@ -1,15 +1,16 @@
+<h1 class="page-title"><%= t(".title") %></h1>
+<hr />
+
 <div class="container">
-  <%= link_to t('defaults.new', resource: Subscription.model_name.human.downcase), new_admin_subscription_path, class: "btn btn-primary" %>
+  <%= link_to t('.new'), class: "btn btn-primary" %>
 
   <table class="table mt-5">
     <thead>
       <tr>
-        <th class="text-center">Details des inscriptions</th>
-        <th colspan="6" class="text-center">Status</th>
+        <th class="text-center"><%= t('.details') %></th>
+        <th colspan="6" class="text-center"><%= Subscription.human_attribute_name(:status) %></th>
       </tr>
-
     </thead>
-
     <tbody>
       <% if @subscriptions.empty? %>
         <tr>
