@@ -2,9 +2,9 @@
 <hr />
 
 <div class="container">
-  <%= link_to t('.new'), class: "btn btn-primary" %>
+  <%= link_to t('.new'), new_admin_subscription_path, class: "btn btn-primary" %>
 
-  <table class="table mt-5">
+  <table class="table table-striped mt-5">
     <thead>
       <tr>
         <th class="text-center"><%= t('.details') %></th>
@@ -14,8 +14,8 @@
     <tbody>
       <% if @subscriptions.empty? %>
         <tr>
-          <td class="text-center">
-            <%= link_to t('.add_subscription'), new_admin_subscription_path %>
+          <td colspan="5" class="text-center">
+            <%= link_to t('.new'), new_admin_subscription_path %>
           </td>
         </tr>
       <% else %>

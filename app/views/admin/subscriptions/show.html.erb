@@ -55,7 +55,13 @@
     <% end %>
   </p>
   <br/>
-
-  <%= link_to t('defaults.edit'), edit_admin_subscription_path(@subscription.id), class: "btn btn-outline-warning btn-sm" %>
-  <%= link_to t('defaults.destroy'), admin_subscription_path(@subscription.id), method: :delete, data: { confirm: t('defaults.are_you_sure') }, class: "btn btn-outline-danger btn-sm" %>
+  <div class="dropdown mr-1">
+    <button type="button" class="btn btn-primary dropdown-toggle" id="dropdownMenuOffset" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%= t('defaults.action') %></button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
+      <%= link_to t('defaults.edit'), edit_admin_subscription_path(@subscription.id), class: "dropdown-item" %>
+      <%= link_to t('defaults.confirm'), confirm_admin_subscription_path(@subscription.id), method: :put, class: "dropdown-item" %>
+      <%= link_to t('defaults.archive'), archive_admin_subscription_path(@subscription.id), method: :put, class: "dropdown-item" %>
+      <%= link_to t('defaults.destroy'), admin_subscription_path(@subscription.id), method: :delete, data: { confirm: t('defaults.are_you_sure') }, class: "dropdown-item" %>
+    </div>
+  </div>
 </div>

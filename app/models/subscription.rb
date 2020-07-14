@@ -5,14 +5,15 @@ class Subscription < ApplicationRecord
   has_many :courses_subscriptions, dependent: :destroy
   has_many :courses, through: :courses_subscriptions
 
-  validates :fee, numericality: { greater_than_or_equal_to: 0, allow_blank: true }
+  validates :year, presence: true
   validates :member_id, uniqueness: { scope: :year }
+  validates :fee, numericality: { greater_than_or_equal_to: 0, allow_blank: true }
   validate :at_least_one_course?
   validate :maximum_three_courses?
   validate :courses_are_of_the_same_category
   validate :maximum_one_course_per_day
 
-  before_create :set_current_year
+  before_validation :set_current_year, on: :create
   before_save :set_fee
 
   has_one_attached :signed_form
