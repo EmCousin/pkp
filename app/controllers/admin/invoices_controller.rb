@@ -7,13 +7,7 @@ module Admin
     def show; end
 
     def create
-      pdf = pdf_from_subscription
-
-      @subscription.invoice.attach(
-        io: StringIO.new(pdf),
-        filename: 'invoice.pdf',
-        content_type: Mime[:pdf]
-      )
+      InvoiceJob.perform_now(@subscription)
 
       redirect_to admin_subscription_path(@subscription.id), notice: t('.success')
     end
@@ -35,19 +29,6 @@ module Admin
         id: params[:subscription_id],
         year: Subscription.current_year
       )
-    end
-
-    def pdf_from_subscription
-      WickedPdf.new.pdf_from_string(
-        render_to_string(
-          'templates/invoice.html.erb',
-          layout: 'pdf.html.erb',
-          encoding: 'UTF-8',
-          locals: {
-            subscription: @subscription
-          }
-        )
-      ).force_encoding('UTF-8')
     end
 
     def subscription_params

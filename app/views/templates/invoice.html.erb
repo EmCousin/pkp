@@ -1,12 +1,13 @@
 <% total_amount = number_to_euros(subscription.fee) %>
 
-<div class="row">
-  <div class="col-md-3 offset-md-1">
-     <%= wicked_pdf_image_tag '/assets/parkourparis.jpg', class: 'invoice-logo' %>
+
+<div class="header">
+  <div class="float-left">
+    <%= wicked_pdf_image_tag 'parkourparis.jpg', class: 'invoice-logo', height: 40 %>
     <div class="mt-5">
       <p>Parkour Paris</p>
       <p>ID société : 750 838 609 00014</p>
-      <p>parkour.paris@gmail.com</p>
+      <p><%= mail_to 'parkour.paris@gmail.com', 'parkour.paris@gmail.com' %></p>
     </div>
     <div class="mt-5">
       <p>International School of Paris</p>
@@ -15,12 +16,10 @@
       <p>Paris</p>
     </div>
   </div>
-  <div class="col-md-3 offset-md-4">
-    <div class="mt-5">
-      <h3>Facture: #<%= subscription.year %><%= subscription.id %></h3>
-      <p>Payée le: <%= subscription.paid_at %>
-      <p>Date de délivrance : <%= Time.now %></p>
-    </div>
+  <div class="float-right mt-5">
+    <h3>Facture: #<%= subscription.year %><%= subscription.id %></h3>
+    <p>Payée le: <%= subscription.paid_at %>
+    <p>Date de délivrance : <%= Time.current %></p>
   </div>
 </div>
 
