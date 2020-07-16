@@ -60,11 +60,15 @@
   </tr>
   <tr>
     <td>Droit à l'image</td>
-    <td><%= subscription.member.agreed_to_publicity_right %></td>
+      <% if subscription.member.agreed_to_publicity_right == true %>
+        <td>Oui</td>
+      <% else %>
+        <td>Non</td>
+      <% end %>
   </tr>
   <tr>
     <td>Tarif</td>
-    <td><%= subscription.fee %></td>
+    <td><%= number_to_currency(subscription.fee, unit: "€", separator: ",", format: "%n %u") %></td>
   </tr>
 </table>
 
