@@ -197,6 +197,7 @@ fr:
         paid: Payé
         not_paid_yet: En attente de paiement
         generate_invoice: Générer une facture
+        generate_credit_note: Générer un avoir
       form:
         users: Membres
       edit:
@@ -210,6 +211,9 @@ fr:
     invoices:
       update:
         edit_success: Facture générée
+    credit_notes:
+      create:
+        success: Avoir généré
   dashboard:
     index:
       choose_my_courses: Choisir mes cours

@@ -22,6 +22,8 @@ class Subscription < ApplicationRecord
 
   enum status: %i[pending confirmed archived]
 
+  attr_accessor :credit_note_amount
+
   class << self
     def current_year
       now = Time.current

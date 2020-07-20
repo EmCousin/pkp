@@ -1,0 +1,25 @@
+<div class="container">
+  <%= form_with(model: @subscription, method: :post, local: true, url: admin_subscription_credit_notes_path(@subscription.id)) do |form| %>
+    <% if @subscription.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@subscription.errors.count, "error") %> prohibited this credit note to be generated:</h2>
+
+        <ul>
+        <% @subscription.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= form.label :credit_note_amount %>
+      <%= form.number_field :credit_note_amount, min: 0, max: @subscription.fee, step: 0.1, placeholder: "maximum #{@subscription.fee}", class: "form-control" %>
+    </div>
+
+    <div class="actions">
+      <%= form.submit t('defaults.save'), class: "btn btn-dark float-lg-right" %>
+      <%= link_to t('defaults.back'), admin_subscriptions_path, class: "btn btn-link float-left" %>
+    </div>
+  <% end %>
+</div>
