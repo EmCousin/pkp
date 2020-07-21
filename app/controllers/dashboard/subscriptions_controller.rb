@@ -4,7 +4,7 @@ module Dashboard
   class SubscriptionsController < DashboardController
     before_action :filter_vacation_time!, only: %i[new create], unless: :vacation_time?
     before_action :filter_full!, only: %i[new create], if: :full?
-    before_action :filter_members!, only: %i[new], unless: :members?
+    before_action :filter_available_members!, only: %i[new], unless: :available_members?
     before_action :set_member, only: %i[new]
 
     def new
@@ -48,12 +48,12 @@ module Dashboard
       Course.available.empty?
     end
 
-    def filter_members!
+    def filter_available_members!
       redirect_to new_dashboard_member_path, notice: t('.create_member')
     end
 
-    def members?
-      current_user.members.any?
+    def available_members?
+      current_user.members.available.any?
     end
 
     def set_member

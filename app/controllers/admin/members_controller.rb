@@ -19,11 +19,12 @@ module Admin
     def show; end
 
     def new
-      @member = User.new
+      @member = Member.new
     end
 
     def create
-      @member = User.new(member_params)
+      @member = Member.new(member_params)
+      @member.user.skip_confirmation!
       if @member.save
         redirect_to admin_members_path, notice: 'Membre créé avec succès !'
       else
@@ -57,6 +58,7 @@ module Admin
         :first_name, :last_name, :birthdate,
         :contact_name, :contact_phone_number, :contact_relationship,
         :avatar,
+        :agreed_to_advertising_right,
         user_attributes: %i[id email password phone_number]
       )
     end
