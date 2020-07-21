@@ -40,7 +40,10 @@ class Member < ApplicationRecord
     def available(year = Subscription.current_year)
       return none if year > Subscription.current_year
 
-      joins(:subscriptions).where.not(subscriptions: { year: year })
+      left_joins(:subscriptions).where(subscriptions: { id: nil })
+        .or(
+          left_joins(:subscriptions).where.not(subscriptions: { year: year })
+        )
     end
   end
 
