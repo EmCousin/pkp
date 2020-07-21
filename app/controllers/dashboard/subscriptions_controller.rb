@@ -8,13 +8,14 @@ module Dashboard
     before_action :set_member, only: %i[new]
 
     def new
-      @form = CreateSubscriptionForm.new(subscription_params)
+      @subscription = current_user.subscriptions.new(member: @member)
     end
 
     def create
-      @form = CreateSubscriptionForm.new(subscription_params)
-      if @form.submit
-        SubscriptionMailer.confirm_subscription(@form.subscription).deliver_later
+      @subscription = current_user.subscriptions.new(subscription_params)
+
+      if @subscription.save
+        SubscriptionMailer.confirm_subscription(@subscription).deliver_later
         redirect_to dashboard_index_path, notice: 'Inscription créée avec succès !'
       else
         render :new
@@ -24,11 +25,11 @@ module Dashboard
     private
 
     def subscription_params
-      if params[:create_subscription_form].present?
-        params.require(:create_subscription_form).permit(:category, course_ids: []).merge(user: current_user)
-      else
-        {}
-      end
+      params.require(:subscription).permit(
+        :category,
+        :member_id,
+        course_ids: []
+      )
     end
 
     def filter_vacation_time!
