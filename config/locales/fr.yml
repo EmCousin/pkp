@@ -237,9 +237,6 @@ fr:
       change_medical_certificate: Remplacer le certificat médical
     edit:
       title: Mes informations personnelles
-    profiles:
-      update:
-        edit_success: Profil modifié avec succès !
     subscriptions:
       new:
         create_member: Veuillez renseigner les informations de la personne à inscrire
