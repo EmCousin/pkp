@@ -3,7 +3,7 @@
     <%= form_with(model: @subscription, local: true, url: dashboard_subscriptions_path, class: "mt-3") do |f| %>
       <div class="form-group">
         <%= f.label :member_id %>
-        <%= f.collection_select(:member_id, current_user.members, :id, :full_name, { include_blank: false }, class: "form-control", onchange: "this.form.submit();") %>
+        <%= f.collection_select(:member_id, current_user.members.available, :id, :full_name, { include_blank: false }, class: "form-control", onchange: "this.form.submit();") %>
 
         <% if @subscription.member.nil? %>
           <p class="mt-3 text-center">Ou</p>

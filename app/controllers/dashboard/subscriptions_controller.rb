@@ -4,18 +4,17 @@ module Dashboard
   class SubscriptionsController < DashboardController
     before_action :filter_vacation_time!, only: %i[new create], unless: :vacation_time?
     before_action :filter_full!, only: %i[new create], if: :full?
-    before_action :filter_members!, only: %i[new], unless: :members?
+    before_action :filter_available_members!, only: %i[new], unless: :available_members?
     before_action :set_member, only: %i[new]
 
     def new
-      @subscription = current_user.subscriptions.new(member: @member)
+      @form = CreateSubscriptionForm.new(subscription_params)
     end
 
     def create
-      @subscription = current_user.subscriptions.new(subscription_params)
-
-      if @subscription.save
-        SubscriptionMailer.confirm_subscription(@subscription).deliver_later
+      @form = CreateSubscriptionForm.new(subscription_params)
+      if @form.submit
+        SubscriptionMailer.confirm_subscription(@form.subscription).deliver_later
         redirect_to dashboard_index_path, notice: 'Inscription créée avec succès !'
       else
         render :new
@@ -25,11 +24,11 @@ module Dashboard
     private
 
     def subscription_params
-      params.require(:subscription).permit(
-        :category,
-        :member_id,
-        course_ids: []
-      )
+      if params[:create_subscription_form].present?
+        params.require(:create_subscription_form).permit(:category, course_ids: []).merge(user: current_user)
+      else
+        {}
+      end
     end
 
     def filter_vacation_time!
@@ -48,12 +47,12 @@ module Dashboard
       Course.available.empty?
     end
 
-    def filter_members!
+    def filter_available_members!
       redirect_to new_dashboard_member_path, notice: t('.create_member')
     end
 
-    def members?
-      current_user.members.any?
+    def available_members?
+      current_user.members.available.any?
     end
 
     def set_member
