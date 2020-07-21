@@ -36,6 +36,17 @@ class Member < ApplicationRecord
   delegate :email, :phone_number, :address, :zip_code, :city, :country,
            to: :user
 
+  class << self
+    def available(year = Subscription.current_year)
+      return none if year > Subscription.current_year
+
+      left_joins(:subscriptions).where(subscriptions: { id: nil })
+                                .or(
+                                  left_joins(:subscriptions).where.not(subscriptions: { year: year })
+                                )
+    end
+  end
+
   def full_name
     "#{first_name} #{last_name}".downcase.titleize
   end
