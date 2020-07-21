@@ -7,7 +7,8 @@ module Admin
     def new; end
 
     def create
-       pdf = pdf_credit_note
+      @subscription.assign_attributes(subscription_params)
+      pdf = pdf_credit_note
 
       @subscription.credit_notes.attach(
         io: StringIO.new(pdf),

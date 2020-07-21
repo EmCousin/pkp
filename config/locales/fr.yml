@@ -153,6 +153,7 @@ fr:
         signed_form: Formulaire signé
         medical_certificate: Certificat médical
         invoice: Facture
+        credit_notes: Avoirs
 
   #views
   devise:

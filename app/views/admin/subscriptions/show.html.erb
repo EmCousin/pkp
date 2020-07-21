@@ -30,10 +30,18 @@
         <br>
         <br>
         <%= link_to t('.generate_credit_note'), new_admin_subscription_credit_note_path(@subscription.id), class: "btn btn-outline-success btn-sm" %>
-           <strong><%= Subscription.human_attribute_name(:invoice) %> :</strong>
+        <br>
+        <br>
+        <table class="table">
+          <th>
+            <strong><%= Subscription.human_attribute_name(:credit_notes) %> :</strong>
+          </th>
+          <td>
            <% @subscription.credit_notes.each do |credit_note| %>
             <%= link_to t('defaults.download'), rails_blob_path(credit_note, disposition: "attachment") %>
           <% end %>
+          </td>
+        </table>
       <% else %>
         <%= link_to t('.preview_invoice'),  admin_subscription_invoice_path(@subscription.id), method: :get, class: "btn btn-outline-success btn-sm" %>
       <% end %>

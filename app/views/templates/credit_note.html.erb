@@ -24,17 +24,17 @@
 <table class="table mt-5 text-center">
   <thead>
     <tr>
-      <th>Valeur credité:</th>
+      <th>Valeur creditée:</th>
     </tr>
   </thead>
 
   <tbody>
     <tr>
-      <td><%= @subscription.credit_note_amount %></td>
+      <td><%= number_to_currency(subscription.credit_note_amount, unit: "€", separator: ",", format: "%n %u") %></td>
     </tr>
     <tr>
       <td>Total avoir :</td>
-      <td><%= @subscription.credit_note_amount %></td>
+      <td><%= number_to_currency(subscription.credit_note_amount, unit: "€", separator: ",", format: "%n %u") %></td>
     </tr>
   </tbody>
 </table>
