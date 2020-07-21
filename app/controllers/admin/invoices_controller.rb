@@ -2,7 +2,15 @@
 
 module Admin
   class InvoicesController < AdminController
-    before_action :set_subscription!, only: %i[edit update]
+    before_action :set_subscription!, only: %i[show create edit update]
+
+    def show; end
+
+    def create
+      InvoiceJob.perform_now(@subscription)
+
+      redirect_to admin_subscription_path(@subscription.id), notice: t('.success')
+    end
 
     def edit; end
 

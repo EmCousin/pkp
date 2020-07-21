@@ -60,11 +60,7 @@
   </tr>
   <tr>
     <td>Droit à l'image</td>
-      <% if subscription.member.agreed_to_publicity_right == true %>
-        <td>Oui</td>
-      <% else %>
-        <td>Non</td>
-      <% end %>
+    <td><%= subscription.member.agreed_to_advertising_right ? 'Oui' : 'Non' %></td>
   </tr>
   <tr>
     <td>Tarif</td>

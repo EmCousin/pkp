@@ -1,4 +1,4 @@
-<h1 class="page-title"><%= t('.edit_my_account') %></h2>
+<h1 class="page-title"><%= t('.edit_my_account') %></h1>
 <hr />
 
 <div class="row">
@@ -8,23 +8,8 @@
       <%= render "devise/shared/error_messages", resource: resource %>
 
       <div class="form-group">
-        <%= f.label :first_name %><br />
-        <%= f.text_field :first_name, autofocus: true, class: "form-control" %>
-      </div>
-
-      <div class="form-group">
-        <%= f.label :last_name %><br />
-        <%= f.text_field :last_name, class: "form-control" %>
-      </div>
-
-      <div class="form-group">
         <%= f.label :email %><br />
         <%= f.email_field :email, autocomplete: "email", class: "form-control" %>
-      </div>
-
-      <div class="form-group">
-        <%= f.label :birthdate %>
-        <%= f.date_field :birthdate, required: true, class: "form-control" %>
       </div>
 
       <div class="form-group">
@@ -37,74 +22,64 @@
         data-places-app-id="<%= Rails.application.credentials.algolia(:application_id) %>"
         data-places-api-key="<%= Rails.application.credentials.algolia(:search_key) %>"
       >
-        <div class="form-group">
-          <%= f.label :address %>
-          <%= f.text_field :address, required: true, class: "form-control", data: { target: 'places.address' } %>
+        <div class="row">
+          <div class="col-8">
+            <div class="form-group">
+              <%= f.label :address %>
+              <%= f.text_field :address, required: true, class: "form-control", data: { target: 'places.address' } %>
+            </div>
+          </div>
+
+          <div class="col-4">
+            <div class="form-group">
+              <%= f.label :zip_code %>
+              <%= f.text_field :zip_code, required: true, class: "form-control", data: { target: 'places.zipCode' } %>
+            </div>
+          </div>
         </div>
 
-        <div class="form-group">
-          <%= f.label :zip_code %>
-          <%= f.text_field :zip_code, required: true, class: "form-control", data: { target: 'places.zipCode' } %>
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <%= f.label :city %>
+              <%= f.text_field :city, required: true, class: "form-control", data: { target: 'places.city' } %>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="form-group">
+              <%= f.label :country %>
+              <%= f.text_field :country, required: true, class: "form-control", data: { target: 'places.country' } %>
+            </div>
+          </div>
         </div>
-
-        <div class="form-group">
-          <%= f.label :city %>
-          <%= f.text_field :city, required: true, class: "form-control", data: { target: 'places.city' } %>
-        </div>
-
-        <div class="form-group">
-          <%= f.label :country %>
-          <%= f.text_field :country, required: true, class: "form-control", data: { target: 'places.country' } %>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <%= f.label :contact_name %>
-        <%= f.text_field :contact_name, required: true, class: "form-control" %>
-      </div>
-
-      <div class="form-group">
-        <%= f.label :contact_phone_number %>
-        <%= f.telephone_field :contact_phone_number, required: true, class: "form-control" %>
-      </div>
-
-      <div class="form-group">
-        <%= f.label :contact_relationship %><br />
-        <%= f.collection_select(:contact_relationship, User::CONTACTS, :to_s, :to_s, { include_blank: true }, required: true, class: "form-control") %>
-      </div>
-
-      <div class="form-group">
-        <%= f.label :agreed_to_publicity_right %>
-        <%= f.check_box :agreed_to_publicity_right, required: true %>
-      </div>
-
-      <div class="form-group">
-        <%= f.label :avatar %>
-        <%= f.file_field :avatar, required: false %>
-        <%= image_tag url_for(current_user.avatar), width: "80" %>
       </div>
 
       <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-        <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+        <div>En attente de confirmation pour l'Email : <%= resource.unconfirmed_email %></div>
       <% end %>
 
       <div class="form-group">
-        <%= f.label :password %> <i>(<%= t('.leave_blank_if_you_wont_change_it') %>)</i><br />
-        <%= f.password_field :password, autocomplete: "new-password", class: "form-control" %>
-        <% if @minimum_password_length %>
-          <br />
-          <em><%= t('.minimum_characters', length: @minimum_password_length) %></em>
+        <%= f.label :current_password do %>
+          <%= resource.class.human_attribute_name(:current_password) %>
+          <em>(<%= t('.current_password_needed') %>)</em>
         <% end %>
+        <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password do %>
+          <%= resource.class.human_attribute_name(:password) %>
+          <% if @minimum_password_length %>
+            <em>(<%= t('.minimum_characters', length: @minimum_password_length) %>)</em>
+          <% end %>
+        <% end %>
+        <%= f.password_field :password, autocomplete: "new-password", class: "form-control", placeholder: t('.leave_blank_if_you_wont_change_it') %>
       </div>
 
       <div class="form-group">
         <%= f.label :password_confirmation %><br />
-        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
-      </div>
-
-      <div class="form-group">
-        <%= f.label :current_password %> <i>(<%= t('.current_password_needed') %>)</i><br />
-        <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control" %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", placeholder: t('.leave_blank_if_you_wont_change_it') %>
       </div>
 
       <div class="actions d-flex mt-3 mb-5">
@@ -115,9 +90,8 @@
 
     <div class="clearfix mb-5"></div>
 
-
     <div class="mb-5">
-      <h3 class="text-center"><%= t('.delete_my_account') %></h3>
+      <h1 class="page-title"><%= t('.delete_my_account') %></h1>
       <hr />
 
       <p>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_02_092126) do
+ActiveRecord::Schema.define(version: 2020_07_14_190059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,14 +64,30 @@ ActiveRecord::Schema.define(version: 2020_06_02_092126) do
     t.index ["subscription_id"], name: "index_courses_subscriptions_on_subscription_id"
   end
 
+  create_table "members", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "first_name", null: false
+    t.string "last_name", null: false
+    t.date "birthdate", null: false
+    t.string "contact_name", null: false
+    t.string "contact_phone_number", null: false
+    t.string "contact_relationship", null: false
+    t.boolean "agreed_to_advertising_right", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["first_name"], name: "index_members_on_first_name"
+    t.index ["last_name"], name: "index_members_on_last_name"
+    t.index ["user_id"], name: "index_members_on_user_id"
+  end
+
   create_table "subscriptions", force: :cascade do |t|
-    t.bigint "member_id"
     t.integer "year", null: false
     t.decimal "fee", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "status", default: 0
     t.string "stripe_charge_id"
+    t.bigint "member_id"
     t.index ["member_id"], name: "index_subscriptions_on_member_id"
   end
 
@@ -88,26 +104,17 @@ ActiveRecord::Schema.define(version: 2020_06_02_092126) do
     t.integer "failed_attempts", default: 0, null: false
     t.string "unlock_token"
     t.datetime "locked_at"
-    t.string "first_name", null: false
-    t.string "last_name", null: false
     t.boolean "admin", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.date "birthdate", null: false
-    t.string "phone_number", null: false
-    t.string "address", null: false
-    t.string "zip_code", null: false
-    t.string "city", null: false
-    t.string "country", null: false
-    t.string "contact_name", null: false
-    t.string "contact_phone_number", null: false
-    t.string "contact_relationship", null: false
-    t.boolean "agreed_to_publicity_right", null: false
+    t.string "phone_number"
+    t.string "address"
+    t.string "zip_code"
+    t.string "city"
+    t.string "country"
     t.string "stripe_customer_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["first_name"], name: "index_users_on_first_name"
-    t.index ["last_name"], name: "index_users_on_last_name"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
@@ -115,5 +122,6 @@ ActiveRecord::Schema.define(version: 2020_06_02_092126) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "courses_subscriptions", "courses"
   add_foreign_key "courses_subscriptions", "subscriptions"
-  add_foreign_key "subscriptions", "users", column: "member_id"
+  add_foreign_key "members", "users"
+  add_foreign_key "subscriptions", "members"
 end
