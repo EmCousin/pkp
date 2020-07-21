@@ -81,8 +81,8 @@ Rails.application.configure do
       address:        Rails.application.credentials.mailgun[:smtp_server],
       user_name:      Rails.application.credentials.mailgun[:smtp_login],
       password:       Rails.application.credentials.mailgun[:smtp_password],
-      domain:         Rails.application.credentials.mailgun[:domain]
-      authentication: :plain,
+      domain:         Rails.application.credentials.mailgun[:domain],
+      authentication: :plain
   }
   config.action_mailer.delivery_method = :smtp
 
