@@ -57,6 +57,11 @@ fr:
     action: Action
     download: Télécharger
     none: Aucun
+    replace: Remplacer
+  custom_error_messages:
+    subscription:
+      member_id:
+        taken: "%{full_name} est déjà inscrit pour %{year}"
   activemodel:
     errors:
       messages:
@@ -82,6 +87,8 @@ fr:
           attributes:
             password:
               too_short: trop court
+        member:
+          attributes:
             birthdate:
               inclusion: "%{value} n'est pas une date valide"
         subscription:
@@ -109,23 +116,24 @@ fr:
         other: Inscriptions
     attributes:
       user:
-        first_name: Prénom
-        last_name: Nom
         admin: Admnistrateur
-        birthdate: Date de naissance
+        email: E-mail
+        email_confirmation: Confirmation de l'E-mail
+        phone_number: Numéro de téléphone
         address: Adresse
         zip_code: Code Postal
         city: Ville
         country: Pays
-        phone_number: Numéro de téléphone
-        contact_name: Personne à contacter en cas d'urgence
+      member:
+        first_name: Prénom
+        last_name: Nom
+        birthdate: Date de naissance
+        contact_name: Contact d'urgence
         contact_phone_number: Téléphone du contact
         contact_relationship: Lien de parenté du contact
-        agreed_to_publicity_right: "Droit à l'image"
+        agreed_to_advertising_right: "Droit à l'image"
         avatar: Photo
         full_name: Nom complet
-        email: E-mail
-        email_confirmation: Confirmation de l'E-mail
       course:
         title: Titre du cours
         description: Description
@@ -133,6 +141,7 @@ fr:
         category: Catégorie
         weekday: Jour de la semaine
       subscription:
+        category: Type de cours
         fee: Cotisation
         year: Année
         member_id: Membre
@@ -164,7 +173,7 @@ fr:
         minimum_characters: "%{length} caractères min"
         are_you_sure: Cette action est irréversible. Cliquez sur OK pour supprimer définivement votre compte.
   admin:
-    users:
+    members:
       index:
         title: Liste des membres
       new:
@@ -198,6 +207,7 @@ fr:
         not_paid_yet: En attente de paiement
         generate_invoice: Générer une facture
         generate_credit_note: Générer un avoir
+        preview_invoice: Prévisualiser la facture
       form:
         users: Membres
       edit:
@@ -209,6 +219,10 @@ fr:
         archivation_success: 'Inscription archivée avec succès !'
         archivation_failure: "L'inscription est déjà archivée !"
     invoices:
+      show:
+        generate_invoice: Génerer cette facture
+      create:
+        success: Facture générée
       update:
         edit_success: Facture générée
     credit_notes:
@@ -216,9 +230,11 @@ fr:
         success: Avoir généré
   dashboard:
     index:
+      add_subscription: Ajouter une inscription
       choose_my_courses: Choisir mes cours
       not_yet_subscribed: "Vous n'êtes pas encore inscrit(e) pour l'année %{year} ! Cliquez sur le bouton pour vous inscrire :"
-      subscription_detailed_info: "Voici les informations detaillées de votre inscription pour l'année %{year} :"
+      subscription_detailed_info: "Vos inscriptions pour l'année %{year} :"
+    subscription:
       pay: Payer
       upload_signed_form: Retourner le formulaire signé
       upload_medical_certificate: Joindre le certificat médical
@@ -226,9 +242,12 @@ fr:
       change_medical_certificate: Remplacer le certificat médical
     edit:
       title: Mes informations personnelles
-    profiles:
-      update:
-        edit_success: Profil modifié avec succès !
+    subscriptions:
+      new:
+        create_member: Veuillez renseigner les informations de la personne à inscrire
+    members:
+      create:
+        success: Membre ajouté
     payments:
       new:
         payment_by_card: Paiement par carte bancaire
@@ -240,14 +259,14 @@ fr:
         already_paid: Votre commande est déjà payée. Votre carte n'a donc pas été débitée.
     medical_certificates:
       update:
-        edit_success: Certificat médical ajuté avec succès !
+        edit_success: Certificat médical ajouté avec succès !
     signed_forms:
       update:
-        edit_success: Formulaire signé ajuté avec succès !
+        edit_success: Formulaire signé ajouté avec succès !
   layouts:
     navbar:
       admin: Admin
-      users: Membres
+      members: Membres
       courses: Cours
       subscriptions: Inscriptions
       my_account: Mon compte

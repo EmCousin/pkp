@@ -10,7 +10,7 @@ describe Subscription, type: :model do
     end
   let(:subscription) { build :subscription, courses: courses }
 
-  it { is_expected.to belong_to(:member).class_name('User') }
+  it { is_expected.to belong_to(:member) }
   it { is_expected.to have_many(:courses_subscriptions).dependent(:destroy) }
   it { is_expected.to have_many(:courses).through(:courses_subscriptions) }
 

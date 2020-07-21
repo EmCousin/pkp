@@ -1,43 +1,50 @@
 <div class="row">
   <div class="col-md-6 offset-md-3">
-    <%= form_with(model: @form, local: true, url: new_dashboard_subscription_path, method: :get) do |f| %>
+    <%= form_with(model: @subscription, local: true, url: dashboard_subscriptions_path, class: "mt-3") do |f| %>
       <div class="form-group">
-        <%= f.label :category %>
-        <%= f.collection_select(:category, Course::CATEGORIES, :to_s, :to_s, { include_blank: true }, required: true, class: "form-control", onchange: "this.form.submit();") %>
+        <%= f.label :member_id %>
+        <%= f.collection_select(:member_id, current_user.members.available, :id, :full_name, { include_blank: false }, class: "form-control", onchange: "this.form.submit();") %>
+
+        <% if @subscription.member.nil? %>
+          <p class="mt-3 text-center">Ou</p>
+
+          <%= link_to "Ajouter une autre personne", new_dashboard_member_path, class: 'btn btn-primary d-flex justify-content-center' %>
+        <% end %>
       </div>
-    <% end %>
 
-    <div class="clearfix"></div>
+      <% if @subscription.member&.valid? %>
+        <div class="form-group">
+          <%= f.label :category %>
+          <%= f.collection_select(:category, Course::CATEGORIES, :to_s, :to_s, { include_blank: true }, required: true, class: "form-control", onchange: "this.form.submit();") %>
+        </div>
+      <% end %>
 
-    <%= form_with(model: @form, local: true, url: dashboard_subscriptions_path, class: "mt-3") do |f| %>
-      <%= f.hidden_field :category %>
-      <% if @form.errors.any? %>
-        <div id="error_explanation">
-          <h2><%= pluralize(@form.errors.count, "error") %> prohibited this subscription from being saved:</h2>
-
+      <% if @subscription.category.present? && @subscription.course_ids.any? && @subscription.errors.any? %>
+        <div id="error_explanation" class="error_explanation">
           <ul>
-          <% @form.errors.full_messages.each do |message| %>
+          <% @subscription.errors.full_messages.each do |message| %>
             <li><%= message %></li>
           <% end %>
           </ul>
         </div>
       <% end %>
 
-      <% if @form.courses.any? %>
+      <% if @subscription.available_courses.any? %>
         <div class="form-group">
           <%= f.label :course_ids %>
-          <%= f.collection_check_boxes :course_ids, @form.courses, :id, :title, required: true do |b| %>
+          <%= f.collection_check_boxes :course_ids, @subscription.available_courses, :id, :title, required: true do |b| %>
             <div class="form-check">
               <%= b.check_box(class: "form-check-input") %>
               <%= b.label(class: "form-check-label") %>
             </div>
           <% end %>
         </div>
-        <div class="actions d-flex mt-3">
-          <%= link_to t('defaults.back'), dashboard_index_path, class: "btn btn-link flex-fill" %>
-          <%= f.submit t('defaults.save'), class: "btn btn-dark flex-fill" %>
-        </div>
       <% end %>
+
+      <div class="actions d-flex mt-5">
+        <%= link_to t('defaults.back'), dashboard_index_path, class: "btn btn-link flex-fill" %>
+        <%= f.submit t('defaults.save'), class: "btn btn-dark flex-fill" %>
+      </div>
     <% end %>
   </div>
 </div>

@@ -57,7 +57,7 @@
         <% else %>
           <% @course.subscriptions.includes(:member).each do |subscription| %>
             <tr>
-              <td><%= link_to subscription.member.full_name , admin_user_path(subscription.member_id) %></td>
+              <td><%= link_to subscription.member.full_name , admin_member_path(subscription.member_id) %></td>
               <td><%= image_tag url_for(subscription.member.avatar), width: "30" %></td>
               <td><%= number_to_currency(subscription.fee, unit: "€", separator: ",", format: "%n %u") %></td>
               <td><%= subscription.year %></td>

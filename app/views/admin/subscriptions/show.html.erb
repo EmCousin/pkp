@@ -35,7 +35,7 @@
             <%= link_to t('defaults.download'), rails_blob_path(credit_note, disposition: "attachment") %>
           <% end %>
       <% else %>
-        <%= link_to t('.generate_invoice'), edit_admin_subscription_invoice_path(@subscription.id), class: "btn btn-outline-success btn-sm" %>
+        <%= link_to t('.preview_invoice'),  admin_subscription_invoice_path(@subscription.id), method: :get, class: "btn btn-outline-success btn-sm" %>
       <% end %>
     </p>
   <% end %>

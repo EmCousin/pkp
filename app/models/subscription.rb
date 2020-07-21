@@ -1,13 +1,20 @@
 # frozen_string_literal: true
 
 class Subscription < ApplicationRecord
-  belongs_to :member, class_name: 'User'
+  belongs_to :member
   has_many :courses_subscriptions, dependent: :destroy
   has_many :courses, through: :courses_subscriptions
 
-  validates :year, presence: true
-  validates :member_id, uniqueness: { scope: :year }
   validates :fee, numericality: { greater_than_or_equal_to: 0, allow_blank: true }
+  validates :year, presence: true
+  validates :member_id, uniqueness: { scope: :year, message: lambda do |subscription, _data|
+    I18n.t(
+      'custom_error_messages.subscription.member_id.taken',
+      full_name: subscription.member.full_name,
+      year: subscription.year
+    )
+  end }
+
   validate :at_least_one_course?
   validate :maximum_three_courses?
   validate :courses_are_of_the_same_category
@@ -24,6 +31,7 @@ class Subscription < ApplicationRecord
   enum status: %i[pending confirmed archived]
 
   attr_accessor :credit_note_amount
+  attr_accessor :category
 
   class << self
     def current_year
@@ -44,6 +52,26 @@ class Subscription < ApplicationRecord
 
   def description
     courses.pluck(:title).join(', ')
+  end
+
+  def paid_at
+    Time.at(stripe_charge.created)
+  end
+
+  def paid_amount
+    stripe_charge.amount / 100.0
+  end
+
+  def balance
+    fee - paid_amount
+  end
+
+  def available_courses
+    @available_courses ||= category.present? ? Course.available.where(category: category).order(:created_at) : Course.none
+  end
+
+  def completed?
+    paid? && signed_form.attached? && medical_certificate.attached?
   end
 
   private

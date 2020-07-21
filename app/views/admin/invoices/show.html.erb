@@ -1,0 +1,92 @@
+<% total_amount = number_to_euros(@subscription.fee) %>
+
+<div class="container">
+  <%= form_with(model: @subscription, local: true, url:   admin_subscription_invoice_path(@subscription.id)) do |form| %>
+    <% if @subscription.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@subscription.errors.count, "error") %> prohibited this invoice from being generated:</h2>
+        <ul>
+        <% @subscription.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="row">
+      <div class="col-md-3 offset-md-1">
+         <%= image_pack_tag "Logo_PKP.webp" %>
+        <div class="mt-5">
+          <p>Parkour Paris</p>
+          <p>ID société : 750 838 609 00014</p>
+          <p>parkour.paris@gmail.com</p>
+        </div>
+        <div class="mt-5">
+          <p>International School of Paris</p>
+          <p>E-mail: lhudson@isparis.edu</p>
+          <p>Adresse: Rue Beethoven</p>
+          <p>Paris</p>
+        </div>
+      </div>
+      <div class="col-md-3 offset-md-4">
+        <div class="mt-5">
+          <h3>Facture: #<%= @subscription.year %><%= @subscription.id %></h3>
+          <p>Payée le: <%= @subscription.paid_at %>
+          <p>Date de délivrance : <%= Time.now %></p>
+        </div>
+      </div>
+    </div>
+
+    <table class="table mt-5 text-center">
+      <thead>
+        <tr>
+          <th>Article ou Service</th>
+          <th>Prix</th>
+          <th>Quantité</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td><%= @subscription.description %></td>
+          <td><%= total_amount %></td>
+          <td>1</td>
+          <td><%= total_amount %></td>
+        </tr>
+        <tr>
+          <td colspan="4"></td>
+        </tr>
+        <tr>
+          <td>Sous-total :</td>
+          <td><%= total_amount %></td>
+        </tr>
+        <tr>
+          <td>Total facture :</td>
+          <td><%= total_amount %></td>
+        </tr>
+        <tr colspan="2">
+          <td>Montant payé :</td>
+          <td><%= number_to_euros(@subscription.paid_amount) %></td>
+        </tr>
+        <tr colspan="2">
+          <td>Solde :</td>
+          <td><%= number_to_euros(@subscription.balance) %></td>
+        </tr>
+      </tbody>
+    </table>
+    <div>
+        <%= link_to t('.generate_invoice'), admin_subscription_invoice_path(@subscription.id), method: :post, class: "btn btn-success float-lg-right" %>
+      </div>
+    <div class="container mt-5">
+      <div class="form-group">
+        <p>Charger une facture:</p>
+        <%= form.label :invoice %>
+        <%= form.file_field :invoice, required: true %>
+      </div>
+      <div class="actions">
+        <%= form.submit t('defaults.save'), class: "btn btn-dark float-lg-right" %>
+        <%= link_to t('defaults.back'), admin_subscription_path(@subscription.id), class: "btn btn-link float-left" %>
+      </div>
+    </div>
+  <% end %>
+</div>
