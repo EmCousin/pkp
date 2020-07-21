@@ -58,6 +58,10 @@ fr:
     download: Télécharger
     none: Aucun
     replace: Remplacer
+  custom_error_messages:
+    subscription:
+      member_id:
+        taken: "%{full_name} est déjà inscrit pour %{year}"
   activemodel:
     errors:
       messages:

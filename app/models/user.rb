@@ -13,7 +13,7 @@ class User < ApplicationRecord
   has_many :subscriptions, through: :members
   has_many :courses, through: :subscriptions
 
-  with_options if: ->(user) { user.confirmed? && !user.confirmed_at_changed? } do |user|
+  with_options on: :account_setup, if: ->(user) { user.confirmed? && !user.confirmed_at_changed? } do |user|
     user.validates :phone_number, presence: true, phone: true
     user.validates :address, presence: true
     user.validates :zip_code, presence: true

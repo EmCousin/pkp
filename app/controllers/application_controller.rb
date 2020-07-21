@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   include DeviseOverrides
 
-  before_action :redirect_to_profile_completion_page!, unless: -> { devise_controller? || current_user.valid? }
+  before_action :redirect_to_profile_completion_page!, unless: -> { devise_controller? || current_user.valid?(:account_setup) }
 
   private
 

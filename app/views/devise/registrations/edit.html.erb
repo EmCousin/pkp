@@ -56,9 +56,16 @@
       </div>
 
       <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-        <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+        <div>En attente de confirmation pour l'Email : <%= resource.unconfirmed_email %></div>
       <% end %>
 
+      <div class="form-group">
+        <%= f.label :current_password do %>
+          <%= resource.class.human_attribute_name(:current_password) %>
+          <em>(<%= t('.current_password_needed') %>)</em>
+        <% end %>
+        <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control" %>
+      </div>
 
       <div class="form-group">
         <%= f.label :password do %>
@@ -73,14 +80,6 @@
       <div class="form-group">
         <%= f.label :password_confirmation %><br />
         <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", placeholder: t('.leave_blank_if_you_wont_change_it') %>
-      </div>
-
-      <div class="form-group">
-        <%= f.label :current_password do %>
-          <%= resource.class.human_attribute_name(:current_password) %>
-          <em>(<%= t('.current_password_needed') %>)</em>
-        <% end %>
-        <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control" %>
       </div>
 
       <div class="actions d-flex mt-3 mb-5">

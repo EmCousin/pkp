@@ -1,11 +1,13 @@
 FactoryBot.define do
   factory :member do
-    first_name { "MyString" }
-    last_name { "MyString" }
-    birthdate { "2020-07-14" }
-    contact_name { "MyString" }
-    contact_phone_number { "MyString" }
-    contact_relationship { "MyString" }
-    agreed_to_advertising_right { false }
+    association :user, factory: :user
+    first_name { Faker::Name.first_name }
+    last_name { Faker::Name.last_name }
+    birthdate { 20.year.ago }
+    contact_name { Faker::Name.name }
+    contact_phone_number { Faker::PhoneNumber.phone_number }
+    contact_relationship { Member::CONTACTS.sample }
+    agreed_to_advertising_right { true }
+    avatar { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'file_examples', 'example.svg')) }
   end
 end

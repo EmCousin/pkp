@@ -18,10 +18,7 @@ class Member < ApplicationRecord
   ].freeze
 
   belongs_to :user
-  accepts_nested_attributes_for :user
-
   has_many :subscriptions, dependent: :destroy
-  accepts_nested_attributes_for :subscriptions
   has_many :courses, through: :subscriptions
 
   validates :first_name, presence: true
