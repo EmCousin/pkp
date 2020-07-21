@@ -19,6 +19,7 @@ class Subscription < ApplicationRecord
   has_one_attached :signed_form
   has_one_attached :medical_certificate
   has_one_attached :invoice
+  has_many_attached :credit_notes
 
   enum status: %i[pending confirmed archived]
 
