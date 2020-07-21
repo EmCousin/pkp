@@ -41,9 +41,9 @@ class Member < ApplicationRecord
       return none if year > Subscription.current_year
 
       left_joins(:subscriptions).where(subscriptions: { id: nil })
-        .or(
-          left_joins(:subscriptions).where.not(subscriptions: { year: year })
-        )
+                                .or(
+                                  left_joins(:subscriptions).where.not(subscriptions: { year: year })
+                                )
     end
   end
 
