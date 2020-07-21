@@ -15,7 +15,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :courses
-    resources :users
+    resources :members
     resources :subscriptions do
       member do
         delete :unlink_course
@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   resources :admin, only: [:index]
 
   namespace :dashboard do
+    resources :members, only: [:new, :create]
     resources :subscriptions, only: [:new, :create] do
       resource :medical_certificate, only: [:edit, :update]
       resource :signed_form, only: [:edit, :update]

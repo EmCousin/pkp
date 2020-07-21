@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Subscription < ApplicationRecord
-  belongs_to :member, class_name: 'User'
+  belongs_to :member
   has_many :courses_subscriptions, dependent: :destroy
   has_many :courses, through: :courses_subscriptions
 
@@ -20,6 +20,8 @@ class Subscription < ApplicationRecord
   has_one_attached :invoice
 
   enum status: %i[pending confirmed archived]
+
+  attr_accessor :category
 
   class << self
     def current_year
@@ -52,6 +54,14 @@ class Subscription < ApplicationRecord
 
   def balance
     fee - paid_amount
+  end
+
+  def available_courses
+    @available_courses ||= category.present? ? Course.available.where(category: category).order(:created_at) : Course.none
+  end
+
+  def completed?
+    paid? && signed_form.attached? && medical_certificate.attached?
   end
 
   private

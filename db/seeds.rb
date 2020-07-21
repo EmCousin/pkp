@@ -10,26 +10,29 @@
 
 Subscription.destroy_all
 Course.destroy_all
+Member.destroy_all
 User.destroy_all
 
 user = User.new
 user.email = "monemail@mail.fr"
-user.email_confirmation = "monemail@mail.fr"
-user.first_name = "Maria"
-user.last_name = "Silva"
-user.admin = true
-user.birthdate = 20.years.ago
 user.phone_number = "+33299506779"
+user.email_confirmation = "monemail@mail.fr"
+user.password = "s3cr3tp4$$w0rd"
 user.address = "1 rue des Halles"
 user.zip_code = "75001"
 user.city = "Paris"
 user.country = "France"
-user.agreed_to_publicity_right = true
-user.avatar = Rack::Test::UploadedFile.new(Rails.root.join('public', 'pkp.jpg'), "image/jpeg")
-user.contact_name = "Maria"
-user.contact_phone_number = "+33299506779"
-user.contact_relationship = User::CONTACTS.sample
-user.password = "s3cr3tp4$$w0rd"
+user.admin = true
+
+member = user.members.new
+member.first_name = "Maria"
+member.last_name = "Silva"
+member.birthdate = 20.years.ago
+member.agreed_to_advertising_right = true
+member.avatar = Rack::Test::UploadedFile.new(Rails.root.join('public', 'pkp.jpg'), "image/jpeg")
+member.contact_name = "Maria"
+member.contact_phone_number = "+33299506779"
+member.contact_relationship = Member::CONTACTS.sample
 
 user.save!
 

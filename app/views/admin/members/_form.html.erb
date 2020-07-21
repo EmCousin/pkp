@@ -1,0 +1,72 @@
+<%= form_with(model: member, local: true, url: url) do |form| %>
+  <% if member.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(member.errors.count, "error") %> prohibited this member from being saved:</h2>
+
+      <ul>
+      <% member.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= form.label :first_name %>
+    <%= form.text_field :first_name, autofocus: true, required: true, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :last_name %>
+    <%= form.text_field :last_name, required: true, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :birthdate %>
+    <%= form.date_field :birthdate, required: true, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :phone_number %>
+    <%= form.telephone_field :phone_number, required: true, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :contact_name %>
+    <%= form.text_field :contact_name, required: true, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :contact_phone_number %>
+    <%= form.telephone_field :contact_phone_number, required: true, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :contact_relationship %><br />
+    <%= form.collection_select(:contact_relationship, Member::CONTACTS, :to_s, :to_s, { include_blank: true }, required: true, class: "form-control") %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :avatar %>
+    <%= form.file_field :avatar %>
+  </div>
+
+  <%= form.fields_for :user, @member.user do |user_form| %>
+    <%= user_form.hidden_field :id, value: @member.user_id %>
+
+    <div class="form-group">
+      <%= user_form.label :email %>
+      <%= user_form.email_field :email, required: true, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= user_form.label :phone_number %>
+      <%= user_form.telephone_field :phone_number, required: true, class: "form-control" %>
+    </div>
+  <% end %>
+
+  <div class="actions d-flex mb-3">
+    <%= link_to t('defaults.back'), :back, class: 'btn btn-default btn-lg flex-fill' %>
+    <%= form.submit t('defaults.save'), class: 'btn btn-dark btn-lg flex-fill' %>
+  </div>
+<% end %>
