@@ -19,7 +19,6 @@ module Admin
       redirect_to admin_subscription_path(@subscription.id), notice: t('.success')
     end
 
-
     private
 
     def set_subscription!
