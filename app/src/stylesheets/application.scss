@@ -52,4 +52,20 @@ body {
   .error_explanation {
     color: red;
   }
+
+  .legal-mentions {
+    h2 {
+      font-size: 24px;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 20px;
+      margin-bottom: 1rem;
+    }
+
+    p, li {
+      font-size: 14px;
+    }
+  }
 }
