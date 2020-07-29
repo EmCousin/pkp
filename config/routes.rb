@@ -23,6 +23,7 @@ Rails.application.routes.draw do
         put :archive
       end
       resource :invoice, only: [:show, :create, :edit, :update]
+      resources :credit_notes, only: [:new, :create]
     end
   end
 

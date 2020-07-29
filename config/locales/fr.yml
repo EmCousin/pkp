@@ -156,6 +156,8 @@ fr:
         signed_form: Formulaire signé
         medical_certificate: Certificat médical
         invoice: Facture
+        credit_notes: Avoirs
+        created_at: Généré le
 
   #views
   devise:
@@ -210,6 +212,8 @@ fr:
         payment: Paiement
         paid: Payé
         not_paid_yet: En attente de paiement
+        generate_invoice: Générer une facture
+        generate_credit_note: Générer un avoir
         preview_invoice: Prévisualiser la facture
       form:
         users: Membres
@@ -222,12 +226,15 @@ fr:
         archivation_success: 'Inscription archivée avec succès !'
         archivation_failure: "L'inscription est déjà archivée !"
     invoices:
+      show:
+        generate_invoice: Génerer cette facture
       create:
         success: Facture générée
       update:
         edit_success: Facture générée
-      show:
-        generate_invoice: Génerer cette facture
+    credit_notes:
+      create:
+        success: Avoir généré
   dashboard:
     index:
       add_subscription: Ajouter une inscription
