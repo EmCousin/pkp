@@ -13,6 +13,8 @@ class User < ApplicationRecord
   has_many :subscriptions, through: :members
   has_many :courses, through: :subscriptions
 
+  validates :terms_of_service, acceptance: true
+
   with_options on: :account_setup, if: ->(user) { user.confirmed? && !user.confirmed_at_changed? } do |user|
     user.validates :phone_number, presence: true, phone: true
     user.validates :address, presence: true

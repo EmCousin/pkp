@@ -49,8 +49,12 @@ body {
     border: 2px solid rgba(255, 255, 255, 1);
   }
 
-  .error_explanation {
+  .error_explanation, .field_with_errors {
     color: red;
+  }
+
+  .field_with_errors {
+    display: inline-block;
   }
 
   .legal-mentions {
