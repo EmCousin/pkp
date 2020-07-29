@@ -87,6 +87,8 @@ fr:
           attributes:
             password:
               too_short: trop court
+            terms_of_service:
+              accepted: doivent être acceptées
         member:
           attributes:
             birthdate:
@@ -124,6 +126,7 @@ fr:
         zip_code: Code Postal
         city: Ville
         country: Pays
+        terms_of_service: Les Conditions Générales d'Utilisation
       member:
         first_name: Prénom
         last_name: Nom
@@ -163,6 +166,8 @@ fr:
     registrations:
       new:
         minimum_characters: "%{length} caractères min."
+        i_have_read_and_accept: J'ai lu et accepte les
+        terms_of_service: Conditions Générales d'Utilisation
       edit:
         edit_my_account: Modifier mon compte
         delete_my_account: Supprimer mon compte

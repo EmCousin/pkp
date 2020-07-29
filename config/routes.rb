@@ -41,5 +41,11 @@ Rails.application.routes.draw do
 
   resources :dashboard, only: [:index]
 
+  resources :pages, path: '/', only: [] do
+    collection do
+      get :legal_mentions
+    end
+  end
+
   root "dashboard#index"
 end

@@ -7,6 +7,7 @@ FactoryBot.define do
     zip_code { Faker::Address.zip_code }
     city { Faker::Address.city }
     country { Faker::Address.country }
+    terms_of_service { true }
 
     trait :admin do
       admin { true }
