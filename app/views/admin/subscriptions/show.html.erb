@@ -27,21 +27,15 @@
       <strong><%= Subscription.human_attribute_name(:invoice) %> :</strong>
       <% if @subscription.invoice.attached? %>
         <%= link_to t('defaults.download'), rails_blob_path(@subscription.invoice, disposition: "attachment") %>
-        <br>
-        <br>
-        <%= link_to t('.generate_credit_note'), new_admin_subscription_credit_note_path(@subscription.id), class: "btn btn-outline-success btn-sm" %>
-        <br>
-        <br>
-
-
-
+        <div class="mb-3">
+        <%= link_to t('.generate_credit_note'), new_admin_subscription_credit_note_path(@subscription.id), class: "btn btn-outline-success btn-sm avoir-button" %>
+        </div>
         <table class="table">
           <thead>
             <tr>
               <th>
                 <%= Subscription.human_attribute_name(:credit_notes) %> :
               </th>
-
               <th>
                 <%= Subscription.human_attribute_name(:created_at) %> :
               </th>
@@ -51,9 +45,9 @@
           <tbody>
             <% @subscription.credit_notes.each do |credit_note| %>
             <tr>
-              <th scope="row">
+              <td scope="row">
                 <%= credit_note.id %>
-              </th>
+              </td>
               <td>
                 <%= credit_note.created_at %>
               </td>

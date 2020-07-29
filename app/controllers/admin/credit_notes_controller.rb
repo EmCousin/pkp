@@ -2,7 +2,7 @@
 
 module Admin
   class CreditNotesController < AdminController
-    before_action :set_subscription!, only: %i[show new create]
+    before_action :set_subscription!, only: %i[new create]
 
     def new; end
 

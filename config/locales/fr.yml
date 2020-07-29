@@ -154,7 +154,7 @@ fr:
         medical_certificate: Certificat médical
         invoice: Facture
         credit_notes: Avoirs
-        created_at: Généré à
+        created_at: Généré le
 
   #views
   devise:
