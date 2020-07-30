@@ -1,20 +1,10 @@
 <% total_amount = number_to_euros(@subscription.fee) %>
 
-<div class="container">
-  <%= form_with(model: @subscription, local: true, url:   admin_subscription_invoice_path(@subscription.id)) do |form| %>
-    <% if @subscription.errors.any? %>
-      <div id="error_explanation">
-        <h2><%= pluralize(@subscription.errors.count, "error") %> prohibited this invoice from being generated:</h2>
-        <ul>
-        <% @subscription.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-        </ul>
-      </div>
-    <% end %>
+<div class="row">
+  <div class="col-8 offset-2 border">
     <div class="row">
       <div class="col-md-3 offset-md-1">
-         <%= image_pack_tag "Logo_PKP.webp" %>
+        <%= image_pack_tag "Logo_PKP.webp" %>
         <div class="mt-5">
           <p>Parkour Paris</p>
           <p>ID société : 750 838 609 00014</p>
@@ -74,19 +64,25 @@
         </tr>
       </tbody>
     </table>
-    <div>
-        <%= link_to t('.generate_invoice'), admin_subscription_invoice_path(@subscription.id), method: :post, class: "btn btn-success float-lg-right" %>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-8 offset-2">
+    <%= link_to t('.generate_invoice'), admin_subscription_invoice_path(@subscription.id), method: :post, class: "btn btn-success w-100 mt-3", data: { disable_with: t('.generating') } %>
+
+    <%= form_with(model: @subscription, local: true, url:   admin_subscription_invoice_path(@subscription.id)) do |form| %>
+      <div class="mt-5">
+        <div class="form-group">
+          <p>Charger une facture:</p>
+          <%= form.label :invoice %>
+          <%= form.file_field :invoice, required: true %>
+        </div>
+        <div class="actions">
+          <%= form.submit t('defaults.save'), class: "btn btn-dark float-lg-right" %>
+          <%= link_to t('defaults.back'), admin_subscription_path(@subscription.id), class: "btn btn-link float-left" %>
+        </div>
       </div>
-    <div class="container mt-5">
-      <div class="form-group">
-        <p>Charger une facture:</p>
-        <%= form.label :invoice %>
-        <%= form.file_field :invoice, required: true %>
-      </div>
-      <div class="actions">
-        <%= form.submit t('defaults.save'), class: "btn btn-dark float-lg-right" %>
-        <%= link_to t('defaults.back'), admin_subscription_path(@subscription.id), class: "btn btn-link float-left" %>
-      </div>
-    </div>
-  <% end %>
+    <% end %>
+  </div>
 </div>

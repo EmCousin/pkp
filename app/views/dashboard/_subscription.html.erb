@@ -1,5 +1,6 @@
-<div class="row">
-  <div class="col">
+<div class="row p-2">
+  <div class="col-4">
+    <%= image_tag url_for(subscription.member.avatar), alt: "Avatar #{subscription.member.first_name}", width: 30 %>
     <%= subscription.member.full_name %>
   </div>
 
@@ -38,7 +39,7 @@
         class="dropdown-menu"
         aria-labelledby="dropdownMenuSubscription<%= subscription.id %>"
       >
-        <%= link_to t('.download_subscription_form'),dashboard_subscription_subscription_form_path(subscription.id), method: :post, class: "dropdown-item" unless subscription.signed_form.attached? %>
+        <%= link_to t('.download_subscription_form'), rails_blob_path(subscription.form), disposition: "attachment", class: "dropdown-item" unless subscription.signed_form.attached? %>
 
         <%= link_to t('.upload_signed_form'), edit_dashboard_subscription_signed_form_path(subscription.id), class: "dropdown-item" unless subscription.signed_form.attached? %>
 
@@ -74,7 +75,7 @@
     <table class="table">
       <thead>
         <tr>
-          <th><%= link_to t('.subscription_form'), dashboard_subscription_subscription_form_path(subscription.id), method: :post %></th>
+          <th><%= link_to t('.subscription_form'), rails_blob_path(subscription.form), disposition: "attachment" %></th>
           <th><%= Subscription.human_attribute_name(:medical_certificate) %></th>
           <th>Paiement</th>
         </tr>

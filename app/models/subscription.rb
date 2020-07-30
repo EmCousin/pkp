@@ -23,6 +23,7 @@ class Subscription < ApplicationRecord
   before_validation :set_current_year, on: :create
   before_save :set_fee
 
+  has_one_attached :form
   has_one_attached :signed_form
   has_one_attached :medical_certificate
   has_one_attached :invoice

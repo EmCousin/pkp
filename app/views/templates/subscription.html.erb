@@ -1,6 +1,6 @@
 <div id="header">
-  <%= wicked_pdf_image_tag url_for(subscription.member.avatar), class: 'avatar' %>
-  <%= wicked_pdf_image_tag 'parkourparis.jpg', class: 'logo' %>
+  <%= wicked_pdf_image_tag polymorphic_url(subscription.member.avatar), class: 'avatar' %>
+  <%= wicked_pdf_image_tag asset_url('parkourparis.jpg'), class: 'logo', alt: "Logo Parkour Paris" %>
 </div>
 
 <h1 class="title">
