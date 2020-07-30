@@ -76,7 +76,7 @@ module Dashboard
           'templates/subscription.html.erb',
           layout: 'pdf.html.erb',
           encoding: 'UTF-8',
-          locals: { subscription: subscription, logo_url: nil }
+          locals: { subscription: subscription }
         )
       ).force_encoding('UTF-8')
     end
