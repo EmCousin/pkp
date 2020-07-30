@@ -74,7 +74,7 @@
     <table class="table">
       <thead>
         <tr>
-          <th><%= link_to t('.subscription_form'),   dashboard_subscription_subscription_form_path(subscription.id), method: :post %></th>
+          <th><%= link_to t('.subscription_form'), dashboard_subscription_subscription_form_path(subscription.id), method: :post %></th>
           <th><%= Subscription.human_attribute_name(:medical_certificate) %></th>
           <th>Paiement</th>
         </tr>
