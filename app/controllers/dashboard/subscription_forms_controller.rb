@@ -2,7 +2,7 @@
 
 module Dashboard
   class SubscriptionFormsController < DashboardController
-    before_action :set_subscription, only: %i[new create]
+    before_action :set_subscription, only: %i[create]
 
     def create
       file = Tempfile.open(['fiche', '.pdf']) do |f|
