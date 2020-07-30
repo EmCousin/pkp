@@ -11,7 +11,7 @@ module Dashboard
 
       respond_to do |format|
         format.html do
-          send_file file.path, type: 'application/pdf',
+          send_file file.path, type: Mime[:pdf],
                                disposition: 'attachment'
         end
       end
