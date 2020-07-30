@@ -5,8 +5,8 @@ class SubscriptionMailer < ApplicationMailer
     @subscription = subscription
 
     attachments['fiche.pdf'] = {
-      mime_type: Mime[:pdf],
-      content: pdf_from_subscription(subscription)
+      mime_type: subscription.form.blob.content_type,
+      content: subscription.form.blob.download
     }
 
     mail to: subscription.member.email, subject: "Inscription Parkour Paris #{subscription.year} / #{subscription.year + 1}"
