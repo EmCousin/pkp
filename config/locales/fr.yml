@@ -170,6 +170,7 @@ fr:
         minimum_characters: "%{length} caractères min."
         i_have_read_and_accept: J'ai lu et accepte les
         terms_of_service: Conditions Générales d'Utilisation
+        signup: S'inscrire
       edit:
         edit_my_account: Modifier mon compte
         delete_my_account: Supprimer mon compte
