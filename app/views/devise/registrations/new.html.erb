@@ -1,9 +1,11 @@
 <div class="row pb-5">
   <div class="col-md-6 offset-md-3">
-    <h1 class="page-title"><%= t('defaults.signup') %></h1>
+    <h1 class="page-title"><%= t('.signup') %></h1>
 
     <hr />
-
+    <div class="alert alert-warning" role="alert">
+     <%= t('.contact_to_essay') %><a href="https://www.parkourparis.fr/contact" class="alert-link" target="_blank" > <%= t('.contact_form') %></a>.
+    </div>
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |form| %>
       <%= render "devise/shared/error_messages", resource: resource %>
       <div class="row">

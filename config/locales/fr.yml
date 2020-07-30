@@ -170,6 +170,9 @@ fr:
         minimum_characters: "%{length} caractères min."
         i_have_read_and_accept: J'ai lu et accepte les
         terms_of_service: Conditions Générales d'Utilisation
+        signup: S'inscrire
+        contact_to_essay: Si vous souhaitez faire un cours d'essai, veuillez envoyer votre demande directement sur notre
+        contact_form: formulaire de contact
       edit:
         edit_my_account: Modifier mon compte
         delete_my_account: Supprimer mon compte
