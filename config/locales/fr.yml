@@ -246,6 +246,8 @@ fr:
       subscription_detailed_info: "Vos inscriptions pour l'année %{year} :"
     subscription:
       pay: Payer
+      subscription_form: Formulaire d'inscription
+      download_subscription_form: Télécharger le formulaire d'inscription
       upload_signed_form: Retourner le formulaire signé
       upload_medical_certificate: Joindre le certificat médical
       change_signed_form: Remplacer le formulaire

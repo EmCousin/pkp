@@ -38,6 +38,8 @@
         class="dropdown-menu"
         aria-labelledby="dropdownMenuSubscription<%= subscription.id %>"
       >
+        <%= link_to t('.download_subscription_form'),dashboard_subscription_subscription_form_path(subscription.id), method: :post, class: "dropdown-item" unless subscription.signed_form.attached? %>
+
         <%= link_to t('.upload_signed_form'), edit_dashboard_subscription_signed_form_path(subscription.id), class: "dropdown-item" unless subscription.signed_form.attached? %>
 
         <%= link_to t('.upload_medical_certificate'), edit_dashboard_subscription_medical_certificate_path(subscription.id), class: "dropdown-item" unless subscription.medical_certificate.attached? %>
@@ -72,7 +74,7 @@
     <table class="table">
       <thead>
         <tr>
-          <th><%= Subscription.human_attribute_name(:signed_form) %></th>
+          <th><%= link_to t('.subscription_form'),   dashboard_subscription_subscription_form_path(subscription.id), method: :post %></th>
           <th><%= Subscription.human_attribute_name(:medical_certificate) %></th>
           <th>Paiement</th>
         </tr>

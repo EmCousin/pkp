@@ -35,6 +35,7 @@ Rails.application.routes.draw do
       resource :medical_certificate, only: [:edit, :update]
       resource :signed_form, only: [:edit, :update]
       resource :payment, only: [:new, :create]
+      resource :subscription_form, only: [:create]
     end
     resources :vacations, only: [:index]
     resources :capacities, only: [:index]
