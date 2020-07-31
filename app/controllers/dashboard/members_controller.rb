@@ -2,6 +2,8 @@
 
 module Dashboard
   class MembersController < DashboardController
+    include AccessFilters
+
     def new
       @member = current_user.members.new
     end
