@@ -2,7 +2,7 @@
 
 module Dashboard
   class SubscriptionsController < DashboardController
-    before_action :filter_vacation_time!, only: %i[new create], unless: :vacation_time?
+    before_action :filter_vacation_time!, only: %i[new create], if: :vacation_time?
     before_action :filter_full!, only: %i[new create], if: :full?
     before_action :filter_available_members!, only: %i[new], unless: :available_members?
     before_action :set_member, only: %i[new]
