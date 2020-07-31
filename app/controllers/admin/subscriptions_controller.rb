@@ -2,6 +2,8 @@
 
 module Admin
   class SubscriptionsController < AdminController
+    include Subscriptions::Pdf
+
     def index
       @subscriptions = Subscription.includes(:member).order(created_at: :desc).page(params[:page]).per(50)
     end
@@ -17,6 +19,7 @@ module Admin
     def create
       @subscription = Subscription.new(subscription_params)
       if @subscription.save
+        process_after_save(@subscription)
         redirect_to admin_subscriptions_path, notice: 'Inscription créée avec succès !'
       else
         render :new
@@ -30,6 +33,7 @@ module Admin
     def update
       @subscription = Subscription.find(params[:id])
       if @subscription.update(subscription_params)
+        process_after_save(@subscription)
         redirect_to admin_subscriptions_path, notice: 'Inscription modifiée avec succès !'
       else
         render :edit

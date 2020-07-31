@@ -41,11 +41,11 @@
       >
         <%= link_to t('.download_subscription_form'), rails_blob_path(subscription.form), disposition: "attachment", class: "dropdown-item" unless subscription.signed_form.attached? %>
 
-        <%= link_to t('.upload_signed_form'), edit_dashboard_subscription_signed_form_path(subscription.id), class: "dropdown-item" unless subscription.signed_form.attached? %>
+        <%= link_to t('.upload_signed_form'), edit_dashboard_subscription_signed_form_path(subscription.id), class: "dropdown-item" if Rails.application.credentials.signed_form[:enabled] && !subscription.signed_form.attached? %>
 
-        <%= link_to t('.upload_medical_certificate'), edit_dashboard_subscription_medical_certificate_path(subscription.id), class: "dropdown-item" unless subscription.medical_certificate.attached? %>
+        <%= link_to t('.upload_medical_certificate'), edit_dashboard_subscription_medical_certificate_path(subscription.id), class: "dropdown-item" if Rails.application.credentials.medical_certificate[:enabled] && !subscription.medical_certificate.attached? %>
 
-        <%= link_to t('.pay'), new_dashboard_subscription_payment_path(subscription.id), class: "dropdown-item" unless subscription.paid? %>
+        <%= link_to t('.pay'), new_dashboard_subscription_payment_path(subscription.id), class: "dropdown-item" if Rails.application.credentials.online_payment[:enabled] && !subscription.paid? %>
       </div>
     <% end %>
   </div>
@@ -76,41 +76,51 @@
       <thead>
         <tr>
           <th><%= link_to t('.subscription_form'), rails_blob_path(subscription.form), disposition: "attachment" %></th>
-          <th><%= Subscription.human_attribute_name(:medical_certificate) %></th>
-          <th>Paiement</th>
+          <% if Rails.application.credentials.medical_certificate[:enabled] %>
+            <th><%= Subscription.human_attribute_name(:medical_certificate) %></th>
+          <% end %>
+          <% if Rails.application.credentials.online_payment[:enabled] %>
+            <th>Paiement</th>
+          <% end %>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>
-            <% if subscription.signed_form.attached? %>
-              Ajouté -
-              <%= link_to t('defaults.download'), rails_blob_path(subscription.signed_form, disposition: "attachment") %> -
-              <%= link_to t('defaults.replace'), edit_dashboard_subscription_signed_form_path(subscription.id) %>
-            <% else %>
-              <%= link_to t('.upload_signed_form'), edit_dashboard_subscription_signed_form_path(subscription.id), class: 'btn btn-primary' %>
-            <% end %>
-          </td>
-          <td>
-            <% if subscription.medical_certificate.attached? %>
-              Ajouté -
-              <%= link_to t('defaults.download'), rails_blob_path(subscription.medical_certificate, disposition: "attachment") %> -
-              <%= link_to t('defaults.replace'), edit_dashboard_subscription_medical_certificate_path(subscription.id) %>
-            <% else %>
-              <%= link_to t('.upload_medical_certificate'), edit_dashboard_subscription_medical_certificate_path(subscription.id), class: 'btn btn-primary' %>
-            <% end %>
-          </td>
-          <td>
-            <% if subscription.paid? %>
-              Payé
-              <% if subscription.invoice.attached? %>
-                -
-                <%= link_to t('defaults.download'), rails_blob_path(subscription.invoice, disposition: "attachment") %>
+          <% if Rails.application.credentials.signed_form[:enabled] %>
+            <td>
+              <% if subscription.signed_form.attached? %>
+                Ajouté -
+                <%= link_to t('defaults.download'), rails_blob_path(subscription.signed_form, disposition: "attachment") %> -
+                <%= link_to t('defaults.replace'), edit_dashboard_subscription_signed_form_path(subscription.id) %>
+              <% else %>
+                <%= link_to t('.upload_signed_form'), edit_dashboard_subscription_signed_form_path(subscription.id), class: 'btn btn-primary' %>
               <% end %>
-            <% else %>
-              <%= link_to t('.pay'), new_dashboard_subscription_payment_path(subscription.id), class: 'btn btn-primary' %>
-            <% end %>
-          </td>
+            </td>
+          <% end %>
+          <% if Rails.application.credentials.medical_certificate[:enabled] %>
+            <td>
+              <% if subscription.medical_certificate.attached? %>
+                Ajouté -
+                <%= link_to t('defaults.download'), rails_blob_path(subscription.medical_certificate, disposition: "attachment") %> -
+                <%= link_to t('defaults.replace'), edit_dashboard_subscription_medical_certificate_path(subscription.id) %>
+              <% else %>
+                <%= link_to t('.upload_medical_certificate'), edit_dashboard_subscription_medical_certificate_path(subscription.id), class: 'btn btn-primary' %>
+              <% end %>
+            </td>
+          <% end %>
+          <% if Rails.application.credentials.online_payment[:enabled] %>
+            <td>
+              <% if subscription.paid? %>
+                Payé
+                <% if subscription.invoice.attached? %>
+                  -
+                  <%= link_to t('defaults.download'), rails_blob_path(subscription.invoice, disposition: "attachment") %>
+                <% end %>
+              <% else %>
+                <%= link_to t('.pay'), new_dashboard_subscription_payment_path(subscription.id), class: 'btn btn-primary' %>
+              <% end %>
+            </td>
+          <% end %>
         </tr>
       </tbody>
     </table>
