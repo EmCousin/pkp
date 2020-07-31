@@ -70,6 +70,11 @@
         <%= user_form.password_field :password, autocomplete: "new-password", required: true, class: "form-control", minlength: Devise.password_length.min, maxlength: Devise.password_length.max %>
       </div>
     <% end %>
+
+    <div class="form-group">
+      <%= user_form.label :admin %>
+      <%= user_form.check_box :admin %>
+    </div>
   <% end %>
 
   <div class="actions d-flex mb-3">

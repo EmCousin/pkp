@@ -118,7 +118,7 @@ fr:
         other: Inscriptions
     attributes:
       user:
-        admin: Admnistrateur
+        admin: Administrateur
         email: E-mail
         email_confirmation: Confirmation de l'E-mail
         phone_number: Numéro de téléphone
@@ -260,6 +260,8 @@ fr:
       new:
         create_member: Veuillez renseigner les informations de la personne à inscrire
     members:
+      new:
+        advertising_right_statement: J'autorise l’utilisation, l’affichage et la publication de mon image provenant des activités de Parkour Paris, à des fins de promotion (tous médias) et d’information des activités de l’association. (panneaux, plaquettes, site internet).
       create:
         success: Membre ajouté
     payments:
