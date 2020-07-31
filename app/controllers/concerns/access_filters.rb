@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module AccessFilters
   extend ActiveSupport::Concern
 
@@ -10,10 +12,16 @@ module AccessFilters
   private
 
   def basic_authenticate
-    if authenticate_with_http_basic { |username, password| username == Rails.application.credentials.basic_auth[:username] && password == Rails.application.credentials.basic_auth[:password] }
+    if valid_basic_authentication?
       session[:basic_authenticated] = true
     else
       request_http_basic_authentication
+    end
+  end
+
+  def valid_basic_authentication?
+    authenticate_with_http_basic do |u, p|
+      u == Rails.application.credentials.basic_auth[:username] && p == Rails.application.credentials.basic_auth[:password]
     end
   end
 
