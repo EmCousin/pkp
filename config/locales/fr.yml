@@ -58,6 +58,7 @@ fr:
     download: Télécharger
     none: Aucun
     replace: Remplacer
+    forbidden: Accès non-autorisé
   custom_error_messages:
     subscription:
       member_id:

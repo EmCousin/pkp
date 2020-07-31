@@ -2,6 +2,7 @@
 
 module Dashboard
   class PaymentsController < DashboardController
+    before_action :filter_enabled!
     before_action :set_subscription!, only: %i[new create]
 
     def new; end
@@ -15,6 +16,12 @@ module Dashboard
     end
 
     private
+
+    def filter_enabled!
+      return false if Rails.application.credentials.online_payment[:enabled]
+
+      redirect_to dashboard_index_path, alert: t('defaults.forbidden')
+    end
 
     def set_subscription!
       @subscription = current_user.subscriptions.find_by!(

@@ -3,6 +3,7 @@
 module Dashboard
   class SubscriptionsController < DashboardController
     include AccessFilters
+    include Subscriptions::Pdf
 
     before_action :filter_available_members!, only: %i[new], unless: :available_members?
     before_action :set_member, only: %i[new]
@@ -15,7 +16,7 @@ module Dashboard
       @subscription = current_user.subscriptions.new(subscription_params)
 
       if @subscription.save
-        process_after_save
+        process_after_save(@subscription)
         redirect_to dashboard_index_path, notice: 'Inscription créée avec succès !'
       else
         render :new
@@ -42,27 +43,6 @@ module Dashboard
 
     def set_member
       @member = Member.find_by(id: params[:member_id])
-    end
-
-    def process_after_save
-      @subscription.form.attach(
-        io: StringIO.new(pdf_from_subscription(@subscription)),
-        filename: 'fiche.pdf',
-        content_type: Mime[:pdf]
-      )
-
-      SubscriptionMailer.confirm_subscription(@subscription).deliver_later
-    end
-
-    def pdf_from_subscription(subscription)
-      WickedPdf.new.pdf_from_string(
-        render_to_string(
-          'templates/subscription.html.erb',
-          layout: 'pdf.html.erb',
-          encoding: 'UTF-8',
-          locals: { subscription: subscription }
-        )
-      ).force_encoding('UTF-8')
     end
   end
 end

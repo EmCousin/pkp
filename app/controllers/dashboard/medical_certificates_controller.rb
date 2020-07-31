@@ -2,6 +2,7 @@
 
 module Dashboard
   class MedicalCertificatesController < DashboardController
+    before_action :filter_enabled!
     before_action :set_subscription, only: %i[edit update]
 
     def edit; end
@@ -15,6 +16,12 @@ module Dashboard
     end
 
     private
+
+    def filter_enabled!
+      return false if Rails.application.credentials.medical_certificate[:enabled]
+
+      redirect_to dashboard_index_path, alert: t('defaults.forbidden')
+    end
 
     def set_subscription
       @subscription = current_user.subscriptions.find_by!(
