@@ -277,6 +277,10 @@ fr:
     signed_forms:
       update:
         edit_success: Formulaire signé ajouté avec succès !
+    vacations:
+      index:
+        i_am_alumni: Je suis un ancien élève
+
   layouts:
     navbar:
       admin: Admin
