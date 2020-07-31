@@ -63,8 +63,10 @@
       </div>
 
       <div class="form-group">
-        <%= f.label :agreed_to_advertising_right %>
-        <%= f.check_box :agreed_to_advertising_right, required: true %>
+        <%= f.check_box :agreed_to_advertising_right %>
+        <%= f.label :agreed_to_advertising_right do %>
+          <small><%= t('.advertising_right_statement') %></small>
+        <% end %>
       </div>
 
       <div class="actions d-flex mt-3">
