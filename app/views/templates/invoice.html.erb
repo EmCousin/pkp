@@ -1,9 +1,8 @@
 <% total_amount = number_to_euros(subscription.fee) %>
 
-
 <div class="header">
   <div class="float-left">
-    <%= wicked_pdf_image_tag 'parkourparis.jpg', class: 'invoice-logo', height: 40 %>
+    <%= wicked_pdf_image_tag asset_url('parkourparis.jpg'), class: 'invoice-logo', alt: "Logo Parkour Paris" %>
     <div class="mt-5">
       <p>Parkour Paris</p>
       <p>ID société : 750 838 609 00014</p>

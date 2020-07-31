@@ -158,6 +158,7 @@ fr:
         invoice: Facture
         credit_notes: Avoirs
         created_at: Généré le
+        credit_note_amount: Montant de l'avoir
 
   #views
   devise:
@@ -218,6 +219,7 @@ fr:
         generate_invoice: Générer une facture
         generate_credit_note: Générer un avoir
         preview_invoice: Prévisualiser la facture
+        generating: "Génération en cours..."
       form:
         users: Membres
       edit:
