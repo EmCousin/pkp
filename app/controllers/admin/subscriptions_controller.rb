@@ -54,22 +54,20 @@ module Admin
     end
 
     def confirm
-      subscription = Subscription.find(params[:id])
-      if subscription.confirmed?
-        redirect_to admin_subscriptions_path, alert: t('.confirmation_failure')
+      if @subscription.confirmed?
+        redirect_back fallback_location: admin_subscriptions_path, alert: t('.confirmation_failure')
       else
-        subscription.confirmed!
-        redirect_to admin_subscriptions_path, notice: t('.confirmation_success')
+        @subscription.confirmed!
+        redirect_back fallback_location: admin_subscriptions_path, notice: t('.confirmation_success')
       end
     end
 
     def archive
-      subscription = Subscription.find(params[:id])
-      if subscription.archived?
-        redirect_to admin_subscriptions_path, alert: t('.archivation_failure')
+      if @subscription.archived?
+        redirect_back fallback_location: admin_subscriptions_path, alert: t('.archivation_failure')
       else
-        subscription.archived!
-        redirect_to admin_subscriptions_path, notice: t('.archivation_success')
+        @subscription.archived!
+        redirect_back fallback_location: admin_subscriptions_path, notice: t('.archivation_success')
       end
     end
 
