@@ -45,6 +45,16 @@ class Member < ApplicationRecord
                                   left_joins(:subscriptions).where.not(subscriptions: { year: year })
                                 )
     end
+
+    def search(query)
+      joins(:user).where(
+        'LOWER(first_name) LIKE :search
+        OR LOWER(last_name) LIKE :search
+        OR LOWER(users.email) LIKE :search
+        OR users.phone_number LIKE :search',
+        search: "%#{query.downcase}%"
+      )
+    end
   end
 
   def full_name

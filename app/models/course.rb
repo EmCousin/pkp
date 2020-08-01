@@ -13,20 +13,31 @@ class Course < ApplicationRecord
 
   enum weekday: { lundi: 1, mardi: 2, mercredi: 3, jeudi: 4, vendredi: 5, samedi: 6, dimanche: 7 }
 
+  scope :active, -> { where(active: true) }
+  scope :empty, -> { left_outer_joins(:subscriptions).where(subscriptions: { id: nil }) }
+
   VACATION_MONTHS = (7..8).to_a.freeze
 
   class << self
+    def with_subscriptions(year = Subscription.current_year)
+      left_outer_joins(:subscriptions).where(subscriptions: { year: year })
+    end
+
     def available(year = Subscription.current_year)
       return none if year > Subscription.current_year
 
-      where(id: includes(:subscriptions).select do |course|
+      with_subscriptions(year).or(empty).active.where(id: includes(:subscriptions).select do |course|
         course.available?(year)
       end)
     end
   end
 
-  def available?(year)
-    capacity > subscriptions.count do |subscription|
+  def available?(year = Subscription.current_year)
+    availability(year).positive?
+  end
+
+  def availability(year = Subscription.current_year)
+    capacity - subscriptions.count do |subscription|
       !subscription.archived? && subscription.year == year
     end
   end

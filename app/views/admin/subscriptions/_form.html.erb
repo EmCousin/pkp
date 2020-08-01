@@ -1,9 +1,7 @@
 <div class="container">
   <%= form_with(model: subscription, local: true, url: url) do |form| %>
     <% if subscription.errors.any? %>
-      <div id="error_explanation">
-        <h2><%= pluralize(subscription.errors.count, "error") %> prohibited this subscription from being saved:</h2>
-
+      <div id="error_explanation" class="error_explanation">
         <ul>
         <% subscription.errors.full_messages.each do |message| %>
           <li><%= message %></li>
@@ -19,7 +17,7 @@
 
     <div class="form-group">
       <%= form.label :course_ids %>
-      <%= form.collection_check_boxes :course_ids, Course.all, :id, :title do |b| %>
+      <%= form.collection_check_boxes :course_ids, Course.order(:created_at), :id, :title do |b| %>
         <div class="form-check">
           <%= b.check_box(class: "form-check-input") %>
           <%= b.label(class: "form-check-label") %>
