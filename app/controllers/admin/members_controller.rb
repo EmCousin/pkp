@@ -5,15 +5,9 @@ module Admin
     before_action :set_member, only: %i[show edit update destroy]
 
     def index
-      @search = params[:q]
-      @members = if @search.present?
-                   Member.where(
-                     'first_name LIKE :search OR last_name LIKE :search',
-                     search: "%#{@search}%"
-                   ).page(params[:page]).per(50).includes(:user)
-                 else
-                   Member.page(params[:page]).per(50).includes(:user)
-                 end
+      @search = params[:q]&.downcase
+      @members = (@search.present? ? Member.search(@search) : Member)
+                 .page(params[:page]).per(50).includes(:user)
     end
 
     def show; end
@@ -24,6 +18,7 @@ module Admin
 
     def create
       @member = Member.new(member_params)
+      @member.user.terms_of_service = true
       @member.user.skip_confirmation!
       if @member.save
         redirect_to admin_members_path, notice: 'Membre créé avec succès !'
@@ -59,7 +54,7 @@ module Admin
         :contact_name, :contact_phone_number, :contact_relationship,
         :avatar,
         :agreed_to_advertising_right,
-        user_attributes: %i[id email password phone_number admin]
+        user_attributes: %i[id email password address zip_code city country phone_number admin]
       )
     end
   end

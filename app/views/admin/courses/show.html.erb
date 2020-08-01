@@ -24,6 +24,11 @@
     </p>
 
     <p>
+      <strong><%= Course.human_attribute_name(:availability) %> :</strong>
+      <%= @course.availability%>
+    </p>
+
+    <p>
       <strong><%= Course.human_attribute_name(:category) %> :</strong>
       <%= @course.category %>
     </p>
@@ -34,15 +39,19 @@
     </p>
 
     <hr />
-    <%= link_to t('.new_subscription', resource: Subscription.model_name.human.downcase), new_admin_subscription_path, class: "btn btn-primary" %>
+
+    <%= link_to t('defaults.back'), :back, class: "btn btn-link float-left" %>
+
+    <%= link_to t('.new_subscription', resource: Subscription.model_name.human.downcase), new_admin_subscription_path(course_ids: @course.id), class: "btn btn-primary float-right" %>
+
+    <div class="clearfix"></div>
 
     <table class="table mt-4">
       <thead>
         <tr>
-          <th><%= User.human_attribute_name(:full_name) %></th>
-          <th><%= User.human_attribute_name(:avatar) %></th>
-          <th><%= Subscription.human_attribute_name(:fee) %></th>
-          <th><%= Subscription.human_attribute_name(:year) %></th>
+          <th><%= Subscription.model_name.human %></th>
+          <th><%= Subscription.human_attribute_name(:member_id) %></th>
+          <th><%= Member.human_attribute_name(:email) %></th>
           <th></th>
         </tr>
       </thead>
@@ -57,10 +66,14 @@
         <% else %>
           <% @course.subscriptions.includes(:member).each do |subscription| %>
             <tr>
-              <td><%= link_to subscription.member.full_name , admin_subscription_path(subscription.id) %></td>
-              <td><%= image_tag url_for(subscription.member.avatar), width: "30" %></td>
-              <td><%= number_to_currency(subscription.fee, unit: "€", separator: ",", format: "%n %u") %></td>
-              <td><%= subscription.year %></td>
+              <td><%= link_to subscription.id , admin_subscription_path(subscription.id) %></td>
+              <td>
+                <%= link_to admin_member_path(subscription.member_id) do %>
+                  <%= image_tag url_for(subscription.member.avatar), width: "30" %>
+                  <%= subscription.member.full_name %>
+                <% end %>
+              </td>
+              <td><%= mail_to subscription.member.email, subscription.member.email %></td>
               <td><%= link_to t('.remove_from_course'),unlink_course_admin_subscription_path(subscription.id, course_id: @course.id), method: :delete, data: { confirm: t('.remove_from_course_are_you_sure', member_full_name: subscription.member.full_name, course_title: @course.title) }, class: "btn btn-outline-danger btn-sm" %></td>
             </tr>
           <% end %>

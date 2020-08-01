@@ -67,10 +67,6 @@ fr:
     errors:
       messages:
         blank: doit être rempli
-    attributes:
-      create_subscription_form:
-        category: Type de cours
-        course_ids: Cours
   activerecord:
     errors:
       messages:
@@ -142,18 +138,22 @@ fr:
         title: Titre du cours
         description: Description
         capacity: Capacité
+        availability: Places restantes
         category: Catégorie
         weekday: Jour de la semaine
+        active: Actif
       subscription:
         category: Type de cours
         fee: Cotisation
         year: Année
         member_id: Membre
         course_ids: Cours
+        courses: Cours
         status: Statut
         pending: En attente
         confirmed: Confirmée
         archived: Archivée
+        form: Formulaire
         signed_form: Formulaire signé
         medical_certificate: Certificat médical
         invoice: Facture
@@ -191,26 +191,27 @@ fr:
       new:
         title: Ajouter un membre
       show:
-        remove_from_course: Retirer du cours
+        remove_from_course: Retirer
         remove_from_course_are_you_sure: Êtes-vous sûr(e) de vouloir retirer %{member_full_name} du cours %{course_title} ?
+        new_subscription: Nouvelle inscription
       edit:
         title: Modifier un membre
     courses:
       index:
         title: Liste des cours
+        inactive: Inactif
       new:
         title: Créer un cours
       edit:
         title: Modifier le cours
       show:
         new_subscription: Nouvelle inscription
-        remove_from_course: Retirer du cours
+        remove_from_course: Retirer
         remove_from_course_are_you_sure: Êtes-vous sûr(e) de vouloir retirer %{member_full_name} du cours %{course_title} ?
     subscriptions:
       index:
-        title: Liste des inscriptions
+        title: Inscriptions
         new: Nouvelle inscription
-        details: Détails des inscriptions
       new:
         title: Inscrire un membre
       show:
