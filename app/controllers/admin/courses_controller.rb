@@ -2,13 +2,13 @@
 
 module Admin
   class CoursesController < AdminController
+    before_action :set_course, only: %i[show edit update destroy]
+
     def index
-      @courses = Course.all
+      @courses = Course.with_subscriptions.or(Course.empty).includes(:subscriptions).order(:created_at)
     end
 
-    def show
-      @course = Course.find(params[:id])
-    end
+    def show; end
 
     def new
       @course = Course.new
@@ -23,12 +23,9 @@ module Admin
       end
     end
 
-    def edit
-      @course = Course.find(params[:id])
-    end
+    def edit; end
 
     def update
-      @course = Course.find(params[:id])
       if @course.update(course_params)
         redirect_to admin_courses_path, notice: 'Cours modifié avec succès !'
       else
@@ -37,15 +34,18 @@ module Admin
     end
 
     def destroy
-      @course = Course.find(params[:id])
       @course.destroy
       redirect_to admin_courses_path, notice: 'Cours supprimé avec succès !'
     end
 
     private
 
+    def set_course
+      @course = Course.find(params[:id])
+    end
+
     def course_params
-      params.require(:course).permit(:title, :description, :capacity, :category, :weekday)
+      params.require(:course).permit(:title, :description, :capacity, :category, :weekday, :active)
     end
   end
 end

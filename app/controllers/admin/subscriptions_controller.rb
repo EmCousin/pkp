@@ -3,17 +3,19 @@
 module Admin
   class SubscriptionsController < AdminController
     include Subscriptions::Pdf
+    before_action :set_subscription!, only: %i[show edit update destroy confirm archive unlink_course]
 
     def index
       @subscriptions = Subscription.includes(:member).order(created_at: :desc).page(params[:page]).per(50)
     end
 
-    def show
-      @subscription = Subscription.find(params[:id])
-    end
+    def show; end
 
     def new
-      @subscription = Subscription.new
+      @subscription = Subscription.new(
+        member_id: params[:member_id],
+        course_ids: params[:course_ids]
+      )
     end
 
     def create
@@ -26,54 +28,51 @@ module Admin
       end
     end
 
-    def edit
-      @subscription = Subscription.find(params[:id])
-    end
+    def edit; end
 
     def update
-      @subscription = Subscription.find(params[:id])
       if @subscription.update(subscription_params)
         process_after_save(@subscription)
-        redirect_to admin_subscriptions_path, notice: 'Inscription modifiée avec succès !'
+        redirect_to admin_subscription_path(@subscription.id), notice: 'Inscription modifiée avec succès !'
       else
         render :edit
       end
     end
 
     def destroy
-      @subscription = Subscription.find(params[:id])
       @subscription.destroy
       redirect_to admin_subscriptions_path, notice: 'Inscription supprimée avec succès !'
     end
 
     def unlink_course
-      @subscription = Subscription.find(params[:id])
       @course = @subscription.courses.find(params[:course_id])
-      @subscription.course_ids -= [@course.id]
+      @subscription.courses_subscriptions.destroy_by(course_id: @course.id)
       redirect_back fallback_location: root_path, notice: 'Cours retiré avec succès !'
     end
 
     def confirm
-      subscription = Subscription.find(params[:id])
       if subscription.confirmed?
-        redirect_to admin_subscriptions_path, alert: t('.confirmation_failure')
+        redirect_back fallback_location: admin_subscriptions_path, alert: t('.confirmation_failure')
       else
         subscription.confirmed!
-        redirect_to admin_subscriptions_path, notice: t('.confirmation_success')
+        redirect_back fallback_location: admin_subscriptions_path, notice: t('.confirmation_success')
       end
     end
 
     def archive
-      subscription = Subscription.find(params[:id])
       if subscription.archived?
-        redirect_to admin_subscriptions_path, alert: t('.archivation_failure')
+        redirect_back fallback_location: admin_subscriptions_path, alert: t('.archivation_failure')
       else
         subscription.archived!
-        redirect_to admin_subscriptions_path, notice: t('.archivation_success')
+        redirect_back fallback_location: admin_subscriptions_path, notice: t('.archivation_success')
       end
     end
 
     private
+
+    def set_subscription!
+      @subscription = Subscription.find(params[:id])
+    end
 
     def subscription_params
       params.require(:subscription).permit(:member_id, course_ids: [])
