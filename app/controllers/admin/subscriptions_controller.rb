@@ -6,7 +6,7 @@ module Admin
     before_action :set_subscription!, only: %i[show edit update destroy confirm archive unlink_course]
 
     def index
-      @subscriptions = Subscription.includes(:member).order(created_at: :desc).page(params[:page]).per(50)
+      @subscriptions = Subscription.includes(:member, :courses).order(created_at: :desc).page(params[:page]).per(50)
     end
 
     def show; end

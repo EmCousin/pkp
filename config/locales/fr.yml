@@ -59,6 +59,7 @@ fr:
     none: Aucun
     replace: Remplacer
     forbidden: Accès non-autorisé
+    details: Détails
   custom_error_messages:
     subscription:
       member_id:

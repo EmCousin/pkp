@@ -52,6 +52,7 @@
           <th><%= Subscription.model_name.human %></th>
           <th><%= Subscription.human_attribute_name(:member_id) %></th>
           <th><%= Member.human_attribute_name(:email) %></th>
+          <th><%= Subscription.human_attribute_name(:status) %></th>
           <th></th>
         </tr>
       </thead>
@@ -74,6 +75,7 @@
                 <% end %>
               </td>
               <td><%= mail_to subscription.member.email, subscription.member.email %></td>
+              <td><%= Subscription.human_attribute_name(subscription.status) %></td>
               <td><%= link_to t('.remove_from_course'),unlink_course_admin_subscription_path(subscription.id, course_id: @course.id), method: :delete, data: { confirm: t('.remove_from_course_are_you_sure', member_full_name: subscription.member.full_name, course_title: @course.title) }, class: "btn btn-outline-danger btn-sm" %></td>
             </tr>
           <% end %>
