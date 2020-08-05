@@ -5,6 +5,6 @@ class AdminMailer < ApplicationMailer
     @email_was = email_was
     @email = email
 
-    mail to: "contact@parkourparis.fr", subject: t('.subject')
+    mail to: 'contact@parkourparis.fr', subject: t('.subject')
   end
 end
