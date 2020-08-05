@@ -4,52 +4,75 @@
 
     <hr />
     <div class="alert alert-warning" role="alert">
-     <%= t('.contact_to_essay') %><a href="https://www.parkourparis.fr/contact" class="alert-link" target="_blank" > <%= t('.contact_form') %></a>.
-    </div>
-    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |form| %>
-      <%= render "devise/shared/error_messages", resource: resource %>
-      <div class="row">
-        <div class="form-group col">
-          <%= form.label :email %><br />
-          <%= form.email_field :email, autocomplete: "email", autofocus: true, required: true, class: "form-control" %>
-        </div>
+      <% if full? %>
+        <h3 class="text-center">
+          <%= t('.full') %>
+        </h3>
+        <hr />
 
-        <div class="form-group col mb-2" data-controller="input">
-          <%= form.label :email_confirmation %>
-          <%= form.email_field :email_confirmation, autocomplete: "email", required: true, class: "form-control", data: { action: "paste->input#prevent" } %>
-        </div>
-      </div>
+        <p><%= t('.reopen_when_available') %></p>
+      <% elsif vacation_time? %>
+        <h3 class="text-center">
+          <%= t('.vacation_time') %>
+        </h3>
+        <hr />
 
-      <div class="row">
-        <div class="form-group col">
-          <%= form.label :password %>
-          <% if @minimum_password_length %>
-          <em>(<%= t('.minimum_characters', length: @minimum_password_length) %>)</em>
-          <% end %>
-          <%= form.password_field :password, autocomplete: "new-password", required: true, class: "form-control", minlength: Devise.password_length.min, maxlength: Devise.password_length.max %>
-        </div>
+        <p><%= t('.you_can_still_create_an_account') %></p>
 
-        <div class="form-group col mb-2">
-          <%= form.label :password_confirmation %>
-          <%= form.password_field :password_confirmation, autocomplete: "new-password", required: true, class: "form-control", minlength: Devise.password_length.min, maxlength: Devise.password_length.max %>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <%= form.check_box :terms_of_service, required: true %>
-        <%= form.label :terms_of_service do %>
-          <%= t('.i_have_read_and_accept') %>
-          <%= link_to t('.terms_of_service'), legal_mentions_pages_path, target: '_blank' %>
+        <% if alumni_time? %>
+          <p><%= t('.if_you_are_alumni') %></p>
         <% end %>
-      </div>
+      <% end %>
 
-      <div class="actions mt-2">
-        <%= form.submit t('defaults.signup'), class: "btn btn-dark btn-lg w-100" %>
-      </div>
+      <p><%= sanitize(t('.contact_to_essay')) %><a href="https://www.parkourparis.fr/contact" class="alert-link" target="_blank" > <%= t('.contact_form') %></a>.</p>
+    </div>
 
-      <div class="mt-2">
-        <%= render "devise/shared/links" %>
-      </div>
+    <% unless full? %>
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |form| %>
+        <%= render "devise/shared/error_messages", resource: resource %>
+        <div class="row">
+          <div class="form-group col">
+            <%= form.label :email %><br />
+            <%= form.email_field :email, autocomplete: "email", autofocus: true, required: true, class: "form-control" %>
+          </div>
+
+          <div class="form-group col mb-2" data-controller="input">
+            <%= form.label :email_confirmation %>
+            <%= form.email_field :email_confirmation, autocomplete: "email", required: true, class: "form-control", data: { action: "paste->input#prevent" } %>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col">
+            <%= form.label :password %>
+            <% if @minimum_password_length %>
+            <em>(<%= t('.minimum_characters', length: @minimum_password_length) %>)</em>
+            <% end %>
+            <%= form.password_field :password, autocomplete: "new-password", required: true, class: "form-control", minlength: Devise.password_length.min, maxlength: Devise.password_length.max %>
+          </div>
+
+          <div class="form-group col mb-2">
+            <%= form.label :password_confirmation %>
+            <%= form.password_field :password_confirmation, autocomplete: "new-password", required: true, class: "form-control", minlength: Devise.password_length.min, maxlength: Devise.password_length.max %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= form.check_box :terms_of_service, required: true %>
+          <%= form.label :terms_of_service do %>
+            <%= t('.i_have_read_and_accept') %>
+            <%= link_to t('.terms_of_service'), legal_mentions_pages_path, target: '_blank' %>
+          <% end %>
+        </div>
+
+        <div class="actions mt-2">
+          <%= form.submit t('defaults.signup'), class: "btn btn-dark btn-lg w-100" %>
+        </div>
+
+        <div class="mt-2">
+          <%= render "devise/shared/links" %>
+        </div>
+      <% end %>
     <% end %>
   </div>
 </div>
