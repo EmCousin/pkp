@@ -1,1 +1,2 @@
+import './inits';
 import './controllers';

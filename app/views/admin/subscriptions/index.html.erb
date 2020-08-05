@@ -9,6 +9,7 @@
       <th>ID</th>
       <th><%= Subscription.human_attribute_name(:member_id) %></th>
       <th><%= Member.human_attribute_name(:email) %></th>
+      <th><%= Subscription.human_attribute_name(:course_ids) %></th>
       <th><%= Subscription.human_attribute_name(:fee) %></th>
       <th><%= Subscription.human_attribute_name(:year) %></th>
       <th colspan="2"><%= Subscription.human_attribute_name(:status) %></th>
@@ -32,6 +33,9 @@
             <% end %>
           </td>
           <td><%= mail_to subscription.member.email, subscription.member.email %></td>
+          <td>
+            <%= link_to t('defaults.details'), nil, data: { toggle: 'tooltip', title: subscription.description } %>
+          </td>
           <td><%= number_to_currency(subscription.fee, unit: "€", separator: ",", format: "%n %u") %></td>
           <td><%= subscription.year %></td>
           <td><%= Subscription.human_attribute_name(subscription.status) %></td>
