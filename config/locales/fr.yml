@@ -308,3 +308,8 @@ fr:
       pagination_previous: Précédent
     last_page:
       pagination_last: Dernière
+  admin_mailer:
+    email_changed:
+      subject: Un utilisateur a changé son adresse E-mail
+      body: "Son E-mail a changé de %{before} à %{after}"
+

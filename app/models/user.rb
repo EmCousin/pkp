@@ -25,9 +25,15 @@ class User < ApplicationRecord
 
   after_create :create_stripe_customer_id
 
+  before_update :notify_admins, if: :email_changed?
+
   private
 
   def create_stripe_customer_id
     Stripe::CreateCustomerJob.perform_later(self)
+  end
+
+  def notify_admins
+    AdminMailer.email_changed(email_was, email).deliver_later
   end
 end
