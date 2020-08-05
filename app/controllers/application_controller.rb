@@ -19,4 +19,19 @@ class ApplicationController < ActionController::Base
 
     !current_user.valid?(:account_setup)
   end
+
+  def vacation_time?
+    Time.current.month.in?(Course::VACATION_MONTHS)
+  end
+  helper_method :vacation_time?
+
+  def alumni_time?
+    Time.current.month.in?(Course::ALUMNI_MONTHS)
+  end
+  helper_method :alumni_time?
+
+  def full?
+    Course.available.empty?
+  end
+  helper_method :full?
 end

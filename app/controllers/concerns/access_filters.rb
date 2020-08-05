@@ -33,16 +33,8 @@ module AccessFilters
     redirect_to dashboard_vacations_path
   end
 
-  def vacation_time?
-    Time.current.month.in?(Course::VACATION_MONTHS)
-  end
-
   def filter_full!
     redirect_to dashboard_capacities_path
-  end
-
-  def full?
-    Course.available.empty?
   end
 
   def alumni?

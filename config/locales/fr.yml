@@ -173,8 +173,13 @@ fr:
         i_have_read_and_accept: J'ai lu et accepte les
         terms_of_service: Conditions Générales d'Utilisation
         signup: S'inscrire
-        contact_to_essay: Si vous souhaitez faire un cours d'essai, veuillez envoyer votre demande directement sur notre
+        contact_to_essay: Si vous souhaitez faire un <b>cours d'essai</b>, veuillez envoyer votre demande directement sur notre
         contact_form: formulaire de contact
+        full: "C'est complet !"
+        reopen_when_available: Si des places se libèrent, il sera à nouveau possible de vous inscrire.
+        vacation_time: "C'est les vacances !"
+        you_can_still_create_an_account: Les cours reprennent en septembre. Vous pouvez toujours créer un compte en attendant, nous vous enverrons alors un e-mail pour vous avertir lorsque les inscriptions seront sur le point de réouvrir.
+        if_you_are_alumni: Si vous êtes un(e) ancien(ne) élève, vous pouvez vous connecter/inscrire, puis cliquer sur "Choisir mes cours" puis sur "Je suis un(e) ancien(ne) élève"
       edit:
         edit_my_account: Modifier mon compte
         delete_my_account: Supprimer mon compte
@@ -283,7 +288,7 @@ fr:
         edit_success: Formulaire signé ajouté avec succès !
     vacations:
       index:
-        i_am_alumni: Je suis un ancien élève
+        i_am_alumni: Je suis un(e) ancien(ne) élève
 
   layouts:
     navbar:

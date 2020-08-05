@@ -17,6 +17,7 @@ class Course < ApplicationRecord
   scope :empty, -> { left_outer_joins(:subscriptions).where(subscriptions: { id: nil }) }
 
   VACATION_MONTHS = (7..8).to_a.freeze
+  ALUMNI_MONTHS = VACATION_MONTHS[-1..-1].freeze
 
   class << self
     def with_subscriptions(year = Subscription.current_year)
