@@ -19,7 +19,7 @@ module Admin
     def create
       @member = Member.new(member_params)
       @member.user.terms_of_service = true
-      @member.user.skip_confirmation!
+      # @member.user.skip_confirmation!
       if @member.save
         redirect_to admin_members_path, notice: 'Membre créé avec succès !'
       else
