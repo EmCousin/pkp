@@ -76,6 +76,7 @@
       <thead>
         <tr>
           <th><%= link_to t('.subscription_form'), rails_blob_path(subscription.form), disposition: "attachment" %></th>
+
           <% if Rails.application.credentials.medical_certificate[:enabled] %>
             <th><%= Subscription.human_attribute_name(:medical_certificate) %></th>
           <% end %>
