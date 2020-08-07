@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Course < ApplicationRecord
-  CATEGORIES = ['Adulte', 'Adulte Féminin', 'Adolescent (13 - 15 ans)', 'Adolescent (10 - 12 ans)', 'Kidz (6 - 9 ans)'].freeze
+  CATEGORIES = ['Adulte', 'Adolescent (13 - 15 ans)', 'Adolescent (10 - 12 ans)', 'Kidz (6 - 9 ans)'].freeze
 
   has_many :courses_subscriptions, dependent: :destroy
   has_many :subscriptions, through: :courses_subscriptions
