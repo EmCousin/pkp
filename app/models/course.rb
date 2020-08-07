@@ -20,6 +20,10 @@ class Course < ApplicationRecord
   ALUMNI_MONTHS = VACATION_MONTHS[-1..-1].freeze
 
   class << self
+    def manageable(year = Subscription.current_year)
+      with_subscriptions(year).or(empty).distinct
+    end
+
     def with_subscriptions(year = Subscription.current_year)
       left_outer_joins(:subscriptions).where(subscriptions: { year: year })
     end
@@ -27,7 +31,7 @@ class Course < ApplicationRecord
     def available(year = Subscription.current_year)
       return none if year > Subscription.current_year
 
-      with_subscriptions(year).or(empty).active.where(id: includes(:subscriptions).select do |course|
+      manageable(year).active.where(id: includes(:subscriptions).select do |course|
         course.available?(year)
       end)
     end
