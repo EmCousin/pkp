@@ -83,7 +83,7 @@ class Subscription < ApplicationRecord
 
   def compute_fee
     case [courses.size, courses.first.category]
-    when [1, 'Adulte'], [1, 'Adulte Féminin'], [1, 'Adolescent (10 - 12 ans)'], [1, 'Adolescent (13 - 15 ans)'], [1, 'Kidz (6 - 9 ans)'] then 175
+    when [1, 'Adulte'], [1, 'Adolescent (10 - 12 ans)'], [1, 'Adolescent (13 - 15 ans)'], [1, 'Kidz (6 - 9 ans)'] then 175
     when [2, 'Adulte'] then 285
     when [3, 'Adulte'] then 330
     when [2, 'Adolescent (10 - 12 ans)'], [2, 'Adolescent (13 - 15 ans)'] then 300

@@ -14,7 +14,7 @@ describe Course, type: :model do
 
   describe 'constants' do
     it 'has a constant CATEGORIES' do
-      expect(described_class::CATEGORIES).to eq ['Adulte', 'Adulte Féminin', 'Adolescent (13 - 15 ans)', 'Adolescent (10 - 12 ans)', 'Kidz (6 - 9 ans)'].freeze
+      expect(described_class::CATEGORIES).to eq ['Adulte', 'Adolescent (13 - 15 ans)', 'Adolescent (10 - 12 ans)', 'Kidz (6 - 9 ans)'].freeze
     end
   end
 end
