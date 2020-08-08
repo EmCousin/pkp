@@ -1,0 +1,59 @@
+# frozen_string_literal: true
+
+module Subscriptions
+  module Validatable
+    extend ActiveSupport::Concern
+
+    included do
+      validates :fee, numericality: { greater_than_or_equal_to: 0, allow_blank: true }
+      validates :year, presence: true
+      validates :member_id, uniqueness: { scope: :year, message: lambda do |subscription, _data|
+        I18n.t(
+          'custom_error_messages.subscription.member_id.taken',
+          full_name: subscription.member.full_name,
+          year: subscription.year
+        )
+      end }
+
+      validate :at_least_one_course?
+      validate :maximum_three_courses?
+      validate :courses_are_of_the_same_category
+      validate :maximum_one_course_per_day
+
+      before_validation :set_current_year, on: :create
+    end
+
+    class_methods do
+      def current_year
+        now = Time.current
+        now.month < Course::VACATION_MONTHS.first ? now.year - 1 : now.year
+      end
+    end
+
+    private
+
+    def at_least_one_course?
+      errors.add(:courses, :must_exist) if courses.empty?
+    end
+
+    def maximum_three_courses?
+      errors.add(:courses, :limit_exceeded) if courses.size > 3
+    end
+
+    def courses_are_of_the_same_category
+      unique_category = courses.map(&:category).uniq.size == 1
+
+      errors.add(:courses, :unique_category) unless unique_category
+    end
+
+    def maximum_one_course_per_day
+      weekdays = courses.map(&:weekday)
+
+      errors.add(:courses, :unique_weekday) if weekdays.uniq.size < weekdays.size
+    end
+
+    def set_current_year
+      self.year = self.class.current_year
+    end
+  end
+end

@@ -7,7 +7,7 @@
       <div class="col-md">
         <%= form_with(url: admin_members_path, local: true, method: "get") do %>
           <div class="input-group mb-3">
-            <%= text_field_tag(:q, @search, class: "form-control mr-sm-2", placeholder: "Search") %>
+            <%= text_field_tag(:q, params[:q], class: "form-control mr-sm-2", placeholder: "Search") %>
             <div class="input-group-append">
               <%= submit_tag("Search", class: "btn btn-success") %>
             </div>

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Admin
-  class InvoicesController < AdminController
+  class InvoicesController < Admin::Abstract::SubscriptionsController
     before_action :set_subscription!, only: %i[show create edit update]
 
     def show; end
@@ -20,7 +20,7 @@ module Admin
 
     def update
       if @subscription.update(subscription_params)
-        redirect_to admin_subscription_path(@subscription.id), notice: t('.edit_success')
+        redirect_to admin_subscription_path(@subscription.id), notice: t('.success')
       else
         render :edit
       end
@@ -28,17 +28,8 @@ module Admin
 
     private
 
-    def set_subscription!
-      @subscription = Subscription.find_by!(
-        id: params[:subscription_id],
-        year: Subscription.current_year
-      )
-    end
-
     def subscription_params
-      params.require(:subscription).permit(
-        :invoice
-      )
+      params.require(:subscription).permit(:invoice)
     end
 
     def pdf(subscription)

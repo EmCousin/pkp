@@ -1,17 +1,16 @@
 # frozen_string_literal: true
 
 module Admin
-  class CreditNotesController < AdminController
+  class CreditNotesController < Admin::Abstract::SubscriptionsController
     before_action :set_subscription!, only: %i[new create]
 
     def new; end
 
     def create
       @subscription.assign_attributes(subscription_params)
-      pdf = pdf_credit_note
 
       @subscription.credit_notes.attach(
-        io: StringIO.new(pdf),
+        io: StringIO.new(pdf_credit_note),
         filename: 'credit_note.pdf',
         content_type: Mime[:pdf]
       )
@@ -20,13 +19,6 @@ module Admin
     end
 
     private
-
-    def set_subscription!
-      @subscription = Subscription.find_by!(
-        id: params[:subscription_id],
-        year: Subscription.current_year
-      )
-    end
 
     def pdf_credit_note
       WickedPdf.new.pdf_from_string(
@@ -42,9 +34,7 @@ module Admin
     end
 
     def subscription_params
-      params.require(:subscription).permit(
-        :credit_note_amount
-      )
+      params.require(:subscription).permit(:credit_note_amount)
     end
   end
 end

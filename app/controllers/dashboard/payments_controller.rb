@@ -1,14 +1,15 @@
 # frozen_string_literal: true
 
 module Dashboard
-  class PaymentsController < DashboardController
+  class PaymentsController < Dashboard::Abstract::SubscriptionsController
     before_action :filter_enabled!
     before_action :set_subscription!, only: %i[new create]
+    before_action :filter_already_paid!
 
     def new; end
 
     def create
-      if PaySubscriptionService.new(@subscription, params[:stripeToken]).perform!
+      if @subscription.pay!(params[:stripeToken])
         redirect_to dashboard_index_path, notice: t('.payment_success')
       else
         redirect_back fallback_location: root_path, alert: t('.payment_error')
@@ -23,12 +24,7 @@ module Dashboard
       redirect_to dashboard_index_path, alert: t('defaults.forbidden')
     end
 
-    def set_subscription!
-      @subscription = current_user.subscriptions.find_by!(
-        id: params[:subscription_id],
-        year: Subscription.current_year
-      )
-
+    def filter_already_paid!
       redirect_back fallback_location: root_path, alert: t('.already_paid') if @subscription.paid?
     end
   end
