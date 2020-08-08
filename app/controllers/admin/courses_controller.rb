@@ -17,7 +17,7 @@ module Admin
     def create
       @course = Course.new(course_params)
       if @course.save
-        redirect_to admin_courses_path, notice: 'Cours créé avec succès !'
+        redirect_to admin_courses_path, notice: t('.success')
       else
         render :new
       end
@@ -27,7 +27,7 @@ module Admin
 
     def update
       if @course.update(course_params)
-        redirect_to admin_courses_path, notice: 'Cours modifié avec succès !'
+        redirect_to admin_courses_path, notice: t('.success')
       else
         render :edit
       end
@@ -35,7 +35,7 @@ module Admin
 
     def destroy
       @course.destroy
-      redirect_to admin_courses_path, notice: 'Cours supprimé avec succès !'
+      redirect_to admin_courses_path, notice: t('.success')
     end
 
     private

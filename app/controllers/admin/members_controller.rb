@@ -5,9 +5,10 @@ module Admin
     before_action :set_member, only: %i[show edit update destroy]
 
     def index
-      @search = params[:q]&.downcase
-      @members = (@search.present? ? Member.search(@search) : Member)
-                 .page(params[:page]).per(50).includes(:user)
+      @members = Member.search(params[:q])
+                       .page(params[:page])
+                       .per(50)
+                       .includes(:user)
     end
 
     def show; end
@@ -19,9 +20,9 @@ module Admin
     def create
       @member = Member.new(member_params)
       @member.user.terms_of_service = true
-      # @member.user.skip_confirmation!
+
       if @member.save
-        redirect_to admin_members_path, notice: 'Membre créé avec succès !'
+        redirect_to admin_members_path, notice: t('.success')
       else
         render :new
       end
@@ -31,7 +32,7 @@ module Admin
 
     def update
       if @member.update(member_params)
-        redirect_to admin_members_path, notice: 'Membre modifié avec succès !'
+        redirect_to admin_members_path, notice: t('.success')
       else
         render :edit
       end
@@ -39,7 +40,7 @@ module Admin
 
     def destroy
       @member.destroy
-      redirect_to admin_members_path, notice: 'Membre supprimé avec succès !'
+      redirect_to admin_members_path, notice: t('.success')
     end
 
     private

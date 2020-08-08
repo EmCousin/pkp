@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 module Dashboard
-  class MedicalCertificatesController < DashboardController
+  class MedicalCertificatesController < Dashboard::Abstract::SubscriptionsController
     before_action :filter_enabled!
-    before_action :set_subscription, only: %i[edit update]
+    before_action :set_subscription!, only: %i[edit update]
 
     def edit; end
 
     def update
       if @subscription.update(subscription_params)
-        redirect_to dashboard_index_path, notice: t('.edit_success')
+        redirect_to dashboard_index_path, notice: t('.success')
       else
         render :edit
       end
@@ -23,17 +23,8 @@ module Dashboard
       redirect_to dashboard_index_path, alert: t('defaults.forbidden')
     end
 
-    def set_subscription
-      @subscription = current_user.subscriptions.find_by!(
-        id: params[:subscription_id],
-        year: Subscription.current_year
-      )
-    end
-
     def subscription_params
-      params.require(:subscription).permit(
-        :medical_certificate
-      )
+      params.require(:subscription).permit(:medical_certificate)
     end
   end
 end
