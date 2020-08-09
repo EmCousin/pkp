@@ -5,8 +5,6 @@ module Courses
     extend ActiveSupport::Concern
 
     included do
-      include Manageable
-
       scope :active, -> { where(active: true) }
     end
 
@@ -14,7 +12,7 @@ module Courses
       def available(year = Subscription.current_year)
         return none if year > Subscription.current_year
 
-        manageable(year).active.where(id: with_courses_available(year))
+        active.where(id: with_courses_available(year))
       end
 
       def with_courses_available(year)
@@ -29,8 +27,14 @@ module Courses
     end
 
     def availability(year = Subscription.current_year)
-      capacity - subscriptions.count do |subscription|
-        !subscription.archived? && subscription.year == year
+      capacity - active_subscriptions(year).size
+    end
+
+    private
+
+    def active_subscriptions(year)
+      subscriptions.reject do |subscription|
+        subscription.archived? || subscription.year != year
       end
     end
   end
