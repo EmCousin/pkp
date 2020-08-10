@@ -5,7 +5,7 @@ module Admin
     before_action :set_course, only: %i[show edit update destroy]
 
     def index
-      @courses = Course.manageable.includes(:subscriptions).order(:created_at)
+      @courses = Course.includes(:subscriptions).order(:created_at)
     end
 
     def show; end
