@@ -8,6 +8,6 @@ FactoryBot.define do
     contact_phone_number { Faker::PhoneNumber.phone_number }
     contact_relationship { Member::CONTACTS.sample }
     agreed_to_advertising_right { true }
-    avatar { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'file_examples', 'example.svg')) }
+    avatar { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'file_examples', 'avatar.jpg')) }
   end
 end
