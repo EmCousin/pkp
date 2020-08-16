@@ -6,9 +6,13 @@ export default class StripeController extends Controller {
 
   async connect() {
     const stripe = await loadStripe(this.data.get('key'));
-    const elements = stripe.elements();
+    const card = this.mountCard(stripe);
 
-    var style = {
+    this.sendTokenToServerOnSubmit(stripe, card);
+  }
+
+  mountCard(stripe) {
+    const style = {
       base: {
         color: '#303238',
         fontSize: '16px',
@@ -26,47 +30,39 @@ export default class StripeController extends Controller {
       },
     };
 
-    const card = elements.create('card', {style});
+    const card = stripe.elements().create('card', {style});
     card.mount(this.cardElementTarget);
-
-    // Handle real-time validation errors from the card Element.
-    let controller = this;
-    card.addEventListener('change', function (event) {
-      let displayError = controller.cardErrorsTarget;
-      if (event.error) {
-        displayError.textContent = event.error.message;
-      } else {
-        displayError.textContent = '';
-      }
+    card.addEventListener('change', (event) => {
+      this.displayError(event?.error?.message || '');
     });
 
-    // Handle form submission.
-    let form = controller.formTarget;
+    return card;
+  }
+
+  sendTokenToServerOnSubmit(stripe, card) {
+    let form = this.formTarget;
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
       let {error, token} = await stripe.createToken(card);
       if (error) {
-        // Inform the user if there was an error.
-        var errorElement = this.cardErrorsTarget;
-        errorElement.textContent = error.message;
+        this.displayError(error.message);
       } else {
-        // Send the token to your server.
-        controller.stripeTokenHandler(token);
+        this.insertTokenIntoFormAndSubmit(token);
       }
     });
   }
 
-  // Submit the form with the token ID.
-  stripeTokenHandler(token) {
-    // Insert the token ID into the form so it gets submitted to the server
+  displayError(errorMessage) {
+    this.cardErrorsTarget.textContent = errorMessage;
+  }
+
+  insertTokenIntoFormAndSubmit(token) {
     const form = this.formTarget;
     let hiddenInput = document.createElement('input');
     hiddenInput.setAttribute('type', 'hidden');
     hiddenInput.setAttribute('name', 'stripeToken');
     hiddenInput.setAttribute('value', token.id);
     form.appendChild(hiddenInput);
-
-    // Submit the form
     form.submit();
   }
 }
