@@ -17,7 +17,7 @@ module Dashboard
 
       if @subscription.save
         process_after_save(@subscription)
-        redirect_to dashboard_index_path, notice: 'Inscription créée avec succès !'
+        redirect_to dashboard_index_path, notice: t('.success')
       else
         render :new
       end

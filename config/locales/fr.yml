@@ -257,6 +257,8 @@ fr:
     subscriptions:
       new:
         create_member: Veuillez renseigner les informations de la personne à inscrire
+      create:
+        success: Inscription créée avec succès !
     members:
       new:
         advertising_right_statement: J'autorise l’utilisation, l’affichage et la publication de mon image provenant des activités de Parkour Paris, à des fins de promotion (tous médias) et d’information des activités de l’association. (panneaux, plaquettes, site internet).
@@ -269,8 +271,8 @@ fr:
         pay: Payer %{amount}
         already_paid: Vous avez déjà payé votre commande.
       create:
-        payment_success: Inscription payée avec succès !
-        payment_error: Une erreur est survenue. Votre carte n'a pas été débitée. Si le problème persiste, contactez-nous.
+        success: Inscription payée avec succès !
+        error: Une erreur est survenue. Votre carte n'a pas été débitée. Si le problème persiste, contactez-nous.
         already_paid: Votre commande est déjà payée. Votre carte n'a donc pas été débitée.
     medical_certificates:
       update:
