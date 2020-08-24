@@ -110,7 +110,7 @@ fr:
         description: Description
         capacity: Capacité
         availability: Places restantes
-        category: Catégorie
+        category_id: Catégorie
         weekday: Jour de la semaine
         active: Actif
       subscription:

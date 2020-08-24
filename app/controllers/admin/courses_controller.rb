@@ -45,7 +45,7 @@ module Admin
     end
 
     def course_params
-      params.require(:course).permit(:title, :description, :capacity, :category, :weekday, :active)
+      params.require(:course).permit(:title, :description, :capacity, :category_id, :weekday, :active)
     end
   end
 end
