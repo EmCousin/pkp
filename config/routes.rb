@@ -15,6 +15,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :courses
+    resources :categories, only: [:new, :create, :edit, :update, :destroy]
     resources :members
     resources :subscriptions do
       member do
