@@ -14,12 +14,12 @@
 
       <% if @subscription.member&.valid? %>
         <div class="form-group">
-          <%= f.label :category %>
-          <%= f.collection_select(:category, Course::CATEGORIES, :to_s, :to_s, { include_blank: true }, required: true, class: "form-control", onchange: "this.form.submit();") %>
+          <%= f.label :category_id %>
+          <%= f.collection_select(:category_id, Category.all, :id, :title, { include_blank: true }, required: true, class: "form-control", onchange: "this.form.submit();") %>
         </div>
       <% end %>
 
-      <% if @subscription.category.present? && @subscription.course_ids.any? && @subscription.errors.any? %>
+      <% if @subscription.category_id.present? && @subscription.course_ids.any? && @subscription.errors.any? %>
         <div id="error_explanation" class="error_explanation">
           <ul>
           <% @subscription.errors.full_messages.each do |message| %>

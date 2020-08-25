@@ -13,7 +13,11 @@ module Subscriptions
     end
 
     def available_courses
-      @available_courses ||= category.present? ? Course.available.where(category: category).order(:created_at) : Course.none
+      @available_courses = if category_id.present?
+                             Course.available.where(category_id: category_id).order(:created_at)
+                           else
+                             Course.none
+                           end
     end
   end
 end

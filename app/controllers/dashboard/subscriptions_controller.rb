@@ -27,8 +27,8 @@ module Dashboard
 
     def subscription_params
       params.require(:subscription).permit(
-        :category,
         :member_id,
+        :category_id,
         course_ids: []
       )
     end
