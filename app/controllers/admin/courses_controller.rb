@@ -3,6 +3,7 @@
 module Admin
   class CoursesController < AdminController
     before_action :set_course, only: %i[show edit update destroy]
+    before_action :filter_available_categories!, only: %i[new], unless: :available_categories?
 
     def index
       @courses = Course.includes(:subscriptions).order(:created_at)
@@ -11,7 +12,7 @@ module Admin
     def show; end
 
     def new
-      @course = Course.new
+      @course = Course.new(category_id: params[:category_id])
     end
 
     def create
@@ -39,6 +40,14 @@ module Admin
     end
 
     private
+
+    def filter_available_categories!
+      redirect_to new_admin_category_path, notice: t('.create_category')
+    end
+
+    def available_categories?
+      Category.any?
+    end
 
     def set_course
       @course = Course.find(params[:id])

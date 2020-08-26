@@ -8,7 +8,7 @@
         <% if @subscription.member.nil? %>
           <p class="mt-3 text-center">Ou</p>
 
-          <%= link_to "Ajouter une autre personne", new_dashboard_member_path, class: 'btn btn-primary d-flex justify-content-center' %>
+          <%= link_to t(".add_member"), new_dashboard_member_path, class: 'btn btn-primary d-flex justify-content-center' %>
         <% end %>
       </div>
 
