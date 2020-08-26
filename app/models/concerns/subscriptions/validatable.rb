@@ -19,6 +19,8 @@ module Subscriptions
       validate :maximum_three_courses?
       validate :courses_are_of_the_same_category
       validate :maximum_one_course_per_day
+      validate :minimum_age_permited
+      validate :maximum_age_permited
 
       before_validation :set_current_year, on: :create
     end
@@ -50,6 +52,23 @@ module Subscriptions
       weekdays = courses.map(&:weekday)
 
       errors.add(:courses, :unique_weekday) if weekdays.uniq.size < weekdays.size
+    end
+
+    def minimum_age_permited
+      errors.add(:member, :too_young) if member_too_young?
+
+    end
+
+    def maximum_age_permited
+       errors.add(:member, :too_old) if member_too_old?
+    end
+
+    def member_too_old?
+      category.max_age.present? && (year - member.birthdate.year > category.max_age)
+    end
+
+    def member_too_young?
+      category.min_age.present? && (year - member.birthdate.year < category.min_age)
     end
 
     def set_current_year
