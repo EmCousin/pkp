@@ -5,6 +5,8 @@ module Subscriptions
     extend ActiveSupport::Concern
 
     included do
+      after_initialize :set_current_year
+
       validates :fee, numericality: { greater_than_or_equal_to: 0, allow_blank: true }
       validates :year, presence: true
       validates :member_id, uniqueness: { scope: :year, message: lambda do |subscription, _data|
@@ -19,10 +21,11 @@ module Subscriptions
       validate :maximum_three_courses?
       validate :courses_are_of_the_same_category
       validate :maximum_one_course_per_day
-      validate :minimum_age_permited
-      validate :maximum_age_permited
 
-      before_validation :set_current_year, on: :create
+      with_options if: :category? do
+        validate :minimum_age_permited
+        validate :maximum_age_permited
+      end
     end
 
     class_methods do
@@ -56,7 +59,6 @@ module Subscriptions
 
     def minimum_age_permited
       errors.add(:member, :too_young) if member_too_young?
-
     end
 
     def maximum_age_permited
@@ -64,15 +66,19 @@ module Subscriptions
     end
 
     def member_too_old?
-      category.max_age.present? && (year - member.birthdate.year > category.max_age)
+      member.age(year) > category.max_age
     end
 
     def member_too_young?
-      category.min_age.present? && (year - member.birthdate.year < category.min_age)
+      member.age(year) < category.min_age
     end
 
     def set_current_year
       self.year = self.class.current_year
+    end
+
+    def category?
+      category.present?
     end
   end
 end

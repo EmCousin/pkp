@@ -77,6 +77,14 @@ fr:
               must_be_paid: doit être payée
             subscription_id:
               taken: a déjà une facture
+        category:
+          attributes:
+            min_age:
+              less_than: doit être inférieur à l'âge maximum
+              greater_than_or_equal_to: doit être supérieur ou égal à 1
+            max_age:
+              greater_than: doit être supérieur à l'âge minimum
+              less_than_or_equal_to: doit être inférieur ou égal à 100
     models:
       user:
         one: Membre
@@ -124,7 +132,7 @@ fr:
         min_age: Âge minimum
         max_age: Âge maximum
       subscription:
-        category: Type de cours
+        category_id: Type de cours
         fee: Cotisation
         year: Année
         member_id: Membre

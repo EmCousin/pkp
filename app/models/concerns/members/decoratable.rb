@@ -12,5 +12,9 @@ module Members
     def full_name
       "#{first_name} #{last_name}".downcase.titleize
     end
+
+    def age(year = Time.current.year)
+      year - birthdate.year
+    end
   end
 end

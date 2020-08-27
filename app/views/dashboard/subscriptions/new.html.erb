@@ -15,7 +15,7 @@
       <% if @subscription.member&.valid? %>
         <div class="form-group">
           <%= f.label :category_id %>
-          <%= f.collection_select(:category_id, Category.all, :id, :title, { include_blank: true }, required: true, class: "form-control", onchange: "this.form.submit();") %>
+          <%= f.collection_select(:category_id, @subscription.suitable_categories, :id, :title, { include_blank: true }, required: true, class: "form-control", onchange: "this.form.submit();") %>
         </div>
       <% end %>
 

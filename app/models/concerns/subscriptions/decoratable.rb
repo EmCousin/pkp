@@ -19,5 +19,16 @@ module Subscriptions
                              Course.none
                            end
     end
+
+    def suitable_categories
+      if member.nil?
+        Category.none
+      else
+        Category.where(
+          "min_age <= :age AND max_age >= :age",
+          age: member.age(year)
+        )
+      end
+    end
   end
 end
