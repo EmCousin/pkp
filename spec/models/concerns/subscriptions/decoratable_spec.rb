@@ -7,6 +7,9 @@ describe Subscriptions::Decoratable, type: :model do
   let(:another_course) { build :course, title: 'Mardi Adulte Mixte' }
   let(:subscription) { build :subscription, courses: [course, another_course] }
 
+  it { is_expected.to respond_to :category_id }
+  it { is_expected.to respond_to 'category_id=' }
+
   it { is_expected.to define_enum_for(:status).with_values(%i[pending confirmed archived]) }
 
   describe '#description' do
@@ -27,5 +30,12 @@ describe Subscriptions::Decoratable, type: :model do
         expect(subject.available_courses).to include course
       end
     end
+  end
+
+  describe '#category' do
+    let(:category) { create :category }
+    let(:subscription) { build :subscription, category_id: category.id }
+
+    it { expect(subject.category).to eq category }
   end
 end
