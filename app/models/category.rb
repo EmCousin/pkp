@@ -12,14 +12,22 @@ class Category < ApplicationRecord
   validates :min_age, presence: true,
                       numericality: {
                         only_integer: true,
-                        greater_than_or_equal_to: MIN_AGE,
-                        less_than: ->(category) { category.max_age }
+                        greater_than_or_equal_to: MIN_AGE
+                      }
+
+  validates :min_age, numericality: {
+                        less_than: ->(category) { category.max_age },
+                        if: :max_age?
                       }
 
   validates :max_age, presence: true,
                       numericality: {
                         only_integer: true,
-                        less_than_or_equal_to: MAX_AGE,
-                        greater_than: ->(category) { category.min_age }
+                        less_than_or_equal_to: MAX_AGE
                       }
+
+ validates :max_age, numericality: {
+                      greater_than: ->(category) { category.min_age },
+                      if: :min_age?
+                    }
 end

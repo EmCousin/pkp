@@ -7,4 +7,5 @@ describe Courses::Validatable, type: :model do
 
   it { is_expected.to validate_presence_of(:title) }
   it { is_expected.to validate_presence_of(:capacity) }
+  it { is_expected.to validate_numericality_of(:capacity).is_greater_than_or_equal_to(1).only_integer }
 end
