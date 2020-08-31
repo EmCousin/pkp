@@ -63,7 +63,7 @@
           <thead>
             <tr>
               <th><%= Course.human_attribute_name(:title) %></th>
-              <th><%= Course.human_attribute_name(:category) %></th>
+              <th><%= Course.human_attribute_name(:category_id) %></th>
               <th><%= Course.human_attribute_name(:weekday) %></th>
               <th><%= link_to t('defaults.edit'), edit_admin_subscription_path(subscription.id), class: 'btn btn-outline-warning btn-sm' %></th>
             </tr>
@@ -72,7 +72,7 @@
             <% subscription.courses.each do |course| %>
               <tr>
                 <td><%= link_to course.title, admin_course_path(course.id) %></td>
-                <td><%= course.category %></td>
+                <td><%= course.category.title %></td>
                 <td><%= course.weekday %></td>
                 <td><%= link_to t('.remove_from_course'), unlink_course_admin_subscription_path(subscription.id, course_id: course.id), method: :delete, data: { confirm: t('.remove_from_course_are_you_sure',member_full_name: @member.full_name, course_title: course.title) }, class: "btn btn-outline-danger btn-sm" %></td>
               </tr>
