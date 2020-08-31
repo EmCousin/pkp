@@ -17,28 +17,35 @@
           <%= f.label :category_id %>
           <%= f.collection_select(:category_id, @subscription.suitable_categories, :id, :title, { include_blank: true }, required: true, class: "form-control", onchange: "this.form.submit();") %>
         </div>
-      <% end %>
 
-      <% if @subscription.category_id.present? && @subscription.course_ids.any? && @subscription.errors.any? %>
-        <div id="error_explanation" class="error_explanation">
-          <ul>
-          <% @subscription.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-          </ul>
-        </div>
-      <% end %>
+        <% if @subscription.category.present? %>
 
-      <% if @subscription.available_courses.any? %>
-        <div class="form-group">
-          <%= f.label :course_ids %>
-          <%= f.collection_check_boxes :course_ids, @subscription.available_courses, :id, :title, required: true do |b| %>
-            <div class="form-check">
-              <%= b.check_box(class: "form-check-input") %>
-              <%= b.label(class: "form-check-label") %>
+          <% if @subscription.course_ids.any? && @subscription.errors.any? %>
+            <div id="error_explanation" class="error_explanation">
+              <ul>
+              <% @subscription.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+              </ul>
             </div>
           <% end %>
-        </div>
+
+          <% if @subscription.available_courses.any? %>
+            <div class="form-group">
+              <%= f.label :course_ids %>
+              <%= f.collection_check_boxes :course_ids, @subscription.available_courses, :id, :title, required: true do |b| %>
+                <div class="form-check">
+                  <%= b.check_box(class: "form-check-input") %>
+                  <%= b.label(class: "form-check-label") %>
+                </div>
+              <% end %>
+            </div>
+          <% else %>
+            <div class="alert alert-warning text-center">
+              <%= t('.no_courses_available', category_title: @subscription.category.title)%>
+            </div>
+          <% end %>
+        <% end %>
       <% end %>
 
       <div class="actions d-flex mt-5">
