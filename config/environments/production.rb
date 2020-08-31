@@ -107,4 +107,6 @@ Rails.application.configure do
 
   # Store files remotely using Amazon Web Services.
   config.active_storage.service = :amazon
+
+  config.time_zone = 'Europe/Paris'
 end
