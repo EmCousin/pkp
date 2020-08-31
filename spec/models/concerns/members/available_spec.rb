@@ -26,7 +26,8 @@ describe Members::Available, type: :model do
     end
 
     context 'when the member has a subscription' do
-      let(:courses) { create_list(:course, 1) }
+      let(:category) { create :category, title: 'Adulte' }
+      let(:courses) { create_list(:course, 1, category: category) }
       let(:member) { create :member }
       let!(:subscription) { create :subscription, member: member, courses: courses, year: year }
 

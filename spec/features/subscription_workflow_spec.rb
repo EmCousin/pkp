@@ -7,6 +7,7 @@ feature "Subscription Workflow", type: :feature do
   let(:avatar) { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'file_examples', 'avatar.jpg')) }
 
   let(:password) { SecureRandom.hex }
+
   let!(:courses) do
     [
       create(:course, title: "Lundi Adulte Féminin",

@@ -62,7 +62,7 @@ module Subscriptions
     end
 
     def maximum_age_permited
-       errors.add(:member, :too_old) if member_too_old?
+      errors.add(:member, :too_old) if member_too_old?
     end
 
     def member_too_old?
@@ -74,7 +74,7 @@ module Subscriptions
     end
 
     def set_current_year
-      self.year = self.class.current_year
+      self.year ||= self.class.current_year
     end
 
     def category?

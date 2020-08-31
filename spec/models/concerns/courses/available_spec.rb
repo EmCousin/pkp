@@ -4,7 +4,8 @@ describe Courses::Available, type: :model do
   subject { course }
 
   let(:active) { true }
-  let(:course) { create :course, active: active }
+  let(:category) { create :category, title: 'Adulte' }
+  let(:course) { create :course, active: active, category: category }
 
   describe 'scopes' do
     describe '.active' do
@@ -30,7 +31,7 @@ describe Courses::Available, type: :model do
     let(:year) { Subscription.current_year }
     let(:capacity) { 60 }
     let(:active) { true }
-    let(:course) { create :course, capacity: capacity, active: active }
+    let(:course) { create :course, capacity: capacity, active: active, category: category }
     let(:status) { :pending }
     let!(:subscription) { create :subscription, courses: [course], status: status, year: year }
 

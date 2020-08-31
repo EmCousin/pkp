@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Subscriptions::Validatable, type: :model do
   subject { subscription }
 
-  let(:category) { Course::CATEGORIES.sample }
+  let(:category) { build :category }
   let(:courses) do
     [
       build(:course, category: category, weekday: Course.weekdays.keys.first),
@@ -35,8 +35,8 @@ describe Subscriptions::Validatable, type: :model do
       context 'when the subscription has courses from different categories' do
         let(:courses) do
           [
-            build(:course, category: Course::CATEGORIES.first),
-            build(:course, category: Course::CATEGORIES.last),
+            build(:course),
+            build(:course),
           ]
         end
 

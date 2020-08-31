@@ -14,6 +14,8 @@ describe Course, type: :model do
     end
   end
 
+  it { is_expected.to belong_to(:category) }
+
   it { is_expected.to have_many(:courses_subscriptions).dependent(:destroy) }
   it { is_expected.to have_many(:subscriptions).through(:courses_subscriptions) }
   it { is_expected.to have_many(:members).through(:subscriptions) }

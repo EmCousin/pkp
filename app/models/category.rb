@@ -1,7 +1,8 @@
 # frozen_string_literal: true
+
 class Category < ApplicationRecord
-  MIN_AGE = 1.freeze
-  MAX_AGE = 100.freeze
+  MIN_AGE = 1
+  MAX_AGE = 100
 
   has_many :courses, dependent: :restrict_with_error
 

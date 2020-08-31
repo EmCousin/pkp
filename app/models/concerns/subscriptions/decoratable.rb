@@ -25,7 +25,7 @@ module Subscriptions
         Category.none
       else
         Category.where(
-          "min_age <= :age AND max_age >= :age",
+          'min_age <= :age AND max_age >= :age',
           age: member.age(year)
         )
       end
