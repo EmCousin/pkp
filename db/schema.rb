@@ -46,9 +46,9 @@ ActiveRecord::Schema.define(version: 2020_08_24_141207) do
   end
 
   create_table "categories", force: :cascade do |t|
-    t.string "title"
-    t.integer "min_age"
-    t.integer "max_age"
+    t.string "title", null: false
+    t.integer "min_age", null: false
+    t.integer "max_age", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
