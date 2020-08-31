@@ -29,8 +29,8 @@
     </p>
 
     <p>
-      <strong><%= Course.human_attribute_name(:category) %> :</strong>
-      <%= @course.category %>
+      <strong><%= Course.human_attribute_name(:category_id) %> :</strong>
+      <%= @course.category.title %>
     </p>
 
     <p>

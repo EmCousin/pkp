@@ -8,8 +8,6 @@ module Subscriptions
       has_one_attached :form
       has_one_attached :signed_form
       has_one_attached :medical_certificate
-
-      attr_accessor :category
     end
 
     def completed?

@@ -68,12 +68,23 @@ fr:
               limit_exceeded: ": maximum trois cours"
               unique_category: ": Les cours doivent être de la même catégorie"
               unique_weekday: ": Les cours ne doivent pas être le même jour"
+            member:
+              too_young: n'a pas l'âge minimum requis
+              too_old: n'a pas l'âge maximum requis
         invoice:
           attributes:
             subscription:
               must_be_paid: doit être payée
             subscription_id:
               taken: a déjà une facture
+        category:
+          attributes:
+            min_age:
+              less_than: doit être inférieur à l'âge maximum
+              greater_than_or_equal_to: doit être supérieur ou égal à 1
+            max_age:
+              greater_than: doit être supérieur à l'âge minimum
+              less_than_or_equal_to: doit être inférieur ou égal à 100
     models:
       user:
         one: Membre
@@ -81,6 +92,9 @@ fr:
       course:
         one: Cours
         other: Cours
+      category:
+        one: Catégorie
+        other: Catégories
       subscription:
         one: Inscription
         other: Inscriptions
@@ -110,11 +124,15 @@ fr:
         description: Description
         capacity: Capacité
         availability: Places restantes
-        category: Catégorie
+        category_id: Catégorie
         weekday: Jour de la semaine
         active: Actif
+      category:
+        title: Titre
+        min_age: Âge minimum
+        max_age: Âge maximum
       subscription:
-        category: Type de cours
+        category_id: Type de cours
         fee: Cotisation
         year: Année
         member_id: Membre
@@ -188,6 +206,7 @@ fr:
         remove_from_course_are_you_sure: Êtes-vous sûr(e) de vouloir retirer %{member_full_name} du cours %{course_title} ?
       new:
         title: Créer un cours
+        create_category: Créez une catégorie pour votre cours
       create:
         success: Cours créé
       edit:
@@ -196,6 +215,13 @@ fr:
         success: Cours modifié
       destroy:
         success: Cours supprimé
+      form:
+        new_category: Ajouter une autre catégorie
+    categories:
+      new:
+        title: Créer une catégorie
+      create:
+        success: Catégorie créée
     subscriptions:
       index:
         title: Inscriptions
@@ -257,6 +283,7 @@ fr:
     subscriptions:
       new:
         create_member: Veuillez renseigner les informations de la personne à inscrire
+        add_member: Ajouter une autre personne
       create:
         success: Inscription créée avec succès !
     members:

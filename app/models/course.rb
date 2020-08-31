@@ -7,6 +7,7 @@ class Course < ApplicationRecord
   include Courses::Validatable
   include Courses::Available
 
+  belongs_to :category
   has_many :courses_subscriptions, dependent: :destroy
   has_many :subscriptions, through: :courses_subscriptions
   has_many :members, through: :subscriptions

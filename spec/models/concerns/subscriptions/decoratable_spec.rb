@@ -19,8 +19,8 @@ describe Subscriptions::Decoratable, type: :model do
     end
 
     context 'when the category is set' do
-      let(:category) { Course::CATEGORIES.sample }
-      let(:subscription) { build :subscription, category: category }
+      let(:category) { create :category }
+      let(:subscription) { build :subscription, category_id: category.id }
       let!(:course) { create :course, category: category }
 
       it "returns the course" do

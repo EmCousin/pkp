@@ -1,9 +1,6 @@
 require 'rails_helper'
 
 describe Course, type: :model do
-  VACATION_MONTHS = (7..8).to_a.freeze
-  ALUMNI_MONTHS = VACATION_MONTHS[-1..-1].freeze
-
   describe 'public constants' do
     it 'has a constant VACATION_MONTHS' do
       expect(described_class::VACATION_MONTHS).to eq([7, 8].freeze)
@@ -13,6 +10,8 @@ describe Course, type: :model do
       expect(described_class::ALUMNI_MONTHS).to eq([8].freeze)
     end
   end
+
+  it { is_expected.to belong_to(:category) }
 
   it { is_expected.to have_many(:courses_subscriptions).dependent(:destroy) }
   it { is_expected.to have_many(:subscriptions).through(:courses_subscriptions) }

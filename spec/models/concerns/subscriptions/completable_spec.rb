@@ -15,8 +15,8 @@ describe Subscriptions::Completable, type: :model do
   it { is_expected.to respond_to :signed_form }
   it { is_expected.to respond_to :medical_certificate }
 
-  it { is_expected.to respond_to :category }
-  it { is_expected.to respond_to 'category=' }
+  it { is_expected.to respond_to :category_id }
+  it { is_expected.to respond_to 'category_id=' }
 
   describe '#completed?' do
     before do

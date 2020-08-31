@@ -5,7 +5,8 @@ describe Subscriptions::Payable, type: :model do
 
   subject { subscription }
 
-  let(:courses) { create_list :course, 1 }
+  let(:category) { create :category, title: 'Adulte' }
+  let(:courses) { create_list :course, 1, category: category }
   let(:subscription) { create :subscription, courses: courses }
   let(:stripe_token) { 'stripe_token' }
   let(:stripe_charge_id) { SecureRandom.hex }

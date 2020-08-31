@@ -7,50 +7,75 @@ feature "Subscription Workflow", type: :feature do
   let(:avatar) { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'file_examples', 'avatar.jpg')) }
 
   let(:password) { SecureRandom.hex }
+
+  let(:categories) do
+    [
+      create(:category, title: 'Adulte',
+                        min_age: 16,
+                        max_age: 99),
+      create(:category, title: 'Adolescent (13 - 15 ans)',
+                        min_age: 13,
+                        max_age: 15),
+      create(:category, title: 'Adolescent (10 - 12 ans)',
+                        min_age: 10,
+                        max_age: 12),
+      create(:category, title: 'Kidz (6 - 7 ans)',
+                        min_age: 6,
+                        max_age: 7),
+      create(:category, title: 'Kidz (8 - 9 ans)',
+                        min_age: 8,
+                        max_age: 9)
+    ]
+  end
+
   let!(:courses) do
     [
       create(:course, title: "Lundi Adulte Féminin",
-                      category: "Adulte",
+                      category: categories.first,
                       capacity: 30,
                       weekday: 'lundi'),
       create(:course, title: "Lundi Adulte Mixte",
-                      category: "Adulte",
+                      category: categories.first,
                       capacity: 60,
                       weekday: 'lundi'),
       create(:course, title: "Mardi Adulte Mixte",
-                      category: "Adulte",
+                      category: categories.first,
                       capacity: 60,
                       weekday: 'mardi'),
       create(:course, title: "Mercredi Adulte Mixte",
-                      category: "Adulte",
+                      category: categories.first,
                       capacity: 60,
                       weekday: 'mercredi'),
       create(:course, title: "Jeudi Adulte Mixte",
-                      category: "Adulte",
+                      category: categories.first,
                       capacity: 60,
                       weekday: 'jeudi'),
       create(:course, title: "Vendredi Adulte Mixte",
-                      category: "Adulte",
+                      category: categories.first,
                       capacity: 60,
                       weekday: 'vendredi'),
       create(:course, title: "Mercredi Ado 13 - 15 ans Mixte",
-                      category: "Adolescent (13 - 15 ans)",
+                      category: categories.second,
                       capacity: 60,
                       weekday: 'mercredi'),
       create(:course, title: "Samedi Ado 13 - 15 ans Mixte",
-                      category: "Adolescent (13 - 15 ans)",
+                      category: categories.second,
                       capacity: 60,
                       weekday: 'samedi'),
       create(:course, title: "Mercredi Ado 10 - 12 ans Mixte",
-                      category: "Adolescent (10 - 12 ans)",
+                      category: categories.third,
                       capacity: 60,
                       weekday: 'mercredi'),
       create(:course, title: "Samedi Ado 10 - 12 ans Mixte",
-                      category: "Adolescent (10 - 12 ans)",
+                      category: categories.third,
                       capacity: 60,
                       weekday: 'samedi'),
-      create(:course, title: "Samedi Kidz 6 - 9 ans Mixte",
-                      category: "Kidz (6 - 9 ans)",
+      create(:course, title: "Samedi Kidz 6 - 7 ans Mixte",
+                      category: categories.fourth,
+                      capacity: 60,
+                      weekday: 'samedi'),
+      create(:course, title: "Samedi Kidz 8 - 9 ans Mixte",
+                      category: categories.fifth,
                       capacity: 60,
                       weekday: 'samedi')
     ]
@@ -117,11 +142,11 @@ feature "Subscription Workflow", type: :feature do
 
     expect(page).to have_text('Membre ajouté')
     expect(find_field('subscription_member_id').find('option[selected]').text).to eq member.full_name
-    select('Adulte', from: 'subscription_category')
+    select(categories.first.title, from: 'subscription_category_id')
 
     click_button 'Sauvegarder'
 
-    available_courses = courses.select { |course| course.category == 'Adulte' }
+    available_courses = categories.first.courses
     available_courses.each do |course|
       expect(find_field("subscription_course_ids_#{course.id}").visible?).to be true
     end
