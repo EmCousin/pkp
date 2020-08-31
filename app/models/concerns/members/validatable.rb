@@ -30,7 +30,6 @@ module Members
       validates :contact_name, presence: true
       validates :contact_phone_number, presence: true, phone: true
       validates :contact_relationship, presence: true, inclusion: { in: CONTACTS }
-      validates :agreed_to_advertising_right, presence: true
       validates :avatar, presence: true
     end
   end

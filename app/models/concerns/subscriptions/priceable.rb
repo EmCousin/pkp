@@ -5,8 +5,6 @@ module Subscriptions
     extend ActiveSupport::Concern
 
     included do
-      attr_accessor :category_id
-
       before_save :set_category_id
       before_save :set_fee
     end
@@ -34,10 +32,6 @@ module Subscriptions
       when 'Kidz (6 - 7 ans)', 'Kidz (8 - 9 ans)'
         [175]
       end
-    end
-
-    def category
-      Category.find_by(id: category_id)
     end
   end
 end
