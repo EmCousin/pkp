@@ -35,7 +35,6 @@ describe Members::Validatable, type: :model do
   it { is_expected.to validate_presence_of(:contact_phone_number) }
   it { is_expected.to validate_presence_of(:contact_relationship) }
   it { is_expected.to validate_inclusion_of(:contact_relationship).in_array(described_class::CONTACTS) }
-  it { is_expected.to validate_presence_of(:agreed_to_advertising_right) }
 
   it 'is expected to validate the birthdate range' do
     expect(member).to be_valid
