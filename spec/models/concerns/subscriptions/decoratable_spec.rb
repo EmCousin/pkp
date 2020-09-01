@@ -38,4 +38,20 @@ describe Subscriptions::Decoratable, type: :model do
 
     it { expect(subject.category).to eq category }
   end
+
+  describe '#status_color' do
+    it { expect(subject.status_color).to eq '' }
+
+    context 'when the subscription is confirmed' do
+      let(:subscription) { build :subscription, status: :confirmed }
+
+      it { expect(subject.status_color).to eq 'table-success' }
+    end
+
+    context 'when the subscription is archived' do
+      let(:subscription) { build :subscription, status: :archived }
+
+      it { expect(subject.status_color).to eq 'table-secondary' }
+    end
+  end
 end

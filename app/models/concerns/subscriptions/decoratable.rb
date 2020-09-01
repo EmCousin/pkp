@@ -36,5 +36,15 @@ module Subscriptions
     def category
       @category ||= Category.find_by(id: category_id)
     end
+
+    def status_color
+      if confirmed?
+        'table-success'
+      elsif archived?
+        'table-secondary'
+      else
+        ''
+      end
+    end
   end
 end
