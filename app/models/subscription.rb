@@ -7,6 +7,7 @@ class Subscription < ApplicationRecord
   include Subscriptions::Payable
   include Subscriptions::Invoiceable
   include Subscriptions::Completable
+  include Subscriptions::Filterable
 
   belongs_to :member
   has_many :courses_subscriptions, dependent: :destroy
