@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :category do
-    title { Faker::Lorem.word }
+    title { 'Adulte' }
     min_age { 1 }
     max_age { 100 }
   end
