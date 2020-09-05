@@ -3,6 +3,6 @@ class ChangeMemberIndexes < ActiveRecord::Migration[6.0]
     remove_index :members, :first_name
     remove_index :members, :last_name
 
-    add_index :members, %i[first_name last_name], unique: true
+    add_index :members, %i[first_name last_name]
   end
 end

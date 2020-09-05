@@ -85,7 +85,7 @@ ActiveRecord::Schema.define(version: 2020_09_05_145004) do
     t.boolean "agreed_to_advertising_right", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["first_name", "last_name"], name: "index_members_on_first_name_and_last_name", unique: true
+    t.index ["first_name", "last_name"], name: "index_members_on_first_name_and_last_name"
     t.index ["user_id"], name: "index_members_on_user_id"
   end
 
