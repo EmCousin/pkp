@@ -9,7 +9,7 @@ module Admin
       @subscriptions = Subscription.filter_by_status(params[:status])
                                    .order(created_at: :desc)
                                    .page(params[:page])
-                                   .per(50)
+                                   .per(25)
                                    .includes(:courses, member: :avatar_attachment)
     end
 
