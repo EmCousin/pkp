@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_24_141207) do
+ActiveRecord::Schema.define(version: 2020_09_05_145004) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -85,8 +85,7 @@ ActiveRecord::Schema.define(version: 2020_08_24_141207) do
     t.boolean "agreed_to_advertising_right", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["first_name"], name: "index_members_on_first_name"
-    t.index ["last_name"], name: "index_members_on_last_name"
+    t.index ["first_name", "last_name"], name: "index_members_on_first_name_and_last_name"
     t.index ["user_id"], name: "index_members_on_user_id"
   end
 
@@ -98,7 +97,9 @@ ActiveRecord::Schema.define(version: 2020_08_24_141207) do
     t.integer "status", default: 0
     t.string "stripe_charge_id"
     t.bigint "member_id"
+    t.index ["created_at"], name: "index_subscriptions_on_created_at", order: :desc
     t.index ["member_id"], name: "index_subscriptions_on_member_id"
+    t.index ["status"], name: "index_subscriptions_on_status"
   end
 
   create_table "users", force: :cascade do |t|
