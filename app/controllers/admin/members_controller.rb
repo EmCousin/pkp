@@ -7,7 +7,7 @@ module Admin
     def index
       @members = Member.search(params[:q])
                        .page(params[:page])
-                       .per(50)
+                       .per(25)
                        .includes(:user)
     end
 
