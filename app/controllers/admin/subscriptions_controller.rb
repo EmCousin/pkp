@@ -10,7 +10,7 @@ module Admin
                                    .order(created_at: :desc)
                                    .page(params[:page])
                                    .per(25)
-                                   .includes(:member, :courses)
+                                   .includes(:courses, member: :avatar_attachment)
     end
 
     def show; end

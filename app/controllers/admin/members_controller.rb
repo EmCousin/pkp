@@ -9,6 +9,7 @@ module Admin
                        .page(params[:page])
                        .per(25)
                        .includes(:user)
+                       .with_attached_avatar
     end
 
     def show; end
