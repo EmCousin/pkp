@@ -6,7 +6,7 @@
 
 ## Description
 
-Back-Office interface for Parkour Paris
+Back-Office interface for [Parkour Paris](https://inscriptions.parkourparis.fr)
 
 ## Prerequisites
 * [Ruby](https://www.ruby-lang.org/en/documentation/installation/) 2.6.3 or later
