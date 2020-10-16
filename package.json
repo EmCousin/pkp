@@ -7,7 +7,7 @@
     "@rails/activestorage": "^6.0.2-2",
     "@rails/ujs": "^6.0.2-2",
     "@rails/webpacker": "^4.3.0",
-    "@stripe/stripe-js": "^1.9.0",
+    "@stripe/stripe-js": "^1.10.0",
     "bootstrap": "^4.5.3",
     "file-loader": "^5.0.2",
     "jquery": "^3.5.1",
