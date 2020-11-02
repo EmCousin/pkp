@@ -2,7 +2,7 @@
 
 class Course < ApplicationRecord
   VACATION_MONTHS = (7..8).to_a.freeze
-  ALUMNI_MONTHS = VACATION_MONTHS[-1..-1].freeze
+  ALUMNI_MONTHS = VACATION_MONTHS[-1..].freeze
 
   include Courses::Validatable
   include Courses::Available

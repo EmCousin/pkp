@@ -6,6 +6,7 @@ module DeviseExtensions
 
     included do
       attr_accessor :email_confirmation
+
       validates :email, confirmation: true, if: :email_confirmation_required?
     end
 
