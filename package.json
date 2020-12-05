@@ -14,7 +14,7 @@
     "places.js": "https://github.com/EmCousin/places",
     "popper.js": "^1.16.0",
     "resolve-url-loader": "^3.1.2",
-    "stimulus": "^1.1.1",
+    "stimulus": "2.0.0",
     "turbolinks": "^5.2.0"
   },
   "devDependencies": {

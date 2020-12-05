@@ -38,14 +38,14 @@
         <div class="col-8">
           <div class="form-group">
             <%= user_form.label :address %>
-            <%= user_form.text_field :address, required: true, class: "form-control", data: { target: 'places.address' } %>
+            <%= user_form.text_field :address, required: true, class: "form-control", data: { :'places-target' => :address } %>
           </div>
         </div>
 
         <div class="col-4">
           <div class="form-group">
             <%= user_form.label :zip_code %>
-            <%= user_form.text_field :zip_code, required: true, class: "form-control", data: { target: 'places.zipCode' } %>
+            <%= user_form.text_field :zip_code, required: true, class: "form-control", data: { :'places-target' => :zipCode } %>
           </div>
         </div>
       </div>
@@ -54,14 +54,14 @@
         <div class="col">
           <div class="form-group">
             <%= user_form.label :city %>
-            <%= user_form.text_field :city, required: true, class: "form-control", data: { target: 'places.city' } %>
+            <%= user_form.text_field :city, required: true, class: "form-control", data: { :'places-target' => :city } %>
           </div>
         </div>
 
         <div class="col">
           <div class="form-group">
             <%= user_form.label :country %>
-            <%= user_form.text_field :country, required: true, class: "form-control", data: { target: 'places.country' } %>
+            <%= user_form.text_field :country, required: true, class: "form-control", data: { :'places-target' => :country } %>
           </div>
         </div>
       </div>
