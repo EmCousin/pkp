@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe Subscriptions::Priceable, type: :model do
+  include ActiveSupport::Testing::TimeHelpers
+
   subject { subscription }
 
   let(:category_title) { 'Adulte' }
@@ -8,13 +10,18 @@ describe Subscriptions::Priceable, type: :model do
   let(:count) { 1 }
   let(:courses) { create_list :course, count, category: category }
   let(:subscription) { build :subscription, courses: courses }
+  let(:travel_date) { DateTime.new(Time.now.year, 9).end_of_month }
 
   before do
+    travel_to travel_date
+
     courses.each_with_index do |course, index|
       course.weekday = index + 1
     end
 
     subject.save!
+
+    travel_back
   end
 
   it 'sets the category before save' do
@@ -118,5 +125,37 @@ describe Subscriptions::Priceable, type: :model do
     let(:count) { 1 }
 
     it { expect(subject.fee_cents).to eq 17500 }
+  end
+
+  describe 'winter pricing' do
+    it 'has a constant WINTER_PRICING' do
+      expect(described_class::WINTER_PRICING).to eq [130, 190, 220].freeze
+    end
+
+    let(:travel_date) { DateTime.new(Time.now.year, 1).end_of_month }
+
+    context 'when there is 1 course' do
+      let(:count) { 1 }
+
+      it 'should set the fee to 130' do
+        expect(subject.fee).to eq 130
+      end
+    end
+
+    context 'when there are 2 courses' do
+      let(:count) { 2 }
+
+      it 'should set the fee to 190' do
+        expect(subject.fee).to eq 190
+      end
+    end
+
+    context 'when there are 3 courses' do
+      let(:count) { 3 }
+
+      it 'should set the fee to 220' do
+        expect(subject.fee).to eq 220
+      end
+    end
   end
 end

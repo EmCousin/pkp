@@ -19,7 +19,7 @@ describe SubscriptionsMailbox, type: :mailbox do
 
   it 'is expected to catch an inbound email' do
     expect do
-      receive_inbound_email_from_mail(mail_attributes)
+      receive_inbound_email_from_mail(**mail_attributes)
     end.to change(ActionMailbox::InboundEmail, :count).by 1
   end
 
@@ -30,6 +30,6 @@ describe SubscriptionsMailbox, type: :mailbox do
       expect(UserMailer).to receive(:missing).with(instance_of(ActionMailbox::InboundEmail)).and_call_original
     end
 
-    after { receive_inbound_email_from_mail(mail_attributes) }
+    after { receive_inbound_email_from_mail(**mail_attributes) }
   end
 end

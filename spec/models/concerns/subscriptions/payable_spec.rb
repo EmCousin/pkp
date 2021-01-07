@@ -38,8 +38,6 @@ describe Subscriptions::Payable, type: :model do
     end
   end
 
-  it { expect(subject.fee).to eq 175 }
-
   describe '#pay!' do
     it 'creates a stripe charge id' do
       expect(subject.stripe_charge_id).to eq stripe_charge_id
