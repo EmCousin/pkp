@@ -4,6 +4,14 @@ module Subscriptions
   module Priceable
     extend ActiveSupport::Concern
 
+    WINTER_PRICING = [130, 190, 220].freeze
+
+    class_methods do
+      def winter_time?
+        Time.now.month.in?(1...Course::VACATION_MONTHS.first)
+      end
+    end
+
     included do
       before_save :set_category_id
       before_save :set_fee
@@ -24,6 +32,8 @@ module Subscriptions
     end
 
     def pricing
+      return WINTER_PRICING if self.class.winter_time?
+
       case category.title
       when 'Adulte'
         [175, 285, 330]
