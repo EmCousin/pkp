@@ -122,7 +122,7 @@ feature "Subscription Workflow", type: :feature do
 
     expect(page).to have_text('Vos modifications ont bien été enregistrées.')
     expect(page).to have_text('Bienvenue !')
-    expect(page).to have_text("Vous n'êtes pas encore inscrit(e) pour l'année #{Subscription.current_year} ! Cliquez sur le bouton pour vous inscrire :")
+    expect(page).to have_text("Vous n'êtes pas encore inscrit(e) pour l'année #{Subscription.current_year} - #{Subscription.current_year + 1} ! Cliquez sur le bouton pour vous inscrire :")
     expect(find_link('Choisir mes cours').visible?).to be true
 
     click_link 'Choisir mes cours'
