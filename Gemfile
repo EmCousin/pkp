@@ -37,7 +37,7 @@ gem 'jquery-rails'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 gem 'kaminari'
-gem 'phonelib', github: 'tricknotes/phonelib', branch: 'ruby-3'
+gem 'phonelib'
 gem 'rack-cors', require: 'rack/cors'
 gem 'sidekiq'
 gem 'stripe'
