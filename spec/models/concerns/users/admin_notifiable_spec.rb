@@ -13,7 +13,7 @@ describe Users::AdminNotifiable, type: :model do
       expect {
         subject.update!(email: email)
       }.to(
-        have_enqueued_job.on_queue('mailers').with(
+        have_enqueued_job.with(
           'AdminMailer', 'email_changed', 'deliver_now', args: [email_was, email]
         )
       )
