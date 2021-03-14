@@ -14,7 +14,7 @@ module Dashboard
       if @member.save
         redirect_to new_dashboard_subscription_path(member_id: @member.id), notice: t('.success')
       else
-        render :new
+        render :new, status: :unprocessable_entity
       end
     end
 

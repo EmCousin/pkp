@@ -376,6 +376,7 @@ DEPENDENCIES
   rack-cors
   rails (~> 6)
   rails-controller-testing
+  redis (~> 4.0)
   rspec-rails
   rspec_junit_formatter
   rubocop

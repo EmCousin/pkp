@@ -20,7 +20,7 @@ module Admin
       if @course.save
         redirect_to admin_courses_path, notice: t('.success')
       else
-        render :new
+        render :new, status: :unprocessable_entity
       end
     end
 
@@ -30,7 +30,7 @@ module Admin
       if @course.update(course_params)
         redirect_to admin_courses_path, notice: t('.success')
       else
-        render :edit
+        render :edit, status: :unprocessable_entity
       end
     end
 

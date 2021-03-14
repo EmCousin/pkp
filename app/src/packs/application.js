@@ -22,14 +22,14 @@ import "regenerator-runtime/runtime";
 import * as ActionCable from '@rails/actioncable';
 window.Cable = ActionCable.createConsumer();
 
+import { Turbo } from "@hotwired/turbo-rails"
+window.Turbo = Turbo;
+
 import * as ActiveStorage from '@rails/activestorage';
 ActiveStorage.start();
 
 import Rails from '@rails/ujs';
 Rails.start();
-
-import Turbolinks from "turbolinks";
-Turbolinks.start();
 
 import '@stripe/stripe-js';
 

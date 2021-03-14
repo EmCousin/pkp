@@ -11,7 +11,7 @@ module Dashboard
       if @subscription.update(subscription_params)
         redirect_to dashboard_index_path, notice: t('.success')
       else
-        render :edit
+        render :edit, status: :unprocessable_entity
       end
     end
 

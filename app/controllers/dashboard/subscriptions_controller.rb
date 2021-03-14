@@ -19,7 +19,7 @@ module Dashboard
         process_after_save(@subscription)
         redirect_to dashboard_index_path, notice: t('.success')
       else
-        render :new
+        render :new, status: :unprocessable_entity
       end
     end
 
