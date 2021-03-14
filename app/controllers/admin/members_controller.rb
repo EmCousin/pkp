@@ -25,7 +25,7 @@ module Admin
       if @member.save
         redirect_to admin_members_path, notice: t('.success')
       else
-        render :new
+        render :new, status: :unprocessable_entity
       end
     end
 
@@ -35,7 +35,7 @@ module Admin
       if @member.update(member_params)
         redirect_to admin_members_path, notice: t('.success')
       else
-        render :edit
+        render :edit, status: :unprocessable_entity
       end
     end
 

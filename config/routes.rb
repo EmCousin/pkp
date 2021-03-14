@@ -3,9 +3,14 @@ Rails.application.routes.draw do
     registrations: 'registrations'
   }
 
+  authenticated :user do
+    root to: "dashboard#index", as: :authenticated
+  end
+
   authenticate :user, ->(user) { user.admin? } do
     mount Sidekiq::Web => '/sidekiq'
   end
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   resources :pdfs, only: :index do
     collection do
@@ -43,11 +48,9 @@ Rails.application.routes.draw do
 
   resources :dashboard, only: [:index]
 
-  resources :pages, path: '/', only: [] do
-    collection do
-      get :legal_mentions
-    end
-  end
+  resources :legal_mentions, only: %i[index]
 
-  root "dashboard#index"
+  devise_scope :user do
+    root to: "devise/sessions#new"
+  end
 end

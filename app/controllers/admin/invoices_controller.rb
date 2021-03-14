@@ -22,7 +22,7 @@ module Admin
       if @subscription.update(subscription_params)
         redirect_to admin_subscription_path(@subscription.id), notice: t('.success')
       else
-        render :edit
+        render :edit, status: :unprocessable_entity
       end
     end
 

@@ -61,7 +61,7 @@
           <%= form.check_box :terms_of_service, required: true %>
           <%= form.label :terms_of_service do %>
             <%= t('.i_have_read_and_accept') %>
-            <%= link_to t('.terms_of_service'), legal_mentions_pages_path, target: '_blank' %>
+            <%= link_to t('.terms_of_service'), legal_mentions_path, target: '_blank' %>
           <% end %>
         </div>
 

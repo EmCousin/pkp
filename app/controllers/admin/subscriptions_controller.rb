@@ -28,7 +28,7 @@ module Admin
         process_after_save(@subscription)
         redirect_to admin_subscriptions_path, notice: t('.success')
       else
-        render :new
+        render :new, status: :unprocessable_entity
       end
     end
 
@@ -39,7 +39,7 @@ module Admin
         process_after_save(@subscription)
         redirect_to admin_subscription_path(@subscription.id), notice: t('.success')
       else
-        render :edit
+        render :edit, status: :unprocessable_entity
       end
     end
 

@@ -11,7 +11,7 @@ module Admin
       if @category.save
         redirect_to new_admin_course_path(category_id: @category.id), notice: t('.success')
       else
-        render :new
+        render :new, status: :unprocessable_entity
       end
     end
 
