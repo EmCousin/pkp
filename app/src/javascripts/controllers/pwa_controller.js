@@ -5,6 +5,10 @@ export default class extends Controller {
     deferredPrompt: Object
   }
 
+  connect() {
+    this.element.style.display = 'none'
+  }
+
   configure(event) {
     event.preventDefault()
 
