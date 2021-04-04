@@ -13,10 +13,10 @@ module Pwa
                      name: 'Parkour Paris',
                      icons: @icons,
                      start_url: '/?source=pwa',
-                     background_color: '#343a40',
+                     background_color: '#cbd3d4',
                      display: 'standalone',
                      scope: '/',
-                     theme_color: '#343a40',
+                     theme_color: '#cbd3d4',
                      description: 'Parkour Paris subscriptions',
                      screenshots: screenshots }
     end
