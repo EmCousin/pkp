@@ -9,27 +9,29 @@ module Pwa
     ICON_SIZES = [48, 72, 96, 128, 192, 384, 512].freeze
 
     def show
-      render json: {
-        short_name: "PKP",
-        name: "Parkour Paris",
-        icons: @icons,
-        start_url: "/?source=pwa",
-        background_color: "#343a40",
-        display: "standalone",
-        scope: "/",
-        theme_color: "#343a40",
-        description: "Parkour Paris subscriptions",
-        screenshots: [
-          {
-            src: "/assets/screenshot.png",
-            type: Mime[:png].to_s,
-            sizes: "1920x1326"
-          }
-        ]
-      }
+      render json: { short_name: 'PKP',
+                     name: 'Parkour Paris',
+                     icons: @icons,
+                     start_url: '/?source=pwa',
+                     background_color: '#343a40',
+                     display: 'standalone',
+                     scope: '/',
+                     theme_color: '#343a40',
+                     description: 'Parkour Paris subscriptions',
+                     screenshots: screenshots }
     end
 
     private
+
+    def screenshots
+      [
+        {
+          src: '/assets/screenshot.png',
+          type: Mime[:png].to_s,
+          sizes: '1920x1326'
+        }
+      ]
+    end
 
     def set_icons
       @icons = ICON_SIZES.map do |size|
@@ -37,7 +39,7 @@ module Pwa
           src: "/assets/pkp-#{size}.png",
           type: Mime[:png].to_s,
           sizes: "#{size}x#{size}",
-          purpose: "any maskable"
+          purpose: 'any maskable'
         }
       end
     end
