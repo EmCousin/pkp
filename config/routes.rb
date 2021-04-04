@@ -11,6 +11,17 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
+  resources :errors, only: [] do
+    collection do
+      get :offline
+    end
+  end
+
+  scope module: :pwa do
+    resource :service_worker, only: :show
+    resource :manifest, only: :show
+  end
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   resources :pdfs, only: :index do
     collection do
