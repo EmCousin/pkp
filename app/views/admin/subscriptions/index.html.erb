@@ -1,7 +1,7 @@
 <h1 class="page-title"><%= t(".title") %> <%= Subscription.current_year %> - <%= Subscription.current_year + 1%></h1>
 <hr />
 
-<%= form_with(url: admin_subscriptions_path, local: true, method: "get") do %>
+<%= form_with(url: %i[admin subscriptions], local: true, method: :get) do %>
   <div class="input-group mb-3">
     <%= select_tag(:status, options_for_select(Subscription.statuses,params[:status]),{ include_blank: true }) %>
     <div class="input-group-append">
@@ -11,17 +11,17 @@
 <% end %>
 
 
-<%= link_to t('.new'), new_admin_subscription_path, class: "btn btn-primary" %>
+<%= link_to t('.new'), %i[new admin subscription], class: "btn btn-primary" %>
 
 <table class="table mt-5">
   <thead>
     <tr>
       <th>ID</th>
       <th><%= Subscription.human_attribute_name(:member_id) %></th>
-      <th><%= Member.human_attribute_name(:email) %></th>
+      <th class='d-none d-md-table-cell'><%= Member.human_attribute_name(:email) %></th>
       <th><%= Subscription.human_attribute_name(:course_ids) %></th>
-      <th><%= Subscription.human_attribute_name(:fee) %></th>
-      <th><%= Subscription.human_attribute_name(:year) %></th>
+      <th class='d-none d-md-table-cell'><%= Subscription.human_attribute_name(:fee) %></th>
+      <th class='d-none d-md-table-cell'><%= Subscription.human_attribute_name(:year) %></th>
       <th colspan="2"><%= Subscription.human_attribute_name(:status) %></th>
     </tr>
   </thead>
@@ -29,35 +29,35 @@
     <% if @subscriptions.empty? %>
       <tr>
         <td colspan="5" class="text-center">
-          <%= link_to t('.new'), new_admin_subscription_path %>
+          <%= link_to t('.new'), %i[new admin subscription] %>
         </td>
       </tr>
     <% else %>
       <% @subscriptions.each do |subscription| %>
         <tr class=<%= subscription.status_color %>>
 
-          <td><%= link_to subscription.id, admin_subscription_path(subscription.id) %></td>
+          <td><%= link_to subscription.id, [:admin, subscription] %></td>
           <td>
-            <%= link_to admin_member_path(subscription.member_id) do %>
+            <%= link_to [:admin, subscription.member] do %>
               <%= image_tag url_for(subscription.member.avatar), width: 30 %>
               <%= subscription.member.full_name %>
             <% end %>
           </td>
-          <td><%= mail_to subscription.member.email, subscription.member.email %></td>
+          <td class='d-none d-md-table-cell'><%= mail_to subscription.member.email, subscription.member.email %></td>
           <td>
             <%= link_to t('defaults.details'), nil, data: { toggle: 'tooltip', title: subscription.description } %>
           </td>
-          <td><%= number_to_currency(subscription.fee, unit: "€", separator: ",", format: "%n %u") %></td>
-          <td><%= subscription.year %></td>
+          <td class='d-none d-md-table-cell'><%= number_to_currency(subscription.fee, unit: "€", separator: ",", format: "%n %u") %></td>
+          <td class='d-none d-md-table-cell'><%= subscription.year %></td>
           <td><%= Subscription.human_attribute_name(subscription.status) %></td>
-          <td>
+          <td class='d-none d-lg-table-cell'>
             <div class="dropdown mr-1">
               <button type="button" class="btn btn-primary dropdown-toggle" id="dropdownMenuOffset" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%= t('defaults.action') %></button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
-                <%= link_to t('defaults.edit'), edit_admin_subscription_path(subscription.id), class: "dropdown-item" %>
-                <%= link_to t('defaults.confirm'), confirm_admin_subscription_path(subscription.id), method: :put, class: "dropdown-item" %>
-                <%= link_to t('defaults.archive'), archive_admin_subscription_path(subscription.id), method: :put, class: "dropdown-item" %>
-                <%= link_to t('defaults.destroy'), admin_subscription_path(subscription.id), method: :delete, data: { confirm: t('defaults.are_you_sure') }, class: "dropdown-item" %>
+                <%= link_to t('defaults.edit'), [:edit, :admin, subscription], class: "dropdown-item" %>
+                <%= link_to t('defaults.confirm'), [:confirm, :admin, subscription], method: :put, class: "dropdown-item" %>
+                <%= link_to t('defaults.archive'), [:archive, :admin, subscription], method: :put, class: "dropdown-item" %>
+                <%= link_to t('defaults.destroy'), [:admin, subscription], method: :delete, data: { confirm: t('defaults.are_you_sure') }, class: "dropdown-item" %>
               </div>
             </div>
           </td>
