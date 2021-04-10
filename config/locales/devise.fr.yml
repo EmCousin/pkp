@@ -58,7 +58,7 @@ fr:
       unlocked: "Votre compte est débloqué. Veuillez vous connecter pour continuer."
       new:
         title: Débloquer votre compte
-        submit: Envoyer les instructions pour débloquer mon compte
+        submit: Envoyer les instructions
   errors:
     messages:
       already_confirmed: "est déjà confirmé. Veuillez vous connecter pour continuer."

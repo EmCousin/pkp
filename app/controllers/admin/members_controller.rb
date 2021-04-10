@@ -23,7 +23,7 @@ module Admin
       @member.user.terms_of_service = true
 
       if @member.save
-        redirect_to admin_members_path, notice: t('.success')
+        redirect_to %i[admin members], notice: t('.success')
       else
         render :new, status: :unprocessable_entity
       end
@@ -33,7 +33,7 @@ module Admin
 
     def update
       if @member.update(member_params)
-        redirect_to admin_members_path, notice: t('.success')
+        redirect_to %i[admin members], notice: t('.success')
       else
         render :edit, status: :unprocessable_entity
       end
@@ -41,7 +41,7 @@ module Admin
 
     def destroy
       @member.destroy
-      redirect_to admin_members_path, notice: t('.success')
+      redirect_to %i[admin members], notice: t('.success')
     end
 
     private
