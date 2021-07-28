@@ -19,7 +19,7 @@ module Dashboard
     private
 
     def filter_enabled!
-      return false if Rails.application.credentials.online_payment[:enabled]
+      return false if Rails.configuration.features.online_payment[:enabled]
 
       redirect_to dashboard_index_path, alert: t('defaults.forbidden')
     end

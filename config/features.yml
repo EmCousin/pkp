@@ -1,0 +1,31 @@
+development:
+  online_payment:
+    enabled: true
+
+  medical_certificate:
+    enabled: true
+
+  signed_form:
+    enabled: true
+
+test:
+  online_payment:
+    enabled: true
+
+  medical_certificate:
+    enabled: true
+
+  signed_form:
+    enabled: true
+
+production:
+  online_payment:
+    enabled: false
+
+  medical_certificate:
+    enabled: false
+
+  signed_form:
+    enabled: false
+
+

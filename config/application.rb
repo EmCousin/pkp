@@ -29,5 +29,7 @@ module Pkp
         end
       end
     end
+
+    config.features = config_for(:features)
   end
 end
