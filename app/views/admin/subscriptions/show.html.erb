@@ -39,7 +39,13 @@
           <%= link_to t('defaults.download'), rails_blob_path(@subscription.form, disposition: 'attachment') %>
         </p>
 
-        <% if Rails.application.credentials.online_payment[:enabled] %>
+        <% unless @subscription.needs_medical_certificate? %>
+          <p>
+            <%= @subscription.member.full_name %> n'a pas besoin d'apporter de certificat médical pour cette inscription.
+          </p>
+        <% end %>
+
+        <% if Rails.configuration.features.online_payment[:enabled] %>
           <p>
             <strong><%= t('.payment') %> :</strong>
             <% if @subscription.paid? %>
@@ -95,7 +101,7 @@
           <% end %>
         <% end %>
 
-        <% if Rails.application.credentials.medical_certificate[:enabled] %>
+        <% if Rails.configuration.features.medical_certificate[:enabled] %>
           <p>
             <strong><%= Subscription.human_attribute_name(:medical_certificate) %> :</strong>
             <% if @subscription.medical_certificate.attached? %>
@@ -106,7 +112,7 @@
           </p>
         <% end %>
 
-        <% if Rails.application.credentials.signed_form[:enabled] %>
+        <% if Rails.configuration.features.signed_form[:enabled] %>
           <p>
             <strong><%= Subscription.human_attribute_name(:signed_form) %> :</strong>
             <% if @subscription.signed_form.attached? %>
