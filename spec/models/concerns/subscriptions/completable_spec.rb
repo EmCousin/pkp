@@ -24,4 +24,43 @@ describe Subscriptions::Completable, type: :model do
 
     it { expect(subscription.completed?).to be true }
   end
+
+  describe '#previous_subscription' do
+    let(:member) { create :member }
+    let(:course) { create :course }
+    let(:subscription) { create :subscription, member: member, courses: [course] }
+    let(:year) { subscription.year - 1 }
+    let!(:previous_subscription) { create :subscription, member: member, courses: [course], year: year }
+
+    it { expect(subscription.previous_subscription).to eq previous_subscription }
+
+    context 'when the previous subscription is more than 1 year old' do
+      let(:year) { subscription.year - 2 }
+
+      it { expect(subscription.previous_subscription).to be nil }
+    end
+  end
+
+  describe '#needs_medical_certificate?' do
+    let(:member) { create :member }
+    let(:course) { create :course }
+    let(:subscription) { create :subscription, member: member, courses: [course] }
+    let(:year) { subscription.year - 1 }
+    let(:status) { :confirmed }
+    let!(:previous_subscription) { create :subscription, member: member, courses: [course], year: year, status: status }
+
+    it { expect(subscription.needs_medical_certificate?).to be false }
+
+    context 'when the previous subscription is more than 1 year old' do
+      let(:year) { subscription.year - 2 }
+
+      it { expect(subscription.needs_medical_certificate?).to be true }
+    end
+
+    context 'when the previous subscription is not confirmed' do
+      let(:status) { :pending }
+
+      it { expect(subscription.needs_medical_certificate?).to be true }
+    end
+  end
 end

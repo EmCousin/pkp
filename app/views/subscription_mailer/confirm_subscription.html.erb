@@ -22,12 +22,18 @@
     Un formulaire d'inscription pour la saison
     <%= @subscription.year %> / <%= @subscription.year + 1 %>
   </li>
-  <li>
-    Un
-    <strong style="color:red;">certificat médical</strong>
-    d'aptitude à la pratique du Parkour datant de
-    <strong style="color:red;">moins d'un mois</strong>,
-  </li>
+  <% if @subscription.needs_medical_certificate? %>
+    <li>
+      Un
+      <strong style="color:red;">certificat médical</strong>
+      d'aptitude à la pratique du Parkour datant de
+      <strong style="color:red;">moins d'un mois</strong>,
+    </li>
+  <% else %>
+    <li>
+      Vous vous êtes inscrit(e) l'année dernière, vous n'avez donc pas besoin de nous fournir de certificat médical cette année.
+    </li>
+  <% end %>
   <li>
     Le règlement de la cotisation (chèque à l'ordre de Parkour Paris ou en espèces)
   </li>
@@ -43,7 +49,9 @@
 
 <ul>
   <li>Au recto, face visible : le formulaire et la cotisation</li>
-  <li>Au verso, face visible : le certificat médical</li>
+  <% if @subscription.needs_medical_certificate? %>
+    <li>Au verso, face visible : le certificat médical (obligatoire)</li>
+  <% end %>
 </ul>
 
 <p>

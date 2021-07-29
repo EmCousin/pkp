@@ -18,7 +18,7 @@ module Dashboard
     private
 
     def filter_enabled!
-      return false if Rails.application.credentials.signed_form[:enabled]
+      return false if Rails.configuration.features.signed_form[:enabled]
 
       redirect_to dashboard_index_path, alert: t('defaults.forbidden')
     end

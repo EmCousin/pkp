@@ -41,11 +41,11 @@
       >
         <%= link_to t('.download_subscription_form'), rails_blob_path(subscription.form), disposition: "attachment", class: "dropdown-item" unless subscription.signed_form.attached? %>
 
-        <%= link_to t('.upload_signed_form'), edit_dashboard_subscription_signed_form_path(subscription.id), class: "dropdown-item" if Rails.application.credentials.signed_form[:enabled] && !subscription.signed_form.attached? %>
+        <%= link_to t('.upload_signed_form'), edit_dashboard_subscription_signed_form_path(subscription.id), class: "dropdown-item" if Rails.configuration.features.signed_form[:enabled] && !subscription.signed_form.attached? %>
 
-        <%= link_to t('.upload_medical_certificate'), edit_dashboard_subscription_medical_certificate_path(subscription.id), class: "dropdown-item" if Rails.application.credentials.medical_certificate[:enabled] && !subscription.medical_certificate.attached? %>
+        <%= link_to t('.upload_medical_certificate'), edit_dashboard_subscription_medical_certificate_path(subscription.id), class: "dropdown-item" if Rails.configuration.features.medical_certificate[:enabled] && !subscription.medical_certificate.attached? %>
 
-        <%= link_to t('.pay'), new_dashboard_subscription_payment_path(subscription.id), class: "dropdown-item" if Rails.application.credentials.online_payment[:enabled] && !subscription.paid? %>
+        <%= link_to t('.pay'), new_dashboard_subscription_payment_path(subscription.id), class: "dropdown-item" if Rails.configuration.features.online_payment[:enabled] && !subscription.paid? %>
       </div>
     <% end %>
   </div>
@@ -77,17 +77,17 @@
         <tr>
           <th><%= link_to t('.subscription_form'), rails_blob_path(subscription.form), disposition: "attachment" %></th>
 
-          <% if Rails.application.credentials.medical_certificate[:enabled] %>
+          <% if Rails.configuration.features.medical_certificate[:enabled] %>
             <th><%= Subscription.human_attribute_name(:medical_certificate) %></th>
           <% end %>
-          <% if Rails.application.credentials.online_payment[:enabled] %>
+          <% if Rails.configuration.features.online_payment[:enabled] %>
             <th>Paiement</th>
           <% end %>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <% if Rails.application.credentials.signed_form[:enabled] %>
+          <% if Rails.configuration.features.signed_form[:enabled] %>
             <td>
               <% if subscription.signed_form.attached? %>
                 Ajouté -
@@ -98,7 +98,7 @@
               <% end %>
             </td>
           <% end %>
-          <% if Rails.application.credentials.medical_certificate[:enabled] %>
+          <% if Rails.configuration.features.medical_certificate[:enabled] %>
             <td>
               <% if subscription.medical_certificate.attached? %>
                 Ajouté -
@@ -109,7 +109,7 @@
               <% end %>
             </td>
           <% end %>
-          <% if Rails.application.credentials.online_payment[:enabled] %>
+          <% if Rails.configuration.features.online_payment[:enabled] %>
             <td>
               <% if subscription.paid? %>
                 Payé
