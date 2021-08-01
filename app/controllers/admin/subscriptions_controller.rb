@@ -7,6 +7,7 @@ module Admin
 
     def index
       @subscriptions = Subscription.filter_by_status(params[:status])
+                                   .where(year: params[:year] || Subscription.current_year)
                                    .order(created_at: :desc)
                                    .page(params[:page])
                                    .per(25)

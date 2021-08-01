@@ -2,16 +2,26 @@
 <hr />
 
 <%= form_with(url: %i[admin subscriptions], local: true, method: :get) do %>
-  <div class="input-group mb-3">
-    <%= select_tag(:status, options_for_select(Subscription.statuses,params[:status]),{ include_blank: true }) %>
-    <div class="input-group-append">
-      <%= submit_tag("Filtrer", class: "btn btn-success") %>
-    </div>
-  </div>
+  <%= select_tag(
+    :status,
+    options_for_select(Subscription.statuses, params[:status]),
+    include_blank: 'Statut',
+    class: 'h-25'
+  ) %>
+  <%= select_tag(
+    :year,
+    options_for_select(
+      (2019..Subscription.current_year).to_a.reverse,
+      params[:year] || Subscription.current_year,
+    ),
+    include_blank: 'Année',
+    class: 'h-25'
+  ) %>
+  <%= submit_tag("Filtrer", class: "btn btn-success") %>
 <% end %>
 
 
-<%= link_to t('.new'), %i[new admin subscription], class: "btn btn-primary" %>
+<%= link_to t('.new'), %i[new admin subscription], class: "btn btn-primary float-right mb-5" %>
 
 <table class="table mt-5">
   <thead>
