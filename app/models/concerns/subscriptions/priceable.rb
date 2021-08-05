@@ -36,9 +36,9 @@ module Subscriptions
 
       case category.title
       when 'Adulte'
-        [175, 285, 330]
+        [200, 300, 350]
       when 'Adolescent (10 - 12 ans)', 'Adolescent (13 - 15 ans)'
-        [175, 300]
+        [200, 300]
       when 'Kidz (6 - 7 ans)', 'Kidz (8 - 9 ans)'
         [175]
       end
