@@ -22,7 +22,7 @@
             </small>
           </p>
 
-          <%= link_to t('.i_am_alumni'), new_dashboard_subscription_path(alumni: true), class: 'btn btn-primary btn-lg' %>
+          <%= link_to t('.i_am_alumni'), new_dashboard_subscription_path(alumni: true), class: 'btn btn-primary btn-lg', data: { turbo: false } %>
         </div>
       </div>
     </div>
