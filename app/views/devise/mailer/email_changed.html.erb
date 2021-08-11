@@ -3,5 +3,5 @@
 <% if @resource.try(:unconfirmed_email?) %>
   <p>Vous recevez ce mail car l'email de votre compte Parkour Paris est en train de changer de <%= @email %> à <%= @resource.unconfirmed_email %>.</p>
 <% else %>
-  <p>Vous recevez ce mail car l'email de votre compte Parkour Paris a été changé de <%= @email %> à <%= @resource.unconfirmed_email %>.</p>
+  <p>Vous recevez ce mail car l'email de votre compte Parkour Paris a été changé de <%= @email %> à <%= @resource.email %>.</p>
 <% end %>
