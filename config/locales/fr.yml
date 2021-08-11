@@ -38,6 +38,11 @@ fr:
     errors:
       messages:
         blank: doit être rempli
+        invalid: invalide
+    attributes:
+      alumni_access:
+        username: Identifiant
+        password: Mot de passe
   activerecord:
     errors:
       messages:
@@ -280,6 +285,10 @@ fr:
       change_medical_certificate: Remplacer le certificat médical
     edit:
       title: Mes informations personnelles
+    alumni_accesses:
+      new:
+        title: Accès ancien(ne)s élèves
+        headline: Entrez l'identifiant et le mot de passe qui vous ont été communiqués par les coachs. Vous pouvez les retrouver dans le mail de réinscription des ancien(ne)s élèves qui vous a été envoyé.
     subscriptions:
       new:
         create_member: Veuillez renseigner les informations de la personne à inscrire

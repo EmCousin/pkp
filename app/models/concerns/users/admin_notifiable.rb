@@ -5,7 +5,7 @@ module Users
     extend ActiveSupport::Concern
 
     included do
-      before_update :notify_admins, if: :email_changed?
+      before_update :notify_admins, if: :will_save_change_to_email?
     end
 
     private
