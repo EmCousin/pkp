@@ -55,6 +55,7 @@ Rails.application.routes.draw do
     end
     resources :vacations, only: [:index]
     resources :capacities, only: [:index]
+    resource :alumni_access, only: %i[new create]
   end
 
   resources :dashboard, only: [:index]
