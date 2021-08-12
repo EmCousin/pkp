@@ -27,7 +27,7 @@ module Admin
       @subscription = Subscription.new(subscription_params)
       if @subscription.save
         process_after_save(@subscription)
-        redirect_to admin_subscriptions_path, notice: t('.success')
+        redirect_to admin_subscriptions_path, notice: t('.success'), status: :see_other
       else
         render :new, status: :unprocessable_entity
       end

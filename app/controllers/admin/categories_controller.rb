@@ -9,7 +9,7 @@ module Admin
     def create
       @category = Category.new(category_params)
       if @category.save
-        redirect_to new_admin_course_path(category_id: @category.id), notice: t('.success')
+        redirect_to new_admin_course_path(category_id: @category.id), notice: t('.success'), status: :see_other
       else
         render :new, status: :unprocessable_entity
       end

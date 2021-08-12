@@ -23,7 +23,7 @@ module Admin
       @member.user.terms_of_service = true
 
       if @member.save
-        redirect_to %i[admin members], notice: t('.success')
+        redirect_to %i[admin members], notice: t('.success'), status: :see_other
       else
         render :new, status: :unprocessable_entity
       end
