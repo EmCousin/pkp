@@ -48,8 +48,19 @@
               <td><%= link_to member.phone_number, "tel:#{member.phone_number}" %></td>
               <td class="d-none d-sm-table-cell"><%= mail_to member.user.email, member.user.email %></td>
               <td class="d-none d-lg-table-cell">
-                <%= link_to t('defaults.edit'), [:edit, :admin, member], class: "btn btn-outline-warning btn-sm" %>
-                <%= link_to t('defaults.destroy'), [:admin, member], method: :delete, data: { confirm: t('defaults.are_you_sure') }, class: "btn btn-outline-danger btn-sm" %>
+                <div class="d-flex justify-content-around">
+                  <%= link_to t('defaults.edit'),
+                              [:edit, :admin, member],
+                              class: "btn btn-outline-warning btn-sm" %>
+                  <%= button_to t('defaults.destroy'),
+                                [:admin, member],
+                                method: :delete,
+                                data: {
+                                  controller: :confirm,
+                                  confirm_message_value: t('defaults.are_you_sure')
+                                },
+                                class: "btn btn-outline-danger btn-sm" %>
+                </div>
               </td>
             </tr>
           <% end %>

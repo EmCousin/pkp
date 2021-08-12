@@ -47,9 +47,18 @@
   </div>
 
   <div class="col-7">
-    <div class="float-right">
-      <%= link_to t('defaults.edit'), edit_admin_member_path(@member.id), class: "btn btn-outline-warning" %>
-      <%= link_to t('defaults.destroy'), admin_member_path(@member.id), method: :delete, data: { confirm: t('defaults.are_you_sure') }, class: "btn btn-outline-danger" %>
+    <div class="d-flex justify-content-end">
+      <%= link_to t('defaults.edit'),
+                  [:edit, :admin, @member],
+                  class: "btn btn-outline-warning mr-2" %>
+      <%= button_to t('defaults.destroy'),
+                    [:admin, @member],
+                    method: :delete,
+                    data: {
+                      controller: :confirm,
+                      confirm_message_value: t('defaults.are_you_sure')
+                    },
+                    class: "btn btn-outline-danger" %>
     </div>
 
     <div class="clearfix"></div>
@@ -74,14 +83,29 @@
                 <td><%= link_to course.title, admin_course_path(course.id) %></td>
                 <td><%= course.category.title %></td>
                 <td><%= course.weekday %></td>
-                <td><%= link_to t('.remove_from_course'), unlink_course_admin_subscription_path(subscription.id, course_id: course.id), method: :delete, data: { confirm: t('.remove_from_course_are_you_sure',member_full_name: @member.full_name, course_title: course.title) }, class: "btn btn-outline-danger btn-sm" %></td>
+                <td>
+                  <%= button_to t('.remove_from_course'),
+                                unlink_course_admin_subscription_path(subscription.id, course_id: course.id),
+                                method: :delete,
+                                data: {
+                                  controller: :confirm,
+                                  confirm_message_value: t(
+                                    '.remove_from_course_are_you_sure',
+                                    member_full_name: @member.full_name,
+                                    course_title: course.title
+                                  )
+                                },
+                                class: "btn btn-outline-danger btn-sm" %>
+                </td>
               </tr>
             <% end %>
           </tbody>
         </table>
       <% end %>
     <% else %>
-      <%= link_to t('.new_subscription'), new_admin_subscription_path(member_id: @member.id), class: 'btn btn-primary float-right' %>
+      <%= link_to t('.new_subscription'),
+                  new_admin_subscription_path(member_id: @member.id),
+                  class: 'btn btn-primary float-right' %>
     <% end %>
   </div>
 </div>

@@ -128,10 +128,29 @@
         <div class="dropdown mr-1 float-right">
           <button type="button" class="btn btn-primary dropdown-toggle" id="dropdownMenuOffset" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%= t('defaults.action') %></button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
-            <%= link_to t('defaults.edit'), edit_admin_subscription_path(@subscription.id), class: "dropdown-item" %>
-            <%= link_to t('defaults.confirm'), confirm_admin_subscription_path(@subscription.id), method: :put, class: "dropdown-item" unless @subscription.confirmed? %>
-            <%= link_to t('defaults.archive'), archive_admin_subscription_path(@subscription.id), method: :put, class: "dropdown-item" unless @subscription.archived? %>
-            <%= link_to t('defaults.destroy'), admin_subscription_path(@subscription.id), method: :delete, data: { confirm: t('defaults.are_you_sure') }, class: "dropdown-item" %>
+            <%= link_to t('defaults.edit'),
+                        [:edit, :admin, @subscription],
+                        class: "dropdown-item" %>
+            <%= button_to(
+              t('defaults.confirm'),
+              [:confirm, :admin, @subscription],
+              method: :put,
+              class: "dropdown-item"
+            ) unless @subscription.confirmed? %>
+            <%= button_to(
+              t('defaults.archive'),
+              [:archive, :admin, @subscription],
+              method: :put,
+              class: "dropdown-item"
+            ) unless @subscription.archived? %>
+            <%= button_to t('defaults.destroy'),
+                          [:admin, @subscription],
+                          method: :delete,
+                          data: {
+                            controller: :confirm,
+                            confirm_message_value: t('defaults.are_you_sure')
+                          },
+                          class: "dropdown-item" %>
           </div>
         </div>
       </div>
