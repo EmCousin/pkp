@@ -27,10 +27,8 @@ window.Turbo = Turbo;
 import * as ActiveStorage from '@rails/activestorage';
 ActiveStorage.start();
 
-import Rails from '@rails/ujs';
-Rails.start();
-
 import '@stripe/stripe-js';
+import 'tail.select.js/langs/tail.select-fr';
 
 import 'stylesheets/application.scss';
 

@@ -140,6 +140,7 @@ fr:
         category_id: Type de cours
         fee: Cotisation
         year: Année
+        member: Membre
         member_id: Membre
         course_ids: Cours
         courses: Cours
@@ -259,6 +260,7 @@ fr:
         success: Inscription retirée
       form:
         users: Membres
+        select_a_member: Choisissez un membre
     invoices:
       show:
         generate_invoice: Génerer cette facture

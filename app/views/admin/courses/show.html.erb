@@ -4,8 +4,17 @@
 <div class="row pt-2">
   <div class="col-8 offset-2">
     <div class="float-right">
-      <%= link_to t('defaults.edit'), edit_admin_course_path(@course.id), class: "btn btn-outline-warning btn-sm" %>
-      <%= link_to t('defaults.destroy'), admin_course_path(@course.id), method: :delete, data: { confirm: t('defaults.are_you_sure') }, class: "btn btn-outline-danger btn-sm" %>
+      <%= link_to t('defaults.edit'),
+                  [:edit, :admin, @course],
+                  class: "btn btn-outline-warning btn-sm" %>
+      <%= button_to t('defaults.destroy'),
+                    [:admin, course],
+                    method: :delete,
+                    data: {
+                      controller: :confirm,
+                      confirm_message_value: t('defaults.are_you_sure')
+                    },
+                    class: "btn btn-outline-danger btn-sm" %>
     </div>
 
     <p>
@@ -76,7 +85,7 @@
               </td>
               <td><%= mail_to subscription.member.email, subscription.member.email %></td>
               <td><%= Subscription.human_attribute_name(subscription.status) %></td>
-              <td><%= link_to t('.remove_from_course'),unlink_course_admin_subscription_path(subscription.id, course_id: @course.id), method: :delete, data: { confirm: t('.remove_from_course_are_you_sure', member_full_name: subscription.member.full_name, course_title: @course.title) }, class: "btn btn-outline-danger btn-sm" %></td>
+              <td><%= link_to t('.remove_from_course'),unlink_course_admin_subscription_path(subscription.id, course_id: @course.id), method: :delete, data: { controller: :confirm, confirm_message_value: t('.remove_from_course_are_you_sure', member_full_name: subscription.member.full_name, course_title: @course.title) }, class: "btn btn-outline-danger btn-sm" %></td>
             </tr>
           <% end %>
         <% end %>

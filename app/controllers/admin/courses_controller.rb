@@ -18,7 +18,7 @@ module Admin
     def create
       @course = Course.new(course_params)
       if @course.save
-        redirect_to admin_courses_path, notice: t('.success')
+        redirect_to admin_courses_path, notice: t('.success'), status: :see_other
       else
         render :new, status: :unprocessable_entity
       end

@@ -15,7 +15,7 @@ module Admin
         content_type: Mime[:pdf]
       )
 
-      redirect_to admin_subscription_path(@subscription.id), notice: t('.success')
+      redirect_to admin_subscription_path(@subscription.id), notice: t('.success'), status: :see_other
     end
 
     private

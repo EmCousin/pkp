@@ -39,7 +39,7 @@
         class="dropdown-menu"
         aria-labelledby="dropdownMenuSubscription<%= subscription.id %>"
       >
-        <%= link_to t('.download_subscription_form'), rails_blob_path(subscription.form), disposition: "attachment", class: "dropdown-item" unless subscription.signed_form.attached? %>
+        <%= link_to t('.download_subscription_form'), rails_blob_path(subscription.form), disposition: "attachment", class: "dropdown-item" if subscription.form.attached? %>
 
         <%= link_to t('.upload_signed_form'), edit_dashboard_subscription_signed_form_path(subscription.id), class: "dropdown-item" if Rails.configuration.features.signed_form[:enabled] && !subscription.signed_form.attached? %>
 
@@ -75,7 +75,7 @@
     <table class="table">
       <thead>
         <tr>
-          <th><%= link_to t('.subscription_form'), rails_blob_path(subscription.form), disposition: "attachment" %></th>
+          <th><%= link_to t('.subscription_form'), rails_blob_path(subscription.form), disposition: "attachment" if subscription.form.attached? %></th>
 
           <% if Rails.configuration.features.medical_certificate[:enabled] %>
             <th><%= Subscription.human_attribute_name(:medical_certificate) %></th>
