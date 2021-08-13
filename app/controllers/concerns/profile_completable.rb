@@ -10,13 +10,14 @@ module ProfileCompletable
   private
 
   def redirect_to_profile_completion_page!
-    redirect_to edit_user_registration_path, notice: t('defaults.complete_your_profile')
+    redirect_to %i[edit user registration],
+                notice: t('defaults.complete_your_profile')
   end
 
   def should_complete_profile?
     return false if devise_controller?
     return false unless user_signed_in?
 
-    !current_user.valid?(:account_setup)
+    current_user.invalid?(:account_setup)
   end
 end

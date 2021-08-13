@@ -3,7 +3,15 @@
     <h1 class="page-title"><%= t('.title') %></h1>
     <hr />
 
-    <%= form_for(resource, as: resource_name, url: unlock_path(resource_name), html: { method: :post }) do |f| %>
+    <%= form_for resource,
+                 as: resource_name,
+                 url: unlock_path(resource_name),
+                 html: {
+                   method: :post,
+                   data: {
+                     controller: :form
+                   }
+                 } do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
 
       <div class="form-group">
@@ -12,7 +20,9 @@
       </div>
 
       <div class="actions">
-        <%= f.submit t('.submit'), class: "btn btn-dark w-100" %>
+        <%= f.submit t('.submit'),
+                     class: "btn btn-dark w-100",
+                     data: { form_target: :submit } %>
       </div>
     <% end %>
 

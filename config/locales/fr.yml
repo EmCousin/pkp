@@ -29,7 +29,7 @@ fr:
     replace: Remplacer
     forbidden: Accès non-autorisé
     details: Détails
-    complete_your_profile: Veuillez compléter votre profil pour continuer
+    complete_your_profile: Veuillez compléter votre profil pour continuer.
   custom_error_messages:
     subscription:
       member_id:

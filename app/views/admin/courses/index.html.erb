@@ -1,7 +1,9 @@
 <h1 class="page-title"><%= t(".title") %></h1>
 <hr />
 
-<%= link_to t('defaults.new', resource: Course.model_name.human.downcase), new_admin_course_path, class: "btn btn-primary float-right mb-4" %>
+<%= link_to t('defaults.new', resource: Course.model_name.human.downcase),
+            %i[new admin course],
+            class: "btn btn-primary float-right mb-4" %>
 
 <div class="table-responsive mt-3">
   <table class="table">
@@ -18,7 +20,7 @@
       <% if @courses.empty? %>
         <tr>
           <td colspan="9" class="text-center">
-            <%= link_to t('.add_course'), new_admin_course_path %>
+            <%= link_to t('.add_course'), %i[new admin course] %>
           </td>
         </tr>
       <% else %>
@@ -44,7 +46,7 @@
                             data: {
                               controller: :confirm,
                               confirm_message_value: t('defaults.are_you_sure')
-                            ,
+                            },
                             class: "btn btn-outline-danger btn-sm" %>
               </td>
           </tr>

@@ -1,6 +1,8 @@
 <div class="row">
   <div class="col-md-6 offset-md-3">
-    <%= form_with(model: @subscription, local: true, url: dashboard_subscriptions_path, class: "mt-3") do |f| %>
+    <%= form_for [:dashboard, @subscription],
+                 class: "mt-3",
+                 data: { controller: :form } do |f| %>
       <div class="form-group">
         <%= f.label :member_id %>
         <%= f.collection_select(:member_id, current_user.members.available, :id, :full_name, { include_blank: false }, class: "form-control", onchange: "this.form.submit();") %>
@@ -49,7 +51,9 @@
 
       <div class="actions d-flex mt-5">
         <%= link_to t('defaults.back'), dashboard_index_path, class: "btn btn-link flex-fill" %>
-        <%= f.submit t('defaults.save'), class: "btn btn-dark flex-fill" %>
+        <%= f.submit t('defaults.save'),
+                     class: "btn btn-dark flex-fill",
+                     data: { form_target: :submit } %>
       </div>
     <% end %>
   </div>
