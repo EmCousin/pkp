@@ -3,7 +3,10 @@
     <h1 class="page-title"><%= t('defaults.login') %></h1>
     <hr />
 
-    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+    <%= form_for resource,
+                 as: resource_name,
+                 url: session_path(resource_name),
+                 data: { controller: :form } do |f| %>
       <div class="form-group">
         <%= f.label :email %>
         <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
@@ -21,7 +24,9 @@
             <%= f.label :remember_me %>
           </div>
         <% end %>
-        <%= f.submit t('defaults.login'), class: "btn btn-dark btn-lg w-100" %>
+        <%= f.submit t('defaults.login'),
+                     class: "btn btn-dark btn-lg w-100",
+                     data: { form_target: :submit } %>
       </div>
     <% end %>
 

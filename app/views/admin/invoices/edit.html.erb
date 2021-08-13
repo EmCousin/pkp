@@ -1,5 +1,6 @@
 <div class="container">
-  <%= form_with(model: @subscription, local: true, url:  admin_subscription_invoice_path(@subscription.id)) do |form| %>
+  <%= form_for [:admin, @subscription, :invoice],
+               data: { controller: :form } do |form| %>
     <% if @subscription.errors.any? %>
       <div id="error_explanation">
         <h2><%= pluralize(@subscription.errors.count, "error") %> prohibited this invoice from being generated:</h2>
@@ -24,8 +25,10 @@
     </div>
 
     <div class="actions">
-      <%= form.submit t('defaults.save'), class: "btn btn-dark float-lg-right" %>
-      <%= link_to t('defaults.back'), admin_subscription_path(@subscription.id), class: "btn btn-link float-left" %>
+      <%= form.submit t('defaults.save'),
+                      class: "btn btn-dark float-lg-right",
+                      data: { form_target: :submit } %>
+      <%= link_to t('defaults.back'), [:admin, @subscription], class: "btn btn-link float-left" %>
     </div>
   <% end %>
 </div>

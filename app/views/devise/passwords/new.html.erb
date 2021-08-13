@@ -4,7 +4,13 @@
 
     <hr />
 
-    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+    <%= form_for resource,
+                 as: resource_name,
+                 url: password_path(resource_name),
+                 html: {
+                   method: :post,
+                   data: { controller: :form }
+                 } do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
 
       <div class="form-group">
@@ -13,7 +19,9 @@
       </div>
 
       <div class="actions mt-2">
-        <%= f.submit t('defaults.send_reset_password_instructions'), class: "btn btn-dark btn-lg w-100" %>
+        <%= f.submit t('defaults.send_reset_password_instructions'),
+                     class: "btn btn-dark btn-lg w-100",
+                     data: { form_target: :submit } %>
       </div>
 
       <div class="mt-2">

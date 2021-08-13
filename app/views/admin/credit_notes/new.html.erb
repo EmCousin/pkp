@@ -1,5 +1,6 @@
 <div class="container">
-  <%= form_with(model: @subscription, method: :post, local: true, url: admin_subscription_credit_notes_path(@subscription.id)) do |form| %>
+  <%= form_for [:admin, @subscription, :credit_notes],
+               data: { controller: :form } do |form| %>
     <% if @subscription.errors.any? %>
       <div id="error_explanation">
         <h2><%= pluralize(@subscription.errors.count, "error") %> prohibited this credit note to be generated:</h2>
@@ -18,8 +19,10 @@
     </div>
 
     <div class="actions">
-      <%= form.submit t('defaults.save'), class: "btn btn-dark float-lg-right" %>
-      <%= link_to t('defaults.back'), admin_subscriptions_path, class: "btn btn-link float-left" %>
+      <%= form.submit t('defaults.save'),
+                      class: "btn btn-dark float-lg-right",
+                      data: { form_target: :submit ] %>
+      <%= link_to t('defaults.back'), %i[admin subscriptions], class: "btn btn-link float-left" %>
     </div>
   <% end %>
 </div>

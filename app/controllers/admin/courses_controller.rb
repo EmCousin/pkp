@@ -18,7 +18,7 @@ module Admin
     def create
       @course = Course.new(course_params)
       if @course.save
-        redirect_to admin_courses_path, notice: t('.success'), status: :see_other
+        redirect_to %i[admin courses], notice: t('.success'), status: :see_other
       else
         render :new, status: :unprocessable_entity
       end
@@ -28,7 +28,7 @@ module Admin
 
     def update
       if @course.update(course_params)
-        redirect_to admin_courses_path, notice: t('.success')
+        redirect_to %i[admin courses], notice: t('.success')
       else
         render :edit, status: :unprocessable_entity
       end
@@ -36,7 +36,7 @@ module Admin
 
     def destroy
       @course.destroy
-      redirect_to admin_courses_path, notice: t('.success')
+      redirect_to %i[admin courses], notice: t('.success')
     end
 
     private

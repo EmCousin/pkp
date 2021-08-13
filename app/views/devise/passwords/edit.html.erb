@@ -2,7 +2,13 @@
   <div class="col-md-6 offset-md-3">
     <h2><%= t('.title') %></h2>
 
-    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
+    <%= form_for resource,
+                 as: resource_name,
+                 url: password_path(resource_name),
+                 html: {
+                   method: :put,
+                   data: { controller: :form }
+                 } do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
       <%= f.hidden_field :reset_password_token %>
 
@@ -23,7 +29,9 @@
         <div class="float-left">
           <%= render "devise/shared/links" %>
         </div>
-        <%= f.submit t('defaults.save'), class: "btn btn-dark btn-lg float-right" %>
+        <%= f.submit t('defaults.save'),
+                     class: "btn btn-dark btn-lg float-right",
+                     data: { form_target: :submit } %>
       </div>
     <% end %>
   </div>

@@ -1,15 +1,5 @@
 <div class="container">
-  <%= form_for [:admin, @subscription] do |form| %>
-    <% if @subscription.errors.any? %>
-      <div id="error_explanation" class="error_explanation">
-        <ul>
-        <% @subscription.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-        </ul>
-      </div>
-    <% end %>
-
+  <%= form_for [:admin, @subscription], data: { controller: :form } do |form| %>
     <div class="form-group">
       <%= form.label :member_id %><br />
       <%= form.grouped_collection_select :member_id,
@@ -22,6 +12,18 @@
                                          class: "form-control",
                                          placeholder: t('.select_a_member'),
                                          data: { controller: 'select' } %>
+      <% if form.object.errors[:member_id].any? || form.object.errors[:member].any? %>
+        <div id="error_explanation" class="error_explanation">
+          <ul>
+            <% form.object.errors.full_messages_for(:member_id).each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+            <% form.object.errors.full_messages_for(:member).each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+          </ul>
+        </div>
+      <% end %>
     </div>
 
     <div class="form-group">
@@ -32,10 +34,25 @@
           <%= b.label(class: "form-check-label") %>
         </div>
       <% end %>
+
+      <% if form.object.errors[:course_ids].any? || form.object.errors[:courses].any? %>
+        <div id="error_explanation" class="error_explanation">
+          <ul>
+            <% form.object.errors.full_messages_for(:course_ids).each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+            <% form.object.errors.full_messages_for(:courses).each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+          </ul>
+        </div>
+      <% end %>
     </div>
 
     <div class="actions">
-      <%= form.submit t('defaults.save'), class: "btn btn-dark float-lg-right" %>
+      <%= form.submit t('defaults.save'),
+                      class: "btn btn-dark float-lg-right",
+                      data: { form_target: :submit } %>
       <%= link_to t('defaults.back'), %i[admin subscriptions], class: "btn btn-link float-left" %>
     </div>
   <% end %>

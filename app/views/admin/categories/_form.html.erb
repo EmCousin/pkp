@@ -1,10 +1,10 @@
 <div class="row">
   <div class="col-md-6 offset-md-3">
-    <%= form_with(model: category, local: true, url: url) do |form| %>
-      <% if category.errors.any? %>
+    <%= form_for [:admin, @category], data: { controller: :form } do |form| %>
+      <% if form.object.errors.any? %>
         <div id="error_explanation" class="error_explanation">
           <ul>
-            <% category.errors.full_messages.each do |message| %>
+            <% form.object.errors.full_messages.each do |message| %>
               <li><%= message %></li>
             <% end %>
           </ul>
@@ -28,7 +28,9 @@
 
       <div class="actions">
         <%= link_to t('defaults.back'), :back, class: "btn btn-link float-left" %>
-        <%= form.submit t('defaults.save'), class: "btn btn-dark float-lg-right" %>
+        <%= form.submit t('defaults.save'),
+                        class: "btn btn-dark float-lg-right",
+                        data: { form_target: :submit } %>
       </div>
     <% end %>
   </div>

@@ -1,6 +1,8 @@
 <div class="row">
   <div class="col-md-6 offset-md-3">
-    <%= form_with(model: @member, local: true, url: dashboard_members_path, class: "mt-3") do |f| %>
+    <%= form_for [:dashboard, @member],
+                 class: "mt-3",
+                 data: { controller: :form } do |f| %>
       <% if @member.errors.any? %>
         <div id="error_explanation">
           <h2><%= pluralize(@member.errors.count, "error") %> prohibited this member from being saved:</h2>
@@ -71,7 +73,9 @@
 
       <div class="actions d-flex mt-3">
         <%= link_to t('defaults.back'), dashboard_index_path, class: "btn btn-link flex-fill" %>
-        <%= f.submit t('defaults.save'), class: "btn btn-dark flex-fill" %>
+        <%= f.submit t('defaults.save'),
+            class: "btn btn-dark flex-fill",
+            data: { form_target: :submit } %>
       </div>
     <% end %>
   </div>
