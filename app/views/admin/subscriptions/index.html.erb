@@ -1,12 +1,15 @@
 <h1 class="page-title"><%= t(".title") %> <%= Subscription.current_year %> - <%= Subscription.current_year + 1%></h1>
 <hr />
 
-<%= form_with(url: %i[admin subscriptions], local: true, method: :get) do %>
+<%= form_with url: %i[admin subscriptions],
+              local: true,
+              method: :get,
+              class: "d-flex align-items-center w-25" do %>
   <%= select_tag(
     :status,
     options_for_select(Subscription.statuses, params[:status]),
     include_blank: 'Statut',
-    class: 'h-25'
+    class: 'h-25 form-control mr-2'
   ) %>
   <%= select_tag(
     :year,
@@ -15,7 +18,7 @@
       params[:year] || Subscription.current_year,
     ),
     include_blank: 'Année',
-    class: 'h-25'
+    class: 'h-25 form-control mr-2'
   ) %>
   <%= submit_tag("Filtrer", class: "btn btn-success") %>
 <% end %>
