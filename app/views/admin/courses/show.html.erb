@@ -49,9 +49,33 @@
 
     <hr />
 
-    <%= link_to t('defaults.back'), :back, class: "btn btn-link float-left" %>
+    <div class="d-flex justify-content-between">
+      <%= link_to t('defaults.back'), :back, class: "btn btn-link" %>
 
-    <%= link_to t('.new_subscription', resource: Subscription.model_name.human.downcase), new_admin_subscription_path(course_ids: @course.id), class: "btn btn-primary float-right" %>
+      <%= link_to t('.new_subscription', resource: Subscription.model_name.human.downcase), new_admin_subscription_path(course_ids: @course.id), class: "btn btn-primary" %>
+    </div>
+
+    <%= form_with url: [:admin, @course],
+              local: true,
+              method: :get,
+              class: "d-flex align-items-center w-50 mt-4" do %>
+      <%= select_tag(
+        :status,
+        options_for_select(Subscription.statuses, params[:status]),
+        include_blank: 'Statut',
+        class: 'h-25 form-control mr-2'
+      ) %>
+      <%= select_tag(
+        :year,
+        options_for_select(
+          (2019..Subscription.current_year).to_a.reverse,
+          params[:year] || Subscription.current_year,
+        ),
+        include_blank: 'Année',
+        class: 'h-25 form-control mr-2'
+      ) %>
+      <%= submit_tag("Filtrer", class: "btn btn-success") %>
+    <% end %>
 
     <div class="clearfix"></div>
 
@@ -67,14 +91,20 @@
       </thead>
 
       <tbody>
-        <% if @course.subscriptions.empty? %>
+        <% if @course.subscriptions
+                     .filter_by_status(params[:status])
+                     .where(year: params[:year] || Subscription.current_year)
+                     .empty? %>
           <tr>
             <td colspan="9" class="text-center">
               <%= link_to t('.new_subscription'), new_admin_subscription_path, class: "btn btn-primary" %>
             </td>
           </tr>
         <% else %>
-          <% @course.subscriptions.includes(:member).each do |subscription| %>
+          <% @course.subscriptions
+                    .filter_by_status(params[:status])
+                    .where(year: params[:year] || Subscription.current_year)
+                    .includes(:member).each do |subscription| %>
             <tr class=<%= subscription.status_color %>>
               <td><%= link_to subscription.id , admin_subscription_path(subscription.id) %></td>
               <td>
