@@ -1,32 +1,36 @@
 <h1 class="page-title"><%= t(".title") %> <%= Subscription.current_year %> - <%= Subscription.current_year + 1%></h1>
 <hr />
+<div class="row mt-4">
+  <%= form_with url: %i[admin subscriptions],
+                local: true,
+                method: :get,
+                class: "col-sm-6" do %>
+    <div class="d-flex align-items-center">
+      <%= select_tag(
+        :status,
+        options_for_select(Subscription.statuses, params[:status]),
+        include_blank: 'Statut',
+        class: 'h-25 form-control mr-2'
+      ) %>
+      <%= select_tag(
+        :year,
+        options_for_select(
+          (2019..Subscription.current_year).to_a.reverse,
+          params[:year] || Subscription.current_year,
+        ),
+        include_blank: 'Année',
+        class: 'h-25 form-control mr-2'
+      ) %>
+      <%= submit_tag("Filtrer", class: "btn btn-success") %>
+    </div>
+  <% end %>
 
-<%= form_with url: %i[admin subscriptions],
-              local: true,
-              method: :get,
-              class: "d-flex align-items-center w-25" do %>
-  <%= select_tag(
-    :status,
-    options_for_select(Subscription.statuses, params[:status]),
-    include_blank: 'Statut',
-    class: 'h-25 form-control mr-2'
-  ) %>
-  <%= select_tag(
-    :year,
-    options_for_select(
-      (2019..Subscription.current_year).to_a.reverse,
-      params[:year] || Subscription.current_year,
-    ),
-    include_blank: 'Année',
-    class: 'h-25 form-control mr-2'
-  ) %>
-  <%= submit_tag("Filtrer", class: "btn btn-success") %>
-<% end %>
-
-
-<%= link_to t('.new'),
-            %i[new admin subscription],
-            class: "btn btn-primary float-right mb-5" %>
+  <div class="col-sm-6 col-md-4 offset-md-2 mt-2 mt-sm-0">
+    <%= link_to t('.new'),
+              %i[new admin subscription],
+              class: "btn btn-primary float-right" %>
+  </div>
+</div>
 
 <table class="table mt-5">
   <thead>

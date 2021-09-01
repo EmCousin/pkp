@@ -55,27 +55,30 @@
       <%= link_to t('.new_subscription', resource: Subscription.model_name.human.downcase), new_admin_subscription_path(course_ids: @course.id), class: "btn btn-primary" %>
     </div>
 
-    <%= form_with url: [:admin, @course],
-              local: true,
-              method: :get,
-              class: "d-flex align-items-center w-50 mt-4" do %>
-      <%= select_tag(
-        :status,
-        options_for_select(Subscription.statuses, params[:status]),
-        include_blank: 'Statut',
-        class: 'h-25 form-control mr-2'
-      ) %>
-      <%= select_tag(
-        :year,
-        options_for_select(
-          (2019..Subscription.current_year).to_a.reverse,
-          params[:year] || Subscription.current_year,
-        ),
-        include_blank: 'Année',
-        class: 'h-25 form-control mr-2'
-      ) %>
-      <%= submit_tag("Filtrer", class: "btn btn-success") %>
-    <% end %>
+    <div class="row mt-4">
+      <%= form_with url: [:admin, @course],
+                local: true,
+                method: :get,
+                class: "col-sm-12 col-md-8 col-lg-6" do %>
+        <div class= "d-flex align-items-center">
+        <%= select_tag(
+          :status,
+          options_for_select(Subscription.statuses, params[:status]),
+          include_blank: 'Statut',
+          class: 'h-25 form-control mr-2'
+        ) %>
+        <%= select_tag(
+          :year,
+          options_for_select(
+            (2019..Subscription.current_year).to_a.reverse,
+            params[:year] || Subscription.current_year,
+          ),
+          include_blank: 'Année',
+          class: 'h-25 form-control mr-2'
+        ) %>
+        <%= submit_tag("Filtrer", class: "btn btn-success") %>
+      <% end %>
+    </div>
 
     <div class="clearfix"></div>
 
