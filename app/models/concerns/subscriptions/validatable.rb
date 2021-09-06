@@ -22,10 +22,10 @@ module Subscriptions
       validate :courses_are_of_the_same_category
       validate :maximum_one_course_per_day
 
-      with_options if: :category? do
-        validate :minimum_age_permited
-        validate :maximum_age_permited
-      end
+      # with_options if: :category? do
+      #   validate :minimum_age_permitted
+      #   validate :maximum_age_permitted
+      # end
     end
 
     class_methods do
@@ -57,11 +57,11 @@ module Subscriptions
       errors.add(:courses, :unique_weekday) if weekdays.uniq.size < weekdays.size
     end
 
-    def minimum_age_permited
+    def minimum_age_permitted
       errors.add(:member, :too_young) if member_too_young?
     end
 
-    def maximum_age_permited
+    def maximum_age_permitted
       errors.add(:member, :too_old) if member_too_old?
     end
 

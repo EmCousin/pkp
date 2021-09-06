@@ -7,6 +7,8 @@ module Subscriptions
     private
 
     def process_after_save(subscription)
+      subscription.reload
+
       subscription.form.attach(
         io: StringIO.new(pdf_from_subscription(subscription)),
         filename: 'fiche.pdf',
