@@ -7324,10 +7324,10 @@ svgo@^1.0.0:
     unquote "~1.1.1"
     util.promisify "~1.0.0"
 
-tail.select.js@^0.5.21:
-  version "0.5.21"
-  resolved "https://registry.yarnpkg.com/tail.select.js/-/tail.select.js-0.5.21.tgz#7471ebc62e5f1fc558247d01ccfef169427e2c65"
-  integrity sha512-DqdImF2ufg76BFnNKdXN4koMOMplfvPiKjLlmvFDbji/2Aozs5EQoABPtCuAYtUmnXGgp9ZcREjzfSgCXjP7uQ==
+tail.select.js@^0.5.22:
+  version "0.5.22"
+  resolved "https://registry.yarnpkg.com/tail.select.js/-/tail.select.js-0.5.22.tgz#d00d2625f0115cfc07374c6730556bbef6d68abb"
+  integrity sha512-IwaQsZ2VJXKGjpFt7MxRlZ5khajmiah1vS5uC6T/RhJZgfgiRWDAhQprQ3lLf1QKvSJiPorkeXgJv2u0OeVh5A==
 
 tapable@^1.0.0, tapable@^1.1.3:
   version "1.1.3"
