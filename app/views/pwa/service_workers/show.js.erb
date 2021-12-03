@@ -6,8 +6,6 @@ function onInstall(event) {
   event.waitUntil(
     caches.open(CACHE_NAME).then(function prefill(cache) {
       return cache.addAll([
-        "<%= asset_pack_path 'application.js' %>",
-        "<%= asset_pack_path 'media/images/capacity.webp' %>",
         "<%= offline_errors_path %>",
         '/favicon.ico',
         '/assets/logopkp.webp'

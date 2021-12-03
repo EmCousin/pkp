@@ -15,12 +15,15 @@ gem 'rails', '~> 6'
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
 gem 'puma', '~> 4.3'
-# Use SCSS for stylesheets
-gem 'sassc-rails'
-# Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
+
+# Assets
+gem 'cssbundling-rails'
+gem 'hotwire-rails'
+gem 'jquery-rails'
+gem 'jsbundling-rails'
+gem 'sassc-rails'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
@@ -31,8 +34,6 @@ gem 'redis', '~> 4.0'
 gem 'aws-sdk-s3', require: false
 gem 'devise'
 gem 'devise-i18n'
-gem 'hotwire-rails'
-gem 'jquery-rails'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 gem 'kaminari'
@@ -40,7 +41,6 @@ gem 'phonelib'
 gem 'rack-cors', require: 'rack/cors'
 gem 'sidekiq'
 gem 'stripe'
-gem 'webpacker', '~> 4.x'
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary'
 
@@ -76,8 +76,6 @@ group :development do
   gem 'rubocop', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
-  gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
