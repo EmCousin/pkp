@@ -41,7 +41,7 @@ describe Members::Available, type: :model do
     end
 
     context 'when the year is in the future' do
-      let(:year) { Subscription.current_year + 1 }
+      let(:year) { Subscription.next_year }
 
       it { expect(Member.available(year)).to eq Member.none }
     end

@@ -1,4 +1,4 @@
-<h1 class="page-title"><%= t(".title") %> <%= Subscription.current_year %> - <%= Subscription.current_year + 1%></h1>
+<h1 class="page-title"><%= t(".title") %> <%= Subscription.current_year %> - <%= Subscription.next_year %></h1>
 <hr />
 <div class="row mt-4">
   <%= form_with url: %i[admin subscriptions],

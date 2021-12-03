@@ -15,7 +15,7 @@
       <%= render 'subscription_instructions' %>
     </div>
     <% else %>
-      <p><%= t('.not_yet_subscribed', year: "#{Subscription.current_year} - #{Subscription.current_year + 1}") %></p>
+      <p><%= t('.not_yet_subscribed', year: "#{Subscription.current_year} - #{Subscription.next_year}") %></p>
       <%= link_to t('.choose_my_courses'), new_dashboard_subscription_path, class: "btn btn-primary w-100" %>
     <% end %>
   </div>

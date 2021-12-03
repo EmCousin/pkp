@@ -81,7 +81,7 @@ describe Courses::Available, type: :model do
       end
 
       context 'when the year is in the future' do
-        let(:year) { Subscription.current_year + 1 }
+        let(:year) { Subscription.next_year }
 
         it 'returns an empty list' do
           expect(Course.available(year)).to eq Course.none

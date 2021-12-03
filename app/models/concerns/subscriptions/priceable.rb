@@ -8,7 +8,10 @@ module Subscriptions
 
     class_methods do
       def winter_time?
-        Time.now.month.in?(1...Course::VACATION_MONTHS.first)
+        Range.new(
+          DateTime.new(Subscription.current_year, 12, 20).beginning_of_day,
+          DateTime.new(Subscription.next_year, Course::VACATION_MONTHS.first, 1).beginning_of_day
+        ).cover?(Time.current)
       end
     end
 

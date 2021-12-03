@@ -120,6 +120,18 @@ describe Subscriptions::Priceable, type: :model do
     end
   end
 
+  describe '.winter_time?' do
+    let(:current_time) { DateTime.new(Subscription.current_year, 9).end_of_month }
+
+    it { travel_to(current_time) { expect(Subscription.winter_time?).to be false } }
+
+    context 'when it is between December 20 and July 1st' do
+      let(:current_time) { DateTime.new(Subscription.current_year, 12, 30).end_of_day }
+
+      it { travel_to(current_time) { expect(Subscription.winter_time?).to be true } }
+    end
+  end
+
   describe '#fee_cents' do
     let(:category_title) { 'Kidz (8 - 9 ans)' }
     let(:count) { 1 }

@@ -33,6 +33,10 @@ module Subscriptions
         now = Time.current
         now.month < Course::VACATION_MONTHS.first ? now.year - 1 : now.year
       end
+
+      def next_year
+        current_year + 1
+      end
     end
 
     private
