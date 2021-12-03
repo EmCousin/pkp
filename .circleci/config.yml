@@ -9,7 +9,7 @@ jobs:
       CC_TEST_REPORTER_ID: 42938d77acb3fd77b5bff9086dff2a141fc9c24eed1bcc5617088368891d5817
     docker:
     # specify the version you desire here
-       - image: circleci/ruby:3.0.3-node-browsers
+       - image: cimg/ruby:3.0.3-browsers
          environment:
            RAILS_ENV: test
            PGHOST: 127.0.0.1
