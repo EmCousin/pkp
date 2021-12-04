@@ -4,14 +4,18 @@ module Subscriptions
   module Priceable
     extend ActiveSupport::Concern
 
-    WINTER_PRICING = [130, 190, 220].freeze
+    WINTER_PRICING = [180, 230].freeze
 
     class_methods do
       def winter_time?
+        winter_time_range.cover?(Time.current)
+      end
+
+      def winter_time_range
         Range.new(
           DateTime.new(Subscription.current_year, 12, 20).beginning_of_day,
           DateTime.new(Subscription.next_year, Course::VACATION_MONTHS.first, 1).beginning_of_day
-        ).cover?(Time.current)
+        )
       end
     end
 
