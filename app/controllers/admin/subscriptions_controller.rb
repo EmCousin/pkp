@@ -27,7 +27,7 @@ module Admin
       @subscription = Subscription.new(subscription_params)
       if @subscription.save
         process_after_save(@subscription)
-        redirect_to admin_subscriptions_path, notice: t('.success'), status: :see_other
+        redirect_to %i[admin subscriptions], notice: t('.success'), status: :see_other
       else
         render :new, status: :unprocessable_entity
       end
@@ -38,7 +38,7 @@ module Admin
     def update
       if @subscription.update(subscription_params)
         process_after_save(@subscription)
-        redirect_to admin_subscription_path(@subscription.id), notice: t('.success')
+        redirect_to [:admin, @subscription], notice: t('.success')
       else
         render :edit, status: :unprocessable_entity
       end
@@ -46,30 +46,30 @@ module Admin
 
     def destroy
       @subscription.destroy
-      redirect_to admin_subscriptions_path, notice: t('.success')
+      redirect_to %i[admin subscriptions], notice: t('.success')
     end
 
     def unlink_course
       @course = @subscription.courses.find(params[:course_id])
       @subscription.courses_subscriptions.destroy_by(course_id: @course.id)
-      redirect_back fallback_location: root_path, notice: t('.success')
+      redirect_back fallback_location: :root, notice: t('.success')
     end
 
     def confirm
       if @subscription.confirmed?
-        redirect_back fallback_location: admin_subscriptions_path, alert: t('.failure')
+        redirect_back fallback_location: %i[admin subscriptions], alert: t('.failure')
       else
         @subscription.confirmed!
-        redirect_back fallback_location: admin_subscriptions_path, notice: t('.success')
+        redirect_back fallback_location: %i[admin subscriptions], notice: t('.success')
       end
     end
 
     def archive
       if @subscription.archived?
-        redirect_back fallback_location: admin_subscriptions_path, alert: t('.failure')
+        redirect_back fallback_location: %i[admin subscriptions], alert: t('.failure')
       else
         @subscription.archived!
-        redirect_back fallback_location: admin_subscriptions_path, notice: t('.success')
+        redirect_back fallback_location: %i[admin subscriptions], notice: t('.success')
       end
     end
 
