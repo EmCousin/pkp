@@ -141,7 +141,7 @@ describe Subscriptions::Priceable, type: :model do
 
   describe 'winter pricing' do
     it 'has a constant WINTER_PRICING' do
-      expect(described_class::WINTER_PRICING).to eq [130, 190, 220].freeze
+      expect(described_class::WINTER_PRICING).to eq [180, 230].freeze
     end
 
     let(:travel_date) { DateTime.new(Time.now.year, 1).end_of_month }
@@ -149,24 +149,16 @@ describe Subscriptions::Priceable, type: :model do
     context 'when there is 1 course' do
       let(:count) { 1 }
 
-      it 'should set the fee to 130' do
-        expect(subject.fee).to eq 130
+      it 'should set the fee to 180' do
+        expect(subject.fee).to eq 180
       end
     end
 
     context 'when there are 2 courses' do
       let(:count) { 2 }
 
-      it 'should set the fee to 190' do
-        expect(subject.fee).to eq 190
-      end
-    end
-
-    context 'when there are 3 courses' do
-      let(:count) { 3 }
-
-      it 'should set the fee to 220' do
-        expect(subject.fee).to eq 220
+      it 'should set the fee to 230' do
+        expect(subject.fee).to eq 230
       end
     end
   end
