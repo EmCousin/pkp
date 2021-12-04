@@ -70,7 +70,7 @@ fr:
           attributes:
             courses:
               must_exist: ":  minimum un cours"
-              limit_exceeded: ": maximum trois cours"
+              limit_exceeded: ": maximum %{count} cours"
               unique_category: ": Les cours doivent être de la même catégorie"
               unique_weekday: ": Les cours ne doivent pas être le même jour"
             member:

@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe Subscriptions::Validatable, type: :model do
+  include ActiveSupport::Testing::TimeHelpers
+
   subject { subscription }
 
   let(:category) { build :category }
@@ -23,13 +25,27 @@ describe Subscriptions::Validatable, type: :model do
       context 'when the subscription has no courses' do
         let(:courses) { [] }
 
-        it { expect(subscription.errors.details[:courses]).to include({ error: :must_exist }) }
+        it { expect(subscription.errors.of_kind?(:courses, :must_exist)).to be true }
       end
 
       context 'when the subscription has more than three courses' do
         let(:courses) { build_list :course, 4 }
 
-        it { expect(subscription.errors.details[:courses]).to include({ error: :limit_exceeded }) }
+        it { expect(subscription.errors.of_kind?(:courses, :limit_exceeded)).to be true }
+
+        context "when it is winter time" do
+          let(:courses) { build_list :course, 3 }
+          let(:winter_time) { 1.month.after(Subscription.winter_time_range.first) }
+
+          before do
+            travel_to(winter_time)
+            subscription.validate
+          end
+
+          it { expect(subscription.errors.of_kind?(:courses, :limit_exceeded)).to be true }
+
+          after { travel_back }
+        end
       end
 
       context 'when the subscription has courses from different categories' do
@@ -40,13 +56,13 @@ describe Subscriptions::Validatable, type: :model do
           ]
         end
 
-        it { expect(subscription.errors.details[:courses]).to include({ error: :unique_category }) }
+        it { expect(subscription.errors.of_kind?(:courses, :unique_category)).to be true }
       end
 
       context 'when the subscription has multiple courses the same day' do
         let(:courses) { build_list :course, 2, weekday: Course.weekdays.keys.first }
 
-        it { expect(subscription.errors.details[:courses]).to include({ error: :unique_weekday }) }
+        it { expect(subscription.errors.of_kind?(:courses, :unique_weekday)).to be true }
       end
     end
   end
