@@ -20,6 +20,7 @@ module Subscriptions
       validate :at_least_one_course?
       validate :maximum_three_courses?
       validate :maximum_two_courses?, on: :create, if: -> { Subscription.winter_time? }
+      validate :maximum_one_course?, on: :create, if: -> { Subscription.winter_time? && category_kidz? }
       validate :courses_are_of_the_same_category
       validate :maximum_one_course_per_day
 
@@ -44,6 +45,10 @@ module Subscriptions
 
     def at_least_one_course?
       errors.add(:courses, :must_exist) if courses.empty?
+    end
+
+    def maximum_one_course?
+      errors.add(:courses, :limit_exceeded, count: 1) if courses.size > 1
     end
 
     def maximum_two_courses?

@@ -12,4 +12,6 @@ class Subscription < ApplicationRecord
   belongs_to :member
   has_many :courses_subscriptions, dependent: :destroy
   has_many :courses, through: :courses_subscriptions
+
+  delegate :kidz?, :teen?, :adult?, to: :category, prefix: true, allow_nil: true
 end
