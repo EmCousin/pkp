@@ -4,11 +4,20 @@ module Subscriptions
   module Priceable
     extend ActiveSupport::Concern
 
-    WINTER_PRICING = [180, 230].freeze
-
     class_methods do
+      def spring_time?
+        spring_time_range.cover?(Time.current)
+      end
+
       def winter_time?
         winter_time_range.cover?(Time.current)
+      end
+
+      def spring_time_range
+        Range.new(
+          DateTime.new(Subscription.next_year, 4, 1).beginning_of_day,
+          DateTime.new(Subscription.next_year, Course::VACATION_MONTHS.first, 1).beginning_of_day
+        )
       end
 
       def winter_time_range
@@ -39,8 +48,31 @@ module Subscriptions
     end
 
     def pricing
-      return WINTER_PRICING if self.class.winter_time?
+      return spring_pricing if self.class.spring_time?
+      return winter_pricing if self.class.winter_time?
 
+      default_pricing
+    end
+
+    def spring_pricing
+      case category.title
+      when 'Adulte', 'Adolescent (10 - 12 ans)', 'Adolescent (13 - 15 ans)'
+        [120, 180]
+      when 'Kidz (6 - 7 ans)', 'Kidz (8 - 9 ans)'
+        [100]
+      end
+    end
+
+    def winter_pricing
+      case category.title
+      when 'Adulte', 'Adolescent (10 - 12 ans)', 'Adolescent (13 - 15 ans)'
+        [170, 230]
+      when 'Kidz (6 - 7 ans)', 'Kidz (8 - 9 ans)'
+        [130]
+      end
+    end
+
+    def default_pricing
       case category.title
       when 'Adulte'
         [200, 300, 350]

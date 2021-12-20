@@ -5,14 +5,14 @@ describe Subscriptions::Validatable, type: :model do
 
   subject { subscription }
 
-  let(:category) { build :category }
+  let(:category) { create :category }
   let(:courses) do
     [
       build(:course, category: category, weekday: Course.weekdays.keys.first),
       build(:course, category: category, weekday: Course.weekdays.keys.last)
     ]
   end
-  let(:subscription) { build :subscription, courses: courses }
+  let(:subscription) { build :subscription, courses: courses, category_id: category.id }
 
   it { is_expected.to validate_numericality_of(:fee).is_greater_than_or_equal_to(0) }
 
@@ -45,6 +45,20 @@ describe Subscriptions::Validatable, type: :model do
           it { expect(subscription.errors.of_kind?(:courses, :limit_exceeded)).to be true }
 
           after { travel_back }
+
+          context "when the subscription is for Kidz" do
+            let(:category) { create :category, :kidz }
+            let(:courses) { build_list :course, 2, category: category }
+
+            before do
+              travel_to(winter_time)
+              subscription.validate
+            end
+
+            it { expect(subscription.errors.of_kind?(:courses, :limit_exceeded)).to be true }
+
+            after { travel_back }
+          end
         end
       end
 

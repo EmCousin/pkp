@@ -30,4 +30,16 @@ class Category < ApplicationRecord
     greater_than: ->(category) { category.min_age },
     if: :min_age?
   }
+
+  def kidz?
+    max_age <= 9
+  end
+
+  def teen?
+    min_age > 9 && max_age <= 15
+  end
+
+  def adult?
+    min_age > 15
+  end
 end
