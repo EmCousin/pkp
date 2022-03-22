@@ -31,5 +31,9 @@ module Pkp
     end
 
     config.features = config_for(:features)
+
+    config.action_dispatch.default_headers = {
+      "Permissions-Policy" => "interest-cohort=()"
+    }
   end
 end
