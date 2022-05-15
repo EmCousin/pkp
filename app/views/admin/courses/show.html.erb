@@ -126,17 +126,17 @@
                                 [:edit, :admin, subscription],
                                 class: "dropdown-item" %>
 
-                    <%= button_to t('defaults.confirm_transfer'),
+                    <%= button_to t('defaults.confirmed_bank_check'),
                                   {
                                     controller: 'admin/subscriptions',
                                     action: 'update',
                                     id: subscription.id,
                                     no_notification: true,
-                                    subscription: { status: 'confirmed_transfer' }
+                                    subscription: { status: 'confirmed_bank_check' }
                                   },
                                   method: :put,
                                   class: "dropdown-item text-success" %>
-                    <%= button_to t('defaults.confirm_cash'),
+                    <%= button_to t('defaults.confirmed_cash'),
                                   {
                                     controller: 'admin/subscriptions',
                                     action: 'update',
