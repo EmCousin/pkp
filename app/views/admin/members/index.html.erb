@@ -10,30 +10,30 @@
         <%= collection_select nil, :category, Category.all, :id, :title, { prompt: t('.search_by_category'), selected: params[:category], include_blank: t('.search_by_category'), autocomplete: :off }, class: 'form-control mr-2' %>
       </div>
 
-      <div class="d-flex my-3">
+      <div class="my-3">
         <span>Afficher les champs&nbsp: </span>
 
-        <div class="d-flex align-items-center mx-3">
+        <div class="d-flex align-items-center">
           <%= check_box nil, :avatar, { checked: params[:avatar] != 'hide', autocomplete: :off }, 'show', 'hide' %>
           <%= label_tag :avatar, Member.human_attribute_name(:avatar), class: 'ml-1 mb-0' %>
         </div>
 
-        <div class="d-flex align-items-center mx-3">
+        <div class="d-flex align-items-center">
           <%= check_box nil, :name, { checked: params[:name] != 'hide', autocomplete: :off }, 'show', 'hide' %>
           <%= label_tag :name, Member.human_attribute_name(:last_name), class: 'ml-1 mb-0' %>
         </div>
 
-        <div class="d-flex align-items-center mx-3">
+        <div class="d-flex align-items-center">
           <%= check_box nil, :phone_number, { checked: params[:phone_number] != 'hide', autocomplete: :off }, 'show', 'hide' %>
           <%= label_tag :phone_number, User.human_attribute_name(:phone_number), class: 'ml-1 mb-0' %>
         </div>
 
-        <div class="d-flex align-items-center mx-3">
+        <div class="d-flex align-items-center">
           <%= check_box nil, :email, { checked: params[:email] != 'hide', autocomplete: :off }, 'show', 'hide' %>
           <%= label_tag :email, User.human_attribute_name(:email), class: 'ml-1 mb-0' %>
         </div>
 
-        <div class="d-flex align-items-center mx-3">
+        <div class="d-flex align-items-center">
           <%= check_box nil, :actions, { checked: params[:actions] != 'hide', autocomplete: :off }, 'show', 'hide' %>
           <%= label_tag :actions, 'Actions', class: 'ml-1 mb-0' %>
         </div>
