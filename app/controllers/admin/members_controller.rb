@@ -1,15 +1,19 @@
 # frozen_string_literal: true
 
+require 'csv'
+
 module Admin
   class MembersController < AdminController
+    before_action :set_members, only: :index
     before_action :set_member, only: %i[show edit update destroy]
 
     def index
-      @members = Member.search(params[:q])
-                       .page(params[:page])
-                       .per(25)
-                       .includes(:user)
-                       .with_attached_avatar
+      respond_to do |format|
+        format.html
+        format.csv do
+          respond_with_csv(:index)
+        end
+      end
     end
 
     def show; end
@@ -58,6 +62,19 @@ module Admin
         :agreed_to_advertising_right,
         user_attributes: %i[id email password address zip_code city country phone_number admin]
       )
+    end
+
+    def set_members # rubocop:disable Metrics/AbcSize
+      scope = Member.search(params[:q])
+      scope = scope.for_category(params[:category]) if params[:category].present?
+      scope = scope.page(params[:page]).per(1) unless params[:no_paginate].present?
+      @members = scope.includes(:user).with_attached_avatar
+    end
+
+    def respond_with_csv(view_name)
+      response.headers['Content-Type'] = Mime[:csv]
+      response.headers['Content-Disposition'] = 'attachment; filename=members.csv'
+      render body: render_to_string(view_name).squish.gsub('<br/>', "\n")
     end
   end
 end

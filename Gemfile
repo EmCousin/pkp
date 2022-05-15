@@ -10,7 +10,7 @@ end
 ruby '3.0.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6'
+gem 'rails', '~> 7'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
@@ -36,6 +36,7 @@ gem 'devise'
 gem 'devise-i18n'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
+gem 'image_processing', '~> 1.2'
 gem 'kaminari'
 gem 'phonelib'
 gem 'rack-cors', require: 'rack/cors'

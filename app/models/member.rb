@@ -11,5 +11,7 @@ class Member < ApplicationRecord
   has_many :subscriptions, dependent: :destroy
   has_many :courses, through: :subscriptions
 
-  has_one_attached :avatar
+  has_one_attached :avatar do |attachable|
+    attachable.variant :mini, resize: '80x80'
+  end
 end
