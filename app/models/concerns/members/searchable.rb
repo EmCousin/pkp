@@ -4,6 +4,14 @@ module Members
   module Searchable
     extend ActiveSupport::Concern
 
+    included do
+      scope(:for_category, lambda do |category_id|
+        joins(subscriptions: { courses: :category })
+          .where(subscriptions: { year: Subscription.current_year })
+          .where(categories: { id: category_id })
+      end)
+    end
+
     class_methods do
       def search(query)
         return all unless query.present?

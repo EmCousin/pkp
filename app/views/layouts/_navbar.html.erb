@@ -32,7 +32,8 @@
               <%= button_to t('defaults.logout'),
                             destroy_user_session_path,
                             method: :delete,
-                            class: "btn-dark nav-link" %>
+                            class: "btn-dark nav-link border-0",
+                            style: 'cursor: pointer;' %>
             <% else %>
               <%= link_to t('devise.shared.links.sign_in'),
                           new_user_session_path,

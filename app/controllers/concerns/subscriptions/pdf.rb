@@ -21,8 +21,8 @@ module Subscriptions
     def pdf_from_subscription(subscription)
       WickedPdf.new.pdf_from_string(
         render_to_string(
-          'templates/subscription.html.erb',
-          layout: 'pdf.html.erb',
+          'templates/subscription',
+          layout: 'pdf',
           encoding: 'UTF-8',
           locals: { subscription: subscription }
         )
