@@ -76,14 +76,36 @@
                 <%= link_to t('defaults.edit'),
                             [:edit, :admin, subscription],
                             class: "dropdown-item" %>
-                <%= button_to t('defaults.confirm'),
-                              [:confirm, :admin, subscription],
+                <%= button_to t('defaults.confirm_transfer'),
+                              {
+                                controller: 'admin/subscriptions',
+                                action: 'update',
+                                id: subscription.id,
+                                no_notification: true,
+                                subscription: { status: 'confirmed_transfer' }
+                              },
                               method: :put,
-                              class: "dropdown-item" %>
+                              class: "dropdown-item text-success" %>
+                <%= button_to t('defaults.confirm_cash'),
+                              {
+                                controller: 'admin/subscriptions',
+                                action: 'update',
+                                id: subscription.id,
+                                no_notification: true,
+                                subscription: { status: 'confirmed_cash' }
+                              },
+                              method: :put,
+                              class: "dropdown-item text-info" %>
                 <%= button_to t('defaults.archive'),
-                              [:archive, :admin, subscription],
+                              {
+                                controller: 'admin/subscriptions',
+                                action: 'update',
+                                id: subscription.id,
+                                no_notification: true,
+                                subscription: { status: 'archived' }
+                              },
                               method: :put,
-                              class: "dropdown-item" %>
+                              class: "dropdown-item text-danger" %>
                 <%= button_to t('defaults.destroy'),
                               [:admin, subscription],
                               method: :delete,
@@ -91,7 +113,7 @@
                                 controller: :confirm,
                                 confirm_message_value: t('defaults.are_you_sure')
                               },
-                              class: "dropdown-item" %>
+                              class: "dropdown-item text-danger" %>
               </div>
             </div>
           </td>

@@ -37,8 +37,8 @@ module Admin
 
     def update
       if @subscription.update(subscription_params)
-        process_after_save(@subscription)
-        redirect_to [:admin, @subscription], notice: t('.success')
+        process_after_save(@subscription) unless params[:no_notification]
+        redirect_back_or_to [:admin, @subscription], notice: t('.success')
       else
         render :edit, status: :unprocessable_entity
       end
@@ -55,24 +55,6 @@ module Admin
       redirect_back fallback_location: :root, notice: t('.success')
     end
 
-    def confirm
-      if @subscription.confirmed?
-        redirect_back fallback_location: %i[admin subscriptions], alert: t('.failure')
-      else
-        @subscription.confirmed!
-        redirect_back fallback_location: %i[admin subscriptions], notice: t('.success')
-      end
-    end
-
-    def archive
-      if @subscription.archived?
-        redirect_back fallback_location: %i[admin subscriptions], alert: t('.failure')
-      else
-        @subscription.archived!
-        redirect_back fallback_location: %i[admin subscriptions], notice: t('.success')
-      end
-    end
-
     private
 
     def set_subscription!
@@ -80,7 +62,7 @@ module Admin
     end
 
     def subscription_params
-      params.require(:subscription).permit(:member_id, course_ids: [])
+      params.require(:subscription).permit(:member_id, :status, course_ids: [])
     end
   end
 end

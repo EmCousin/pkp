@@ -7,7 +7,13 @@ module Subscriptions
     included do
       attr_accessor :category_id
 
-      enum status: %i[pending confirmed archived]
+      enum status: %i[pending confirmed_transfer confirmed_cash archived]
+
+      scope :confirmed, -> { confirmed_transfer.or(confirmed_cash) }
+    end
+
+    def confirmed?
+      confirmed_cash? || confirmed_transfer?
     end
 
     def description
@@ -38,8 +44,10 @@ module Subscriptions
     end
 
     def status_color
-      if confirmed?
+      if confirmed_transfer?
         'table-success'
+      elsif confirmed_cash?
+        'table-info'
       elsif archived?
         'table-secondary'
       else

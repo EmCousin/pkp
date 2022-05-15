@@ -36,8 +36,6 @@ Rails.application.routes.draw do
     resources :subscriptions do
       member do
         delete :unlink_course
-        put :confirm
-        put :archive
       end
       resource :invoice, only: [:show, :create, :edit, :update]
       resources :credit_notes, only: [:new, :create]

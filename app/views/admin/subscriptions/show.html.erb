@@ -131,18 +131,38 @@
             <%= link_to t('defaults.edit'),
                         [:edit, :admin, @subscription],
                         class: "dropdown-item" %>
-            <%= button_to(
-              t('defaults.confirm'),
-              [:confirm, :admin, @subscription],
-              method: :put,
-              class: "dropdown-item"
-            ) unless @subscription.confirmed? %>
-            <%= button_to(
-              t('defaults.archive'),
-              [:archive, :admin, @subscription],
-              method: :put,
-              class: "dropdown-item"
-            ) unless @subscription.archived? %>
+
+            <%= button_to t('defaults.confirm_transfer'),
+                          {
+                            controller: 'admin/subscriptions',
+                            action: 'update',
+                            id: @subscription.id,
+                            no_notification: true,
+                            subscription: { status: 'confirmed_transfer' }
+                          },
+                          method: :put,
+                          class: "dropdown-item text-success" %>
+            <%= button_to t('defaults.confirm_cash'),
+                          {
+                            controller: 'admin/subscriptions',
+                            action: 'update',
+                            id: @subscription.id,
+                            no_notification: true,
+                            subscription: { status: 'confirmed_cash' }
+                          },
+                          method: :put,
+                          class: "dropdown-item text-info" %>
+            <%= button_to t('defaults.archive'),
+                          {
+                            controller: 'admin/subscriptions',
+                            action: 'update',
+                            id: @subscription.id,
+                            no_notification: true,
+                            subscription: { status: 'archived' }
+                          },
+                          method: :put,
+                          class: "dropdown-item text-danger" %>
+
             <%= button_to t('defaults.destroy'),
                           [:admin, @subscription],
                           method: :delete,

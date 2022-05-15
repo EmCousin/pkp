@@ -22,6 +22,9 @@ fr:
     welcome: Bienvenue
     select: Sélectionner
     confirm: Confirmer
+    confirm_transfer: A payé par virement
+    confirm_cash: A payé en espèces
+    confirm: Confirmer
     archive: Archiver
     action: Action
     download: Télécharger
@@ -147,6 +150,8 @@ fr:
         status: Statut
         pending: En attente
         confirmed: Confirmée
+        confirmed_transfer: A payé par virement
+        confirmed_cash: A payé en espèces
         archived: Archivée
         form: Formulaire
         signed_form: Formulaire signé
