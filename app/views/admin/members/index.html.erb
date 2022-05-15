@@ -90,7 +90,11 @@
               <% unless params[:avatar] == 'hide' %>
                 <td>
                   <%= link_to [:admin, member] do %>
-                    <%= image_tag member.avatar.variant(:mini), width: "30" %>
+                    <% if member.avatar.variable? %>
+                      <%= image_tag member.avatar.variant(:mini), width: "30" %>
+                    <% else %>
+                      <%= image_tag member.avatar, width: "30" %>
+                    <% end %>
                   <% end %>
                 </td>
               <% end %>
