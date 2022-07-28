@@ -46,7 +46,7 @@ describe Subscriptions::Completable, type: :model do
     let(:course) { create :course }
     let(:subscription) { create :subscription, member: member, courses: [course] }
     let(:year) { subscription.year - 1 }
-    let(:status) { :confirmed }
+    let(:status) { :confirmed_bank_check }
     let!(:previous_subscription) { create :subscription, member: member, courses: [course], year: year, status: status }
 
     it { expect(subscription.needs_medical_certificate?).to be false }

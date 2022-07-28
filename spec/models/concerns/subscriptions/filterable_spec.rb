@@ -5,13 +5,13 @@ describe Subscriptions::Filterable, type: :model do
 
   let(:course) { create :course }
 
-  let!(:confirmed_subscription) { create :subscription, courses: [course], status: :confirmed }
+  let!(:confirmed_subscription) { create :subscription, courses: [course], status: :confirmed_bank_check }
   let!(:pending_subscription) { create :subscription, courses: [course], status: :pending }
   let!(:archived_subscription) { create :subscription, courses: [course], status: :archived }
 
   describe '#filter_by_status' do
     context 'when selecting the confirmed status' do
-      it { expect(subject.filter_by_status('confirmed')).to eq [confirmed_subscription] }
+      it { expect(subject.filter_by_status('confirmed_bank_check')).to eq [confirmed_subscription] }
     end
 
     context 'when selecting the archived status' do

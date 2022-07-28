@@ -297,9 +297,14 @@ fr:
     edit:
       title: Mes informations personnelles
     alumni_accesses:
+      failure: &failure
+        not_yet_open: La réinscription pour les ancien(ne)s élèves n'est pas encore ouverte
       new:
+        <<: *failure
         title: Accès ancien(ne)s élèves
         headline: Entrez l'identifiant et le mot de passe qui vous ont été communiqués par les coachs. Vous pouvez les retrouver dans le mail de réinscription des ancien(ne)s élèves qui vous a été envoyé.
+      create:
+        <<: *failure
     subscriptions:
       new:
         create_member: Veuillez renseigner les informations de la personne à inscrire

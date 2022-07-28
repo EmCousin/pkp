@@ -13,7 +13,7 @@
           <h2>Les cours reprennent en Septembre !</h2>
           <h5>Ouverture des inscriptions le 1er Septembre pour les nouveaux adhérents.</h5>
 
-          ​​<p>
+          <p>
             <small>
               Pour suivre notre actualité médiatique, rendez-vous sur<br/>
               Instagram <a href="https://www.instagram.com/parkourparis/?hl=fr" target="_blank">@ParkourParis</a><br/>
@@ -22,7 +22,9 @@
             </small>
           </p>
 
-          <%= link_to t('.i_am_alumni'), %i[new dashboard alumni_access], class: 'btn btn-primary btn-lg' %>
+          <% if alumni_time? %>
+            <%= link_to t('.i_am_alumni'), %i[new dashboard alumni_access], class: 'btn btn-primary btn-lg' %>
+          <% end %>
         </div>
       </div>
     </div>

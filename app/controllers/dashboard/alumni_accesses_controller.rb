@@ -2,6 +2,8 @@
 
 module Dashboard
   class AlumniAccessesController < DashboardController
+    before_action :filter_alumni_time!
+
     def new
       @alumni_access = AlumniAccess.new
     end
@@ -17,6 +19,10 @@ module Dashboard
     end
 
     private
+
+    def filter_alumni_time!
+      redirect_to :root, alert: t('.not_yet_open') unless alumni_time?
+    end
 
     def alumni_access_params
       params.require(:alumni_access).permit(:username, :password)
