@@ -179,6 +179,7 @@ fr:
         reopen_when_available: Si des places se libèrent, il sera à nouveau possible de vous inscrire.
         vacation_time: "C'est les vacances !"
         you_can_still_create_an_account: Les cours reprennent en septembre. Vous pouvez toujours créer un compte en attendant, nous vous enverrons alors un e-mail pour vous avertir lorsque les inscriptions seront sur le point de réouvrir.
+        if_you_have_an_account: Si vous avez déjà ouvert un compte l'année dernière, connectez-vous ici
         if_you_are_alumni: Si vous êtes un(e) ancien(ne) élève, vous pouvez vous connecter/inscrire, puis cliquer sur "Choisir mes cours" puis sur "Je suis un(e) ancien(ne) élève"
       edit:
         edit_my_account: Modifier mon compte

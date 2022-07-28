@@ -19,6 +19,8 @@
 
         <p><%= t('.you_can_still_create_an_account') %></p>
 
+        <p><%= link_to t('.if_you_have_an_account'), new_session_path(resource_name), class: 'alert-link' %></p>
+
         <% if alumni_time? %>
           <p><%= t('.if_you_are_alumni') %></p>
         <% end %>
