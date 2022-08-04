@@ -180,7 +180,7 @@ fr:
         vacation_time: "C'est les vacances !"
         you_can_still_create_an_account: Les cours reprennent en septembre. Vous pouvez toujours créer un compte en attendant, nous vous enverrons alors un e-mail pour vous avertir lorsque les inscriptions seront sur le point de réouvrir.
         if_you_have_an_account: Si vous avez déjà ouvert un compte l'année dernière, connectez-vous ici
-        if_you_are_alumni: Si vous êtes un(e) ancien(ne) élève, vous pouvez vous connecter/inscrire, puis cliquer sur "Choisir mes cours" puis sur "Je suis un(e) ancien(ne) élève"
+        if_you_are_alumni: Si vous êtes un·e ancien·ne) élève, vous pouvez vous connecter/inscrire, puis cliquer sur "Choisir mes cours" puis sur "Je suis un·e ancien·ne) élève"
       edit:
         edit_my_account: Modifier mon compte
         delete_my_account: Supprimer mon compte
@@ -285,7 +285,7 @@ fr:
     index:
       add_subscription: Ajouter une inscription
       choose_my_courses: Choisir mes cours
-      not_yet_subscribed: "Vous n'êtes pas encore inscrit(e) pour l'année %{year} ! Cliquez sur le bouton pour vous inscrire :"
+      not_yet_subscribed: "Vous n'êtes pas encore inscrit·e pour l'année %{year} ! Cliquez sur le bouton pour vous inscrire :"
       subscription_detailed_info: "Vos inscriptions pour l'année %{year} :"
     subscription:
       pay: Payer
@@ -299,11 +299,11 @@ fr:
       title: Mes informations personnelles
     alumni_accesses:
       failure: &failure
-        not_yet_open: La réinscription pour les ancien(ne)s élèves n'est pas encore ouverte
+        not_yet_open: La réinscription pour les ancien·ne)s élèves n'est pas encore ouverte
       new:
         <<: *failure
-        title: Accès ancien(ne)s élèves
-        headline: Entrez l'identifiant et le mot de passe qui vous ont été communiqués par les coachs. Vous pouvez les retrouver dans le mail de réinscription des ancien(ne)s élèves qui vous a été envoyé.
+        title: Accès ancien·ne)s élèves
+        headline: Entrez l'identifiant et le mot de passe qui vous ont été communiqués par les coachs. Vous pouvez les retrouver dans le mail de réinscription des ancien·ne)s élèves qui vous a été envoyé.
       create:
         <<: *failure
     subscriptions:
@@ -336,7 +336,7 @@ fr:
         success: Formulaire signé ajouté avec succès !
     vacations:
       index:
-        i_am_alumni: Je suis un(e) ancien(ne) élève
+        i_am_alumni: Je suis un·e ancien·ne) élève
 
   layouts:
     navbar:

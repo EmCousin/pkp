@@ -10,7 +10,7 @@ fr:
         title: "Confirmer votre compte"
         submit: "Envoyer les instructions de confirmation"
     failure:
-      already_authenticated: "Vous êtes déjà connecté(e)."
+      already_authenticated: "Vous êtes déjà connecté·e."
       inactive: "Votre compte n'est pas encore activé."
       invalid: "%{authentication_keys} ou mot de passe incorrect."
       locked: "Votre compte est bloqué."
@@ -32,12 +32,12 @@ fr:
         subject: "Mot de passe modifié"
     omniauth_callbacks:
       failure: "Échec de la connection via %{kind} : \"%{reason}\"."
-      success: "Connecté(e) via %{kind}."
+      success: "Connecté·e via %{kind}."
     passwords:
       no_token: "Vous ne pouvez pas accéder à cette page sans provenir d'un E-mail de réinitialisation de mot de passe. Si c'est le cas, assurez-vous que l'URL de votre navigateur correspond à celle indiquer dans l'E-mail."
       send_instructions: "Vous allez recevoir un E-mail comportant des instructions pour réinitialiser votre mot de passe dans un instant."
       send_paranoid_instructions: "Si votre adresse E-mail existe dans notre système, vous allez y recevoir des instructions pour réinitialiser votre compte."
-      updated: "Votre mot de passe a bien été modifié. Vous êtes désormais connecté(e)."
+      updated: "Votre mot de passe a bien été modifié. Vous êtes désormais connecté·e."
       updated_not_active: "Votre mot de passe a bien été modifié."
     registrations:
       destroyed: "Votre compte a bien été supprimé. À bientôt !"
@@ -49,9 +49,9 @@ fr:
       updated: "Vos modifications ont bien été enregistrées."
       updated_but_not_signed_in: "Vos modifications ont bien été enregistrées, mais vous devez désormais vous reconnecter avec votre nouveau mot de passe."
     sessions:
-      signed_in: "Connecté(e)."
-      signed_out: "Déconnecté(e)"
-      already_signed_out: "Déconnecté(e)"
+      signed_in: "Connecté·e."
+      signed_out: "Déconnecté·e"
+      already_signed_out: "Déconnecté·e"
     unlocks:
       send_instructions: "Vous allez recevoir par E-mail des instructions pour débloquer votre compte."
       send_paranoid_instructions: "Si votre compte existe, vous allez recevoir des instructions pour le débloquer dans un instant."

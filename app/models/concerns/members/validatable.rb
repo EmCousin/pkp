@@ -8,15 +8,15 @@ module Members
       'Père',
       'Mère',
       'Tuteur / Tutrice',
-      'Conjoint(e)',
+      'Conjoint·e',
       'Frère',
       'Sœur',
       'Grand-père',
       'Grand-mère',
       'Oncle',
       'Tante',
-      'Cousin(e)',
-      'Ami(e)',
+      'Cousin·e',
+      'Ami·e',
       'Autre'
     ].freeze
 
