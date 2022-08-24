@@ -85,9 +85,32 @@
     <table class="table mt-4">
       <thead>
         <tr>
-          <th><%= Subscription.model_name.human %></th>
-          <th><%= Subscription.human_attribute_name(:member_id) %></th>
-          <th><%= Member.human_attribute_name(:email) %></th>
+          <th>
+            <%= link_to url_for(order: "subscriptions.id #{params[:order].in?([nil, 'subscriptions.id DESC']) ? 'ASC' : 'DESC'}") do %>
+              <%= Subscription.model_name.human %>
+              <%= params[:order].in?([nil, 'subscriptions.id DESC']) ? '⬇️' : '⬆️' %>
+            <% end %>
+          </th>
+
+          <th>
+            <%= link_to url_for(order: "members.first_name #{params[:order] == 'members.first_name DESC' ? 'ASC' : 'DESC'}") do %>
+              <%= Member.human_attribute_name(:first_name) %>
+              <%= params[:order] == 'members.first_name DESC' ? '⬇️' : '⬆️' %>
+            <% end %>
+            /
+            <%= link_to url_for(order: "members.last_name #{params[:order] == 'members.last_name DESC' ? 'ASC' : 'DESC'}") do %>
+              <%= Member.human_attribute_name(:last_name) %>
+              <%= params[:order] == 'members.last_name DESC' ? '⬇️' : '⬆️' %>
+            <% end %>
+          </th>
+
+          <th>
+            <%= link_to url_for(order: "users.email #{params[:order] == 'users.email DESC' ? 'ASC' : 'DESC'}") do %>
+              <%= User.human_attribute_name(:email) %>
+              <%= params[:order] == 'users.email DESC' ? '⬇️' : '⬆️' %>
+            <% end %>
+          </th>
+
           <th><%= Subscription.human_attribute_name(:status) %></th>
           <th></th>
         </tr>
@@ -105,9 +128,11 @@
           </tr>
         <% else %>
           <% @course.subscriptions
+                    .joins(member: :user)
                     .filter_by_status(params[:status])
                     .where(year: params[:year] || Subscription.current_year)
-                    .includes(:member).each do |subscription| %>
+                    .order(params[:order], created_at: :desc)
+                    .includes(member: :user).each do |subscription| %>
             <tr class=<%= subscription.status_color %>>
               <td><%= link_to subscription.id , admin_subscription_path(subscription.id) %></td>
               <td>
