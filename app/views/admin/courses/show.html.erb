@@ -1,4 +1,8 @@
-<h1 class="page-title"><%= @course.title %></h1>
+<h1 class="page-title">
+  <%= link_to '←', [:admin, @course.previous], title: @course.previous.title %>
+  <%= @course.title %>
+  <%= link_to '→', [:admin, @course.next], title: @course.next.title %>
+</h1>
 <hr />
 
 <div class="row pt-2">

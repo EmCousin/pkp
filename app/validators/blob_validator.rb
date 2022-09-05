@@ -97,6 +97,9 @@ class BlobValidator < ::ActiveModel::EachValidator
     validate_image_square(record, attribute, value)
   end
 
+  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/PerceivedComplexity
   def validate_image_dimension(record, attribute, value, dimension_attribute)
     return unless options.dig(:representable, dimension_attribute)
 
@@ -110,6 +113,9 @@ class BlobValidator < ::ActiveModel::EachValidator
       record.errors.add(attribute, "#{dimension_attribute}_too_long_strict".to_sym, value: limit) if value.metadata[dimension_attribute] > limit
     end
   end
+  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/PerceivedComplexity
 
   def validate_image_square(record, attribute, value)
     return unless options.dig(:representable, :square) == true
@@ -120,9 +126,8 @@ class BlobValidator < ::ActiveModel::EachValidator
 
   ROTATIONS = /Right-top|Left-bottom|Top-right|Bottom-left/
   def rotated_image?(image)
-    ROTATIONS === image.get("exif-ifd0-Orientation")
+    ROTATIONS === image.get('exif-ifd0-Orientation')
   rescue Vips::Error
     false
   end
-
 end

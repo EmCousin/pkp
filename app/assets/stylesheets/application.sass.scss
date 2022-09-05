@@ -16,12 +16,19 @@ body {
 
   h1.page-title {
     color:#EB8D00;
+    display: flex;
+    justify-content: space-around;
     font-family: lulo-clean-w01-one-bold,sans-serif;
     font-size: 2em;
     font-weight: bold;
     letter-spacing: 0.075em;
     text-align: center;
     text-transform: uppercase;
+  }
+
+  h1.page-title > a {
+    color:#EB8D00;
+    text-decoration: none;
   }
 
   .background-white {
