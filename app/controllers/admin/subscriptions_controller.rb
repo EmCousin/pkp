@@ -38,7 +38,7 @@ module Admin
     def update
       if @subscription.update(subscription_params)
         process_after_save(@subscription) unless params[:no_notification]
-        redirect_back_or_to [:admin, @subscription], notice: t('.success')
+        redirect_back_or_to [:admin, @subscription], notice: t('.success'), status: :see_other
       else
         render :edit, status: :unprocessable_entity
       end
@@ -46,7 +46,7 @@ module Admin
 
     def destroy
       @subscription.destroy
-      redirect_to %i[admin subscriptions], notice: t('.success')
+      redirect_to %i[admin subscriptions], notice: t('.success'), status: :see_other
     end
 
     def unlink_course

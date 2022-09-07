@@ -218,6 +218,7 @@ fr:
         inactive: Inactif
       show:
         new_subscription: Nouvelle inscription
+      subscription:
         remove_from_course: Retirer
         remove_from_course_are_you_sure: Êtes-vous sûr(e) de vouloir retirer %{member_full_name} du cours %{course_title} ?
       new:

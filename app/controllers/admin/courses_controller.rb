@@ -9,7 +9,9 @@ module Admin
       @courses = Course.includes(:subscriptions).order(:created_at)
     end
 
-    def show; end
+    def show
+      session[:admin_course_subscriptions_order] = params[:order] if params[:order].present?
+    end
 
     def new
       @course = Course.new(category_id: params[:category_id])
@@ -28,7 +30,7 @@ module Admin
 
     def update
       if @course.update(course_params)
-        redirect_to %i[admin courses], notice: t('.success')
+        redirect_to %i[admin courses], notice: t('.success'), status: :see_other
       else
         render :edit, status: :unprocessable_entity
       end
@@ -36,7 +38,7 @@ module Admin
 
     def destroy
       @course.destroy
-      redirect_to %i[admin courses], notice: t('.success')
+      redirect_to %i[admin courses], notice: t('.success'), status: :see_other
     end
 
     private
