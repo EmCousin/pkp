@@ -24,6 +24,7 @@ fr:
     confirm: Confirmer
     confirmed_bank_check: A payé par chèque
     confirmed_cash: A payé en espèces
+    pending: En attente
     confirm: Confirmer
     archive: Archiver
     action: Action
