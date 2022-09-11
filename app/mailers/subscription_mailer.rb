@@ -9,6 +9,14 @@ class SubscriptionMailer < ApplicationMailer
       content: subscription.form.blob.download
     }
 
-    mail to: subscription.member.email, subject: "Inscription Parkour Paris #{subscription.year} / #{subscription.year + 1}"
+    mail to: subscription.member.email,
+         cc: cc_emails(subscription),
+         subject: "Inscription Parkour Paris #{subscription.year} / #{subscription.year + 1}"
+  end
+
+  private
+
+  def cc_emails(subscription)
+    subscription.member.contacts.pluck(:email)
   end
 end

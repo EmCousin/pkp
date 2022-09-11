@@ -20,7 +20,9 @@ module DeviseOverrides
     zip_code
     city
     country
-  ]).freeze
+  ] + [{
+    contacts_attributes: %i[id email _destroy]
+  }]).freeze
 
   protected
 

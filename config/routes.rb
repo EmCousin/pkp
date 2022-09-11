@@ -44,6 +44,12 @@ Rails.application.routes.draw do
 
   resources :admin, only: [:index]
 
+  resources :contacts, only: [] do
+    scope module: :contacts do
+      resource :confirmation, only: %i[show destroy]
+    end
+  end
+
   namespace :dashboard do
     resources :members, only: [:new, :create]
     resources :subscriptions, only: [:new, :create] do

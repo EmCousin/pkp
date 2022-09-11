@@ -1,0 +1,31 @@
+<p>Bonjour,</p>
+
+<p>
+  <%= mail_to @contact.user.email, @contact.user.email %> a ajouté votre adresse E-mail à la liste
+  de ses contacts sur <%= link_to 'Parkour Paris Inscriptions', root_url, target: '_blank' %>
+</p>
+
+<p>
+  Si vous reconnaissez l'adresse E-mail de la personne qui vous a ajouté·e, vous pouvez confirmer cet ajout en cliquant sur le lien ci-dessous :
+</p>
+
+<p>
+  <%= link_to 'Confirmer', contact_confirmation_url(@contact.signed_id(purpose: :confirmation)) %>
+</p>
+
+<p>
+  Votre adresse E-mail sera alors en copie des notifications qui seront envoyées à
+  <%= mail_to @contact.user.email, @contact.user.email %> par notre site.
+</p>
+
+<p>
+  Si vous ne reconnaissez pas l'adresse E-mail de la personne qui vous a ajouté·e, il vous suffit d'ignorer ce message et vous ne recevrez pas de notifications.
+</p>
+
+<p>
+  Cordialement,
+</p>
+
+<p>
+  L'équipe Parkour Paris.
+</p>
