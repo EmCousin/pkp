@@ -201,7 +201,7 @@ fr:
         csv_export: Exporter au format CSV
       show:
         remove_from_course: Retirer
-        remove_from_course_are_you_sure: Êtes-vous sûr(e) de vouloir retirer %{member_full_name} du cours %{course_title} ?
+        remove_from_course_are_you_sure: Êtes-vous sûr·e de vouloir retirer %{member_full_name} du cours %{course_title} ?
         new_subscription: Nouvelle inscription
       new:
         title: Ajouter un membre
@@ -221,7 +221,7 @@ fr:
         new_subscription: Nouvelle inscription
       subscription:
         remove_from_course: Retirer
-        remove_from_course_are_you_sure: Êtes-vous sûr(e) de vouloir retirer %{member_full_name} du cours %{course_title} ?
+        remove_from_course_are_you_sure: Êtes-vous sûr·e de vouloir retirer %{member_full_name} du cours %{course_title} ?
       new:
         title: Créer un cours
         create_category: Créez une catégorie pour votre cours
@@ -301,7 +301,7 @@ fr:
       title: Mes informations personnelles
     alumni_accesses:
       failure: &failure
-        not_yet_open: La réinscription pour les ancien·ne)s élèves n'est pas encore ouverte
+        not_yet_open: La réinscription pour les ancien·ne·s élèves n'est pas encore ouverte
       new:
         <<: *failure
         title: Accès ancien·ne)s élèves
@@ -317,7 +317,7 @@ fr:
         success: Inscription créée avec succès !
     members:
       new:
-        advertising_right_statement: J'autorise l’utilisation, l’affichage et la publication de mon image provenant des activités de Parkour Paris, à des fins de promotion (tous médias) et d’information des activités de l’association. (panneaux, plaquettes, site internet).
+        advertising_right_statement: J'autorise l'utilisation, l'affichage et la publication de mon image provenant des activités de Parkour Paris, à des fins de promotion (tous médias) et d'information des activités de l'association. (panneaux, plaquettes, site internet).
         contact_name: Nom complet du contact
       create:
         success: Membre ajouté

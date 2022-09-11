@@ -13,6 +13,9 @@ class User < ApplicationRecord
   include Users::AdminNotifiable
   include Users::Chargeable
 
+  has_many :contacts, dependent: :destroy
+  accepts_nested_attributes_for :contacts, reject_if: :all_blank, allow_destroy: true
+
   has_many :members, dependent: :destroy
   has_many :subscriptions, through: :members
   has_many :courses, through: :subscriptions

@@ -10,12 +10,7 @@ describe Members::Available, type: :model do
 
     it 'performs a SQL query' do
       expect(Member.available(year).to_sql).to eq(
-        Member.left_joins(:subscriptions)
-              .where(subscriptions: { id: nil })
-              .or(
-                Member.left_joins(:subscriptions)
-                      .where.not(subscriptions: { year: year })
-              ).to_sql
+        Member.where.not(id: Member.unavailable(year)).to_sql
       )
     end
 

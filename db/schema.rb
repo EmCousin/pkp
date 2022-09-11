@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_07_170816) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_09_11_111331) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,8 +18,8 @@ ActiveRecord::Schema.define(version: 2021_01_07_170816) do
     t.integer "status", default: 0, null: false
     t.string "message_id", null: false
     t.string "message_checksum", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["message_id", "message_checksum"], name: "index_action_mailbox_inbound_emails_uniqueness", unique: true
   end
 
@@ -29,7 +28,7 @@ ActiveRecord::Schema.define(version: 2021_01_07_170816) do
     t.string "record_type", null: false
     t.bigint "record_id", null: false
     t.bigint "blob_id", null: false
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: nil, null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
@@ -41,7 +40,7 @@ ActiveRecord::Schema.define(version: 2021_01_07_170816) do
     t.text "metadata"
     t.bigint "byte_size", null: false
     t.string "checksum", null: false
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: nil, null: false
     t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
@@ -56,16 +55,25 @@ ActiveRecord::Schema.define(version: 2021_01_07_170816) do
     t.string "title", null: false
     t.integer "min_age", null: false
     t.integer "max_age", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "contacts", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "email", null: false
+    t.datetime "confirmed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_contacts_on_user_id"
   end
 
   create_table "courses", force: :cascade do |t|
     t.string "title", null: false
     t.string "description"
     t.integer "capacity", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "weekday", null: false
     t.boolean "active", default: true
     t.bigint "category_id"
@@ -75,8 +83,8 @@ ActiveRecord::Schema.define(version: 2021_01_07_170816) do
   create_table "courses_subscriptions", force: :cascade do |t|
     t.bigint "course_id"
     t.bigint "subscription_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["course_id"], name: "index_courses_subscriptions_on_course_id"
     t.index ["subscription_id"], name: "index_courses_subscriptions_on_subscription_id"
   end
@@ -90,8 +98,8 @@ ActiveRecord::Schema.define(version: 2021_01_07_170816) do
     t.string "contact_phone_number", null: false
     t.string "contact_relationship", null: false
     t.boolean "agreed_to_advertising_right", default: false, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["first_name", "last_name"], name: "index_members_on_first_name_and_last_name"
     t.index ["user_id"], name: "index_members_on_user_id"
   end
@@ -99,8 +107,8 @@ ActiveRecord::Schema.define(version: 2021_01_07_170816) do
   create_table "subscriptions", force: :cascade do |t|
     t.integer "year", null: false
     t.decimal "fee", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "status", default: 0
     t.string "stripe_charge_id"
     t.bigint "member_id"
@@ -113,18 +121,18 @@ ActiveRecord::Schema.define(version: 2021_01_07_170816) do
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
+    t.datetime "reset_password_sent_at", precision: nil
+    t.datetime "remember_created_at", precision: nil
     t.string "confirmation_token"
-    t.datetime "confirmed_at"
-    t.datetime "confirmation_sent_at"
+    t.datetime "confirmed_at", precision: nil
+    t.datetime "confirmation_sent_at", precision: nil
     t.string "unconfirmed_email"
     t.integer "failed_attempts", default: 0, null: false
     t.string "unlock_token"
-    t.datetime "locked_at"
+    t.datetime "locked_at", precision: nil
     t.boolean "admin", default: false, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "phone_number"
     t.string "address"
     t.string "zip_code"
@@ -140,6 +148,7 @@ ActiveRecord::Schema.define(version: 2021_01_07_170816) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "contacts", "users"
   add_foreign_key "courses", "categories"
   add_foreign_key "courses_subscriptions", "courses"
   add_foreign_key "courses_subscriptions", "subscriptions"

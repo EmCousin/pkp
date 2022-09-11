@@ -8,6 +8,8 @@ class Member < ApplicationRecord
 
   belongs_to :user
   accepts_nested_attributes_for :user
+
+  has_many :contacts, through: :user
   has_many :subscriptions, dependent: :destroy
   has_many :courses, through: :subscriptions
 

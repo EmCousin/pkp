@@ -62,7 +62,7 @@
       </div>
 
       <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-        <div>En attente de confirmation pour l'Email : <%= resource.unconfirmed_email %></div>
+        <div>En attente de confirmation pour l'E-mail : <%= resource.unconfirmed_email %></div>
       <% end %>
 
       <div class="form-group">
@@ -72,6 +72,36 @@
         <% end %>
         <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control" %>
       </div>
+
+      <%= f.fields_for :contacts, f.object.contacts.first_or_initialize do |ff| %>
+        <div class="form-group">
+          <%= ff.label :email, 'Autre E-mail de notification (facultatif)' %>
+          <%= ff.text_field :email, required: true, class: "form-control" %>
+
+          <div class="d-flex justify-content-between">
+            <details class="text-sm w-50">
+              <summary><small>ℹ️ À quoi ça sert ?</small></summary>
+
+              <small class="d-block mt-2">
+                Vous pouvez ajouter une adresse E-mail supplémentaire à celle que vous utilisez pour votre compte.
+                Cette adresse E-mail sera alors en copie de toutes les notifications que vous recevez de la part de Parkour Paris Inscriptions.
+
+                Cela permet par exemple à des parents d'un·e même élève de recevoir les notifications chacun sur leur adresse respective.
+                La personne possédant l'adresse E-mail devra toutefois confirmer cet ajout.
+              <p>
+              </small>
+            </details>
+
+            <% if ff.object.persisted? %>
+              <%= ff.hidden_field :id %>
+              <small class="mt-1">
+                <%= ff.check_box :_destroy %>
+                <%= ff.label :_destroy, 'Supprimer le contact' %>
+              </small>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
 
       <div class="form-group">
         <%= f.label :password do %>
