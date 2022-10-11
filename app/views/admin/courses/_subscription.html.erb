@@ -1,5 +1,5 @@
 <tr class=<%= subscription.status_color %>>
-  <td><%= link_to [:admin, subscription], data: { turbo_frame: '_top' } %></td>
+  <td><%= link_to subscription.id, [:admin, subscription], data: { turbo_frame: '_top' } %></td>
   <td>
     <%= link_to [:admin, subscription.member], data: { turbo_frame: '_top' } do %>
       <% if subscription.member.avatar.variable? %>
