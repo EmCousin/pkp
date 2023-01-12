@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class BlobValidator < ::ActiveModel::EachValidator
+class BlobValidator < ActiveModel::EachValidator
   # Validates that the specified ActiveStorage attributes
   # match the conditions as defined in the :blob options
   #
