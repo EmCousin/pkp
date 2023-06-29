@@ -5,20 +5,20 @@
                  method: :post,
                  data: {
                    controller: 'form stripe',
-                   target: 'stripe.form',
-                   'stripe-key': Rails.application.credentials.stripe[:public_key]
+                   stripe_target: 'form',
+                   stripe_key_value: Rails.application.credentials.stripe[:public_key]
                  } do |f| %>
       <label for="card-element" class="mb-2">
         <%= t('.payment_by_card')%>
       </label>
       <br />
 
-      <div class="mb-3" data-target="stripe.cardElement">
+      <div class="mb-3" data-stripe-target="cardElement">
         <!-- A Stripe Element will be inserted here. -->
       </div>
 
       <!-- Used to display form errors. -->
-      <div data-target="stripe.cardErrors" role="alert">
+      <div data-stripe-target="cardErrors" role="alert">
       </div>
 
       <div class="actions">
