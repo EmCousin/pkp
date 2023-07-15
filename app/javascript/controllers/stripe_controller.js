@@ -3,10 +3,10 @@ import { loadStripe } from '@stripe/stripe-js'
 
 export default class StripeController extends Controller {
   static targets = ["form", "cardElement", "cardErrors"]
-  static values = { key: String }
+  static values = { key: String, locale: { type: String, default: 'fr' } }
 
   async connect() {
-    const stripe = await loadStripe(this.keyValue)
+    const stripe = await loadStripe(this.keyValue, { locale: this.localeValue })
     const card = this.mountCard(stripe)
 
     this.sendTokenToServerOnSubmit(stripe, card)

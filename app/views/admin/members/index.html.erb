@@ -7,7 +7,7 @@
     <%= form_with(url: %i[admin members], local: true, method: :get, data: { turbo: false }) do %>
       <div class="input-group mb-3">
         <%= text_field_tag :q, params[:q], class: "form-control mr-sm-2", placeholder: t('.search_by_name') %>
-        <%= collection_select nil, :category, Category.all, :id, :title, { prompt: t('.search_by_category'), selected: params[:category], include_blank: t('.search_by_category'), autocomplete: :off }, class: 'form-control mr-2' %>
+        <%= collection_select nil, :category, Category.all, :id, :title, { prompt: t('.search_by_category'), selected: params[:category], include_blank: t('.search_by_category') }, autocomplete: :off, class: 'form-control mr-2'  %>
       </div>
 
       <div class="my-3">
@@ -34,6 +34,11 @@
         </div>
 
         <div class="d-flex align-items-center">
+          <%= check_box nil, :contact_email, { checked: params[:contact_email] != 'hide', autocomplete: :off }, 'show', 'hide' %>
+          <%= label_tag :contact_email, Contact.human_attribute_name(:email), class: 'ml-1 mb-0' %>
+        </div>
+
+        <div class="d-flex align-items-center">
           <%= check_box nil, :actions, { checked: params[:actions] != 'hide', autocomplete: :off }, 'show', 'hide' %>
           <%= label_tag :actions, 'Actions', class: 'ml-1 mb-0' %>
         </div>
@@ -49,7 +54,7 @@
         <%= label_tag :format, t('.csv_export'), class: 'ml-1 mb-0' %>
       </div>
 
-      <%= submit_tag("Search", class: "btn btn-success my-4") %>
+      <%= submit_tag t('defaults.search'), class: "btn btn-success my-4" %>
     <% end %>
 
     <div class="d-flex justify-content-end my-3">
@@ -70,6 +75,9 @@
           <% end %>
           <% unless params[:email] == 'hide' %>
             <th><%= User.human_attribute_name(:email) %></th>
+          <% end %>
+          <% unless params[:contact_email] == 'hide' %>
+            <th><%= Contact.human_attribute_name(:email) %></th>
           <% end %>
           <% unless params[:actions] == 'hide' %>
             <th class="text-center">Action</th>
@@ -106,6 +114,9 @@
               <% end %>
               <% unless params[:email] == 'hide' %>
                 <td><%= mail_to member.user.email, member.user.email %></td>
+              <% end %>
+              <% unless params[:contact_email] == 'hide' %>
+                <td><%= member.contacts.map(&:email).join(', ') %></td>
               <% end %>
               <% unless params[:actions] == 'hide' %>
                 <td>

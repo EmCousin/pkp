@@ -9,15 +9,12 @@
 
       <%= link_to t('.add_subscription'), new_dashboard_subscription_path, class: "btn btn-primary w-100 mt-5" %>
 
-      <%= link_to 'Comment compléter mon dossier', "#subscription-instructions", data: { toggle: 'collapse' }, class: 'btn btn-outline-primary w-100 mt-3' %>
+      <%= link_to t('.how_to_complete_my_subscription'), "#subscription-instructions", data: { toggle: 'modal' }, class: 'btn btn-outline-primary w-100 mt-3' %>
 
-      <div class="collapse overflow-auto mt-3" id="subscription-instructions">
-      <%= render 'subscription_instructions' %>
-    </div>
+
     <% else %>
       <p><%= t('.not_yet_subscribed', year: "#{Subscription.current_year} - #{Subscription.next_year}") %></p>
       <%= link_to t('.choose_my_courses'), new_dashboard_subscription_path, class: "btn btn-primary w-100" %>
     <% end %>
   </div>
 </div>
-
