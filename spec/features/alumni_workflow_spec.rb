@@ -132,12 +132,12 @@ feature "Alumni Workflow", type: :feature do
     expect(page).to have_text("C'est les vacances")
     expect(page).to have_text("Les cours reprennent en Septembre !")
     expect(page).to have_text("Ouverture des inscriptions le 1er Septembre pour les nouveaux adhérents.")
-    expect(page).to have_text("Je suis un·e ancien·ne) élève")
+    expect(page).to have_text("Je suis un·e ancien·ne élève")
 
-    click_link "Je suis un·e ancien·ne) élève"
+    click_link "Je suis un·e ancien·ne élève"
 
-    expect(page).to have_text("Accès ancien·ne)s élèves")
-    expect(page).to have_text("Entrez l'identifiant et le mot de passe qui vous ont été communiqués par les coachs. Vous pouvez les retrouver dans le mail de réinscription des ancien·ne)s élèves qui vous a été envoyé.")
+    expect(page).to have_text("Accès ancien·ne·s élèves")
+    expect(page).to have_text("Entrez l'identifiant et le mot de passe qui vous ont été communiqués par les coachs. Vous pouvez les retrouver dans le mail de réinscription des ancien·ne·s élèves qui vous a été envoyé.")
 
     fill_in "alumni_access_username", with: Rails.application.credentials.basic_auth[:username]
     fill_in "alumni_access_password", with: Rails.application.credentials.basic_auth[:password]

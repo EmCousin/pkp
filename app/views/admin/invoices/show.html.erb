@@ -69,7 +69,7 @@
 
 <div class="row">
   <div class="col-8 offset-2">
-    <%= link_to t('.generate_invoice'), admin_subscription_invoice_path(@subscription.id), method: :post, class: "btn btn-success w-100 mt-3", data: { disable_with: t('.generating') } %>
+    <%= link_to t('.generate_invoice'), admin_subscription_invoice_path(@subscription.id), method: :post, class: "btn btn-success w-100 mt-3", data: { turbo_submits_with: t('.generating') } %>
 
     <%= form_with(model: @subscription, local: true, url:   admin_subscription_invoice_path(@subscription.id)) do |form| %>
       <div class="mt-5">

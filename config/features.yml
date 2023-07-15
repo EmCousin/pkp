@@ -20,12 +20,12 @@ test:
 
 production:
   online_payment:
-    enabled: false
+    enabled: true
 
   medical_certificate:
-    enabled: false
+    enabled: true
 
   signed_form:
-    enabled: false
+    enabled: true
 
 

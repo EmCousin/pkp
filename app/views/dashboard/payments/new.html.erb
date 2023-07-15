@@ -6,7 +6,8 @@
                  data: {
                    controller: 'form stripe',
                    stripe_target: 'form',
-                   stripe_key_value: Rails.application.credentials.stripe[:public_key]
+                   stripe_key_value: Rails.application.credentials.stripe[:public_key],
+                   stripe_locale_value: I18n.locale
                  } do |f| %>
       <label for="card-element" class="mb-2">
         <%= t('.payment_by_card')%>
@@ -18,7 +19,7 @@
       </div>
 
       <!-- Used to display form errors. -->
-      <div data-stripe-target="cardErrors" role="alert">
+      <div class="my-2 text-danger" data-stripe-target="cardErrors" role="alert">
       </div>
 
       <div class="actions">

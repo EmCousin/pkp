@@ -2,6 +2,7 @@
   params[:name] != 'hide' && Member.human_attribute_name(:last_name),
   params[:phone_number] != 'hide' && User.human_attribute_name(:phone_number),
   params[:email] != 'hide' && User.human_attribute_name(:email),
+  params[:contact_email] != 'hide' && Contact.human_attribute_name(:email)
 ].compact_blank -%>
 
 <%= CSV.generate_line headers %>
@@ -12,6 +13,7 @@
     params[:name] != 'hide' && member.full_name,
     params[:phone_number] != 'hide' && member.user.phone_number,
     params[:email] != 'hide' && member.user.email,
+    params[:contact_email] != 'hide' && member.contacts.map(&:email).join(', '),
   ].compact_blank %>
 
   <%= CSV.generate_line(line) -%>

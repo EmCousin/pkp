@@ -68,7 +68,7 @@ module Admin
       scope = Member.search(params[:q])
       scope = scope.for_category(params[:category]) if params[:category].present?
       scope = scope.page(params[:page]).per(25) unless params[:no_paginate].present?
-      @members = scope.includes(:user).with_attached_avatar
+      @members = scope.includes(:user, :contacts).with_attached_avatar
     end
 
     def respond_with_csv(view_name)
