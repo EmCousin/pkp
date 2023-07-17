@@ -16,7 +16,7 @@
         :year,
         options_for_select(
           Subscription.select_options,
-          params[:year] || Subscription.current_year,
+          params[:year],
         ),
         include_blank: 'Année',
         class: 'h-25 form-control mr-2'
