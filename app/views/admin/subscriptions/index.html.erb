@@ -15,7 +15,7 @@
       <%= select_tag(
         :year,
         options_for_select(
-          (2019..Subscription.current_year).to_a.reverse,
+          Subscription.select_options,
           params[:year] || Subscription.current_year,
         ),
         include_blank: 'Année',

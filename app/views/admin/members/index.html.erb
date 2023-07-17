@@ -5,10 +5,27 @@
   <div class="col-12">
 
     <%= form_with(url: %i[admin members], local: true, method: :get, data: { turbo: false }) do %>
-      <div class="input-group mb-3">
-        <%= text_field_tag :q, params[:q], class: "form-control mr-sm-2", placeholder: t('.search_by_name') %>
-        <%= collection_select nil, :category, Category.all, :id, :title, { prompt: t('.search_by_category'), selected: params[:category], include_blank: t('.search_by_category') }, autocomplete: :off, class: 'form-control mr-2'  %>
+
+      <div class="row">
+        <div class="col-md-4 mb-2">
+          <%= text_field_tag :q, params[:q], class: "form-control", placeholder: t('.search_by_name') %>
+        </div>
+        <div class="col-md-4 mb-2">
+          <%= collection_select nil, :category, Category.all, :id, :title, { prompt: t('.search_by_category'), selected: params[:category], include_blank: t('.search_by_category') }, autocomplete: :off, class: 'form-control'  %>
+        </div>
+        <div class="col-md-4 mb-2">
+          <%= select_tag(
+            :subscription_year,
+            options_for_select(
+              Subscription.select_options,
+              params[:subscription_year] || Subscription.current_year,
+            ),
+            include_blank: 'Année',
+            class: 'form-control'
+          ) %>
+        </div>
       </div>
+
 
       <div class="my-3">
         <span>Afficher les champs&nbsp: </span>

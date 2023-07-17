@@ -67,6 +67,7 @@ module Admin
     def set_members # rubocop:disable Metrics/AbcSize
       scope = Member.search(params[:q])
       scope = scope.for_category(params[:category]) if params[:category].present?
+      scope = scope.for_subscription_year(params[:subscription_year]) if params[:subscription_year].present?
       scope = scope.page(params[:page]).per(25) unless params[:no_paginate].present?
       @members = scope.includes(:user, :contacts).with_attached_avatar
     end

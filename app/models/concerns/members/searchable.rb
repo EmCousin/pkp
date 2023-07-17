@@ -10,6 +10,11 @@ module Members
           .where(subscriptions: { year: Subscription.current_year })
           .where(categories: { id: category_id })
       end)
+
+      scope(:for_subscription_year, lambda do |subscription_year|
+        joins(:subscriptions)
+          .rewhere(subscriptions: { year: subscription_year })
+      end)
     end
 
     class_methods do
