@@ -17,7 +17,7 @@ class Subscription < ApplicationRecord
 
   class << self
     def select_options
-      (2019..current_year).to_a.reverse.map { |year| ["#{year - 1} - #{year}", year] }
+      (2019..current_year).to_a.reverse.map { |year| ["#{year} - #{year + 1}", year] }
     end
   end
 end
