@@ -37,6 +37,12 @@ describe Subscriptions::Completable, type: :model do
     context 'when the previous subscription is more than 1 year old' do
       let(:year) { subscription.year - 2 }
 
+      it { expect(subscription.previous_subscription).to eq previous_subscription }
+    end
+
+    context 'when the previous subscription is more than 2 years old' do
+      let(:year) { subscription.year - 3 }
+
       it { expect(subscription.previous_subscription).to be nil }
     end
   end
@@ -51,8 +57,14 @@ describe Subscriptions::Completable, type: :model do
 
     it { expect(subscription.needs_medical_certificate?).to be false }
 
-    context 'when the previous subscription is more than 1 year old' do
+    context 'when the previous subscription is 2 years old' do
       let(:year) { subscription.year - 2 }
+
+      it { expect(subscription.needs_medical_certificate?).to be false }
+    end
+
+    context 'when the previous subscription is 3 years old' do
+      let(:year) { subscription.year - 3 }
 
       it { expect(subscription.needs_medical_certificate?).to be true }
     end

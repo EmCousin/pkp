@@ -10,22 +10,20 @@ development:
 
 test:
   online_payment:
-    enabled: true
+    enabled: false
 
   medical_certificate:
-    enabled: true
+    enabled: false
 
   signed_form:
-    enabled: true
+    enabled: false
 
 production:
   online_payment:
-    enabled: true
+    enabled: false
 
   medical_certificate:
-    enabled: true
+    enabled: false
 
   signed_form:
-    enabled: true
-
-
+    enabled: false

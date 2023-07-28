@@ -15,7 +15,7 @@ module Subscriptions
     end
 
     def previous_subscription
-      @previous_subscription ||= member.subscriptions.find_by(year: year - 1)
+      @previous_subscription ||= member.subscriptions.find_by(year: [year - 1, year - 2])
     end
 
     def completed?
