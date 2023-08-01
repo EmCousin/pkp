@@ -20,7 +20,7 @@ module AccessFilteringHelpers
   end
 
   def alumni_starting_date
-    DateTime.new(Subscription.current_year, Course::ALUMNI_MONTHS.first, 4).beginning_of_day
+    DateTime.new(Subscription.current_year, Course::ALUMNI_MONTHS.first, 1).beginning_of_day
   end
 
   def full?
