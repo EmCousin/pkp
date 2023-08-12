@@ -141,6 +141,7 @@ fr:
         capacity: Capacité
         availability: Places restantes
         category_id: Catégorie
+        category: Catégorie
         weekday: Jour de la semaine
         active: Actif
       category:
