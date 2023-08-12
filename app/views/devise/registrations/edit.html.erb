@@ -76,7 +76,7 @@
       <%= f.fields_for :contacts, f.object.contacts.first_or_initialize do |ff| %>
         <div class="form-group">
           <%= ff.label :email, 'Autre E-mail de notification (facultatif)' %>
-          <%= ff.text_field :email, required: true, class: "form-control" %>
+          <%= ff.text_field :email, class: "form-control" %>
 
           <div class="d-flex justify-content-between">
             <details class="text-sm w-50">
