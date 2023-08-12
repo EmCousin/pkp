@@ -49,6 +49,7 @@ fr:
       alumni_access:
         username: Identifiant
         password: Mot de passe
+
   activerecord:
     errors:
       messages:
@@ -70,6 +71,8 @@ fr:
               accepted: doivent être acceptées
         member:
           attributes:
+            avatar:
+              content_type: doit être au format JPG, JPEG ou PNG
             birthdate:
               inclusion: "%{value} n'est pas une date valide"
         subscription:
