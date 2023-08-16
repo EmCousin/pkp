@@ -132,6 +132,12 @@ fr:
         agreed_to_advertising_right: "Droit à l'image"
         avatar: Photo
         full_name: Nom complet
+        level: Niveau
+        levels:
+          white: Blanc
+          yellow: Jaune
+          green: Vert
+          red: Rouge
       course:
         title: Titre du cours
         description: Description

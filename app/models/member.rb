@@ -16,4 +16,6 @@ class Member < ApplicationRecord
   has_one_attached :avatar do |attachable|
     attachable.variant :mini, resize: '80x80'
   end
+
+  enum level: { white: "white", yellow: "yellow", green: "green", red: "red"}, _default: "white"
 end

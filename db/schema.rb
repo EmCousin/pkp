@@ -10,9 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_11_111331) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_09_123942) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  # Custom types defined in this database.
+  # Note that some types may not work with other database engines. Be careful if changing database.
+  create_enum "member_level", ["white", "yellow", "green", "red"]
 
   create_table "action_mailbox_inbound_emails", force: :cascade do |t|
     t.integer "status", default: 0, null: false
@@ -100,7 +104,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_11_111331) do
     t.boolean "agreed_to_advertising_right", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.enum "level", default: "white", null: false, enum_type: "member_level"
     t.index ["first_name", "last_name"], name: "index_members_on_first_name_and_last_name"
+    t.index ["level"], name: "index_members_on_level"
     t.index ["user_id"], name: "index_members_on_user_id"
   end
 

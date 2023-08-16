@@ -23,6 +23,7 @@ user.zip_code = "75001"
 user.city = "Paris"
 user.country = "France"
 user.admin = true
+user.terms_of_service = true
 
 member = user.members.new
 member.first_name = "Maria"
@@ -34,7 +35,7 @@ member.contact_name = "Maria"
 member.contact_phone_number = "+33299506779"
 member.contact_relationship = Member::CONTACTS.sample
 
-user.save!
+user.save
 
 ## Default courses
-Rake::Task["courses:seed"].invoke
+# Rake::Task["courses:seed"].invoke
