@@ -86,7 +86,7 @@
 
           <%= collection_check_boxes nil, :level, Member.levels.keys, :itself, :capitalize, { include_hidden: false } do |b| %>
             <div class="d-flex align-items-center">
-              <%= b.check_box checked: b.value.in?(params[:level]), autocomplete: :off %>
+              <%= b.check_box checked: params[:level].is_a?(Array) && b.value.in?(params[:level]), autocomplete: :off %>
               <%= b.label class: 'ml-1 mb-0' %>
             </div>
           <% end %>
