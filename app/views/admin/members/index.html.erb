@@ -84,7 +84,7 @@
         <div class="col-md-4 mb-2">
           <span>Afficher les niveaux&nbsp: </span>
 
-          <%= collection_check_boxes nil, :level, Member.levels.keys, :itself, :capitalize, { include_hidden: false } do |b| %>
+          <%= collection_check_boxes nil, :level, Member.level_options.map(&:values), :first, :last, { include_hidden: false } do |b| %>
             <div class="d-flex align-items-center">
               <%= b.check_box checked: params[:level].is_a?(Array) && b.value.in?(params[:level]), autocomplete: :off %>
               <%= b.label class: 'ml-1 mb-0' %>
@@ -139,7 +139,7 @@
             <tr>
               <% unless params[:display_level] == 'no' %>
                 <td>
-                  <div style="background-color: <%= member.level %>; width: 1rem; height: 1rem"></div>
+                  <div class="border border-dark" style="background-color: <%= member.level %>; width: 1rem; height: 1rem"></div>
                 </td>
               <% end %>
               <% unless params[:display_avatar] == 'no' %>

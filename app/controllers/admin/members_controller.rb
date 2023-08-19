@@ -56,7 +56,7 @@ module Admin
 
     def member_params
       params.require(:member).permit(
-        :first_name, :last_name, :birthdate,
+        :level, :first_name, :last_name, :birthdate,
         :contact_name, :contact_phone_number, :contact_relationship,
         :avatar,
         :agreed_to_advertising_right,
