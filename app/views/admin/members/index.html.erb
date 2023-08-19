@@ -26,49 +26,71 @@
         </div>
       </div>
 
+      <hr />
 
-      <div class="my-3">
-        <span>Afficher les champs&nbsp: </span>
+      <div class="my-3 row">
+        <div class="col-md-4 mb-2">
+          <span>Afficher les champs&nbsp: </span>
 
-        <div class="d-flex align-items-center">
-          <%= check_box nil, :avatar, { checked: params[:avatar] != 'hide', autocomplete: :off }, 'show', 'hide' %>
-          <%= label_tag :avatar, Member.human_attribute_name(:avatar), class: 'ml-1 mb-0' %>
+          <div class="d-flex align-items-center">
+            <%= check_box nil, :display_level, { checked: params[:display_level] != 'no', autocomplete: :off }, 'yes', 'no' %>
+            <%= label_tag :display_level, Member.human_attribute_name(:level), class: 'ml-1 mb-0' %>
+          </div>
+
+          <div class="d-flex align-items-center">
+            <%= check_box nil, :display_avatar, { checked: params[:display_avatar] != 'no', autocomplete: :off }, 'yes', 'no' %>
+            <%= label_tag :display_avatar, Member.human_attribute_name(:avatar), class: 'ml-1 mb-0' %>
+          </div>
+
+          <div class="d-flex align-items-center">
+            <%= check_box nil, :display_name, { checked: params[:display_name] != 'no', autocomplete: :off }, 'yes', 'no' %>
+            <%= label_tag :display_name, Member.human_attribute_name(:last_name), class: 'ml-1 mb-0' %>
+          </div>
+
+          <div class="d-flex align-items-center">
+            <%= check_box nil, :display_phone_number, { checked: params[:display_phone_number] != 'no', autocomplete: :off }, 'yes', 'no' %>
+            <%= label_tag :display_phone_number, User.human_attribute_name(:phone_number), class: 'ml-1 mb-0' %>
+          </div>
+
+          <div class="d-flex align-items-center">
+            <%= check_box nil, :display_email, { checked: params[:display_email] != 'no', autocomplete: :off }, 'yes', 'no' %>
+            <%= label_tag :display_email, User.human_attribute_name(:email), class: 'ml-1 mb-0' %>
+          </div>
+
+          <div class="d-flex align-items-center">
+            <%= check_box nil, :display_contact_email, { checked: params[:display_contact_email] != 'no', autocomplete: :off }, 'yes', 'no' %>
+            <%= label_tag :display_contact_email, Contact.human_attribute_name(:email), class: 'ml-1 mb-0' %>
+          </div>
+
+          <div class="d-flex align-items-center">
+            <%= check_box nil, :display_actions, { checked: params[:display_actions] != 'no', autocomplete: :off }, 'yes', 'no' %>
+            <%= label_tag :display_actions, 'Actions', class: 'ml-1 mb-0' %>
+          </div>
+        </div>
+      
+      
+        <div class="col-md-4 mb-2">
+          <div class="d-flex align-items-center">
+            <%= check_box nil, :no_paginate, { checked: params[:no_paginate].present?, autocomplete: :off }, true, false %>
+            <%= label_tag :no_paginate, t('.no_paginate'), class: 'ml-1 mb-0' %>
+          </div>
+
+          <div class="d-flex align-items-center">
+            <%= check_box nil, :format, { checked: false, autocomplete: :off }, 'csv', 'html' %>
+            <%= label_tag :format, t('.csv_export'), class: 'ml-1 mb-0' %>
+          </div>
         </div>
 
-        <div class="d-flex align-items-center">
-          <%= check_box nil, :name, { checked: params[:name] != 'hide', autocomplete: :off }, 'show', 'hide' %>
-          <%= label_tag :name, Member.human_attribute_name(:last_name), class: 'ml-1 mb-0' %>
+        <div class="col-md-4 mb-2">
+          <span>Afficher les niveaux&nbsp: </span>
+
+          <%= collection_check_boxes nil, :level, Member.level_options.map(&:values), :first, :last, { include_hidden: false } do |b| %>
+            <div class="d-flex align-items-center">
+              <%= b.check_box checked: params[:level].is_a?(Array) && b.value.in?(params[:level]), autocomplete: :off %>
+              <%= b.label class: 'ml-1 mb-0' %>
+            </div>
+          <% end %>
         </div>
-
-        <div class="d-flex align-items-center">
-          <%= check_box nil, :phone_number, { checked: params[:phone_number] != 'hide', autocomplete: :off }, 'show', 'hide' %>
-          <%= label_tag :phone_number, User.human_attribute_name(:phone_number), class: 'ml-1 mb-0' %>
-        </div>
-
-        <div class="d-flex align-items-center">
-          <%= check_box nil, :email, { checked: params[:email] != 'hide', autocomplete: :off }, 'show', 'hide' %>
-          <%= label_tag :email, User.human_attribute_name(:email), class: 'ml-1 mb-0' %>
-        </div>
-
-        <div class="d-flex align-items-center">
-          <%= check_box nil, :contact_email, { checked: params[:contact_email] != 'hide', autocomplete: :off }, 'show', 'hide' %>
-          <%= label_tag :contact_email, Contact.human_attribute_name(:email), class: 'ml-1 mb-0' %>
-        </div>
-
-        <div class="d-flex align-items-center">
-          <%= check_box nil, :actions, { checked: params[:actions] != 'hide', autocomplete: :off }, 'show', 'hide' %>
-          <%= label_tag :actions, 'Actions', class: 'ml-1 mb-0' %>
-        </div>
-      </div>
-
-      <div class="d-flex align-items-center">
-        <%= check_box nil, :no_paginate, { checked: params[:no_paginate].present?, autocomplete: :off }, true, false %>
-        <%= label_tag :no_paginate, t('.no_paginate'), class: 'ml-1 mb-0' %>
-      </div>
-
-      <div class="d-flex align-items-center">
-        <%= check_box nil, :format, { checked: false, autocomplete: :off }, 'csv', 'html' %>
-        <%= label_tag :format, t('.csv_export'), class: 'ml-1 mb-0' %>
       </div>
 
       <%= submit_tag t('defaults.search'), class: "btn btn-success my-4" %>
@@ -81,22 +103,25 @@
     <table class="table mt-5">
       <thead>
         <tr>
-          <% unless params[:avatar] == 'hide' %>
+          <% unless params[:display_level] == 'no' %>
+            <th><%= Member.human_attribute_name(:level) %></th>
+          <% end %>
+          <% unless params[:display_avatar] == 'no' %>
             <th><%= Member.human_attribute_name(:avatar) %></th>
           <% end %>
-          <% unless params[:name] == 'hide' %>
+          <% unless params[:display_name] == 'no' %>
             <th><%= Member.human_attribute_name(:last_name) %></th>
           <% end %>
-          <% unless params[:phone_number] == 'hide' %>
+          <% unless params[:display_phone_number] == 'no' %>
             <th><%= User.human_attribute_name(:phone_number) %></th>
           <% end %>
-          <% unless params[:email] == 'hide' %>
+          <% unless params[:display_email] == 'no' %>
             <th><%= User.human_attribute_name(:email) %></th>
           <% end %>
-          <% unless params[:contact_email] == 'hide' %>
+          <% unless params[:display_contact_email] == 'no' %>
             <th><%= Contact.human_attribute_name(:email) %></th>
           <% end %>
-          <% unless params[:actions] == 'hide' %>
+          <% unless params[:display_actions] == 'no' %>
             <th class="text-center">Action</th>
           <% end %>
         </tr>
@@ -112,7 +137,12 @@
         <% else %>
           <% @members.each do |member| %>
             <tr>
-              <% unless params[:avatar] == 'hide' %>
+              <% unless params[:display_level] == 'no' %>
+                <td>
+                  <div class="border border-dark" style="background-color: <%= member.level %>; width: 1rem; height: 1rem"></div>
+                </td>
+              <% end %>
+              <% unless params[:display_avatar] == 'no' %>
                 <td>
                   <%= link_to [:admin, member] do %>
                     <% if member.avatar.variable? %>
@@ -123,19 +153,19 @@
                   <% end %>
                 </td>
               <% end %>
-              <% unless params[:name] == 'hide' %>
+              <% unless params[:display_name] == 'no' %>
                 <td><%= member.full_name %></td>
               <% end %>
-              <% unless params[:phone_number] == 'hide' %>
+              <% unless params[:display_phone_number] == 'no' %>
                 <td><%= link_to member.phone_number, "tel:#{member.phone_number}" %></td>
               <% end %>
-              <% unless params[:email] == 'hide' %>
+              <% unless params[:display_email] == 'no' %>
                 <td><%= mail_to member.user.email, member.user.email %></td>
               <% end %>
-              <% unless params[:contact_email] == 'hide' %>
+              <% unless params[:display_contact_email] == 'no' %>
                 <td><%= member.contacts.map(&:email).join(', ') %></td>
               <% end %>
-              <% unless params[:actions] == 'hide' %>
+              <% unless params[:display_actions] == 'no' %>
                 <td>
                   <div class="d-flex justify-content-around">
                     <%= link_to t('defaults.edit'),

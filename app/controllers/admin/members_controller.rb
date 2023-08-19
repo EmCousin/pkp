@@ -56,7 +56,7 @@ module Admin
 
     def member_params
       params.require(:member).permit(
-        :first_name, :last_name, :birthdate,
+        :level, :first_name, :last_name, :birthdate,
         :contact_name, :contact_phone_number, :contact_relationship,
         :avatar,
         :agreed_to_advertising_right,
@@ -65,11 +65,12 @@ module Admin
     end
 
     def set_members # rubocop:disable Metrics/AbcSize
-      scope = Member.search(params[:q])
-      scope = scope.for_category(params[:category]) if params[:category].present?
-      scope = scope.for_subscription_year(params[:subscription_year]) if params[:subscription_year].present?
-      scope = scope.page(params[:page]).per(25) unless params[:no_paginate].present?
-      @members = scope.includes(:user, :contacts).with_attached_avatar
+      members = Member.search(params[:q])
+      members = members.for_category(params[:category]) if params[:category].present?
+      members = members.where(level: params[:level]) if params[:level].present?
+      members = members.for_subscription_year(params[:subscription_year]) if params[:subscription_year].present?
+      members = members.page(params[:page]).per(25) unless params[:no_paginate].present?
+      @members = members.includes(:user, :contacts).with_attached_avatar
     end
 
     def respond_with_csv(view_name)
