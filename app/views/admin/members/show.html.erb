@@ -1,4 +1,10 @@
-<h1 class="page-title"><%= @member.full_name %></h1>
+<h1 class="page-title justify-content-center">
+  <%= tag.div class: "border border-dark mr-3",
+              style: "background-color: #{@member.level}; width: 2rem; height: 2rem;",
+              title: @member.level_text %>
+  <%= @member.full_name %>
+</h1>
+
 <hr />
 
 <div class="row">
