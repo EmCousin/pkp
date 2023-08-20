@@ -175,6 +175,12 @@ fr:
         credit_notes: Avoirs
         created_at: Généré le
         credit_note_amount: Montant de l'avoir
+        status: Statut
+        statuses:
+          pending: En attente
+          confirmed_bank_check: A payé par chèque
+          confirmed_cash: A payé en espèces
+          archived: Archivée
 
   # Views
   devise:
