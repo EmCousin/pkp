@@ -66,17 +66,21 @@
                 method: :get,
                 class: "col-sm-12 col-md-8 col-lg-6" do %>
         <div class= "d-flex align-items-center">
-        <%= select_tag(
+        <%= collection_select(
+          nil,
           :status,
-          options_for_select(Subscription.statuses, params[:status]),
-          include_blank: 'Statut',
+          Subscription.status_options.map(&:values),
+          :first,
+          :last,
+          { include_blank: 'Statut' },
+          value: params[:status],
           class: 'h-25 form-control mr-2'
         ) %>
         <%= select_tag(
           :year,
           options_for_select(
-            (2019..Subscription.current_year).to_a.reverse,
-            params[:year] || Subscription.current_year,
+            Subscription.select_options,
+            params[:year],
           ),
           include_blank: 'Année',
           class: 'h-25 form-control mr-2'
