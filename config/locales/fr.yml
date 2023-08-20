@@ -242,6 +242,10 @@ fr:
       subscription:
         remove_from_course: Retirer
         remove_from_course_are_you_sure: Êtes-vous sûr·e de vouloir retirer %{member_full_name} du cours %{course_title} ?
+        move_to_white_level: Passer en blanc
+        move_to_yellow_level: Passer en jaune
+        move_to_green_level: Passer en vert
+        move_to_red_level: Passer en rouge
       new:
         title: Créer un cours
         create_category: Créez une catégorie pour votre cours

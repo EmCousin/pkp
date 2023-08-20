@@ -31,18 +31,40 @@
   <% end %>
   <% unless params[:display_actions] == 'no' %>
     <td>
-      <div class="d-flex justify-content-around">
-        <%= link_to t('defaults.edit'),
-                    [:edit, :admin, member],
-                    class: "btn btn-outline-warning btn-sm" %>
-        <%= button_to t('defaults.destroy'),
-                      [:admin, member],
-                      method: :delete,
-                      data: {
-                        controller: :confirm,
-                        confirm_message_value: t('defaults.are_you_sure')
-                      },
-                      class: "btn btn-outline-danger btn-sm" %>
+      <div class="dropdown mr-1">
+        <a type="button" class="dropdown-toggle" id="dropdownMenuOffset" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%= t('defaults.action') %></a>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
+          <%= link_to t('defaults.edit'),
+                      [:edit, :admin, member],
+                      class: "dropdown-item" %>
+
+          <% Member.levels.each_key do |level| %>
+            <% unless member.level == level %>
+              <%= button_to({
+                              controller: 'admin/members',
+                              action: 'update',
+                              id: member.id,
+                              member: { level: level }
+                            },
+                            method: :put,
+                            class: "dropdown-item d-flex align-items-center") do %>
+                <%= tag.div class: "border border-dark",
+                    style: "background-color: #{level}; width: 1rem; height: 1rem;",
+                    title: member.level_text %>
+                <span class="ml-2"><%= t("admin.courses.subscription.move_to_#{level}_level") %></span>
+              <% end %>
+            <% end %>
+          <% end %>
+
+          <%= button_to t('defaults.destroy'),
+                        [:admin, member],
+                        method: :delete,
+                        data: {
+                          controller: :confirm,
+                          confirm_message_value: t('defaults.are_you_sure')
+                        },
+                        class: "dropdown-item text-danger" %>
+        </div>
       </div>
     </td>
   <% end %>

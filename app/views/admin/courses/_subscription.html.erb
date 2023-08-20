@@ -30,6 +30,24 @@
                     class: "dropdown-item",
                     data: { turbo_frame: '_top' } %>
 
+        <% Member.levels.each_key do |level| %>
+          <% unless subscription.member.level == level %>
+            <%= button_to({
+                            controller: 'admin/members',
+                            action: 'update',
+                            id: subscription.member_id,
+                            member: { level: level }
+                          },
+                          method: :put,
+                          class: "dropdown-item d-flex align-items-center") do %>
+              <%= tag.div class: "border border-dark",
+                  style: "background-color: #{level}; width: 1rem; height: 1rem;",
+                  title: subscription.member.level_text %>
+              <span class="ml-2"><%= t(".move_to_#{level}_level") %></span>
+            <% end %>
+          <% end %>
+        <% end %>
+
         <%= button_to t('defaults.pending'),
                       {
                         controller: 'admin/subscriptions',
@@ -40,6 +58,7 @@
                       },
                       method: :put,
                       class: "dropdown-item" %>
+
         <%= button_to t('defaults.confirmed_bank_check'),
                       {
                         controller: 'admin/subscriptions',
@@ -50,6 +69,7 @@
                       },
                       method: :put,
                       class: "dropdown-item text-success" %>
+
         <%= button_to t('defaults.confirmed_cash'),
                       {
                         controller: 'admin/subscriptions',
@@ -60,6 +80,7 @@
                       },
                       method: :put,
                       class: "dropdown-item text-info" %>
+
         <%= button_to t('defaults.archive'),
                       {
                         controller: 'admin/subscriptions',
