@@ -5,7 +5,6 @@
   <div class="col-12">
 
     <%= form_with(url: %i[admin members], local: true, method: :get, data: { turbo: false }) do %>
-
       <div class="row">
         <div class="col-md-4 mb-2">
           <%= text_field_tag :q, params[:q], class: "form-control", placeholder: t('.search_by_name') %>
@@ -67,19 +66,6 @@
             <%= label_tag :display_actions, 'Actions', class: 'ml-1 mb-0' %>
           </div>
         </div>
-      
-      
-        <div class="col-md-4 mb-2">
-          <div class="d-flex align-items-center">
-            <%= check_box nil, :no_paginate, { checked: params[:no_paginate].present?, autocomplete: :off }, true, false %>
-            <%= label_tag :no_paginate, t('.no_paginate'), class: 'ml-1 mb-0' %>
-          </div>
-
-          <div class="d-flex align-items-center">
-            <%= check_box nil, :format, { checked: false, autocomplete: :off }, 'csv', 'html' %>
-            <%= label_tag :format, t('.csv_export'), class: 'ml-1 mb-0' %>
-          </div>
-        </div>
 
         <div class="col-md-4 mb-2">
           <span>Afficher les niveaux&nbsp: </span>
@@ -90,6 +76,18 @@
               <%= b.label class: 'ml-1 mb-0' %>
             </div>
           <% end %>
+        </div>
+
+        <div class="col-md-4 mb-2">
+          <div class="d-flex align-items-center">
+            <%= check_box nil, :no_paginate, { checked: params[:no_paginate].present?, autocomplete: :off }, true, false %>
+            <%= label_tag :no_paginate, t('.no_paginate'), class: 'ml-1 mb-0' %>
+          </div>
+
+          <div class="d-flex align-items-center">
+            <%= check_box nil, :format, { checked: false, autocomplete: :off }, 'csv', 'html' %>
+            <%= label_tag :format, t('.csv_export'), class: 'ml-1 mb-0' %>
+          </div>
         </div>
       </div>
 
@@ -135,55 +133,7 @@
             </td>
           </tr>
         <% else %>
-          <% @members.each do |member| %>
-            <tr>
-              <% unless params[:display_level] == 'no' %>
-                <td>
-                  <div class="border border-dark" style="background-color: <%= member.level %>; width: 1rem; height: 1rem"></div>
-                </td>
-              <% end %>
-              <% unless params[:display_avatar] == 'no' %>
-                <td>
-                  <%= link_to [:admin, member] do %>
-                    <% if member.avatar.variable? %>
-                      <%= image_tag member.avatar.variant(:mini), width: "30" %>
-                    <% else %>
-                      <%= image_tag member.avatar, width: "30" %>
-                    <% end %>
-                  <% end %>
-                </td>
-              <% end %>
-              <% unless params[:display_name] == 'no' %>
-                <td><%= member.full_name %></td>
-              <% end %>
-              <% unless params[:display_phone_number] == 'no' %>
-                <td><%= link_to member.phone_number, "tel:#{member.phone_number}" %></td>
-              <% end %>
-              <% unless params[:display_email] == 'no' %>
-                <td><%= mail_to member.user.email, member.user.email %></td>
-              <% end %>
-              <% unless params[:display_contact_email] == 'no' %>
-                <td><%= member.contacts.map(&:email).join(', ') %></td>
-              <% end %>
-              <% unless params[:display_actions] == 'no' %>
-                <td>
-                  <div class="d-flex justify-content-around">
-                    <%= link_to t('defaults.edit'),
-                                [:edit, :admin, member],
-                                class: "btn btn-outline-warning btn-sm" %>
-                    <%= button_to t('defaults.destroy'),
-                                  [:admin, member],
-                                  method: :delete,
-                                  data: {
-                                    controller: :confirm,
-                                    confirm_message_value: t('defaults.are_you_sure')
-                                  },
-                                  class: "btn btn-outline-danger btn-sm" %>
-                  </div>
-                </td>
-              <% end %>
-            </tr>
-          <% end %>
+          <%= render partial: "admin/members/table_row", collection: @members, as: :member %>
         <% end %>
       </tbody>
     </table>
