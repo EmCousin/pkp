@@ -1,4 +1,9 @@
 <tr class=<%= subscription.status_color %>>
+  <td>
+    <%= tag.div class: "border border-dark",
+                style: "background-color: #{subscription.member.level}; width: 1rem; height: 1rem;",
+                title: subscription.member.level_text %>
+  </td>
   <td><%= link_to subscription.id, [:admin, subscription], data: { turbo_frame: '_top' } %></td>
   <td>
     <%= link_to [:admin, subscription.member], data: { turbo_frame: '_top' } do %>

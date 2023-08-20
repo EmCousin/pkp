@@ -60,41 +60,75 @@
       <%= link_to t('.new_subscription', resource: Subscription.model_name.human.downcase), new_admin_subscription_path(course_ids: @course.id), class: "btn btn-primary" %>
     </div>
 
-    <div class="row mt-4">
-      <%= form_with url: [:admin, @course],
-                local: true,
-                method: :get,
-                class: "col-sm-12 col-md-8 col-lg-6" do %>
-        <div class= "d-flex align-items-center">
-        <%= collection_select(
-          nil,
+
+    <%= form_with url: [:admin, @course],
+                  local: true,
+                  method: :get,
+                  class: "row mt-4" do %>
+      <div class="col-sm mb-2">
+        <%= select_tag(
           :status,
-          Subscription.status_options.map(&:values),
-          :first,
-          :last,
-          { include_blank: 'Statut' },
-          value: params[:status],
-          class: 'h-25 form-control mr-2'
+          options_for_select(
+            Subscription.status_options.map(&:values).map(&:reverse),
+            params[:status],
+          ),
+          include_blank: Subscription.human_attribute_name(:status),
+          class: 'form-control'
         ) %>
+      </div>
+
+      <div class="col-sm mb-2">
         <%= select_tag(
           :year,
           options_for_select(
             Subscription.select_options,
             params[:year],
           ),
-          include_blank: 'Année',
-          class: 'h-25 form-control mr-2'
+          include_blank: Subscription.human_attribute_name(:year),
+          class: 'form-control'
         ) %>
+      </div>
+
+      <div class="col-sm mb-2">
+        <%= select_tag(
+          :level,
+          options_for_select(
+            Member.level_options.map(&:values).map(&:reverse),
+            params[:level],
+          ),
+          include_blank: Member.human_attribute_name(:level),
+          class: 'form-control'
+        ) %>
+      </div>
+
+      <div class="col-sm mb-2">
         <%= submit_tag("Filtrer", class: "btn btn-success") %>
-      <% end %>
-    </div>
+      </div>
+    <% end %>
+
+    <% subscriptions = @course.subscriptions
+                              .joins(member: :user)
+                              .filter_by_status(params[:status])
+                              .where(year: params[:year].presence || Subscription.current_year)
+                              .where(members: { level: params[:level].presence || Member.levels.keys })
+                              .order(session[:admin_course_subscriptions_order], created_at: :desc)
+                              .includes(member: [:user, :avatar_attachment]) %>
+
+
+
 
     <div class="clearfix"></div>
+
+    <div class="mt-2">
+      <%= subscriptions.size %> résultat(s)
+    </div>
 
     <%= turbo_frame_tag :course_subscriptions do %>
       <table class="table mt-4">
         <thead>
           <tr>
+            <th><%= Member.human_attribute_name(:level) %></th>
+
             <th>
               <%= link_to url_for(order: "subscriptions.id #{session[:admin_course_subscriptions_order].in?([nil, 'subscriptions.id DESC']) ? 'ASC' : 'DESC'}") do %>
                 <%= Subscription.model_name.human %>&nbsp;<%= session[:admin_course_subscriptions_order].in?([nil, 'subscriptions.id DESC']) ? '⬇️' : '⬆️' %>
@@ -125,28 +159,23 @@
         </thead>
 
         <tbody>
-          <% if @course.subscriptions
-                      .filter_by_status(params[:status])
-                      .where(year: params[:year] || Subscription.current_year)
-                      .empty? %>
+          <% if subscriptions.empty? %>
             <tr>
               <td colspan="9" class="text-center">
                 <%= link_to t('.new_subscription'), new_admin_subscription_path, class: "btn btn-primary", data: { turbo_frame: '_top' } %>
               </td>
             </tr>
           <% else %>
-            <% @course.subscriptions
-                      .joins(member: :user)
-                      .filter_by_status(params[:status])
-                      .where(year: params[:year] || Subscription.current_year)
-                      .order(session[:admin_course_subscriptions_order], created_at: :desc)
-                      .includes(member: [:user, :avatar_attachment]).each do |subscription| %>
-              <%= render 'admin/courses/subscription', subscription: subscription %>
-            <% end %>
+            <%= render partial: 'admin/courses/subscription',
+                       collection: @course.subscriptions
+                                          .joins(member: :user)
+                                          .filter_by_status(params[:status])
+                                          .where(year: params[:year].presence || Subscription.current_year)
+                                          .order(session[:admin_course_subscriptions_order], created_at: :desc)
+                                          .includes(member: [:user, :avatar_attachment]) %>
           <% end %>
         </tbody>
       </table>
     <% end %>
   </div>
 </div>
-
