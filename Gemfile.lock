@@ -218,7 +218,7 @@ GEM
     pg (1.5.3)
     phonelib (0.8.2)
     public_suffix (5.0.3)
-    puma (4.3.12)
+    puma (5.6.7)
       nio4r (~> 2.0)
     racc (1.7.1)
     rack (2.2.8)
@@ -404,7 +404,7 @@ DEPENDENCIES
   listen (~> 3.2)
   pg (>= 0.18, < 2.0)
   phonelib
-  puma (~> 4.3)
+  puma (~> 5.6)
   rack-cors
   rails (~> 7)
   rails-controller-testing
