@@ -144,7 +144,7 @@ feature "Subscription Workflow", type: :feature do
     expect(find_field('subscription_member_id').find('option[selected]').text).to eq member.full_name
     select(categories.first.title, from: 'subscription_category_id')
 
-    click_button 'Sauvegarder'
+    click_button 'Continuer'
 
     available_courses = categories.first.courses
     available_courses.each do |course|
@@ -153,7 +153,7 @@ feature "Subscription Workflow", type: :feature do
     check "subscription_course_ids_#{available_courses.first.id}"
     check "subscription_course_ids_#{available_courses.last.id}"
 
-    click_button 'Sauvegarder'
+    click_button 'Continuer'
 
     expect(page).to have_text('Inscription créée avec succès !')
     expect(page).to have_text('Bienvenue !')

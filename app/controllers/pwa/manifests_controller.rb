@@ -18,7 +18,7 @@ module Pwa
                      scope: '/',
                      theme_color: '#cbd3d4',
                      description: 'Parkour Paris subscriptions',
-                     screenshots: screenshots }
+                     screenshots: }
     end
 
     private

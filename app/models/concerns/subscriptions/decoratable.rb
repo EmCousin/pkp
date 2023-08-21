@@ -22,7 +22,7 @@ module Subscriptions
 
     def available_courses
       @available_courses = if category_id.present?
-                             Course.where(category_id: category_id).order(:created_at)
+                             Course.where(category_id:).order(:created_at)
                            else
                              Course.none
                            end

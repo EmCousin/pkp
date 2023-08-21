@@ -6,7 +6,7 @@ module Members
 
     class_methods do
       def unavailable(year = Subscription.current_year)
-        joins(:subscriptions).where(subscriptions: { year: year })
+        joins(:subscriptions).where(subscriptions: { year: })
       end
 
       def available(year = Subscription.current_year)

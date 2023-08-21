@@ -35,7 +35,7 @@ module Subscriptions
         amount: fee_cents,
         currency: 'eur',
         source: stripe_token,
-        description: description
+        description:
       )
     end
 

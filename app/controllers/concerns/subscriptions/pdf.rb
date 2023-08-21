@@ -24,7 +24,7 @@ module Subscriptions
           'templates/subscription',
           layout: 'pdf',
           encoding: 'UTF-8',
-          locals: { subscription: subscription }
+          locals: { subscription: }
         )
       ).force_encoding('UTF-8')
     end

@@ -39,7 +39,7 @@ module Admin
           layout: 'invoice.html.erb',
           encoding: 'UTF-8',
           locals: {
-            subscription: subscription
+            subscription:
           }
         )
       ).force_encoding('UTF-8')
