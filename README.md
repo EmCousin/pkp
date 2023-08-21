@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/EmCousin/pkp/tree/master.svg?style=shield)](https://circleci.com/gh/EmCousin/pkp/tree/master)
+![Ruby](https://github.com/EmCousin/pkp/workflows/Ruby/badge.svg)
 [![GitHub issues](https://img.shields.io/github/issues/EmCousin/pkp)](https://github.com/EmCousin/pkp/issues)
 [![Maintainability](https://api.codeclimate.com/v1/badges/d11f43afa6788ac81980/maintainability)](https://codeclimate.com/github/EmCousin/pkp/maintainability)
 
