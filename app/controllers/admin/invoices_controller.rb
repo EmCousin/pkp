@@ -6,6 +6,8 @@ module Admin
 
     def show; end
 
+    def edit; end
+
     def create
       @subscription.invoice.attach(
         io: StringIO.new(pdf(@subscription)),
@@ -15,8 +17,6 @@ module Admin
 
       redirect_to admin_subscription_path(@subscription.id), notice: t('.success'), status: :see_other
     end
-
-    def edit; end
 
     def update
       if @subscription.update(subscription_params)

@@ -7,7 +7,7 @@ module Subscriptions
     included do
       attr_accessor :category_id
 
-      enum status: %i[pending confirmed_bank_check confirmed_cash archived]
+      enum status: { pending: 0, confirmed_bank_check: 1, confirmed_cash: 2, archived: 3 }
 
       scope :confirmed, -> { confirmed_bank_check.or(confirmed_cash) }
     end

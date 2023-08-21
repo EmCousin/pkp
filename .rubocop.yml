@@ -20,9 +20,6 @@ AllCops:
     - app/controllers/pdfs_controller.rb
     - app/mailers/application_mailer.rb
 
-Rails:
-  Enabled: false
-
 Metrics/ClassLength:
   Max: 160
 

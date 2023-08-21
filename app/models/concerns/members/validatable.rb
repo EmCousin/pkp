@@ -20,13 +20,18 @@ module Members
       'Autre'
     ].freeze
 
-    MAX_BIRTHDATE = 99.years.ago
-    MIN_BIRTHDATE = 6.years.ago
+    def self.max_birthdate
+      99.years.ago
+    end
+
+    def self.min_birthdate
+      6.years.ago
+    end
 
     included do
       validates :first_name, presence: true
       validates :last_name, presence: true
-      validates :birthdate, presence: true, inclusion: { in: MAX_BIRTHDATE..MIN_BIRTHDATE, on: :create }
+      validates :birthdate, presence: true, inclusion: { in: Members::Validatable.max_birthdate..Members::Validatable.min_birthdate, on: :create }
       validates :contact_name, presence: true
       validates :contact_phone_number, presence: true, phone: true
       validates :contact_relationship, presence: true, inclusion: { in: CONTACTS }

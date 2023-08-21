@@ -19,7 +19,7 @@ module Members
 
     class_methods do
       def search(query)
-        return all unless query.present?
+        return all if query.blank?
 
         joins(:user).where(
           'LOWER(first_name) LIKE :search

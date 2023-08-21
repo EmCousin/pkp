@@ -22,6 +22,8 @@ module Admin
       @member = Member.new
     end
 
+    def edit; end
+
     def create
       @member = Member.new(member_params)
       @member.user.terms_of_service = true
@@ -32,8 +34,6 @@ module Admin
         render :new, status: :unprocessable_entity
       end
     end
-
-    def edit; end
 
     def update
       if @member.update(member_params)
@@ -69,7 +69,7 @@ module Admin
       members = members.for_category(params[:category]) if params[:category].present?
       members = members.where(level: params[:level]) if params[:level].present?
       members = members.for_subscription_year(params[:subscription_year]) if params[:subscription_year].present?
-      members = members.page(params[:page]).per(25) unless params[:no_paginate].present?
+      members = members.page(params[:page]).per(25) if params[:no_paginate].blank?
       @members = members.includes(:user, :contacts).with_attached_avatar
     end
 

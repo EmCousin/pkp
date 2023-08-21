@@ -17,6 +17,8 @@ module Admin
       @course = Course.new(category_id: params[:category_id])
     end
 
+    def edit; end
+
     def create
       @course = Course.new(course_params)
       if @course.save
@@ -25,8 +27,6 @@ module Admin
         render :new, status: :unprocessable_entity
       end
     end
-
-    def edit; end
 
     def update
       if @course.update(course_params)

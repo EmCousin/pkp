@@ -183,6 +183,10 @@ fr:
           archived: Archivée
 
   # Views
+  contacts:
+    confirmations:
+      destroy:
+        success: Désabonnement réussi
   devise:
     passwords:
       edit:
@@ -385,6 +389,14 @@ fr:
       pagination_previous: Précédent
     last_page:
       pagination_last: Dernière
+
+ # Mailers
+
+  contact_mailer:
+    confirmation_instructions:
+      subject: Vous avez été ajouté comme contact à notifier
+
+
   admin_mailer:
     email_changed:
       subject: Un utilisateur a changé son adresse E-mail

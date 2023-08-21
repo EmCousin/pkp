@@ -3,7 +3,7 @@
 module Admin
   class SubscriptionsController < AdminController
     include Subscriptions::Pdf
-    before_action :set_subscription!, only: %i[show edit update destroy confirm archive unlink_course]
+    before_action :set_subscription!, only: %i[show edit update destroy unlink_course]
 
     def index
       @subscriptions = Subscription.filter_by_status(params[:status])
@@ -24,6 +24,8 @@ module Admin
       )
     end
 
+    def edit; end
+
     def create
       @subscription = Subscription.new(subscription_params)
       if @subscription.save
@@ -33,8 +35,6 @@ module Admin
         render :new, status: :unprocessable_entity
       end
     end
-
-    def edit; end
 
     def update
       if @subscription.update(subscription_params)

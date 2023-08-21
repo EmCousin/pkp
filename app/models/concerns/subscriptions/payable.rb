@@ -11,13 +11,13 @@ module Subscriptions
     end
 
     def paid?
-      return false unless stripe_charge.present?
+      return false if stripe_charge.blank?
 
       stripe_charge.paid && stripe_charge.amount == fee_cents
     end
 
     def paid_at
-      Time.at(stripe_charge.created)
+      Time.zone.at(stripe_charge.created)
     end
 
     def paid_amount

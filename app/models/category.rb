@@ -6,8 +6,7 @@ class Category < ApplicationRecord
 
   has_many :courses, dependent: :restrict_with_error
 
-  validates :title, presence: true,
-                    uniqueness: true
+  validates :title, presence: true, uniqueness: true
 
   validates :min_age, presence: true,
                       numericality: {

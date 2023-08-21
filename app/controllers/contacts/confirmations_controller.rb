@@ -10,7 +10,7 @@ module Contacts
 
     def destroy
       @contact.destroy!
-      redirect_to root_path, notice: 'Désabonnement réussi'
+      redirect_to root_path, notice: t('.success')
     end
 
     private
