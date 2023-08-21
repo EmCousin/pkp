@@ -311,6 +311,7 @@ fr:
     index:
       add_subscription: Ajouter une inscription
       choose_my_courses: Choisir mes cours
+      come_to_your_slots_only: Vous ne pouvez pas vous rendre à d'autres cours que ceux que vous avez choisis lors de votre inscription. Merci de respecter les créneaux que vous avez sélectionnés.
       not_yet_subscribed: "Vous n'êtes pas encore inscrit·e pour l'année %{year} ! Cliquez sur le bouton pour vous inscrire :"
       subscription_detailed_info: "Vos inscriptions pour l'année %{year} :"
       how_to_complete_my_subscription: Comment compléter mon dossier
@@ -338,6 +339,7 @@ fr:
         create_member: Veuillez renseigner les informations de la personne à inscrire
         add_member: Ajouter une autre personne
         no_courses_available: Désolé, il n'y a plus de cours %{category_title} disponibles.
+        full: Complet
       create:
         success: Inscription créée avec succès !
     members:
