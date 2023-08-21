@@ -23,6 +23,7 @@ module Subscriptions
       validate :maximum_one_course?, on: :create, if: -> { Subscription.winter_time? && category_kidz? }
       validate :courses_are_of_the_same_category
       validate :maximum_one_course_per_day
+      validate :courses_must_be_available, on: :create
 
       # with_options if: :category? do
       #   validate :minimum_age_permitted
@@ -73,6 +74,10 @@ module Subscriptions
       weekdays = courses.map(&:weekday)
 
       errors.add(:courses, :unique_weekday) if weekdays.uniq.size < weekdays.size
+    end
+
+    def courses_must_be_available
+      errors.add(:courses, :unavailable) if courses.any? { |c| !c.available? }
     end
 
     def minimum_age_permitted

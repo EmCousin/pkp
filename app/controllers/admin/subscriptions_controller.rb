@@ -7,9 +7,8 @@ module Admin
 
     def index
       @subscriptions = Subscription.filter_by_status(params[:status])
-                                   .joins(:member)
-                                   .where(members: { level: params[:level].presence || Member.levels.keys })
-                                   .where(year: params[:year] || Subscription.current_year)
+                                   .filter_by_level(params[:level])
+                                   .filter_by_year(params[:year])
                                    .order(created_at: :desc)
                                    .page(params[:page])
                                    .per(25)

@@ -36,8 +36,15 @@
               <%= f.label :course_ids %>
               <%= f.collection_check_boxes :course_ids, @subscription.available_courses, :id, :title, required: true do |b| %>
                 <div class="form-check">
-                  <%= b.check_box(class: "form-check-input") %>
-                  <%= b.label(class: "form-check-label") %>
+                  <%= b.check_box(class: "form-check-input", disabled: !b.object.available?) %>
+                  <%= b.label(class: "form-check-label") do %>
+                    <%= tag.public_send(b.object.available? ? :span : :strike) do %>
+                      <%= b.text %>
+                    <% end %>
+                    <% unless b.object.available? %>
+                      (<%= t('.full') %>)
+                    <% end %>
+                  <% end %>
                 </div>
               <% end %>
             </div>
@@ -51,7 +58,7 @@
 
       <div class="actions d-flex mt-5">
         <%= link_to t('defaults.back'), dashboard_index_path, class: "btn btn-link flex-fill" %>
-        <%= f.submit t('defaults.save'),
+        <%= f.submit t('defaults.continue'),
                      class: "btn btn-dark flex-fill",
                      data: { form_target: :submit } %>
       </div>

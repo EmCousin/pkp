@@ -4,12 +4,10 @@ module Subscriptions
   module Filterable
     extend ActiveSupport::Concern
 
-    class_methods do
-      def filter_by_status(status)
-        return all unless status.present?
-
-        where(status: status)
-      end
+    included do
+      scope :filter_by_status, ->(status) { status.present? ? where(status: status) : all }
+      scope :filter_by_level, ->(level) { level.present? ? joins(:member).where(members: { level: level }) : all }
+      scope :filter_by_year, ->(year) { where(year: year.presence || Subscription.current_year) }
     end
   end
 end

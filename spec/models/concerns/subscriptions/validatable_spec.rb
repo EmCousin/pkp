@@ -78,6 +78,12 @@ describe Subscriptions::Validatable, type: :model do
 
         it { expect(subscription.errors.of_kind?(:courses, :unique_weekday)).to be true }
       end
+
+      context 'when the subscription has courses that are no longer available' do
+        let(:courses) { build_list :course, 2, weekday: Course.weekdays.keys.first, capacity: 0 }
+
+        it { expect(subscription.errors.of_kind?(:courses, :unavailable)).to be true }
+      end
     end
   end
 end
