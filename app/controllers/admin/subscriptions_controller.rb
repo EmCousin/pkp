@@ -59,7 +59,7 @@ module Admin
     private
 
     def set_subscription!
-      @subscription = Subscription.find(params[:id])
+      @subscription = Subscription.all.find(params[:id])
     end
 
     def subscription_params

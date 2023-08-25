@@ -2,7 +2,7 @@
 
 <p>
   <%= mail_to @contact.user.email, @contact.user.email %> a ajouté votre adresse E-mail à la liste
-  de ses contacts sur <%= link_to 'Parkour Paris Inscriptions', root_url, target: '_blank' %>
+  de ses contacts sur <%= link_to 'Parkour Paris Inscriptions', root_url, target: '_blank', rel: 'noopener noreferrer' %>
 </p>
 
 <p>
