@@ -60,10 +60,18 @@ module Admin
       @subscriptions = @course.subscriptions
                               .joins(member: :user)
                               .filter_by_status(params[:status])
-                              .where(year: params[:year].presence || Subscription.current_year)
-                              .where(members: { level: params[:level].presence || Member.levels.keys })
+                              .where(year: subscription_year)
+                              .where(members: { level: subscription_levels })
                               .order(session[:admin_course_subscriptions_order], created_at: :desc)
                               .includes(member: %i[user avatar_attachment])
+    end
+
+    def subscription_year
+      params[:year].presence || Subscription.current_year
+    end
+
+    def subscription_levels
+      params[:level].presence || Member.levels.keys
     end
 
     def course_params
