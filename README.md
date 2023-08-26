@@ -1,4 +1,6 @@
-![Ruby](https://github.com/EmCousin/pkp/workflows/Ruby/badge.svg)
+![Rspec](https://github.com/EmCousin/pkp/workflows/rspec/badge.svg)
+![Rubocop](https://github.com/EmCousin/pkp/workflows/rubocop/badge.svg)
+![Brakeman](https://github.com/EmCousin/pkp/workflows/brakeman/badge.svg)
 [![GitHub issues](https://img.shields.io/github/issues/EmCousin/pkp)](https://github.com/EmCousin/pkp/issues)
 [![Maintainability](https://api.codeclimate.com/v1/badges/d11f43afa6788ac81980/maintainability)](https://codeclimate.com/github/EmCousin/pkp/maintainability)
 
@@ -25,7 +27,7 @@ Back-Office interface for [Parkour Paris](https://inscriptions.parkourparis.fr)
 * Run `yarn install`
 
 ## Booting
-* Run `foreman start -f Procfile.dev`
+* Run `bin/dev`
 
 ## Running tests
 * Run `rspec`
