@@ -3,6 +3,7 @@
 module Admin
   class CoursesController < AdminController
     before_action :set_course, only: %i[show edit update destroy]
+    before_action :set_subscriptions, only: :show
     before_action :filter_available_categories!, only: %i[new], unless: :available_categories?
 
     def index
@@ -53,6 +54,16 @@ module Admin
 
     def set_course
       @course = Course.all.find(params[:id])
+    end
+
+    def set_subscriptions
+      @subscriptions = @course.subscriptions
+                              .joins(member: :user)
+                              .filter_by_status(params[:status])
+                              .where(year: params[:year].presence || Subscription.current_year)
+                              .where(members: { level: params[:level].presence || Member.levels.keys })
+                              .order(session[:admin_course_subscriptions_order], created_at: :desc)
+                              .includes(member: %i[user avatar_attachment])
     end
 
     def course_params

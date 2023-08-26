@@ -106,21 +106,10 @@
       </div>
     <% end %>
 
-    <% subscriptions = @course.subscriptions
-                              .joins(member: :user)
-                              .filter_by_status(params[:status])
-                              .where(year: params[:year].presence || Subscription.current_year)
-                              .where(members: { level: params[:level].presence || Member.levels.keys })
-                              .order(session[:admin_course_subscriptions_order], created_at: :desc)
-                              .includes(member: [:user, :avatar_attachment]) %>
-
-
-
-
     <div class="clearfix"></div>
 
     <div class="mt-2">
-      <%= subscriptions.size %> résultat(s)
+      <%= @subscriptions.size %> résultat(s)
     </div>
 
     <%= turbo_frame_tag :course_subscriptions do %>
@@ -159,20 +148,14 @@
         </thead>
 
         <tbody>
-          <% if subscriptions.empty? %>
+          <% if @subscriptions.empty? %>
             <tr>
               <td colspan="9" class="text-center">
                 <%= link_to t('.new_subscription'), new_admin_subscription_path, class: "btn btn-primary", data: { turbo_frame: '_top' } %>
               </td>
             </tr>
           <% else %>
-            <%= render partial: 'admin/courses/subscription',
-                       collection: @course.subscriptions
-                                          .joins(member: :user)
-                                          .filter_by_status(params[:status])
-                                          .where(year: params[:year].presence || Subscription.current_year)
-                                          .order(session[:admin_course_subscriptions_order], created_at: :desc)
-                                          .includes(member: [:user, :avatar_attachment]) %>
+            <%= render partial: 'admin/courses/subscription', collection: @subscriptions %>
           <% end %>
         </tbody>
       </table>
