@@ -1,6 +1,6 @@
-![Rspec](https://github.com/EmCousin/pkp/actions/workflows/rspec.yml/badge.svg)
-![Rubocop](https://github.com/EmCousin/pkp/actions/workflows/rubocop.yml/badge.svg)
-![Brakeman](https://github.com/EmCousin/pkp/actions/workflows/brakeman.yml/badge.svg)
+[![Rspec](https://github.com/EmCousin/pkp/actions/workflows/rspec.yml/badge.svg)](https://github.com/EmCousin/pkp/actions/workflows/rspec.yml)
+[![Rubocop](https://github.com/EmCousin/pkp/actions/workflows/rubocop.yml/badge.svg)](https://github.com/EmCousin/pkp/actions/workflows/rubocop.yml)
+[![Brakeman](https://github.com/EmCousin/pkp/actions/workflows/brakeman.yml/badge.svg)](https://github.com/EmCousin/pkp/actions/workflows/brakeman.yml)
 [![GitHub issues](https://img.shields.io/github/issues/EmCousin/pkp)](https://github.com/EmCousin/pkp/issues)
 [![Maintainability](https://api.codeclimate.com/v1/badges/d11f43afa6788ac81980/maintainability)](https://codeclimate.com/github/EmCousin/pkp/maintainability)
 
