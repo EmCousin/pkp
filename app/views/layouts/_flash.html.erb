@@ -14,3 +14,12 @@
     </button>
   </div>
 <% end %>
+
+<% if current_user&.invalid_email_provider? %>
+  <div class="alert alert-danger alert-dismissible fade show text-center mb-0" role="alert">
+    <span><%= t('.invalid_email_provider', email: current_user.email) %></span>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+<% end %>

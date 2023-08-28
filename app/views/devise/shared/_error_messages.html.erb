@@ -1,8 +1,8 @@
 <% if resource.errors.any? %>
-  <div id="error_explanation" class="error_explanation">
-    <ul>
+  <div id="error_explanation" class="alert alert-danger">
+    <ul class="list-group list-group-flush bg-transparent">
       <% resource.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
+        <li class="list-group-item bg-transparent"><%= message %></li>
       <% end %>
     </ul>
   </div>

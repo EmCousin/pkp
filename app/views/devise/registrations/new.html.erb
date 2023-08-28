@@ -37,13 +37,13 @@
         <%= render "devise/shared/error_messages", resource: resource %>
         <div class="row">
           <div class="form-group col-sm">
-            <%= form.label :email %><br />
-            <%= form.email_field :email, autocomplete: "email", autofocus: true, required: true, class: "form-control" %>
+            <%= form.label :email %>
+            <%= form.email_field :email, autocomplete: "email", autofocus: true, required: true, class: "form-control", placeholder: "monemail@example.fr" %>
           </div>
 
           <div class="form-group col-sm mb-2" data-controller="input">
             <%= form.label :email_confirmation %>
-            <%= form.email_field :email_confirmation, autocomplete: "email", required: true, class: "form-control", data: { action: "paste->input#prevent" } %>
+            <%= form.email_field :email_confirmation, autocomplete: "email", required: true, class: "form-control", data: { action: "paste->input#prevent" }, placeholder: "monemail@example.fr" %>
           </div>
         </div>
 
