@@ -66,7 +66,7 @@ fr:
         user:
           attributes:
             email:
-              invalid_provider: est invalide. Le fournisseur d'email que vous avez renseigné (%{value}) bloque les mails de notre plateforme (confirmations d'inscription, instructions pour réinitialiser votre mot de passe.). Veuillez utiliser une autre adresse E-mail.
+              invalid_provider: est invalide. Le fournisseur d'email que vous avez renseigné (%{value}) bloque les mails de notre plateforme (confirmations d'inscription, instructions pour réinitialiser votre mot de passe). Veuillez utiliser une autre adresse E-mail.
             password:
               too_short: trop court
             terms_of_service:
@@ -376,7 +376,7 @@ fr:
   layouts:
     flash:
       invalid_email_provider:
-        L'adresse email de votre compte (%{email}) bloque les emails automatiques provenant de votre service. Cela veut dire que vous ne pouvez pas recevoir les emails de confirmation d'inscriptions ou encore de réinitialisation de votre mot de passe. Nous vous conseillons d'utiliser une autre adresse email en allant dans les paramètres de votre compte.
+        L'adresse email de votre compte (%{email}) bloque les emails automatiques provenant de votre service. Cela veut dire que vous ne pouvez pas recevoir les emails de confirmation d'inscription ou encore de réinitialisation de votre mot de passe. Nous vous conseillons d'utiliser une autre adresse email en allant dans les paramètres de votre compte.
     navbar:
       admin: Admin
       members: Membres
