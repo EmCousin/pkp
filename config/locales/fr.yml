@@ -137,8 +137,8 @@ fr:
         contact_name: Contact d'urgence
         contact_phone_number: Téléphone du contact
         contact_relationship: Lien de parenté du contact
-        agreed_to_advertising_right: "Droit à l'image"
-        avatar: Photo de l'Élève
+        agreed_to_advertising_right: Droit à l'image
+        avatar: Photo de l'élève
         full_name: Nom complet
         level: Niveau
         levels:
