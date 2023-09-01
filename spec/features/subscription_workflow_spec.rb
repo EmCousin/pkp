@@ -140,7 +140,7 @@ feature "Subscription Workflow", type: :feature do
 
     click_button 'Sauvegarder'
 
-    expect(page).to have_text('Membre ajouté')
+    expect(page).to have_text('Élève ajouté·e')
     expect(find_field('subscription_member_id').find('option[selected]').text).to eq member.full_name
     select(categories.first.title, from: 'subscription_category_id')
 
