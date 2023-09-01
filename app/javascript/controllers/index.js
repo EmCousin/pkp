@@ -10,6 +10,9 @@ application.register("confirm", ConfirmController)
 import FormController from "./form_controller"
 application.register("form", FormController)
 
+import ImageUploadController from "./image_upload_controller"
+application.register("image-upload", ImageUploadController)
+
 import InputController from "./input_controller"
 application.register("input", InputController)
 

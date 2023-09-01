@@ -103,8 +103,11 @@ fr:
               less_than_or_equal_to: doit être inférieur ou égal à 100
     models:
       user:
-        one: Membre
-        other: Membres
+        one: Compte utilisateur
+        other: Comptes utilisateur
+      member:
+        one: Élève
+        other: Élève·s
       course:
         one: Cours
         other: Cours
@@ -135,7 +138,7 @@ fr:
         contact_phone_number: Téléphone du contact
         contact_relationship: Lien de parenté du contact
         agreed_to_advertising_right: "Droit à l'image"
-        avatar: Photo
+        avatar: Photo de l'Élève
         full_name: Nom complet
         level: Niveau
         levels:
@@ -329,6 +332,7 @@ fr:
       upload_medical_certificate: Joindre le certificat médical
       change_signed_form: Remplacer le formulaire
       change_medical_certificate: Remplacer le certificat médical
+      edit_member: Modifier le profil de l'élève
     edit:
       title: Mes informations personnelles
     alumni_accesses:
@@ -349,11 +353,13 @@ fr:
       create:
         success: Inscription créée avec succès !
     members:
-      new:
+      form:
         advertising_right_statement: J'autorise l'utilisation, l'affichage et la publication de mon image provenant des activités de Parkour Paris, à des fins de promotion (tous médias) et d'information des activités de l'association. (panneaux, plaquettes, site internet).
         contact_name: Nom complet du contact
       create:
-        success: Membre ajouté
+        success: Élève ajouté·e
+      update:
+        success: Élève modifié·e
     payments:
       new:
         payment_by_card: Paiement par carte bancaire

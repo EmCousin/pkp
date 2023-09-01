@@ -1,7 +1,7 @@
 <div class="row p-2">
   <div class="col-4">
     <%= image_tag url_for(subscription.member.avatar), alt: "Avatar #{subscription.member.first_name}", width: 30 %>
-    <%= subscription.member.full_name %>
+    <%= link_to subscription.member.full_name, [:edit, :dashboard, subscription.member] %>
   </div>
 
   <div class="col">
@@ -39,6 +39,8 @@
         class="dropdown-menu"
         aria-labelledby="dropdownMenuSubscription<%= subscription.id %>"
       >
+        <%= link_to t('.edit_member'), [:edit, :dashboard, subscription.member], class: "dropdown-item" %>
+
         <%= link_to t('.download_subscription_form'), rails_blob_path(subscription.form), disposition: "attachment", class: "dropdown-item" if subscription.form.attached? %>
 
         <%= link_to t('.upload_signed_form'), edit_dashboard_subscription_signed_form_path(subscription.id), class: "dropdown-item" if Rails.configuration.features.signed_form[:enabled] && !subscription.signed_form.attached? %>
