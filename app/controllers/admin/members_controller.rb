@@ -69,6 +69,7 @@ module Admin
       members = members.for_category(params[:category]) if params[:category].present?
       members = members.where(level: params[:level]) if params[:level].present?
       members = members.for_subscription_year(params[:subscription_year]) if params[:subscription_year].present?
+      members = members.for_subscription_course(params[:course_id]) if params[:course_id].present?
       members = members.page(params[:page]).per(25) if params[:no_paginate].blank?
       @members = members.includes(:user, :contacts).with_attached_avatar
     end

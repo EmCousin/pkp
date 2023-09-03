@@ -6,13 +6,16 @@
 
     <%= form_with(url: %i[admin members], local: true, method: :get, data: { turbo: false }) do %>
       <div class="row">
-        <div class="col-md-4 mb-2">
+        <div class="col-md-3 mb-2">
           <%= text_field_tag :q, params[:q], class: "form-control", placeholder: t('.search_by_name') %>
         </div>
-        <div class="col-md-4 mb-2">
-          <%= collection_select nil, :category, Category.all, :id, :title, { prompt: t('.search_by_category'), selected: params[:category], include_blank: t('.search_by_category') }, autocomplete: :off, class: 'form-control'  %>
+        <div class="col-md-3 mb-2">
+          <%= collection_select nil, :category, Category.all, :id, :title, { selected: params[:category], include_blank: t('.all_categories') }, autocomplete: :off, class: 'form-control'  %>
         </div>
-        <div class="col-md-4 mb-2">
+        <div class="col-md-3 mb-2">
+          <%= collection_select nil, :course_id, Course.all, :id, :title, { selected: params[:course_id], include_blank: t('.all_courses') }, autocomplete: :off, class: 'form-control'  %>
+        </div>
+        <div class="col-md-3 mb-2">
           <%= select_tag(
             :subscription_year,
             options_for_select(

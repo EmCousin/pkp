@@ -15,6 +15,11 @@ module Members
         joins(:subscriptions)
           .rewhere(subscriptions: { year: subscription_year })
       end)
+
+      scope(:for_subscription_course, lambda do |course_id|
+        joins(subscriptions: :courses)
+          .where(courses: { id: course_id })
+      end)
     end
 
     class_methods do

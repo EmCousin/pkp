@@ -225,7 +225,8 @@ fr:
       index:
         title: Liste des membres
         search_by_name: Nom
-        search_by_category: Catégorie
+        all_categories: Toutes les catégories
+        all_courses: Tous les cours
         no_paginate: Désactiver la pagination
         csv_export: Exporter au format CSV
       show:
