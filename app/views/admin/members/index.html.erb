@@ -10,10 +10,10 @@
           <%= text_field_tag :q, params[:q], class: "form-control", placeholder: t('.search_by_name') %>
         </div>
         <div class="col-md-3 mb-2">
-          <%= collection_select nil, :category, Category.all, :id, :title, { selected: params[:category], include_blank: t('.all_categories') }, autocomplete: :off, class: 'form-control'  %>
+          <%= collection_select nil, :category, Category.order(:created_at), :id, :title, { selected: params[:category], include_blank: t('.all_categories') }, autocomplete: :off, class: 'form-control'  %>
         </div>
         <div class="col-md-3 mb-2">
-          <%= collection_select nil, :course_id, Course.all, :id, :title, { selected: params[:course_id], include_blank: t('.all_courses') }, autocomplete: :off, class: 'form-control'  %>
+          <%= collection_select nil, :course_id, Course.order(:created_at), :id, :title, { selected: params[:course_id], include_blank: t('.all_courses') }, autocomplete: :off, class: 'form-control'  %>
         </div>
         <div class="col-md-3 mb-2">
           <%= select_tag(
