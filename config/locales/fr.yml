@@ -80,10 +80,11 @@ fr:
         subscription:
           attributes:
             courses:
-              must_exist: ":  minimum un cours"
+              must_exist: ": minimum un cours"
               limit_exceeded: ": maximum %{count} cours"
               unique_category: ": Les cours doivent être de la même catégorie"
               unique_weekday: ": Les cours ne doivent pas être le même jour"
+              unavailable: ": L'un des cours est complet"
             member:
               too_young: n'a pas l'âge minimum requis
               too_old: n'a pas l'âge maximum requis
