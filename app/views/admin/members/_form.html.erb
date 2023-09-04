@@ -111,9 +111,17 @@
     <%= form.collection_select(:contact_relationship, Member::CONTACTS, :to_s, :to_s, { include_blank: true }, required: true, class: "form-control") %>
   </div>
 
-  <div class="form-group">
-    <%= form.label :avatar %>
-    <%= form.file_field :avatar %>
+  <div class="form-group" data-controller="image-upload">
+    <%= f.label :avatar %>
+    <%= f.file_field :avatar, required: !f.object.avatar.attached?, data: { image_upload_target: 'input', action: 'image-upload#preview' } %>
+
+    <div class="mt-2">
+      <% if f.object.avatar.attached? %>
+        <%= image_tag f.object.avatar, width: 128, data: { image_upload_target: 'output' } %>
+      <% else %>
+        <%= image_tag 'user.svg', width: 128, class: "bg-light", data: { image_upload_target: 'output' } %>
+      <% end %>
+    </div>
   </div>
 
   <div class="form-group">
