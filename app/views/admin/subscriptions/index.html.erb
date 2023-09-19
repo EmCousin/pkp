@@ -79,7 +79,11 @@
           </td>
           <td>
             <%= link_to [:admin, subscription.member] do %>
-              <%= image_tag url_for(subscription.member.avatar), width: 30 %>
+              <% if subscription.member.avatar.variable? %>
+                <%= image_tag subscription.member.avatar.variant(:mini), width: "30" %>
+              <% else %>
+                <%= image_tag subscription.member.avatar, width: "30" %>
+              <% end %>
               <%= subscription.member.full_name %>
             <% end %>
           </td>
