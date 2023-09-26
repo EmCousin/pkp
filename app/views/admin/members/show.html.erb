@@ -9,7 +9,7 @@
 
 <div class="row">
   <div class="col-3 offset-1">
-    <%= image_tag url_for(@member.avatar), width: "100%" %>
+    <%= image_tag @member.avatar, width: "100%" %>
 
     <p class="mt-3">
       <strong><%= User.human_attribute_name(:admin) %> :</strong>
@@ -72,8 +72,8 @@
     <br />
 
     <% if @member.subscriptions.any? %>
-      <% @member.subscriptions.includes(:courses).each do |subscription| %>
-        <h1><%= subscription.year %></h1>
+      <% @member.subscriptions.order(year: :desc).includes(:courses).each do |subscription| %>
+        <h1><%= subscription.year %> - <%= subscription.year + 1%></h1>
         <table class="table">
           <thead>
             <tr>
@@ -86,7 +86,7 @@
           <tbody>
             <% subscription.courses.each do |course| %>
               <tr>
-                <td><%= link_to course.title, admin_course_path(course.id) %></td>
+                <td><%= link_to course.title, [:admin, course] %></td>
                 <td><%= course.category.title %></td>
                 <td><%= course.weekday %></td>
                 <td>
