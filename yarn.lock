@@ -840,10 +840,10 @@ supports-color@^6.1.0:
   dependencies:
     has-flag "^3.0.0"
 
-tail.select.js@^0.5.22:
-  version "0.5.22"
-  resolved "https://registry.yarnpkg.com/tail.select.js/-/tail.select.js-0.5.22.tgz#d00d2625f0115cfc07374c6730556bbef6d68abb"
-  integrity sha512-IwaQsZ2VJXKGjpFt7MxRlZ5khajmiah1vS5uC6T/RhJZgfgiRWDAhQprQ3lLf1QKvSJiPorkeXgJv2u0OeVh5A==
+tail.select.js@^0.5.23:
+  version "0.5.23"
+  resolved "https://registry.yarnpkg.com/tail.select.js/-/tail.select.js-0.5.23.tgz#d6a7881775aa84d41bb7a230322f7629117711e9"
+  integrity sha512-ZyT9YN9FCdhP/k5Av6fDJXa19Tlf6VUjO01foMJwTqWQFCU9rh1NdW0YRt8jU01OPDInALRxtemUz0R81q8N3Q==
 
 through@~2.3.4:
   version "2.3.8"
