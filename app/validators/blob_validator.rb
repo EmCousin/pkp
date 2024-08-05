@@ -69,7 +69,7 @@ class BlobValidator < ActiveModel::EachValidator
     case options[:content_type]
     when Regexp then options[:content_type].match?(blob.content_type)
     when Array then options[:content_type].include?(blob.content_type)
-    when Symbol then blob.public_send("#{options[:content_type]}?")
+    when Symbol then blob.public_send(:"#{options[:content_type]}?")
     else options[:content_type] == blob.content_type
     end
   end
@@ -104,13 +104,13 @@ class BlobValidator < ActiveModel::EachValidator
     return unless options.dig(:representable, dimension_attribute)
 
     if (limit = options.dig(:representable, dimension_attribute, :greater_than))
-      record.errors.add(attribute, "#{dimension_attribute}_too_short".to_sym, value: limit) if value.metadata[dimension_attribute] <= limit
+      record.errors.add(attribute, :"#{dimension_attribute}_too_short", value: limit) if value.metadata[dimension_attribute] <= limit
     elsif (limit = options.dig(:representable, dimension_attribute, :greater_than_or_equal_to))
-      record.errors.add(attribute, "#{dimension_attribute}_too_short_strict".to_sym, value: limit) if value.metadata[dimension_attribute] < limit
+      record.errors.add(attribute, :"#{dimension_attribute}_too_short_strict", value: limit) if value.metadata[dimension_attribute] < limit
     elsif (limit = options.dig(:representable, dimension_attribute, :less_than))
-      record.errors.add(attribute, "#{dimension_attribute}_too_long".to_sym, value: limit) if value.metadata[dimension_attribute] >= limit
+      record.errors.add(attribute, :"#{dimension_attribute}_too_long", value: limit) if value.metadata[dimension_attribute] >= limit
     elsif (limit = options.dig(:representable, dimension_attribute, :less_than_or_equal_to))
-      record.errors.add(attribute, "#{dimension_attribute}_too_long_strict".to_sym, value: limit) if value.metadata[dimension_attribute] > limit
+      record.errors.add(attribute, :"#{dimension_attribute}_too_long_strict", value: limit) if value.metadata[dimension_attribute] > limit
     end
   end
   # rubocop:enable Metrics/AbcSize

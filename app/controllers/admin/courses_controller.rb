@@ -53,7 +53,7 @@ module Admin
     end
 
     def set_course
-      @course = Course.all.find(params[:id])
+      @course = Course.find(params[:id])
     end
 
     def set_subscriptions

@@ -20,11 +20,11 @@ gem 'puma', '~> 4.3'
 
 # Assets
 gem 'cssbundling-rails'
-gem 'stimulus-rails'
-gem 'turbo-rails'
 gem 'jquery-rails'
 gem 'jsbundling-rails'
 gem 'sassc-rails'
+gem 'stimulus-rails'
+gem 'turbo-rails'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'

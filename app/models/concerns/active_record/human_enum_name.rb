@@ -4,12 +4,12 @@ module ActiveRecord
   module HumanEnumName
     # rubocop:disable Metrics/MethodLength
     def enum(name = nil, values = nil, **options)
-      super(name, values, **options)
+      super
 
       definitions = options.slice!(:_prefix, :_suffix, :_scopes, :_default)
 
       definitions.each do |definition_key, definition_values|
-        define_singleton_method "#{definition_key}_options" do
+        define_singleton_method :"#{definition_key}_options" do
           definition_values.map do |key, _value|
             {
               value: key.to_s,
@@ -18,7 +18,7 @@ module ActiveRecord
           end
         end
 
-        define_method "#{definition_key}_text" do
+        define_method :"#{definition_key}_text" do
           public_send(definition_key).presence && self.class.human_enum_name(definition_key, public_send(definition_key))
         end
       end

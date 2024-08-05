@@ -51,7 +51,7 @@ module Admin
     private
 
     def set_member
-      @member = Member.all.find(params[:id])
+      @member = Member.find(params[:id])
     end
 
     def member_params

@@ -10,6 +10,6 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   def previous
-    self.class.where('created_at < ?', created_at).order(created_at: :desc).first || self.class.last
+    self.class.where(created_at: ...created_at).order(created_at: :desc).first || self.class.last
   end
 end

@@ -16,6 +16,6 @@ class RegistrationsController < Devise::RegistrationsController
   private
 
   def update_resource(resource, params)
-    super(resource, params) && resource.valid?(:account_setup)
+    super && resource.valid?(:account_setup)
   end
 end
