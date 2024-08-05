@@ -42,7 +42,7 @@ module Dashboard
     end
 
     def set_member
-      @member = Member.find_by(id: params[:member_id])
+      @member = current_user.members.find_by(id: params[:member_id])
     end
   end
 end

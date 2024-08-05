@@ -1,0 +1,75 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Unscoped Find",
+      "warning_code": 82,
+      "fingerprint": "0aa94d3ded5b8bcd86a1dfd46b744080ea74527507c8ca16cc6738aa404fd588",
+      "check_name": "UnscopedFind",
+      "message": "Unscoped call to `Course#find`",
+      "file": "app/controllers/admin/courses_controller.rb",
+      "line": 56,
+      "link": "https://brakemanscanner.org/docs/warning_types/unscoped_find/",
+      "code": "Course.find(params[:id])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Admin::CoursesController",
+        "method": "set_course"
+      },
+      "user_input": "params[:id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        285
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Unscoped Find",
+      "warning_code": 82,
+      "fingerprint": "5845e02b1070fe61ff0fae7cab044b2c5707b1ee6f2599ff2c3a2b47fe75ed31",
+      "check_name": "UnscopedFind",
+      "message": "Unscoped call to `Member#find`",
+      "file": "app/controllers/admin/members_controller.rb",
+      "line": 54,
+      "link": "https://brakemanscanner.org/docs/warning_types/unscoped_find/",
+      "code": "Member.find(params[:id])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Admin::MembersController",
+        "method": "set_member"
+      },
+      "user_input": "params[:id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        285
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Unscoped Find",
+      "warning_code": 82,
+      "fingerprint": "5d68f031210a7cfce4269315252a92e7b3cec31099a60814913e9fd90e0b577d",
+      "check_name": "UnscopedFind",
+      "message": "Unscoped call to `Subscription#find`",
+      "file": "app/controllers/admin/subscriptions_controller.rb",
+      "line": 62,
+      "link": "https://brakemanscanner.org/docs/warning_types/unscoped_find/",
+      "code": "Subscription.find(params[:id])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Admin::SubscriptionsController",
+        "method": "set_subscription!"
+      },
+      "user_input": "params[:id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        285
+      ],
+      "note": ""
+    }
+  ],
+  "updated": "2024-08-05 09:58:19 +0200",
+  "brakeman_version": "6.1.2"
+}
