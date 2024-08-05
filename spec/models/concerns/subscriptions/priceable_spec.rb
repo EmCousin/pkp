@@ -34,24 +34,24 @@ describe Subscriptions::Priceable, type: :model do
     context 'when there is 1 course' do
       let(:count) { 1 }
 
-      it 'should set the fee to 200' do
-        expect(subject.fee).to eq 200
+      it 'should set the fee to 240' do
+        expect(subject.fee).to eq 240
       end
     end
 
     context 'when there are 2 courses' do
       let(:count) { 2 }
 
-      it 'should set the fee to 300' do
-        expect(subject.fee).to eq 300
+      it 'should set the fee to 360' do
+        expect(subject.fee).to eq 360
       end
     end
 
     context 'when there are 3 courses' do
       let(:count) { 3 }
 
-      it 'should set the fee to 350' do
-        expect(subject.fee).to eq 350
+      it 'should set the fee to 420' do
+        expect(subject.fee).to eq 420
       end
     end
   end
@@ -62,16 +62,16 @@ describe Subscriptions::Priceable, type: :model do
     context 'when there is 1 course' do
       let(:count) { 1 }
 
-      it 'should set the fee to 200' do
-        expect(subject.fee).to eq 200
+      it 'should set the fee to 240' do
+        expect(subject.fee).to eq 240
       end
     end
 
     context 'when there are 2 courses' do
       let(:count) { 2 }
 
-      it 'should set the fee to 300' do
-        expect(subject.fee).to eq 300
+      it 'should set the fee to 360' do
+        expect(subject.fee).to eq 360
       end
     end
   end
@@ -82,16 +82,16 @@ describe Subscriptions::Priceable, type: :model do
     context 'when there is 1 course' do
       let(:count) { 1 }
 
-      it 'should set the fee to 200' do
-        expect(subject.fee).to eq 200
+      it 'should set the fee to 240' do
+        expect(subject.fee).to eq 240
       end
     end
 
     context 'when there are 2 courses' do
       let(:count) { 2 }
 
-      it 'should set the fee to 300' do
-        expect(subject.fee).to eq 300
+      it 'should set the fee to 360' do
+        expect(subject.fee).to eq 360
       end
     end
   end
@@ -102,8 +102,8 @@ describe Subscriptions::Priceable, type: :model do
     context 'when there is 1 course' do
       let(:count) { 1 }
 
-      it 'should set the fee to 175' do
-        expect(subject.fee).to eq 175
+      it 'should set the fee to 210' do
+        expect(subject.fee).to eq 210
       end
     end
   end
@@ -114,8 +114,8 @@ describe Subscriptions::Priceable, type: :model do
     context 'when there is 1 course' do
       let(:count) { 1 }
 
-      it 'should set the fee to 175' do
-        expect(subject.fee).to eq 175
+      it 'should set the fee to 210' do
+        expect(subject.fee).to eq 210
       end
     end
   end
@@ -136,7 +136,7 @@ describe Subscriptions::Priceable, type: :model do
     let(:category_title) { 'Kidz (8 - 9 ans)' }
     let(:count) { 1 }
 
-    it { expect(subject.fee_cents).to eq 17500 }
+    it { expect(subject.fee_cents).to eq 21000 }
   end
 
   describe 'spring pricing' do

@@ -75,11 +75,11 @@ module Subscriptions
     def default_pricing
       case category.title
       when 'Adulte'
-        [200, 300, 350]
+        [240, 360, 420]
       when 'Adolescent (10 - 12 ans)', 'Adolescent (13 - 15 ans)'
-        [200, 300]
+        [240, 360]
       when 'Kidz (6 - 7 ans)', 'Kidz (8 - 9 ans)'
-        [175]
+        [210]
       end
     end
   end

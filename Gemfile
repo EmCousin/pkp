@@ -20,7 +20,8 @@ gem 'puma', '~> 4.3'
 
 # Assets
 gem 'cssbundling-rails'
-gem 'hotwire-rails'
+gem 'stimulus-rails'
+gem 'turbo-rails'
 gem 'jquery-rails'
 gem 'jsbundling-rails'
 gem 'sassc-rails'
