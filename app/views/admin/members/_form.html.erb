@@ -1,13 +1,11 @@
 <%= form_for [:admin, @member],
-             data: { controller: :form } do |form| %>
+             data: { controller: :form, turbo: false } do |form| %>
   <% if form.object.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(form.object.errors.count, "error") %> prohibited this member from being saved:</h2>
-
+    <div id="error_explanation" class="alert alert-danger">
       <ul>
-      <% form.object.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
+        <% form.object.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
       </ul>
     </div>
   <% end %>
@@ -116,7 +114,7 @@
     <%= form.file_field :avatar, required: !form.object.avatar.attached?, data: { image_upload_target: 'input', action: 'image-upload#preview' } %>
 
     <div class="mt-2">
-      <% if form.object.avatar.attached? %>
+      <% if form.object.avatar.attached? && form.object.persisted? %>
         <%= image_tag form.object.avatar, width: 128, data: { image_upload_target: 'output' } %>
       <% else %>
         <%= image_tag 'user.svg', width: 128, class: "bg-light", data: { image_upload_target: 'output' } %>
