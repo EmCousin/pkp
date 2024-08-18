@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-md-6 offset-md-3">
-    <%= form_for [:admin, @course], data: { controller: :form } do |form| %>
+    <%= form_for [:admin, @course], data: { turbo: false } do |form| %>
       <% if form.object.errors.any? %>
         <div id="error_explanation">
           <ul>
@@ -48,9 +48,7 @@
 
       <div class="actions">
         <%= link_to t('defaults.back'), %i[admin courses], class: "btn btn-link float-left" %>
-        <%= form.submit t('defaults.save'),
-                        class: "btn btn-dark float-lg-right" ,
-                        data: { form_target: :submit } %>
+        <%= form.submit t('defaults.save'), class: "btn btn-dark float-lg-right" %>
       </div>
     <% end %>
   </div>

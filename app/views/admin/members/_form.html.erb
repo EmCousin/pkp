@@ -1,5 +1,5 @@
 <%= form_for [:admin, @member],
-             data: { controller: :form, turbo: false } do |form| %>
+             data: { turbo: false } do |form| %>
   <% if form.object.errors.any? %>
     <div id="error_explanation" class="alert alert-danger">
       <ul>
@@ -129,8 +129,6 @@
 
   <div class="actions d-flex mb-3">
     <%= link_to t('defaults.back'), :back, class: 'btn btn-default btn-lg flex-fill' %>
-    <%= form.submit t('defaults.save'),
-                    class: 'btn btn-dark btn-lg flex-fill',
-                    data: { form_target: :submit } %>
+    <%= form.submit t('defaults.save'), class: 'btn btn-dark btn-lg flex-fill' %>
   </div>
 <% end %>

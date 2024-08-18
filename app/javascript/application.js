@@ -16,7 +16,7 @@ import "tail.select.js/js/tail.select-full"
 
 import "./controllers"
 
-document.addEventListener("turbo:load", function() {
+document.addEventListener("DOMContentLoaded", function() {
   $('[data-toggle="tooltip"]').tooltip()
   $('[data-toggle="dropdown"]').dropdown()
 })

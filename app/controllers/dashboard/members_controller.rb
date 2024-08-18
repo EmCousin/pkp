@@ -3,6 +3,7 @@
 module Dashboard
   class MembersController < DashboardController
     include AccessFilters
+    include Subscriptions::Pdf
 
     before_action :set_member, only: %i[edit update]
 
@@ -24,6 +25,7 @@ module Dashboard
 
     def update
       if @member.update(member_params)
+        process_after_save(@member.current_subscription) if @member.current_subscription
         redirect_to dashboard_index_path, notice: t('.success')
       else
         render :edit, status: :unprocessable_entity

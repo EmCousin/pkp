@@ -1,6 +1,6 @@
 <div class="container">
   <%= form_for [:admin, @subscription, :credit_notes],
-               data: { controller: :form } do |form| %>
+               data: { turbo: false } do |form| %>
     <% if @subscription.errors.any? %>
       <div id="error_explanation">
         <h2><%= pluralize(@subscription.errors.count, "error") %> prohibited this credit note to be generated:</h2>
@@ -19,9 +19,7 @@
     </div>
 
     <div class="actions">
-      <%= form.submit t('defaults.save'),
-                      class: "btn btn-dark float-lg-right",
-                      data: { form_target: :submit } %>
+      <%= form.submit t('defaults.save'), class: "btn btn-dark float-lg-right" %>
       <%= link_to t('defaults.back'), %i[admin subscriptions], class: "btn btn-link float-left" %>
     </div>
   <% end %>
