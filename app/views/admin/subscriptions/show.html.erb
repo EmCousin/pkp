@@ -36,7 +36,11 @@
 
         <p>
           <strong><%= Subscription.human_attribute_name(:form) %> :</strong>
-          <%= link_to t('defaults.download'), rails_blob_path(@subscription.form, disposition: 'attachment') %>
+          <% if @subscription.form.attached? %>
+            <%= link_to t('defaults.download'), rails_blob_path(@subscription.form, disposition: 'attachment') %>
+          <% else %>
+            Le formulaire d'inscription n'a pas été généré. Essayez de mettre à jour l'inscription.
+          <% end %>
         </p>
 
         <% unless @subscription.needs_medical_certificate? %>
