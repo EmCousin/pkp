@@ -36,7 +36,6 @@ module Members
       validates :contact_phone_number, presence: true, phone: true
       validates :contact_relationship, presence: true, inclusion: { in: CONTACTS }
       validates :avatar, presence: true
-      validates :avatar, blob: { content_type: :image }
     end
   end
 end
