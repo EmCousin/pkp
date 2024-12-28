@@ -1,131 +1,197 @@
-<div class="row p-2">
-  <div class="col-4">
-    <%= image_tag url_for(subscription.member.avatar), alt: "Avatar #{subscription.member.first_name}", width: 30 %>
-    <%= link_to subscription.member.full_name, [:edit, :dashboard, subscription.member] %>
-  </div>
+<div class="relative flex items-center justify-between p-4 bg-white rounded-lg shadow-sm">
+  <div class="flex items-center space-x-3 flex-grow">
+    <div class="flex items-center space-x-2 w-1/3">
+      <%= image_tag url_for(subscription.member.avatar),
+                    alt: "Avatar #{subscription.member.first_name}",
+                    class: "w-8 h-8 rounded-full" %>
+      <%= link_to subscription.member.full_name,
+                  [:edit, :dashboard, subscription.member],
+                  class: "text-slate-900 hover:text-slate-700" %>
+    </div>
 
-  <div class="col">
-    <%= number_to_currency(subscription.fee, unit: "€", separator: ",", format: "%n %u") %>
-  </div>
+    <div class="w-1/4">
+      <%= number_to_currency(subscription.fee, unit: "€", separator: ",", format: "%n %u") %>
+    </div>
 
-  <div class="col">
-    <button
-      type="button"
-      data-toggle="collapse"
-      data-target="#collapse-subscription-<%= subscription.id %>"
-      role="button"
-      aria-expanded="false"
-      aria-controls="collapse-subscription-<%= subscription.id %>"
-    >
-      Détails
-    </button>
-  </div>
+    <div class="w-1/4">
+      <details class="peer group">
+        <summary class="flex cursor-pointer items-center rounded-md bg-white px-3 py-2 text-sm font-medium text-slate-900 hover:bg-slate-50 focus:outline-none focus-visible:ring focus-visible:ring-slate-500 focus-visible:ring-opacity-75">
+          <span>Détails</span>
+          <svg class="ml-2 h-5 w-5 text-slate-500 transition-transform group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        </summary>
+      </details>
 
-  <div class="col dropdown">
-    <% if subscription.completed? %>
-      Complété
-    <% else %>
-      <button
-        type="button"
-        class="dropdown-toggle"
-        id="dropdownMenuSubscription<%= subscription.id %>"
-        data-toggle="dropdown"
-        aria-haspopup="true"
-        aria-expanded="false"
-      >
-        <%= t('defaults.action') %>
-      </button>
-      <div
-        class="dropdown-menu"
-        aria-labelledby="dropdownMenuSubscription<%= subscription.id %>"
-      >
-        <%= link_to t('.edit_member'), [:edit, :dashboard, subscription.member], class: "dropdown-item" %>
+      <div class="absolute left-0 right-0 z-10 mt-2 grid transition-[grid-template-rows] duration-300 peer-open:grid-rows-[1fr] grid-rows-[0fr]">
+        <div class="overflow-hidden">
+          <div class="bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+            <div class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <%= Course.human_attribute_name(:title) %>
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <%= Course.human_attribute_name(:weekday) %>
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <%= Course.human_attribute_name(:category) %>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <% subscription.courses.each do |course| %>
+                    <tr>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><%= course.title %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><%= course.weekday %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><%= course.category.title %></td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
 
-        <%= link_to t('.download_subscription_form'), rails_blob_path(subscription.form), disposition: "attachment", class: "dropdown-item" if subscription.form.attached? %>
+            <div class="p-4 overflow-x-auto">
+              <div class="space-y-4">
+                <% if subscription.form.attached? %>
+                  <div class="flex flex-col">
+                    <span class="text-xs font-medium text-gray-500 uppercase mb-2">
+                      <%= link_to t('.subscription_form'),
+                                rails_blob_path(subscription.form),
+                                disposition: "attachment",
+                                class: "text-slate-900 hover:text-slate-700" %>
+                    </span>
 
-        <%= link_to t('.upload_signed_form'), edit_dashboard_subscription_signed_form_path(subscription.id), class: "dropdown-item" if Rails.configuration.features.signed_form[:enabled] && !subscription.signed_form.attached? %>
-
-        <%= link_to t('.upload_medical_certificate'), edit_dashboard_subscription_medical_certificate_path(subscription.id), class: "dropdown-item" if Rails.configuration.features.medical_certificate[:enabled] && !subscription.medical_certificate.attached? %>
-
-        <%= link_to t('.pay'), new_dashboard_subscription_payment_path(subscription.id), class: "dropdown-item" if Rails.configuration.features.online_payment[:enabled] && !subscription.paid? %>
-      </div>
-    <% end %>
-  </div>
-</div>
-
-<div class="table-responsive mt-3 collapse <%= show ? 'show' : ''%>" id="collapse-subscription-<%= subscription.id %>">
-  <table class="table">
-    <thead>
-      <tr>
-        <th><%= Course.human_attribute_name(:title) %></th>
-        <th><%= Course.human_attribute_name(:weekday) %></th>
-        <th><%= Course.human_attribute_name(:category) %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% subscription.courses.each do |course| %>
-        <tr>
-          <td><%= course.title %></td>
-          <td><%= course.weekday %></td>
-          <td><%= course.category.title %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-
-  <div class="table-responsive mt-3">
-    <table class="table">
-      <thead>
-        <tr>
-          <th><%= link_to t('.subscription_form'), rails_blob_path(subscription.form), disposition: "attachment" if subscription.form.attached? %></th>
-
-          <% if Rails.configuration.features.medical_certificate[:enabled] %>
-            <th><%= Subscription.human_attribute_name(:medical_certificate) %></th>
-          <% end %>
-          <% if Rails.configuration.features.online_payment[:enabled] %>
-            <th>Paiement</th>
-          <% end %>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <% if Rails.configuration.features.signed_form[:enabled] %>
-            <td>
-              <% if subscription.signed_form.attached? %>
-                Ajouté -
-                <%= link_to t('defaults.download'), rails_blob_path(subscription.signed_form, disposition: "attachment") %> -
-                <%= link_to t('defaults.replace'), edit_dashboard_subscription_signed_form_path(subscription.id) %>
-              <% else %>
-                <%= link_to t('.upload_signed_form'), edit_dashboard_subscription_signed_form_path(subscription.id), class: 'btn btn-primary' %>
-              <% end %>
-            </td>
-          <% end %>
-          <% if Rails.configuration.features.medical_certificate[:enabled] %>
-            <td>
-              <% if subscription.medical_certificate.attached? %>
-                Ajouté -
-                <%= link_to t('defaults.download'), rails_blob_path(subscription.medical_certificate, disposition: "attachment") %> -
-                <%= link_to t('defaults.replace'), edit_dashboard_subscription_medical_certificate_path(subscription.id) %>
-              <% else %>
-                <%= link_to t('.upload_medical_certificate'), edit_dashboard_subscription_medical_certificate_path(subscription.id), class: 'btn btn-primary' %>
-              <% end %>
-            </td>
-          <% end %>
-          <% if Rails.configuration.features.online_payment[:enabled] %>
-            <td>
-              <% if subscription.paid? %>
-                Payé
-                <% if subscription.invoice.attached? %>
-                  -
-                  <%= link_to t('defaults.download'), rails_blob_path(subscription.invoice, disposition: "attachment") %>
+                    <% if Rails.configuration.features.signed_form[:enabled] %>
+                      <div class="flex flex-wrap gap-2 items-center">
+                        <% if subscription.signed_form.attached? %>
+                          <span class="text-sm text-gray-900">Ajouté</span>
+                          <span class="text-gray-400">•</span>
+                          <%= link_to t('defaults.download'),
+                                    rails_blob_path(subscription.signed_form, disposition: "attachment"),
+                                    class: "text-sm text-slate-900 hover:text-slate-700" %>
+                          <span class="text-gray-400">•</span>
+                          <%= link_to t('defaults.replace'),
+                                    edit_dashboard_subscription_signed_form_path(subscription.id),
+                                    class: "text-sm text-slate-900 hover:text-slate-700" %>
+                        <% else %>
+                          <%= link_to t('.upload_signed_form'),
+                                    edit_dashboard_subscription_signed_form_path(subscription.id),
+                                    class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-slate-800 hover:bg-slate-900" %>
+                        <% end %>
+                      </div>
+                    <% end %>
+                  </div>
                 <% end %>
-              <% else %>
-                <%= link_to t('.pay'), new_dashboard_subscription_payment_path(subscription.id), class: 'btn btn-primary' %>
-              <% end %>
-            </td>
-          <% end %>
-        </tr>
-      </tbody>
-    </table>
+
+                <% if Rails.configuration.features.medical_certificate[:enabled] %>
+                  <div class="flex flex-col">
+                    <span class="text-xs font-medium text-gray-500 uppercase mb-2">
+                      <%= Subscription.human_attribute_name(:medical_certificate) %>
+                    </span>
+                    <div class="flex flex-wrap gap-2 items-center">
+                      <% if subscription.medical_certificate.attached? %>
+                        <span class="text-sm text-gray-900">Ajouté</span>
+                        <span class="text-gray-400">•</span>
+                        <%= link_to t('defaults.download'),
+                                  rails_blob_path(subscription.medical_certificate, disposition: "attachment"),
+                                  class: "text-sm text-slate-900 hover:text-slate-700" %>
+                        <span class="text-gray-400">•</span>
+                        <%= link_to t('defaults.replace'),
+                                  edit_dashboard_subscription_medical_certificate_path(subscription.id),
+                                  class: "text-sm text-slate-900 hover:text-slate-700" %>
+                      <% else %>
+                        <%= link_to t('.upload_medical_certificate'),
+                                  edit_dashboard_subscription_medical_certificate_path(subscription.id),
+                                  class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-slate-800 hover:bg-slate-900" %>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+
+                <% if Rails.configuration.features.online_payment[:enabled] %>
+                  <div class="flex flex-col">
+                    <span class="text-xs font-medium text-gray-500 uppercase mb-2">Paiement</span>
+                    <div class="flex flex-wrap gap-2 items-center">
+                      <% if subscription.paid? %>
+                        <span class="text-sm text-gray-900">Payé</span>
+                        <% if subscription.invoice.attached? %>
+                          <span class="text-gray-400">•</span>
+                          <%= link_to t('defaults.download'),
+                                    rails_blob_path(subscription.invoice, disposition: "attachment"),
+                                    class: "text-sm text-slate-900 hover:text-slate-700" %>
+                        <% end %>
+                      <% else %>
+                        <%= link_to t('.pay'),
+                                  new_dashboard_subscription_payment_path(subscription.id),
+                                  class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-slate-800 hover:bg-slate-900" %>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="w-1/4">
+      <% if subscription.completed? %>
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+          Complété
+        </span>
+      <% else %>
+        <div class="relative">
+          <details class="group">
+            <summary class="flex cursor-pointer items-center rounded-md bg-white px-3 py-2 text-sm font-medium text-slate-900 hover:bg-slate-50 focus:outline-none focus-visible:ring focus-visible:ring-slate-500 focus-visible:ring-opacity-75">
+              <span><%= t('defaults.action') %></span>
+              <svg class="ml-2 h-5 w-5 text-slate-500 transition-transform group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </summary>
+            <div class="absolute right-0 z-10 mt-2 w-56">
+              <div class="grid transition-[grid-template-rows] duration-300 group-open:grid-rows-[1fr] grid-rows-[0fr]">
+                <div class="overflow-hidden">
+                  <div class="rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5">
+                    <%= link_to t('.edit_member'),
+                              [:edit, :dashboard, subscription.member],
+                              class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+
+                    <% if subscription.form.attached? %>
+                      <%= link_to t('.download_subscription_form'),
+                                rails_blob_path(subscription.form),
+                                disposition: "attachment",
+                                class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+                    <% end %>
+
+                    <% if Rails.configuration.features.signed_form[:enabled] && !subscription.signed_form.attached? %>
+                      <%= link_to t('.upload_signed_form'),
+                                edit_dashboard_subscription_signed_form_path(subscription.id),
+                                class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+                    <% end %>
+
+                    <% if Rails.configuration.features.medical_certificate[:enabled] && !subscription.medical_certificate.attached? %>
+                      <%= link_to t('.upload_medical_certificate'),
+                                edit_dashboard_subscription_medical_certificate_path(subscription.id),
+                                class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+                    <% end %>
+
+                    <% if Rails.configuration.features.online_payment[:enabled] && !subscription.paid? %>
+                      <%= link_to t('.pay'),
+                                new_dashboard_subscription_payment_path(subscription.id),
+                                class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </details>
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>

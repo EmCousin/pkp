@@ -1,20 +1,20 @@
 <p>
   Pour être
-  <strong style="color:green;">complet</strong>, votre dossier doit
-  <strong style="color:red;">obligatoirement</strong>
+  <strong class="text-green-600">complet</strong>, votre dossier doit
+  <strong class="text-red-600">obligatoirement</strong>
   comporter :
 </p>
 
-<ul>
+<ul class="list-disc ml-6 space-y-2">
   <li>
     Un formulaire d'inscription pour la saison
     <%= Subscription.current_year %> / <%= Subscription.next_year %>
   </li>
   <li>
     Un
-    <strong style="color:red;">certificat médical</strong>
+    <strong class="text-red-600">certificat médical</strong>
     d'aptitude à la pratique du Parkour datant de
-    <strong style="color:red;">moins d'un mois</strong>
+    <strong class="text-red-600">moins d'un mois</strong>
     sauf si vous étiez déjà inscrit·e pour <em>l'année précédente ou celle d'avant</em>,
   </li>
   <li>
@@ -25,12 +25,13 @@
   </li>
 </ul>
 
-<p>
+<p class="mt-4">
   Afin de nous faciliter le contrôle des pièces et gagner du temps lors de la récupération, merci de joindre l'ensemble des pièces (formulaire signé, paiement par chèques/espèces, certificat médical à jour) dans
-  <strong style="color:red;">une pochette plastique perforée</strong>
+  <strong class="text-red-600">une pochette plastique perforée</strong>
   au format A4 comme suit :
+</p>
 
-<ul>
+<ul class="list-disc ml-6 space-y-2">
   <li>Au recto, face visible : le formulaire et la cotisation</li>
   <li>
     Au verso, face visible : le certificat médical (obligatoire sauf si vous étiez déjà inscrit·e en
@@ -40,18 +41,18 @@
   </li>
 </ul>
 
-<p>
+<p class="mt-4">
   Pour valider votre inscription, vous devez absolument apporter votre dossier <strong>complet</strong> et le remettre directement aux coachs présents,
-  <strong style="color:red;">lors de votre premier cours au plus tard</strong>.
+  <strong class="text-red-600">lors de votre premier cours au plus tard</strong>.
 </p>
 
-<p>
-  Tout dossier <strong style="color:red;">incomplet</strong> se verra systématiquement <strong style="color:red;">refusé</strong> et vous ne serez pas autorisé à participer aux cours.
+<p class="mt-4">
+  Tout dossier <strong class="text-red-600">incomplet</strong> se verra systématiquement <strong class="text-red-600">refusé</strong> et vous ne serez pas autorisé à participer aux cours.
 </p>
 
-<p>
+<p class="mt-4">
   Vous trouverez toutes les informations nécessaires concernant les lieux des cours dans l'agenda :
-  <%= link_to "Agenda Parkour Paris", "https://www.parkourparis.fr/agenda", style: "color: #ffa000";%>.
+  <%= link_to "Agenda Parkour Paris", "https://www.parkourparis.fr/agenda", class: "text-amber-500 hover:text-amber-400" %>
 </p>
 
-<p>Bonne rentrée !</p>
+<p class="mt-4">Bonne rentrée !</p>
