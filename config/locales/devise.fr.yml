@@ -40,6 +40,10 @@ fr:
       updated: "Votre mot de passe a bien été modifié. Vous êtes désormais connecté·e."
       updated_not_active: "Votre mot de passe a bien été modifié."
     registrations:
+      edit:
+        title: "Modifier vos informations"
+        cancel_my_account: "Supprimer mon compte"
+        are_you_sure: "Êtes-vous sûr·e de vouloir supprimer votre compte ?"
       destroyed: "Votre compte a bien été supprimé. À bientôt !"
       signed_up: "Inscription réussie. Bienvenue !"
       signed_up_but_inactive: "Inscription réussie. Vous devez activer votre compte pour vous connecter."
