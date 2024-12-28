@@ -10,7 +10,7 @@ module Dashboard
 
     def create
       if @subscription.pay!(params[:stripeToken])
-        redirect_to dashboard_index_path, notice: t('.success'), status: :see_other
+        redirect_to :dashboard, notice: t('.success'), status: :see_other
       else
         redirect_back fallback_location: root_path, alert: t('.error')
       end
@@ -21,7 +21,7 @@ module Dashboard
     def filter_enabled!
       return false if Rails.configuration.features.online_payment[:enabled]
 
-      redirect_to dashboard_index_path, alert: t('defaults.forbidden')
+      redirect_to :dashboard, alert: t('defaults.forbidden')
     end
 
     def filter_already_paid!

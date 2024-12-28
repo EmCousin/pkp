@@ -319,7 +319,7 @@ fr:
       create:
         success: Avoir généré
   dashboard:
-    index:
+    show:
       add_subscription: Ajouter une inscription
       choose_my_courses: Choisir mes cours
       come_to_your_slots_only: Vous ne pouvez pas vous rendre à d'autres cours que ceux que vous avez choisis lors de votre inscription. Merci de respecter les créneaux que vous avez sélectionnés.

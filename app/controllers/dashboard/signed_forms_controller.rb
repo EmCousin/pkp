@@ -9,7 +9,7 @@ module Dashboard
 
     def update
       if @subscription.update(subscription_params)
-        redirect_to dashboard_index_path, notice: t('.success')
+        redirect_to :dashboard, notice: t('.success')
       else
         render :edit, status: :unprocessable_entity
       end
@@ -20,7 +20,7 @@ module Dashboard
     def filter_enabled!
       return false if Rails.configuration.features.signed_form[:enabled]
 
-      redirect_to dashboard_index_path, alert: t('defaults.forbidden')
+      redirect_to :dashboard, alert: t('defaults.forbidden')
     end
 
     def subscription_params

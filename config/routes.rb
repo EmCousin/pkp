@@ -62,7 +62,7 @@ Rails.application.routes.draw do
     resource :alumni_access, only: %i[new create]
   end
 
-  resources :dashboard, only: [:index]
+  resource :dashboard, controller: :dashboard, only: [:show]
 
   resources :legal_mentions, only: %i[index]
 
