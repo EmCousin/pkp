@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   }
 
   authenticated :user do
-    root to: "dashboard#index", as: :authenticated
+    root to: "dashboard#show", as: :authenticated
   end
 
   authenticate :user, ->(user) { user.admin? } do
