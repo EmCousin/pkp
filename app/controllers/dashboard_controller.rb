@@ -3,7 +3,7 @@
 class DashboardController < ApplicationController
   before_action :authenticate_user!
 
-  def index
+  def show
     @subscriptions = current_user.subscriptions
                                  .where(year: Subscription.current_year)
                                  .includes(:member)
