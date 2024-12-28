@@ -1,43 +1,89 @@
 <!DOCTYPE html>
-<html lang="<%= I18n.locale%> ">
+<html class="h-full bg-gray-50">
   <head>
-    <title>Parkour Paris</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#343a40">
-    <link rel="apple-touch-icon" href="/assets/pkp-192.png">
-    <link rel="manifest" href="/manifest.webmanifest">
+    <title><%= content_for?(:title) ? yield(:title) : "Your App Name" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
-    <%= favicon_link_tag '/favicon.ico' %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+    <%= csp_meta_tag %>
+
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
 
-  <body>
-    <%= render 'layouts/pwa' %>
-    <%= render 'layouts/navbar' %>
-    <%= render 'layouts/flash' %>
-    <div class="container background-white pt-5">
-      <%= yield %>
-    </div>
-    <%= render 'layouts/footer' %>
-
-    <div class="modal fade" id="subscription-instructions" tabindex="-1">
-      <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title"><%= t('dashboard.index.how_to_complete_my_subscription') %></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <%= render 'dashboard/subscription_instructions' %>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= t('defaults.close') %></button>
+  <body class="h-full">
+    <div class="min-h-full">
+      <% if notice %>
+        <div class="bg-blue-50 p-4">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg class="h-5 w-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm text-blue-700"><%= notice %></p>
+            </div>
           </div>
         </div>
-      </div>
+      <% end %>
+
+      <% if alert %>
+        <div class="bg-red-50 p-4">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm text-red-700"><%= alert %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <nav class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex justify-between h-16">
+            <div class="flex">
+              <%= link_to root_path, class: "flex-shrink-0 flex items-center" do %>
+                <!-- Add your logo here -->
+                <span class="text-xl font-bold text-gray-900">Your Logo</span>
+              <% end %>
+
+              <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                <!-- Add your navigation links here -->
+                <%= link_to "Home", root_path, class: "inline-flex items-center px-1 pt-1 border-b-2 #{current_page?(root_path) ? 'border-slate-800 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'}" %>
+                <!-- Add more navigation items as needed -->
+              </div>
+            </div>
+
+            <div class="hidden sm:ml-6 sm:flex sm:items-center">
+              <% if user_signed_in? %>
+                <div class="ml-3 relative">
+                  <div class="flex items-center">
+                    <span class="text-sm text-gray-700 mr-4"><%= current_user.email %></span>
+                    <%= button_to destroy_user_session_path,
+                                method: :delete,
+                                class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-slate-800 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800" do %>
+                      Sign out
+                    <% end %>
+                  </div>
+                </div>
+              <% else %>
+                <%= link_to "Sign in", new_user_session_path, class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-slate-800 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <main>
+        <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+          <%= yield %>
+        </div>
+      </main>
     </div>
   </body>
 </html>
