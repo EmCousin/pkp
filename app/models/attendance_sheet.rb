@@ -6,17 +6,28 @@ class AttendanceSheet < ApplicationRecord
 
   validates :date, presence: true, uniqueness: { scope: :course_id }
 
-  def self.find_or_create_for_course(course)
-    sheet = find_or_create_by!(
-      course:,
-      date: Time.current
-    )
+  class << self
+    def find_or_create_for_course(course)
+      sheet = find_or_create_by!(
+        course:,
+        date: Time.current
+      )
 
-    # Create attendance records for all active subscribers
-    course.subscriptions.active.each do |subscription|
-      sheet.attendance_records.find_or_create_by!(member: subscription.member)
+      create_attendance_records(sheet, course)
+
+      sheet
     end
 
-    sheet
+    def create_attendance_records(sheet, course)
+      AttendanceRecord.upsert_all( # rubocop:disable Rails/SkipsModelValidations
+        course.subscriptions.active.map do |subscription|
+          {
+            attendance_sheet_id: sheet.id,
+            member_id: subscription.member_id
+          }
+        end,
+        unique_by: %i[attendance_sheet_id member_id]
+      )
+    end
   end
 end
