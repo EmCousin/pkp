@@ -282,6 +282,7 @@ fr:
         title: Inscriptions
         new: Nouvelle inscription
       show:
+        title: Inscription n°%{id}
         payment: Paiement
         paid: Payé
         not_paid_yet: En attente de paiement
