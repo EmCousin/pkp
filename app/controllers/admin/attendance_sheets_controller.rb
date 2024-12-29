@@ -6,7 +6,7 @@ module Admin
     before_action :set_attendance_sheet, only: %i[show update]
 
     def show
-      @attendance_records = @attendance_sheet.attendance_records.includes(member: :avatar_attachment)
+      @attendance_records = @attendance_sheet.attendance_records.includes(member: :avatar_attachment).order('members.level')
     end
 
     def create
