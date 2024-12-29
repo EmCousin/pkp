@@ -46,4 +46,6 @@ Rails.application.configure do
 
   # Run Active Job in test mode.
   config.active_job.queue_adapter = :test
+
+  config.assets.compile = true
 end

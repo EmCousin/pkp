@@ -67,7 +67,7 @@ jobs:
           PGHOST: localhost
           PGUSER: postgres
           PGPASSWORD: postgres
-          RAILS_ENV: development
+          RAILS_ENV: test
         run: |
           bundle exec rails assets:precompile
 
