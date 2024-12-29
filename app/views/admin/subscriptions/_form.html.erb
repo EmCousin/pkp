@@ -1,57 +1,101 @@
-<div class="container">
-  <%= form_for [:admin, @subscription], data: { turbo: false } do |form| %>
-    <div class="form-group">
-      <%= form.label :member_id %><br />
-      <%= form.grouped_collection_select :member_id,
-                                         User.all,
-                                         :members,
-                                         :email,
-                                         :id,
-                                         :full_name,
-                                         { include_blank: t('.select_a_member') },
-                                         class: "form-control",
-                                         placeholder: t('.select_a_member'),
-                                         data: { controller: 'select' } %>
+<div class="bg-white shadow-sm rounded-lg p-6">
+  <%= form_for [:admin, @subscription],
+      data: { turbo: false },
+      class: "space-y-6" do |form| %>
+
+    <div>
+      <%= form.label :member_id, class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <div class="relative">
+        <%= form.grouped_collection_select :member_id,
+            User.all,
+            :members,
+            :email,
+            :id,
+            :full_name,
+            { include_blank: t('.select_a_member') },
+            class: "mt-1 appearance-none block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-slate-800 focus:border-slate-800 rounded-md sm:text-sm",
+            required: true,
+            data: {
+              controller: 'select',
+              placeholder: t('.select_a_member')
+            } %>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </div>
       <% if form.object.errors[:member_id].any? || form.object.errors[:member].any? %>
-        <div id="error_explanation" class="error_explanation">
-          <ul>
+        <div class="mt-2 text-sm text-red-600">
+          <ul class="list-disc pl-5 space-y-1">
             <% form.object.errors.full_messages_for(:member_id).each do |message| %>
               <li><%= message %></li>
             <% end %>
             <% form.object.errors.full_messages_for(:member).each do |message| %>
-            <li><%= message %></li>
-          <% end %>
+              <li><%= message %></li>
+            <% end %>
           </ul>
         </div>
       <% end %>
     </div>
 
-    <div class="form-group">
-      <%= form.label :course_ids %>
-      <%= form.collection_check_boxes :course_ids, Course.order(:created_at), :id, :title do |b| %>
-        <div class="form-check">
-          <%= b.check_box(class: "form-check-input") %>
-          <%= b.label(class: "form-check-label") %>
-        </div>
-      <% end %>
-
+    <div>
+      <%= form.label :course_ids, class: "block text-sm font-medium text-gray-700 mb-2" %>
+      <div class="space-y-2">
+        <%= form.collection_check_boxes :course_ids, Course.order(:created_at), :id, :title do |b| %>
+          <label class="relative flex items-start py-0.5">
+            <div class="flex items-center h-5">
+              <%= b.check_box class: "h-4 w-4 text-slate-800 border-gray-300 rounded focus:ring-slate-800" %>
+            </div>
+            <div class="ml-3 text-sm">
+              <%= b.label class: "font-medium text-gray-700 select-none" %>
+            </div>
+          </label>
+        <% end %>
+      </div>
       <% if form.object.errors[:course_ids].any? || form.object.errors[:courses].any? %>
-        <div id="error_explanation" class="error_explanation">
-          <ul>
+        <div class="mt-2 text-sm text-red-600">
+          <ul class="list-disc pl-5 space-y-1">
             <% form.object.errors.full_messages_for(:course_ids).each do |message| %>
               <li><%= message %></li>
             <% end %>
             <% form.object.errors.full_messages_for(:courses).each do |message| %>
-            <li><%= message %></li>
-          <% end %>
+              <li><%= message %></li>
+            <% end %>
           </ul>
         </div>
       <% end %>
     </div>
 
-    <div class="actions">
-      <%= form.submit t('defaults.save'), class: "btn btn-dark float-lg-right" %>
-      <%= link_to t('defaults.back'), %i[admin subscriptions], class: "btn btn-link float-left" %>
+    <div class="flex flex-col sm:flex-row gap-3 pt-5">
+      <%= link_to t('defaults.back'),
+          %i[admin subscriptions],
+          class: "inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800" %>
+      <%= form.submit t('defaults.save'),
+          class: "inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800" %>
     </div>
   <% end %>
 </div>
+
+<%# Add this to your JavaScript pack to initialize tail.select %>
+<%= javascript_tag do %>
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof tail !== 'undefined') {
+      tail.select('[data-controller="select"]', {
+        search: true,
+        descriptions: true,
+        hideSelected: true,
+        placeholder: '<%= t('.select_a_member') %>',
+        classNames: {
+          select: 'hidden',
+          label: 'hidden',
+          dropdown: 'absolute z-50 w-full bg-white border border-gray-300 mt-1 rounded-md shadow-lg',
+          search: 'w-full px-3 py-2 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-slate-800',
+          option: 'px-3 py-2 hover:bg-gray-100 cursor-pointer',
+          optgroup: 'px-3 py-1 text-sm font-semibold bg-gray-50 text-gray-700',
+          selected: 'bg-slate-800 text-white',
+        }
+      });
+    }
+  });
+<% end %>
