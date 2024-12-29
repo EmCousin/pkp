@@ -62,13 +62,16 @@ jobs:
         run: |
           bin/rails db:setup
 
-      - name: Precompile assets
+      - name: Build and precompile assets
         env:
           PGHOST: localhost
           PGUSER: postgres
           PGPASSWORD: postgres
           RAILS_ENV: test
+          NODE_ENV: test
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
         run: |
+          bundle exec rails assets:clobber
           bundle exec rails assets:precompile
 
       - name: Run Tests
