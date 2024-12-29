@@ -19,7 +19,6 @@ gem 'puma', '~> 5.6'
 # gem 'therubyracer', platforms: :ruby
 
 # Assets
-gem 'cssbundling-rails'
 gem 'jsbundling-rails'
 gem 'sassc-rails'
 gem 'stimulus-rails'

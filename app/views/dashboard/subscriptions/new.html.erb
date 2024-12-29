@@ -3,29 +3,23 @@
                class: "mt-6",
                data: { controller: :form } do |f| %>
     <div class="space-y-4">
-      <div>
-        <%= f.label :member_id, class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <div class="flex items-center space-x-2">
         <%= f.collection_select(:member_id,
                               current_user.members.available,
                               :id,
                               :full_name,
                               { include_blank: false },
-                              class: "bg-white mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm",
+                              class: "flex-1 bg-white mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm",
                               data: { action: "form#submit" }) %>
 
-        <% if @subscription.member.nil? %>
-          <div class="relative my-6">
-            <div class="absolute inset-0 flex items-center">
-              <div class="w-full border-t border-gray-300"></div>
-            </div>
-            <div class="relative flex justify-center text-sm">
-              <span class="bg-white px-2 text-gray-500"><%= t(".or") %></span>
-            </div>
-          </div>
+        <% unless @subscription.member %>
+          <span class="text-gray-500 text-sm"><%= t(".or") %></span>
 
-          <%= link_to t(".add_member"),
-                      new_dashboard_member_path,
-                      class: "w-full inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800" %>
+          <%= link_to new_dashboard_member_path,
+                      class: "flex sm:flex-1 justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800" do %>
+            <span role="icon" title="<%= t(".add_member") %>">+</span>
+            <span class="sr-only sm:not-sr-only ml-2"><%= t(".add_member") %></span>
+          <% end %>
         <% end %>
       </div>
 
@@ -38,7 +32,7 @@
                                 :title,
                                 { include_blank: true },
                                 required: true,
-                                class: "bg-white mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm",
+                                class: "bg-white mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm",
                                 data: { action: "form#submit" }) %>
         </div>
 

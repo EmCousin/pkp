@@ -4,6 +4,8 @@
     <title><%= content_for?(:title) ? yield(:title) : 'Parkour Paris' %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="apple-touch-icon" href="/assets/pkp-192.png">
+    <meta name="view-transition" content="same-origin" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
     <link rel="manifest" href="/manifest.webmanifest">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>

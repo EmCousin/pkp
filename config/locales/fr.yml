@@ -354,8 +354,9 @@ fr:
         <<: *failure
     subscriptions:
       new:
+        or: ou
         create_member: Veuillez renseigner les informations de la personne à inscrire
-        add_member: Ajouter une autre personne
+        add_member: Nouveau membre
         no_courses_available: Désolé, il n'y a plus de cours %{category_title} disponibles.
         full: Complet
       create:
