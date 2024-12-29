@@ -20,7 +20,7 @@ gem 'puma', '~> 5.6'
 
 # Assets
 gem 'jsbundling-rails'
-gem 'sassc-rails'
+gem 'propshaft'
 gem 'stimulus-rails'
 gem 'turbo-rails'
 
@@ -38,12 +38,12 @@ gem 'devise-i18n'
 gem 'image_processing', '~> 1.2'
 gem 'kaminari'
 gem 'phonelib'
+gem 'prawn'
+gem 'prawn-table'
 gem 'rack-cors', require: 'rack/cors'
 gem 'rollbar'
 gem 'sidekiq', '<7'
 gem 'stripe'
-gem 'wicked_pdf'
-gem 'wkhtmltopdf-binary'
 
 # Add this line to your Gemfile
 gem 'tailwindcss-rails'

@@ -216,7 +216,7 @@ fr:
         if_you_have_an_account: Si vous avez déjà ouvert un compte l'année dernière, connectez-vous ici
         if_you_are_alumni: Si vous êtes un·e ancien·ne élève, vous pouvez vous connecter/inscrire, puis cliquer sur "Choisir mes cours" puis sur "Je suis un·e ancien·ne élève"
       edit:
-        edit_my_account: Modifier mon compte
+        title: Modifier mon compte
         delete_my_account: Supprimer mon compte
         click_below_to_delete_your_account: Pour supprimer votre compte, cliquez sur le bouton ci-dessous.
         warning_cannot_be_undone: Les données relatives à votre compte seront immédiatement détruites. Cette action est irréversible.
@@ -359,6 +359,7 @@ fr:
         add_member: Nouveau membre
         no_courses_available: Désolé, il n'y a plus de cours %{category_title} disponibles.
         full: Complet
+        select_category: Sélectionner une catégorie
       create:
         success: Inscription créée avec succès !
     members:

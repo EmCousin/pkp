@@ -30,7 +30,7 @@
       </details>
     <% else %>
       <div class="text-center">
-        <p class="mb-6 text-gray-600">
+        <p class="mb-6 text-gray-600 max-w-sm mx-auto">
           <%= t('.not_yet_subscribed', year: "#{Subscription.current_year} - #{Subscription.next_year}") %>
         </p>
         <%= link_to t('.choose_my_courses'),

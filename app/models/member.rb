@@ -19,4 +19,6 @@ class Member < ApplicationRecord
   end
 
   enum level: { white: 'white', yellow: 'yellow', green: 'green', red: 'red' }, _default: 'white'
+
+  delegate :full_address, to: :user
 end
