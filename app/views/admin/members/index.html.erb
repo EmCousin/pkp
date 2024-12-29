@@ -2,7 +2,7 @@
 <div class="border-b border-gray-200 mb-6"></div>
 
 <div class="w-full p-4 bg-slate-100 rounded-lg shadow-sm">
-  <%= form_with(url: %i[admin members], local: true, method: :get, data: { turbo: false }) do |f| %>
+  <%= form_with(url: %i[admin members], local: true, method: :get) do |f| %>
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
       <div>
         <%= f.text_field :q,

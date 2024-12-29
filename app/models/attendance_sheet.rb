@@ -20,7 +20,7 @@ class AttendanceSheet < ApplicationRecord
 
     def create_attendance_records(sheet, course)
       AttendanceRecord.upsert_all( # rubocop:disable Rails/SkipsModelValidations
-        course.subscriptions.active.map do |subscription|
+        course.subscriptions.confirmed.filter_by_year(Subscription.current_year).map do |subscription|
           {
             attendance_sheet_id: sheet.id,
             member_id: subscription.member_id

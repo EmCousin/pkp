@@ -226,6 +226,17 @@ fr:
         minimum_characters: "%{length} caractères min"
         are_you_sure: Cette action est irréversible. Cliquez sur OK pour supprimer définivement votre compte.
   admin:
+    attendance_sheets:
+      show:
+        title: "Feuille de présence pour %{course_title} - %{date}"
+        member: "Membre"
+        status: "Statut"
+        actions: "Actions"
+      attendance_record:
+        present: "Présent"
+        absent: "Absent"
+        mark_present: "Marquer présent"
+        mark_absent: "Marquer absent"
     members:
       index:
         title: Liste des membres
@@ -256,6 +267,7 @@ fr:
         inactive: Inactif
       show:
         new_subscription: Nouvelle inscription
+        create_attendance_sheet: "Feuille de présence"
       subscription:
         remove_from_course: Retirer
         remove_from_course_are_you_sure: Êtes-vous sûr·e de vouloir retirer %{member_full_name} du cours %{course_title} ?
@@ -443,23 +455,6 @@ fr:
       short: "%d/%m/%Y %H:%M"   # e.g. "15/01/2024 14:30"
     am: "am"
     pm: "pm"
-
-  admin:
-    attendance_sheets:
-      show:
-        title: "Feuille de présence pour %{course_title} - %{date}"
-        member: "Membre"
-        status: "Statut"
-        actions: "Actions"
-      attendance_record:
-        present: "Présent"
-        absent: "Absent"
-        mark_present: "Marquer présent"
-        mark_absent: "Marquer absent"
-    courses:
-      show:
-        new_subscription: Nouvelle inscription
-        create_attendance_sheet: "Feuille de présence"
 
   attendance_mailer:
     consecutive_absences:
