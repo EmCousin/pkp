@@ -45,7 +45,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
       <div class="flex items-center space-x-2">
         <span class="text-sm text-gray-500">ID:</span>
-        <%= link_to subscription.id, [:admin, subscription], class: "text-blue-600 hover:text-blue-800" %>
+        <%= link_to subscription.id, [:admin, subscription], class: "text-blue-600 hover:text-blue-800", data: { turbo_frame: '_top' } %>
       </div>
 
       <div class="flex items-center space-x-2">
@@ -58,7 +58,7 @@
 
       <div class="flex items-center space-x-2">
         <span class="text-sm text-gray-500"><%= Subscription.human_attribute_name(:member_id) %>:</span>
-        <%= link_to [:admin, subscription.member], class: "flex items-center gap-2" do %>
+        <%= link_to [:admin, subscription.member], class: "flex items-center gap-2", data: { turbo_frame: '_top' } do %>
           <% if subscription.member.avatar.variable? %>
             <%= image_tag subscription.member.avatar.variant(:mini), class: "w-8 h-8 rounded-full" %>
           <% else %>
