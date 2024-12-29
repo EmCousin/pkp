@@ -2,6 +2,6 @@
 
 module Dashboard
   class CapacitiesController < DashboardController
-    def index; end
+    def show; end
   end
 end

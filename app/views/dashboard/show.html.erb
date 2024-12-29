@@ -1,0 +1,42 @@
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <h1 class="text-center text-2xl sm:text-3xl font-bold mb-4 text-amber-500"><%= t('defaults.welcome') %> !</h1>
+  <div class="border-b border-gray-200 mb-6"></div>
+
+  <div class="bg-white rounded-lg shadow-sm p-4 sm:p-6">
+    <% if @subscriptions.any? %>
+      <h3 class="text-lg sm:text-xl font-semibold text-center mb-6">
+        <%= t('.subscription_detailed_info', year: Subscription.current_year) %>
+      </h3>
+
+      <div class="bg-blue-50 border border-blue-200 text-blue-700 p-4 text-center mb-8 rounded-lg text-sm sm:text-base">
+        <%= t('.come_to_your_slots_only') %>
+      </div>
+
+      <div class="space-y-4">
+        <%= render partial: 'subscription', collection: @subscriptions, as: :subscription, locals: { show: !@subscriptions.many? } %>
+      </div>
+
+      <%= link_to t('.add_subscription'),
+          new_dashboard_subscription_path,
+          class: "mt-6 block w-full text-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors" %>
+
+      <details class="mt-6">
+        <summary class="cursor-pointer w-full text-center py-2 px-4 border border-amber-500 text-amber-500 hover:bg-amber-50 rounded-md transition-colors">
+          <%= t('.how_to_complete_my_subscription') %>
+        </summary>
+        <div class="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+          <%= render 'dashboard/subscription_instructions' %>
+        </div>
+      </details>
+    <% else %>
+      <div class="text-center">
+        <p class="mb-6 text-gray-600 max-w-sm mx-auto">
+          <%= t('.not_yet_subscribed', year: "#{Subscription.current_year} - #{Subscription.next_year}") %>
+        </p>
+        <%= link_to t('.choose_my_courses'),
+            new_dashboard_subscription_path,
+            class: "inline-block px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors" %>
+      </div>
+    <% end %>
+  </div>
+</div>

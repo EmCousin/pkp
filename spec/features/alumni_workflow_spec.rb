@@ -139,9 +139,9 @@ feature "Alumni Workflow", type: :feature do
     expect(page).to have_text("Accès ancien·ne·s élèves")
     expect(page).to have_text("Entrez l'identifiant et le mot de passe qui vous ont été communiqués par les coachs. Vous pouvez les retrouver dans le mail de réinscription des ancien·ne·s élèves qui vous a été envoyé.")
 
-    fill_in "alumni_access_username", with: Rails.application.credentials.basic_auth[:username]
-    fill_in "alumni_access_password", with: Rails.application.credentials.basic_auth[:password]
-    click_button 'Envoyer'
+    fill_in "alumni_access[username]", with: Rails.application.credentials.basic_auth[:username]
+    fill_in "alumni_access[password]", with: Rails.application.credentials.basic_auth[:password]
+    click_button 'Continuer'
 
     expect(page).to have_text('Veuillez renseigner les informations de la personne à inscrire')
   end

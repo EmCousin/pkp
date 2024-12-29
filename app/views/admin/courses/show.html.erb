@@ -1,164 +1,126 @@
-<h1 class="page-title">
-  <%= link_to '←', [:admin, @course.previous], title: @course.previous.title %>
-  <%= @course.title %>
-  <%= link_to '→', [:admin, @course.next], title: @course.next.title %>
-</h1>
-<hr />
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="mb-8">
+    <h1 class="text-2xl text-center font-bold mb-4 text-amber-500 flex items-center justify-center gap-4">
+      <%= link_to '←', [:admin, @course.previous], title: @course.previous.title, class: "hover:text-amber-600" %>
+      <%= @course.title %>
+      <%= link_to '→', [:admin, @course.next], title: @course.next.title, class: "hover:text-amber-600" %>
+    </h1>
+    <div class="border-b border-gray-200"></div>
+  </div>
 
-<div class="row pt-2">
-  <div class="col-8 offset-2">
-    <div class="d-flex justify-content-end">
+  <div class="bg-white shadow-sm rounded-lg p-6">
+    <div class="flex justify-end mb-6 gap-2">
       <%= link_to t('defaults.edit'),
-                  [:edit, :admin, @course],
-                  class: "btn btn-outline-warning btn-sm mr-2" %>
+          [:edit, :admin, @course],
+          class: "px-3 py-1.5 border border-yellow-600 text-yellow-600 hover:bg-yellow-50 text-sm rounded-md" %>
 
       <%= button_to t('defaults.destroy'),
-                    [:admin, @course],
-                    method: :delete,
-                    data: {
-                      controller: :confirm,
-                      confirm_message_value: t('defaults.are_you_sure')
-                    },
-                    class: "btn btn-outline-danger btn-sm" %>
+          [:admin, @course],
+          method: :delete,
+          data: {
+            controller: :confirm,
+            confirm_message_value: t('defaults.are_you_sure')
+          },
+          class: "px-3 py-1.5 border border-red-600 text-red-600 hover:bg-red-50 text-sm rounded-md" %>
     </div>
 
-    <p>
-      <strong><%= Course.human_attribute_name(:title) %> :</strong>
-      <%= @course.title %>
-    </p>
+    <div class="space-y-4">
+      <div>
+        <span class="font-medium text-gray-700"><%= Course.human_attribute_name(:title) %> :</span>
+        <span class="ml-1"><%= @course.title %></span>
+      </div>
 
-    <p>
-      <strong><%= Course.human_attribute_name(:description) %> :</strong>
-      <%= @course.description %>
-    </p>
+      <div>
+        <span class="font-medium text-gray-700"><%= Course.human_attribute_name(:description) %> :</span>
+        <div class="mt-1"><%= @course.description %></div>
+      </div>
 
-    <p>
-      <strong><%= Course.human_attribute_name(:capacity) %> :</strong>
-      <%= @course.capacity %>
-    </p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div>
+          <span class="font-medium text-gray-700"><%= Course.human_attribute_name(:capacity) %> :</span>
+          <span class="ml-1"><%= @course.capacity %></span>
+        </div>
 
-    <p>
-      <strong><%= Course.human_attribute_name(:availability) %> :</strong>
-      <%= @course.availability%>
-    </p>
+        <div>
+          <span class="font-medium text-gray-700"><%= Course.human_attribute_name(:availability) %> :</span>
+          <span class="ml-1"><%= @course.availability %></span>
+        </div>
 
-    <p>
-      <strong><%= Course.human_attribute_name(:category_id) %> :</strong>
-      <%= @course.category.title %>
-    </p>
+        <div>
+          <span class="font-medium text-gray-700"><%= Course.human_attribute_name(:category_id) %> :</span>
+          <span class="ml-1"><%= @course.category.title %></span>
+        </div>
 
-    <p>
-      <strong><%= Course.human_attribute_name(:weekday) %> :</strong>
-      <%= @course.weekday %>
-    </p>
-
-    <hr />
-
-    <div class="d-flex justify-content-between">
-      <%= link_to t('defaults.back'), :back, class: "btn btn-link" %>
-
-      <%= link_to t('.new_subscription', resource: Subscription.model_name.human.downcase), new_admin_subscription_path(course_ids: @course.id), class: "btn btn-primary" %>
+        <div>
+          <span class="font-medium text-gray-700"><%= Course.human_attribute_name(:weekday) %> :</span>
+          <span class="ml-1"><%= @course.weekday %></span>
+        </div>
+      </div>
     </div>
 
+    <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-8 pt-6 border-t">
+      <%= link_to t('defaults.back'),
+          :back,
+          class: "text-gray-600 hover:text-gray-900" %>
+
+      <%= link_to t('.new_subscription', resource: Subscription.model_name.human.downcase),
+          new_admin_subscription_path(course_ids: @course.id),
+          class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md" %>
+    </div>
 
     <%= form_with url: [:admin, @course],
-                  local: true,
-                  method: :get,
-                  class: "row mt-4" do %>
-      <div class="col-sm mb-2">
-        <%= select_tag(
-          :status,
-          options_for_select(
-            Subscription.status_options.map(&:values).map(&:reverse),
-            params[:status],
-          ),
-          include_blank: Subscription.human_attribute_name(:status),
-          class: 'form-control'
-        ) %>
-      </div>
+        local: true,
+        method: :get,
+        class: "mt-8" do |f| %>
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+        <%= f.select :status,
+            options_for_select(
+              Subscription.status_options.map(&:values).map(&:reverse),
+              params[:status]
+            ),
+            { include_blank: Subscription.human_attribute_name(:status) },
+            class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm bg-white' %>
 
-      <div class="col-sm mb-2">
-        <%= select_tag(
-          :year,
-          options_for_select(
-            Subscription.select_options,
-            params[:year],
-          ),
-          include_blank: Subscription.human_attribute_name(:year),
-          class: 'form-control'
-        ) %>
-      </div>
+        <%= f.select :year,
+            options_for_select(
+              Subscription.select_options,
+              params[:year]
+            ),
+            { include_blank: Subscription.human_attribute_name(:year) },
+            class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm bg-white' %>
 
-      <div class="col-sm mb-2">
-        <%= select_tag(
-          :level,
-          options_for_select(
-            Member.level_options.map(&:values).map(&:reverse),
-            params[:level],
-          ),
-          include_blank: Member.human_attribute_name(:level),
-          class: 'form-control'
-        ) %>
-      </div>
+        <%= f.select :level,
+            options_for_select(
+              Member.level_options.map(&:values).map(&:reverse),
+              params[:level]
+            ),
+            { include_blank: Member.human_attribute_name(:level) },
+            class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm bg-white' %>
 
-      <div class="col-sm mb-2">
-        <%= submit_tag("Filtrer", class: "btn btn-success") %>
+        <div class="flex items-end">
+          <%= f.submit t('defaults.filter'),
+              class: "bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md w-full sm:w-auto" %>
+        </div>
       </div>
     <% end %>
 
-    <div class="clearfix"></div>
-
-    <div class="mt-2">
+    <div class="mt-4 text-sm text-gray-600">
       <%= @subscriptions.size %> résultat(s)
     </div>
 
     <%= turbo_frame_tag :course_subscriptions do %>
-      <table class="table mt-4">
-        <thead>
-          <tr>
-            <th><%= Member.human_attribute_name(:level) %></th>
-
-            <th>
-              <%= link_to url_for(order: "subscriptions.id #{session[:admin_course_subscriptions_order].in?([nil, 'subscriptions.id DESC']) ? 'ASC' : 'DESC'}") do %>
-                <%= Subscription.model_name.human %>&nbsp;<%= session[:admin_course_subscriptions_order].in?([nil, 'subscriptions.id DESC']) ? '⬇️' : '⬆️' %>
-              <% end %>
-            </th>
-
-            <th><%= Member.human_attribute_name(:avatar) %></th>
-
-            <th>
-              <%= link_to url_for(order: "members.first_name #{session[:admin_course_subscriptions_order] == 'members.first_name DESC' ? 'ASC' : 'DESC'}") do %>
-                <%= Member.human_attribute_name(:first_name) %>&nbsp;<%= session[:admin_course_subscriptions_order] == 'members.first_name DESC' ? '⬇️' : '⬆️' %>
-              <% end %>
-              /
-              <%= link_to url_for(order: "members.last_name #{session[:admin_course_subscriptions_order] == 'members.last_name DESC' ? 'ASC' : 'DESC'}") do %>
-                <%= Member.human_attribute_name(:last_name) %>&nbsp;<%= session[:admin_course_subscriptions_order] == 'members.last_name DESC' ? '⬇️' : '⬆️' %>
-              <% end %>
-            </th>
-
-            <th>
-              <%= link_to url_for(order: "users.email #{session[:admin_course_subscriptions_order] == 'users.email DESC' ? 'ASC' : 'DESC'}") do %>
-                <%= User.human_attribute_name(:email) %>&nbsp;<%= session[:admin_course_subscriptions_order] == 'users.email DESC' ? '⬇️' : '⬆️' %>
-              <% end %>
-            </th>
-
-            <th><%= Subscription.human_attribute_name(:status) %></th>
-            <th></th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <% if @subscriptions.empty? %>
-            <tr>
-              <td colspan="9" class="text-center">
-                <%= link_to t('.new_subscription'), new_admin_subscription_path, class: "btn btn-primary", data: { turbo_frame: '_top' } %>
-              </td>
-            </tr>
-          <% else %>
-            <%= render partial: 'admin/courses/subscription', collection: @subscriptions %>
-          <% end %>
-        </tbody>
-      </table>
+      <% if @subscriptions.empty? %>
+        <div class="text-center py-12">
+          <%= link_to t('.new_subscription'),
+              new_admin_subscription_path,
+              class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md",
+              data: { turbo_frame: '_top' } %>
+        </div>
+      <% else %>
+        <div class="grid grid-cols-1 gap-4 mt-4">
+          <%= render partial: "admin/subscriptions/subscription", collection: @subscriptions %>
+        </div>
+      <% end %>
     <% end %>
   </div>
 </div>

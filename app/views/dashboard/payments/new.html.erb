@@ -1,33 +1,38 @@
-<div class="row">
-  <div class="col-md-6 offset-md-3">
-    <%= form_for @subscription,
-                 url: dashboard_subscription_payment_path(@subscription.id),
-                 method: :post,
-                 data: {
-                   controller: 'form stripe',
-                   stripe_target: 'form',
-                   stripe_key_value: Rails.application.credentials.stripe[:public_key],
-                   stripe_locale_value: I18n.locale
-                 } do |f| %>
-      <label for="card-element" class="mb-2">
-        <%= t('.payment_by_card')%>
-      </label>
-      <br />
+<div class="w-full max-w-2xl mx-auto px-4">
+  <%= form_for @subscription,
+               url: dashboard_subscription_payment_path(@subscription.id),
+               method: :post,
+               class: "mt-6",
+               data: {
+                 controller: 'form stripe',
+                 stripe_target: 'form',
+                 stripe_key_value: Rails.application.credentials.stripe[:public_key],
+                 stripe_locale_value: I18n.locale
+               } do |f| %>
 
-      <div class="mb-3" data-stripe-target="cardElement">
-        <!-- A Stripe Element will be inserted here. -->
+    <div class="space-y-4">
+      <div>
+        <label for="card-element" class="block text-sm font-medium text-gray-700 mb-1">
+          <%= t('.payment_by_card')%>
+        </label>
+
+        <div class="mt-1 p-3 border rounded-md shadow-sm bg-white" data-stripe-target="cardElement">
+          <!-- A Stripe Element will be inserted here. -->
+        </div>
+
+        <!-- Used to display form errors. -->
+        <div class="mt-2 text-sm text-red-600" data-stripe-target="cardErrors" role="alert">
+        </div>
       </div>
 
-      <!-- Used to display form errors. -->
-      <div class="my-2 text-danger" data-stripe-target="cardErrors" role="alert">
-      </div>
-
-      <div class="actions">
-        <%= link_to t('defaults.back'), dashboard_index_path, class: "btn btn-link float-left" %>
+      <div class="flex flex-col sm:flex-row gap-3 mt-8">
+        <%= link_to t('defaults.back'),
+                    :dashboard,
+                    class: "inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800" %>
         <%= f.submit t('.pay', amount: number_to_currency(@subscription.fee, unit: "€", separator: ",", format: "%n %u")),
-                     class: 'btn btn-primary float-right',
-                     data: { form_target: :submit }%>
+                     class: "inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800",
+                     data: { form_target: :submit } %>
       </div>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 </div>

@@ -19,4 +19,12 @@ class User < ApplicationRecord
   has_many :members, dependent: :destroy
   has_many :subscriptions, through: :members
   has_many :courses, through: :subscriptions
+
+  def full_address
+    [
+      address,
+      "#{zip_code} #{city}",
+      country
+    ].join("\n")
+  end
 end

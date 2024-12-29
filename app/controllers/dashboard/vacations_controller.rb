@@ -2,6 +2,6 @@
 
 module Dashboard
   class VacationsController < DashboardController
-    def index; end
+    def show; end
   end
 end

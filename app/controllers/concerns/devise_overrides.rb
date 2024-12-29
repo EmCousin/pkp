@@ -32,7 +32,7 @@ module DeviseOverrides
   end
 
   def signed_in_root_path(_resource_or_scope)
-    dashboard_index_path
+    :dashboard
   end
 
   def after_sign_out_path_for(_resource_or_scope)

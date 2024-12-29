@@ -1,117 +1,171 @@
-<h1 class="page-title justify-content-center">
-  <%= tag.div class: "border border-dark mr-3",
-              style: "background-color: #{@member.level}; width: 2rem; height: 2rem;",
-              title: @member.level_text %>
-  <%= @member.full_name %>
-</h1>
-
-<hr />
-
-<div class="row">
-  <div class="col-3 offset-1">
-    <%= image_tag @member.avatar, width: "100%" %>
-
-    <p class="mt-3">
-      <strong><%= User.human_attribute_name(:admin) %> :</strong>
-      <%= @member.user.admin ? 'Oui' : 'Non' %>
-    </p>
-
-    <p class="mt-3">
-      <strong><%= Member.human_attribute_name(:first_name) %> :</strong>
-      <%= @member.first_name %>
-    </p>
-
-    <p>
-      <strong><%= Member.human_attribute_name(:last_name) %> :</strong>
-      <%= @member.last_name %>
-    </p>
-
-    <p>
-      <strong><%= User.human_attribute_name(:phone_number) %> :</strong>
-      <%= @member.phone_number %>
-    </p>
-
-    <p>
-      <strong><%= User.human_attribute_name(:address) %> :</strong>
-      <%= @member.address %>
-    </p>
-
-    <p>
-      <strong><%= User.human_attribute_name(:zip_code) %> :</strong>
-      <%= @member.zip_code %>
-    </p>
-
-    <p>
-      <strong><%= User.human_attribute_name(:city) %> :</strong>
-      <%= @member.city %>
-    </p>
-
-    <p>
-      <strong><%= User.human_attribute_name(:country) %> :</strong>
-      <%= @member.country %>
-    </p>
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="mb-8">
+    <h1 class="text-2xl text-center font-bold mb-4 text-amber-500"><%= t(".title", member: @member.full_name) %></h1>
+    <div class="border-b border-gray-200"></div>
   </div>
 
-  <div class="col-7">
-    <div class="d-flex justify-content-end">
+  <div class="bg-slate-50 shadow-sm rounded-lg p-6">
+    <div class="flex justify-end mb-6 gap-2">
       <%= link_to t('defaults.edit'),
-                  [:edit, :admin, @member],
-                  class: "btn btn-outline-warning mr-2" %>
+          [:edit, :admin, @member],
+          class: "px-3 py-1.5 border border-yellow-600 text-yellow-600 hover:bg-yellow-50 text-sm rounded-md" %>
+
       <%= button_to t('defaults.destroy'),
-                    [:admin, @member],
-                    method: :delete,
-                    data: {
-                      controller: :confirm,
-                      confirm_message_value: t('defaults.are_you_sure')
-                    },
-                    class: "btn btn-outline-danger" %>
+          [:admin, @member],
+          method: :delete,
+          data: {
+            controller: :confirm,
+            confirm_message_value: t('defaults.are_you_sure')
+          },
+          class: "px-3 py-1.5 border border-red-600 text-red-600 hover:bg-red-50 text-sm rounded-md" %>
     </div>
 
-    <div class="clearfix"></div>
+    <div class="space-y-6">
+      <div class="flex items-center gap-6">
+        <% if @member.avatar.attached? %>
+          <%= image_tag @member.avatar, class: "w-32 h-32 rounded-full object-cover" %>
+        <% else %>
+          <%= image_tag 'user.svg', class: "w-32 h-32 p-4 bg-gray-100 rounded-full" %>
+        <% end %>
 
-    <br />
+        <div>
+          <div class="flex items-center gap-3">
+            <div class="w-4 h-4 border border-gray-400 rounded"
+                 style="background-color: <%= @member.level %>"
+                 title="<%= @member.level_text %>">
+            </div>
+            <h2 class="text-xl font-medium text-gray-900"><%= @member.full_name %></h2>
+          </div>
+          <%= mail_to @member.email, class: "mt-1 text-blue-600 hover:text-blue-800" %>
+        </div>
+      </div>
 
-    <% if @member.subscriptions.any? %>
-      <% @member.subscriptions.order(year: :desc).includes(:courses).each do |subscription| %>
-        <h1><%= subscription.year %> - <%= subscription.year + 1%></h1>
-        <table class="table">
-          <thead>
-            <tr>
-              <th><%= Course.human_attribute_name(:title) %></th>
-              <th><%= Course.human_attribute_name(:category_id) %></th>
-              <th><%= Course.human_attribute_name(:weekday) %></th>
-              <th><%= link_to t('defaults.edit'), edit_admin_subscription_path(subscription.id), class: 'btn btn-outline-warning btn-sm' %></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% subscription.courses.each do |course| %>
-              <tr>
-                <td><%= link_to course.title, [:admin, course] %></td>
-                <td><%= course.category.title %></td>
-                <td><%= course.weekday %></td>
-                <td>
-                  <%= button_to t('.remove_from_course'),
-                                unlink_course_admin_subscription_path(subscription.id, course_id: course.id),
-                                method: :delete,
-                                data: {
-                                  controller: :confirm,
-                                  confirm_message_value: t(
-                                    '.remove_from_course_are_you_sure',
-                                    member_full_name: @member.full_name,
-                                    course_title: course.title
-                                  )
-                                },
-                                class: "btn btn-outline-danger btn-sm" %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      <% end %>
-    <% else %>
-      <%= link_to t('.new_subscription'),
-                  new_admin_subscription_path(member_id: @member.id),
-                  class: 'btn btn-primary float-right' %>
-    <% end %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+          <h3 class="text-lg font-medium text-gray-900 mb-4"><%= t('.personal_info') %></h3>
+          <dl class="space-y-3">
+            <div>
+              <dt class="text-sm font-medium text-gray-500"><%= Member.human_attribute_name(:birthdate) %></dt>
+              <dd class="mt-1"><%= l(@member.birthdate, format: :long) %></dd>
+            </div>
+
+            <div>
+              <dt class="text-sm font-medium text-gray-500"><%= User.human_attribute_name(:phone_number) %></dt>
+              <dd class="mt-1">
+                <%= link_to @member.phone_number, "tel:#{@member.phone_number}", class: "text-blue-600 hover:text-blue-800" %>
+              </dd>
+            </div>
+
+            <div>
+              <dt class="text-sm font-medium text-gray-500"><%= User.human_attribute_name(:address) %></dt>
+              <dd class="mt-1"><%= @member.user.address %></dd>
+            </div>
+
+            <div>
+              <dt class="text-sm font-medium text-gray-500"><%= User.human_attribute_name(:zip_code) %></dt>
+              <dd class="mt-1"><%= @member.user.zip_code %></dd>
+            </div>
+
+            <div>
+              <dt class="text-sm font-medium text-gray-500"><%= User.human_attribute_name(:city) %></dt>
+              <dd class="mt-1"><%= @member.user.city %></dd>
+            </div>
+
+            <div>
+              <dt class="text-sm font-medium text-gray-500"><%= User.human_attribute_name(:country) %></dt>
+              <dd class="mt-1"><%= @member.user.country %></dd>
+            </div>
+          </dl>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-medium text-gray-900 mb-4"><%= t('.emergency_contact') %></h3>
+          <dl class="space-y-3">
+            <div>
+              <dt class="text-sm font-medium text-gray-500"><%= Member.human_attribute_name(:contact_name) %></dt>
+              <dd class="mt-1"><%= @member.contact_name %></dd>
+            </div>
+
+            <div>
+              <dt class="text-sm font-medium text-gray-500"><%= Member.human_attribute_name(:contact_phone_number) %></dt>
+              <dd class="mt-1">
+                <%= link_to @member.contact_phone_number, "tel:#{@member.contact_phone_number}", class: "text-blue-600 hover:text-blue-800" %>
+              </dd>
+            </div>
+
+            <div>
+              <dt class="text-sm font-medium text-gray-500"><%= Member.human_attribute_name(:contact_relationship) %></dt>
+              <dd class="mt-1"><%= @member.contact_relationship %></dd>
+            </div>
+          </dl>
+
+          <div class="mt-6">
+            <div class="flex items-center">
+              <% if @member.agreed_to_advertising_right? %>
+                <svg class="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+              <% else %>
+                <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                </svg>
+              <% end %>
+              <span class="ml-2 text-sm text-gray-700"><%= Member.human_attribute_name(:agreed_to_advertising_right) %></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white shadow-sm rounded-lg p-6">
+        <h3 class="text-lg font-medium text-gray-900 mb-4"><%= t('.subscriptions') %></h3>
+
+        <% @member.subscriptions.group_by(&:year).sort.reverse.each do |year, subscriptions| %>
+          <div class="mb-6 last:mb-0">
+            <h4 class="text-base font-medium text-gray-700 mb-3"><%= year %></h4>
+
+            <div class="space-y-4">
+              <% subscriptions.each do |subscription| %>
+                <div class="border rounded-lg p-4">
+                  <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2">
+                      <span class="<%= subscription.status_color.gsub('table-', 'text-') %>">
+                        <%= Subscription.human_attribute_name(subscription.status) %>
+                      </span>
+                      <span class="text-sm text-gray-500">
+                        <%= number_to_currency(subscription.fee, unit: "€", separator: ",", format: "%n %u") %>
+                      </span>
+                    </div>
+                    <%= link_to t('defaults.edit'),
+                        [:edit, :admin, subscription],
+                        class: "text-sm text-blue-600 hover:text-blue-800" %>
+                  </div>
+
+                  <div class="space-y-2">
+                    <% subscription.courses.each do |course| %>
+                      <div class="flex items-center justify-between text-sm">
+                        <span><%= course.title %></span>
+                        <span class="text-gray-500"><%= course.weekday %></span>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="mt-4">
+          <%= link_to t('.new_subscription'),
+              new_admin_subscription_path(member_id: @member.id),
+              class: "inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-3 pt-6 mt-6 border-t border-gray-200">
+      <%= link_to t('defaults.back'),
+          %i[admin members],
+          class: "inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800" %>
+    </div>
   </div>
 </div>

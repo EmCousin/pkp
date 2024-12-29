@@ -16,7 +16,7 @@ module AccessFilteringHelpers
   end
 
   def alumni_time?
-    Time.current.month.in?(Course::ALUMNI_MONTHS) && alumni_starting_date.past?
+    true || (Time.current.month.in?(Course::ALUMNI_MONTHS) && alumni_starting_date.past?)
   end
 
   def alumni_starting_date

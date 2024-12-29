@@ -40,18 +40,18 @@ describe Subscriptions::Decoratable, type: :model do
   end
 
   describe '#status_color' do
-    it { expect(subject.status_color).to eq '' }
+    it { expect(subject.status_color).to eq 'text-yellow-600' }
 
     context 'when the subscription is confirmed' do
       let(:subscription) { build :subscription, status: :confirmed_bank_check }
 
-      it { expect(subject.status_color).to eq 'table-success' }
+      it { expect(subject.status_color).to eq 'text-green-600' }
     end
 
     context 'when the subscription is archived' do
       let(:subscription) { build :subscription, status: :archived }
 
-      it { expect(subject.status_color).to eq 'table-secondary' }
+      it { expect(subject.status_color).to eq 'text-red-600' }
     end
   end
 end

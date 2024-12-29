@@ -26,7 +26,7 @@ module Dashboard
     def update
       if @member.update(member_params)
         process_after_save(@member.current_subscription) if @member.current_subscription
-        redirect_to dashboard_index_path, notice: t('.success')
+        redirect_to :dashboard, notice: t('.success')
       else
         render :edit, status: :unprocessable_entity
       end

@@ -1,148 +1,111 @@
-<h1 class="page-title"><%= t(".title") %></h1>
-<hr />
+<h1 class="text-2xl text-center font-bold mb-4 text-amber-500"><%= t(".title") %></h1>
+<div class="border-b border-gray-200 mb-6"></div>
 
-<div class="row">
-  <div class="col-12">
-
-    <%= form_with(url: %i[admin members], local: true, method: :get, data: { turbo: false }) do %>
-      <div class="row">
-        <div class="col-md-3 mb-2">
-          <%= text_field_tag :q, params[:q], class: "form-control", placeholder: t('.search_by_name') %>
-        </div>
-        <div class="col-md-3 mb-2">
-          <%= collection_select nil, :category, Category.order(:created_at), :id, :title, { selected: params[:category], include_blank: t('.all_categories') }, autocomplete: :off, class: 'form-control'  %>
-        </div>
-        <div class="col-md-3 mb-2">
-          <%= collection_select nil, :course_id, Course.order(:created_at), :id, :title, { selected: params[:course_id], include_blank: t('.all_courses') }, autocomplete: :off, class: 'form-control'  %>
-        </div>
-        <div class="col-md-3 mb-2">
-          <%= select_tag(
-            :subscription_year,
-            options_for_select(
-              Subscription.select_options,
-              params[:subscription_year],
-            ),
-            include_blank: 'Année',
-            class: 'form-control'
-          ) %>
-        </div>
+<div class="w-full p-4 bg-slate-100 rounded-lg shadow-sm">
+  <%= form_with(url: %i[admin members], local: true, method: :get, data: { turbo: false }) do |f| %>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div>
+        <%= f.text_field :q,
+            class: "mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm",
+            placeholder: t('.search_by_name') %>
       </div>
-
-      <hr />
-
-      <div class="my-3 row">
-        <div class="col-md-4 mb-2">
-          <span>Afficher les champs&nbsp: </span>
-
-          <div class="d-flex align-items-center">
-            <%= check_box nil, :display_level, { checked: params[:display_level] != 'no', autocomplete: :off }, 'yes', 'no' %>
-            <%= label_tag :display_level, Member.human_attribute_name(:level), class: 'ml-1 mb-0' %>
-          </div>
-
-          <div class="d-flex align-items-center">
-            <%= check_box nil, :display_avatar, { checked: params[:display_avatar] != 'no', autocomplete: :off }, 'yes', 'no' %>
-            <%= label_tag :display_avatar, Member.human_attribute_name(:avatar), class: 'ml-1 mb-0' %>
-          </div>
-
-          <div class="d-flex align-items-center">
-            <%= check_box nil, :display_name, { checked: params[:display_name] != 'no', autocomplete: :off }, 'yes', 'no' %>
-            <%= label_tag :display_name, Member.human_attribute_name(:last_name), class: 'ml-1 mb-0' %>
-          </div>
-
-          <div class="d-flex align-items-center">
-            <%= check_box nil, :display_phone_number, { checked: params[:display_phone_number] != 'no', autocomplete: :off }, 'yes', 'no' %>
-            <%= label_tag :display_phone_number, User.human_attribute_name(:phone_number), class: 'ml-1 mb-0' %>
-          </div>
-
-          <div class="d-flex align-items-center">
-            <%= check_box nil, :display_email, { checked: params[:display_email] != 'no', autocomplete: :off }, 'yes', 'no' %>
-            <%= label_tag :display_email, User.human_attribute_name(:email), class: 'ml-1 mb-0' %>
-          </div>
-
-          <div class="d-flex align-items-center">
-            <%= check_box nil, :display_contact_email, { checked: params[:display_contact_email] != 'no', autocomplete: :off }, 'yes', 'no' %>
-            <%= label_tag :display_contact_email, Contact.human_attribute_name(:email), class: 'ml-1 mb-0' %>
-          </div>
-
-          <div class="d-flex align-items-center">
-            <%= check_box nil, :display_actions, { checked: params[:display_actions] != 'no', autocomplete: :off }, 'yes', 'no' %>
-            <%= label_tag :display_actions, 'Actions', class: 'ml-1 mb-0' %>
-          </div>
-        </div>
-
-        <div class="col-md-4 mb-2">
-          <span>Afficher les niveaux&nbsp: </span>
-
-          <%= collection_check_boxes nil, :level, Member.level_options.map(&:values), :first, :last, { include_hidden: false } do |b| %>
-            <div class="d-flex align-items-center">
-              <%= b.check_box checked: params[:level].is_a?(Array) && b.value.in?(params[:level]), autocomplete: :off %>
-              <%= b.label class: 'ml-1 mb-0' %>
-            </div>
-          <% end %>
-        </div>
-
-        <div class="col-md-4 mb-2">
-          <div class="d-flex align-items-center">
-            <%= check_box nil, :no_paginate, { checked: params[:no_paginate].present?, autocomplete: :off }, true, false %>
-            <%= label_tag :no_paginate, t('.no_paginate'), class: 'ml-1 mb-0' %>
-          </div>
-
-          <div class="d-flex align-items-center">
-            <%= check_box nil, :format, { checked: false, autocomplete: :off }, 'csv', 'html' %>
-            <%= label_tag :format, t('.csv_export'), class: 'ml-1 mb-0' %>
-          </div>
-        </div>
+      <div>
+        <%= f.collection_select :category, Category.order(:created_at), :id, :title,
+            { selected: params[:category], include_blank: t('.all_categories') },
+            class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm bg-white' %>
       </div>
-
-      <%= submit_tag t('defaults.search'), class: "btn btn-success my-4" %>
-    <% end %>
-
-    <div class="d-flex justify-content-end my-3">
-      <%= link_to t('defaults.new', resource: User.model_name.human.downcase), %i[new admin member], class: "btn btn-primary ml-2" %>
+      <div>
+        <%= f.collection_select :course_id, Course.order(:created_at), :id, :title,
+            { selected: params[:course_id], include_blank: t('.all_courses') },
+            class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm bg-white' %>
+      </div>
+      <div>
+        <%= f.select :subscription_year,
+            options_for_select(Subscription.select_options, params[:subscription_year]),
+            { include_blank: 'Année' },
+            class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm bg-white' %>
+      </div>
     </div>
 
-    <table class="table mt-5">
-      <thead>
-        <tr>
-          <% unless params[:display_level] == 'no' %>
-            <th><%= Member.human_attribute_name(:level) %></th>
-          <% end %>
-          <% unless params[:display_avatar] == 'no' %>
-            <th><%= Member.human_attribute_name(:avatar) %></th>
-          <% end %>
-          <% unless params[:display_name] == 'no' %>
-            <th><%= Member.human_attribute_name(:last_name) %></th>
-          <% end %>
-          <% unless params[:display_phone_number] == 'no' %>
-            <th><%= User.human_attribute_name(:phone_number) %></th>
-          <% end %>
-          <% unless params[:display_email] == 'no' %>
-            <th><%= User.human_attribute_name(:email) %></th>
-          <% end %>
-          <% unless params[:display_contact_email] == 'no' %>
-            <th><%= Contact.human_attribute_name(:email) %></th>
-          <% end %>
-          <% unless params[:display_actions] == 'no' %>
-            <th class="text-center">Action</th>
-          <% end %>
-        </tr>
-      </thead>
+    <div class="border-b border-gray-200 mb-6"></div>
 
-      <tbody>
-        <% if @members.empty? %>
-          <tr>
-            <td colspan="6" class="text-center">
-              <%= link_to t('.add_member'), %i[new admin member], class: "btn btn-primary" %>
-            </td>
-          </tr>
-        <% else %>
-          <%= render partial: "admin/members/table_row", collection: @members, as: :member %>
-        <% end %>
-      </tbody>
-    </table>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+      <div>
+        <span class="block mb-2 font-medium">Afficher les champs : </span>
+        <div class="space-y-1">
+          <% display_fields = [:level, :avatar, :name, :phone_number, :email, :contact_email, :actions] %>
+          <% display_fields.each do |field| %>
+            <label class="flex items-center gap-2 py-0.5">
+              <%= f.check_box "display_#{field}",
+                  { checked: params["display_#{field}"] != 'no',
+                    class: "rounded border-gray-300 text-slate-800 focus:ring-slate-800" },
+                  'yes', 'no' %>
+              <span class="text-sm text-gray-700"><%= field == :name ? Member.human_attribute_name(:last_name) :
+                       field == :email ? User.human_attribute_name(:email) :
+                       field == :contact_email ? Contact.human_attribute_name(:email) :
+                       field == :actions ? 'Actions' :
+                       Member.human_attribute_name(field) %></span>
+            </label>
+          <% end %>
+        </div>
+      </div>
 
-    <% if params[:no_paginate].blank? %>
-      <%= paginate @members %>
-    <% end %>
+      <div>
+        <span class="block mb-2 font-medium">Afficher les niveaux : </span>
+        <div class="space-y-2">
+          <%= f.collection_check_boxes :level, Member.level_options.map(&:values), :first, :last, { include_hidden: false } do |b| %>
+            <label class="flex items-center space-x-2">
+              <%= b.check_box checked: params[:level].is_a?(Array) && b.value.in?(params[:level]),
+                  class: "rounded border-gray-300" %>
+              <span><%= b.text %></span>
+            </label>
+          <% end %>
+        </div>
+      </div>
+
+      <div>
+        <div class="space-y-2">
+          <label class="flex items-center space-x-2">
+            <%= f.check_box :no_paginate,
+                { checked: params[:no_paginate].present?, class: "rounded border-gray-300" },
+                true, false %>
+            <span><%= t('.no_paginate') %></span>
+          </label>
+
+          <label class="flex items-center">
+            <%= f.check_box :format,
+                { checked: false, class: "rounded border-gray-300" },
+                'csv', 'html' %>
+            <span class="ml-2"><%= t('.csv_export') %></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <%= f.submit t('defaults.search'), class: "bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md" %>
+  <% end %>
+
+  <div class="flex justify-end my-6">
+    <%= link_to t('defaults.new', resource: User.model_name.human.downcase),
+        %i[new admin member],
+        class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md" %>
   </div>
+
+  <% if @members.empty? %>
+    <div class="text-center py-12">
+      <%= link_to t('.add_member'),
+          %i[new admin member],
+          class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md" %>
+    </div>
+  <% else %>
+    <div class="grid grid-cols-1 gap-4">
+      <%= render partial: "admin/members/member", collection: @members, as: :member %>
+    </div>
+  <% end %>
+
+  <% if params[:no_paginate].blank? %>
+    <div class="mt-6">
+      <%= paginate @members %>
+    </div>
+  <% end %>
 </div>

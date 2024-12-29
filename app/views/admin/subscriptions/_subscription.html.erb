@@ -1,0 +1,104 @@
+<%= turbo_frame_tag dom_id(subscription, :row), class: "block border bg-white rounded-lg shadow-sm p-4" do %>
+  <div class="relative">
+    <div class="absolute top-0 right-0">
+      <div class="relative">
+        <details class="group">
+          <summary class="flex items-center gap-1 text-gray-700 hover:text-gray-900 cursor-pointer">
+            <%= t('defaults.action') %>
+            <svg class="w-4 h-4 transition-transform group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </summary>
+          <div class="absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 z-50">
+            <%= link_to t('defaults.edit'),
+                [:edit, :admin, subscription],
+                class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100",
+                data: { turbo_frame: '_top' } %>
+
+            <% %w[pending confirmed_bank_check confirmed_cash archived].each do |status| %>
+              <%= button_to t("defaults.#{status}"),
+                  {
+                    controller: 'admin/subscriptions',
+                    action: 'update',
+                    id: subscription.id,
+                    no_notification: true,
+                    subscription: { status: status }
+                  },
+                  method: :put,
+                  class: "w-full text-left px-4 py-2 text-sm #{status.include?('confirmed') ? 'text-green-600' : status == 'archived' ? 'text-red-600' : 'text-gray-700'} hover:bg-gray-100" %>
+            <% end %>
+
+            <%= button_to t('defaults.destroy'),
+                [:admin, subscription],
+                method: :delete,
+                data: {
+                  controller: :confirm,
+                  confirm_message_value: t('defaults.are_you_sure'),
+                  turbo_frame: '_top'
+                },
+                class: "w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100" %>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <div class="flex items-center space-x-2">
+        <span class="text-sm text-gray-500">ID:</span>
+        <%= link_to subscription.id, [:admin, subscription], class: "text-blue-600 hover:text-blue-800", data: { turbo_frame: '_top' } %>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <span class="text-sm text-gray-500"><%= Member.human_attribute_name(:level) %>:</span>
+        <div class="w-4 h-4 border border-gray-400 rounded"
+             style="background-color: <%= subscription.member.level %>"
+             title="<%= subscription.member.level_text %>">
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <span class="text-sm text-gray-500"><%= Subscription.human_attribute_name(:member_id) %>:</span>
+        <%= link_to [:admin, subscription.member], class: "flex items-center gap-2", data: { turbo_frame: '_top' } do %>
+          <% if subscription.member.avatar.variable? %>
+            <%= image_tag subscription.member.avatar.variant(:mini), class: "w-8 h-8 rounded-full" %>
+          <% else %>
+            <%= image_tag subscription.member.avatar, class: "w-8 h-8 rounded-full" %>
+          <% end %>
+          <span><%= subscription.member.full_name %></span>
+        <% end %>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <span class="text-sm text-gray-500"><%= Member.human_attribute_name(:email) %>:</span>
+        <%= mail_to subscription.member.email, subscription.member.email, class: "text-blue-600 hover:text-blue-800" %>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <span class="text-sm text-gray-500"><%= Subscription.human_attribute_name(:course_ids) %>:</span>
+
+        <% subscription.courses.each do |course| %>
+          <%= link_to course.title, [:admin, course], class: "text-blue-600 hover:text-blue-800", data: { turbo_frame: '_top' } %>
+          <span class="last:hidden">,</span>
+        <% end %>
+
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <span class="text-sm text-gray-500"><%= Subscription.human_attribute_name(:fee) %>:</span>
+        <span><%= number_to_currency(subscription.fee, unit: "€", separator: ",", format: "%n %u") %></span>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <span class="text-sm text-gray-500"><%= Subscription.human_attribute_name(:year) %>:</span>
+        <span><%= subscription.year %></span>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <span class="text-sm text-gray-500"><%= Subscription.human_attribute_name(:status) %>:</span>
+        <span class="<%= subscription.status_color.gsub('table-', 'text-') %>">
+          <%= Subscription.human_attribute_name(subscription.status) %>
+        </span>
+      </div>
+    </div>
+  </div>
+<% end %>

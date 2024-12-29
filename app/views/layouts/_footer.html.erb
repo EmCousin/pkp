@@ -1,7 +1,7 @@
-<footer class="container-fluid bg-dark p-2 d-flex justify-content-center">
-  <span class="align-middle">Copyright © <%= Time.current.year %> - Parkour Paris</span>
-  <span class="ml-2 mr-2">|</span>
-  <span class="align-middle">
-    <%= link_to "Mentions Légales et Conditions Générales d'Utilisation", legal_mentions_path, target: '_blank' %>
+<footer class="w-full bg-gray-900 p-2 flex justify-center items-center">
+  <span class="text-amber-500">Copyright © <%= Time.current.year %> - Parkour Paris</span>
+  <span class="mx-2">|</span>
+  <span>
+    <%= link_to "Mentions Légales et Conditions Générales d'Utilisation", legal_mentions_path, class: "text-amber-500 hover:text-amber-400", target: '_blank' %>
   </span>
 </footer>

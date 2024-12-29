@@ -1,5 +1,6 @@
 fr:
   defaults:
+    dismiss: Fermer
     close: Fermer
     show: Voir
     new: Nouveau %{resource}
@@ -23,9 +24,11 @@ fr:
     welcome: Bienvenue
     select: Sélectionner
     search: Rechercher
+    filter: Filtrer
     confirm: Confirmer
     confirmed_bank_check: A payé par chèque
     confirmed_cash: A payé en espèces
+    archived: Archivée
     pending: En attente
     continue: Continuer
     archive: Archiver
@@ -213,7 +216,7 @@ fr:
         if_you_have_an_account: Si vous avez déjà ouvert un compte l'année dernière, connectez-vous ici
         if_you_are_alumni: Si vous êtes un·e ancien·ne élève, vous pouvez vous connecter/inscrire, puis cliquer sur "Choisir mes cours" puis sur "Je suis un·e ancien·ne élève"
       edit:
-        edit_my_account: Modifier mon compte
+        title: Modifier mon compte
         delete_my_account: Supprimer mon compte
         click_below_to_delete_your_account: Pour supprimer votre compte, cliquez sur le bouton ci-dessous.
         warning_cannot_be_undone: Les données relatives à votre compte seront immédiatement détruites. Cette action est irréversible.
@@ -231,9 +234,11 @@ fr:
         no_paginate: Désactiver la pagination
         csv_export: Exporter au format CSV
       show:
+        title: "%{member}"
         remove_from_course: Retirer
         remove_from_course_are_you_sure: Êtes-vous sûr·e de vouloir retirer %{member_full_name} du cours %{course_title} ?
         new_subscription: Nouvelle inscription
+        subscriptions: Inscriptions
       new:
         title: Ajouter un membre
       create:
@@ -280,6 +285,7 @@ fr:
         title: Inscriptions
         new: Nouvelle inscription
       show:
+        title: Inscription n°%{id}
         payment: Paiement
         paid: Payé
         not_paid_yet: En attente de paiement
@@ -319,7 +325,7 @@ fr:
       create:
         success: Avoir généré
   dashboard:
-    index:
+    show:
       add_subscription: Ajouter une inscription
       choose_my_courses: Choisir mes cours
       come_to_your_slots_only: Vous ne pouvez pas vous rendre à d'autres cours que ceux que vous avez choisis lors de votre inscription. Merci de respecter les créneaux que vous avez sélectionnés.
@@ -348,10 +354,12 @@ fr:
         <<: *failure
     subscriptions:
       new:
+        or: ou
         create_member: Veuillez renseigner les informations de la personne à inscrire
-        add_member: Ajouter une autre personne
+        add_member: Nouveau membre
         no_courses_available: Désolé, il n'y a plus de cours %{category_title} disponibles.
         full: Complet
+        select_category: Sélectionner une catégorie
       create:
         success: Inscription créée avec succès !
     members:
@@ -378,7 +386,7 @@ fr:
       update:
         success: Formulaire signé ajouté avec succès !
     vacations:
-      index:
+      show:
         i_am_alumni: Je suis un·e ancien·ne élève
 
   layouts:
@@ -414,4 +422,24 @@ fr:
     email_changed:
       subject: Un utilisateur a changé son adresse E-mail
       body: "Son E-mail a changé de %{before} à %{after}"
+
+  date:
+    formats:
+      long: "%d %B %Y"  # e.g. "15 janvier 2024"
+      short: "%d/%m/%Y" # e.g. "15/01/2024"
+    day_names: [dimanche, lundi, mardi, mercredi, jeudi, vendredi, samedi]
+    abbr_day_names: [dim, lun, mar, mer, jeu, ven, sam]
+    month_names: [~, janvier, février, mars, avril, mai, juin, juillet, août, septembre, octobre, novembre, décembre]
+    abbr_month_names: [~, jan., fév., mar., avr., mai, juin, juil., août, sept., oct., nov., déc.]
+    order:
+      - :day
+      - :month
+      - :year
+
+  time:
+    formats:
+      long: "%d %B %Y à %H:%M"  # e.g. "15 janvier 2024 à 14:30"
+      short: "%d/%m/%Y %H:%M"   # e.g. "15/01/2024 14:30"
+    am: "am"
+    pm: "pm"
 

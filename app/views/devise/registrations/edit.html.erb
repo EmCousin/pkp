@@ -1,151 +1,103 @@
-<h1 class="page-title"><%= t('.edit_my_account') %></h1>
-<hr />
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8">
+    <div>
+      <h1 class="mt-6 text-center text-3xl font-extrabold text-amber-500">
+        <%= t('.title') %>
+      </h1>
+      <div class="mt-2 border-b border-gray-300"></div>
+    </div>
 
-<div class="row">
-  <div class="col-md-6 offset-md-3">
-
-    <%= form_for resource,
-                 as: resource_name,
-                 url: registration_path(resource_name),
-                 html: {
-                   method: :put,
-                   data: { controller: :form }
-                 } do |f| %>
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "mt-8 space-y-6" }) do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
 
-      <div class="form-group">
-        <%= f.label :email %><br />
-        <%= f.email_field :email, autocomplete: "email", class: "form-control" %>
-      </div>
-
-      <div class="form-group">
-        <%= f.label :phone_number %>
-        <%= f.telephone_field :phone_number, required: true, class: "form-control" %>
-      </div>
-
-      <div
-        data-controller="places"
-        data-places-app-id="<%= Rails.application.credentials.algolia(:application_id) %>"
-        data-places-api-key="<%= Rails.application.credentials.algolia(:search_key) %>"
-      >
-        <div class="row">
-          <div class="col-8">
-            <div class="form-group">
-              <%= f.label :address %>
-              <%= f.text_field :address, required: true, class: "form-control", data: { :'places-target' => :address } %>
-            </div>
-          </div>
-
-          <div class="col-4">
-            <div class="form-group">
-              <%= f.label :zip_code %>
-              <%= f.text_field :zip_code, required: true, class: "form-control", data: {:'places-target' => :zipCode } %>
-            </div>
-          </div>
+      <div class="space-y-6">
+        <div>
+          <%= f.label :email, class: "block text-sm font-medium text-gray-700" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email",
+              class: "mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
         </div>
 
-        <div class="row">
-          <div class="col">
-            <div class="form-group">
-              <%= f.label :city %>
-              <%= f.text_field :city, required: true, class: "form-control", data: {:'places-target' => :city } %>
-            </div>
+        <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+          <div class="text-sm text-gray-500">
+            <%= t('.currently_waiting_confirmation_for_email', email: resource.unconfirmed_email) %>
           </div>
-
-          <div class="col">
-            <div class="form-group">
-              <%= f.label :country %>
-              <%= f.text_field :country, required: true, class: "form-control", data: {:'places-target' => :country } %>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-        <div>En attente de confirmation pour l'E-mail : <%= resource.unconfirmed_email %></div>
-      <% end %>
-
-      <div class="form-group">
-        <%= f.label :current_password do %>
-          <%= resource.class.human_attribute_name(:current_password) %>
-          <em>(<%= t('.current_password_needed') %>)</em>
         <% end %>
-        <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control" %>
-      </div>
 
-      <%= f.fields_for :contacts, f.object.contacts.first_or_initialize do |ff| %>
-        <div class="form-group">
-          <%= ff.label :email, 'Autre E-mail de notification (facultatif)' %>
-          <%= ff.text_field :email, class: "form-control" %>
-
-          <div class="d-flex justify-content-between">
-            <details class="text-sm w-50">
-              <summary><small>ℹ️ À quoi ça sert ?</small></summary>
-
-              <small class="d-block mt-2">
-                Vous pouvez ajouter une adresse E-mail supplémentaire à celle que vous utilisez pour votre compte.
-                Cette adresse E-mail sera alors en copie de toutes les notifications que vous recevez de la part de Parkour Paris Inscriptions.
-
-                Cela permet par exemple à des parents d'un·e même élève de recevoir les notifications chacun sur leur adresse respective.
-                La personne possédant l'adresse E-mail devra toutefois confirmer cet ajout.
-              <p>
-              </small>
-            </details>
-
-            <% if ff.object.persisted? %>
-              <%= ff.hidden_field :id %>
-              <small class="mt-1">
-                <%= ff.check_box :_destroy %>
-                <%= ff.label :_destroy, 'Supprimer le contact' %>
-              </small>
-            <% end %>
-          </div>
+        <div>
+          <%= f.label :phone_number, class: "block text-sm font-medium text-gray-700" %>
+          <%= f.telephone_field :phone_number,
+              class: "mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
         </div>
-      <% end %>
 
-      <div class="form-group">
-        <%= f.label :password do %>
-          <%= resource.class.human_attribute_name(:password) %>
-          <% if @minimum_password_length %>
-            <em>(<%= t('.minimum_characters', length: @minimum_password_length) %>)</em>
-          <% end %>
-        <% end %>
-        <%= f.password_field :password, autocomplete: "new-password", class: "form-control", placeholder: t('.leave_blank_if_you_wont_change_it'), minlength: Devise.password_length.min, maxlength: Devise.password_length.max %>
-      </div>
+        <div>
+          <%= f.label :address, class: "block text-sm font-medium text-gray-700" %>
+          <%= f.text_field :address,
+              class: "mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
+        </div>
 
-      <div class="form-group">
-        <%= f.label :password_confirmation %><br />
-        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", placeholder: t('.leave_blank_if_you_wont_change_it') %>
-      </div>
+        <div>
+          <%= f.label :zip_code, class: "block text-sm font-medium text-gray-700" %>
+          <%= f.text_field :zip_code,
+              class: "mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
+        </div>
 
-      <div class="actions d-flex mt-3 mb-5">
-        <%= link_to t('defaults.back'), :back, class: 'btn btn-default btn-lg flex-fill' %>
+        <div>
+          <%= f.label :city, class: "block text-sm font-medium text-gray-700" %>
+          <%= f.text_field :city,
+              class: "mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
+        </div>
+
+        <div>
+          <%= f.label :country, class: "block text-sm font-medium text-gray-700" %>
+          <%= f.text_field :country,
+              class: "mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
+        </div>
+
+        <div>
+          <%= f.label :password, class: "block text-sm font-medium text-gray-700" %>
+          <%= f.password_field :password,
+                               autocomplete: "new-password",
+                               class: "mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
+          <p class="mt-2 text-sm text-gray-500">
+            <%= t('.leave_blank_if_you_don_t_want_to_change_it').capitalize %>
+          </p>
+        </div>
+
+        <div>
+          <%= f.label :current_password, class: "block text-sm font-medium text-gray-700" %>
+          <%= f.password_field :current_password,
+                               autocomplete: "current-password",
+                               class: "mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
+          <p class="mt-2 text-sm text-gray-500">
+            <%= t('.we_need_your_current_password_to_confirm_your_changes').capitalize %>
+          </p>
+        </div>
+
         <%= f.submit t('defaults.save'),
-                     class: 'btn btn-dark btn-lg flex-fill',
-                     data: { form_target: :submit } %>
+                     class: "w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800" %>
       </div>
     <% end %>
 
-    <div class="clearfix mb-5"></div>
+    <div class="mt-6 space-y-4">
+      <%= render "devise/shared/links" %>
 
-    <div class="mb-5">
-      <h1 class="page-title"><%= t('.delete_my_account') %></h1>
-      <hr />
+      <div class="pt-4 border-t border-gray-200">
+        <h3 class="text-lg font-medium text-gray-900"><%= t('.cancel_my_account') %></h3>
 
-      <p>
-        <%= t('.click_below_to_delete_your_account') %>
-        <br />
-        <b><%= t('.warning_cannot_be_undone') %></b>
-      </p>
+        <div class="text-sm mt-2 p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert">
+          <span>
+            <%= t('.click_below_to_delete_your_account') %>
+            <b><%= t('.warning_cannot_be_undone') %></b>
+          </span>
 
-      <%= button_to t('.delete_my_account'),
-                    registration_path(resource_name),
-                    data: {
-                      controller: :confirm,
-                      confirm_message_value: t('.are_you_sure')
-                    },
-                    method: :delete,
-                    class: 'btn btn-danger btn-lg w-100' %>
+          <div class="mt-2">
+            <%= button_to t('.cancel_my_account'), registration_path(resource_name),
+                          form: { data: { turbo_confirm: t('.are_you_sure') } },
+                          method: :delete,
+                          class: "flex items-center w-full px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" %>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

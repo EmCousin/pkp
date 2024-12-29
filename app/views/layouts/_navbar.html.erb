@@ -1,46 +1,90 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container">
-    <%= link_to(root_path, class: "navbar-brand") do %>
-      <%= image_tag "/assets/logopkp.webp" %>
-    <% end %>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <% if user_signed_in? %>
-          <% if current_user.admin %>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <%= t('.admin') %>
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <%= link_to t('.members'), %i[admin members], class: "dropdown-item" %>
-                <%= link_to t('.courses'), %i[admin courses], class: "dropdown-item" %>
-                <%= link_to t('.subscriptions'), %i[admin subscriptions], class: "dropdown-item" %>
-              </div>
-            </li>
-          <% end %>
-          <%= link_to t('.my_account'), edit_user_registration_path, class: "nav-link" %>
+<nav class="bg-gray-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <div class="flex items-center">
+        <%= link_to root_path, class: "flex-shrink-0" do %>
+          <%= image_tag "/assets/logopkp.webp", class: "h-8 w-auto" %>
         <% end %>
-      </ul>
-      <div class="menu-container">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <% if user_signed_in? %>
-              <%= button_to t('defaults.logout'),
-                            destroy_user_session_path,
-                            method: :delete,
-                            class: "btn-dark nav-link border-0",
-                            style: 'cursor: pointer;' %>
-            <% else %>
-              <%= link_to t('devise.shared.links.sign_in'),
-                          new_user_session_path,
-                          class: "nav-link" %>
+      </div>
+
+      <div class="hidden md:block">
+        <div class="ml-10 flex items-baseline space-x-4">
+          <% if user_signed_in? %>
+            <% if current_user.admin %>
+              <div class="relative">
+                <details class="group">
+                  <summary class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer flex items-center">
+                    <%= t('.admin') %>
+                    <svg class="w-4 h-4 ml-1 transition-transform group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                  </summary>
+                  <div class="absolute z-50 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5">
+                    <%= link_to t('.members'), %i[admin members], class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+                    <%= link_to t('.courses'), %i[admin courses], class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+                    <%= link_to t('.subscriptions'), %i[admin subscriptions], class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+                  </div>
+                </details>
+              </div>
             <% end %>
-          </li>
-        </ul>
+            <%= link_to t('.my_account'), edit_user_registration_path, class: "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="hidden md:block">
+        <div class="ml-4 flex items-center md:ml-6">
+          <% if user_signed_in? %>
+            <%= button_to t('defaults.logout'),
+                        destroy_user_session_path,
+                        method: :delete,
+                        class: "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" %>
+          <% else %>
+            <%= link_to t('devise.shared.links.sign_in'),
+                      new_user_session_path,
+                      class: "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="flex md:hidden">
+        <div class="relative">
+          <details class="peer">
+            <summary class="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none cursor-pointer">
+              <span class="sr-only">Open main menu</span>
+              <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </summary>
+          </details>
+
+          <div class="grid transition-[grid-template-rows] duration-300 peer-open:grid-rows-[1fr] grid-rows-[0fr] absolute right-0 min-w-[200px]">
+            <div class="overflow-hidden">
+              <div class="space-y-1 bg-gray-800">
+                <% if user_signed_in? %>
+                  <% if current_user.admin %>
+                    <div class="space-y-1">
+                      <p class="text-gray-300 px-3 py-2 text-sm font-medium"><%= t('.admin') %></p>
+                      <%= link_to t('.members'), %i[admin members], class: "text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium" %>
+                      <%= link_to t('.courses'), %i[admin courses], class: "text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium" %>
+                      <%= link_to t('.subscriptions'), %i[admin subscriptions], class: "text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium" %>
+                    </div>
+                    <div class="border-t border-gray-700 my-2"></div>
+                  <% end %>
+                  <%= link_to t('.my_account'), edit_user_registration_path, class: "text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium" %>
+                  <%= button_to t('defaults.logout'),
+                              destroy_user_session_path,
+                              method: :delete,
+                              class: "text-gray-300 hover:bg-gray-700 hover:text-white block w-full text-left px-3 py-2 rounded-md text-base font-medium" %>
+                <% else %>
+                  <%= link_to t('devise.shared.links.sign_in'),
+                            new_user_session_path,
+                            class: "text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium" %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
