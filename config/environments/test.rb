@@ -48,6 +48,4 @@ Rails.application.configure do
   config.active_job.queue_adapter = :test
 
   config.assets.compile = true
-  config.assets.debug = false
-  config.assets.css_compressor = nil
 end
