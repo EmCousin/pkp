@@ -1,58 +1,65 @@
-<h1 class="page-title"><%= t(".title") %></h1>
-<hr />
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="mb-8">
+    <h1 class="text-2xl text-center font-bold mb-4 text-amber-500"><%= t(".title") %></h1>
+    <div class="border-b border-gray-200"></div>
+  </div>
 
-<%#= link_to t('defaults.new', resource: Course.model_name.human.downcase),
-            %i[new admin course],
-            class: "btn btn-primary float-right mb-4" %>
+  <div class="bg-white shadow-sm rounded-lg p-6">
+    <div class="flex justify-end mb-6">
+      <%= link_to t('defaults.new', resource: Course.model_name.human.downcase),
+          %i[new admin course],
+          class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md" %>
+    </div>
 
-<div class="table-responsive mt-3">
-  <table class="table">
-    <thead>
-      <tr>
-        <th><%= Course.human_attribute_name(:title) %></th>
-        <th><%= Course.human_attribute_name(:capacity) %></th>
-        <th><%= Course.human_attribute_name(:availability) %></th>
-        <th colspan="2" class="text-center">Action</th>
-      </tr>
-    </thead>
-
-    <tbody>
+    <div class="grid grid-cols-1 gap-4">
       <% if @courses.empty? %>
-        <tr>
-          <td colspan="9" class="text-center">
-            <%= link_to t('.add_course'), %i[new admin course] %>
-          </td>
-        </tr>
+        <div class="text-center py-12">
+          <%= link_to t('.add_course'),
+              %i[new admin course],
+              class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md" %>
+        </div>
       <% else %>
         <% @courses.each do |course| %>
-          <tr>
-            <td>
-              <% unless course.active? %>
-                (<%= t('.inactive') %>)
-              <% end %>
-              <%= link_to course.title, [:admin, course] %>
-            </td>
-            <td><%= course.capacity %></td>
-            <td><%= course.availability %></td>
-            <td>
-              <%= link_to t('defaults.edit'),
-                          [:edit, :admin, course],
-                          class: "btn btn-outline-warning btn-sm" %>
-            </td>
-            <td>
-              <%= button_to t('defaults.destroy'),
-                            [:admin, course],
-                            method: :delete,
-                            data: {
-                              controller: :confirm,
-                              confirm_message_value: t('defaults.are_you_sure')
-                            },
-                            class: "btn btn-outline-danger btn-sm" %>
-              </td>
-          </tr>
+          <div class="block border bg-white rounded-lg shadow-sm p-4">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <div class="flex-grow">
+                <div class="flex flex-wrap items-center gap-x-2">
+                  <%= link_to course.title, [:admin, course], class: "text-blue-600 hover:text-blue-800 font-medium" %>
+                  <% unless course.active? %>
+                    <span class="text-gray-500 text-sm">(<%= t('.inactive') %>)</span>
+                  <% end %>
+                </div>
+                <div class="mt-2 flex flex-wrap items-center gap-x-6 text-sm text-gray-500">
+                  <div class="flex items-center gap-x-1">
+                    <span><%= Course.human_attribute_name(:capacity) %>:</span>
+                    <span class="text-gray-900"><%= course.capacity %></span>
+                  </div>
+                  <div class="flex items-center gap-x-1">
+                    <span><%= Course.human_attribute_name(:availability) %>:</span>
+                    <span class="text-gray-900"><%= course.availability %></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2 w-full sm:w-auto">
+                <%= link_to t('defaults.edit'),
+                    [:edit, :admin, course],
+                    class: "flex-1 sm:flex-initial text-center px-3 py-1.5 border border-yellow-600 text-yellow-600 hover:bg-yellow-50 text-sm rounded-md" %>
+
+                <%= button_to t('defaults.destroy'),
+                    [:admin, course],
+                    method: :delete,
+                    data: {
+                      controller: :confirm,
+                      confirm_message_value: t('defaults.are_you_sure')
+                    },
+                    class: "flex-1 sm:flex-initial text-center px-3 py-1.5 border border-red-600 text-red-600 hover:bg-red-50 text-sm rounded-md" %>
+              </div>
+            </div>
+          </div>
         <% end %>
       <% end %>
-    </tbody>
-  </table>
+    </div>
+  </div>
 </div>
 
