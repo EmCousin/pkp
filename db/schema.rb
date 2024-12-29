@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_21_072926) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_29_144841) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -53,6 +53,26 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_072926) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "attendance_records", force: :cascade do |t|
+    t.bigint "attendance_sheet_id", null: false
+    t.bigint "member_id", null: false
+    t.boolean "absent", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["attendance_sheet_id", "member_id"], name: "index_attendance_records_on_attendance_sheet_id_and_member_id", unique: true
+    t.index ["attendance_sheet_id"], name: "index_attendance_records_on_attendance_sheet_id"
+    t.index ["member_id"], name: "index_attendance_records_on_member_id"
+  end
+
+  create_table "attendance_sheets", force: :cascade do |t|
+    t.bigint "course_id", null: false
+    t.date "date", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id", "date"], name: "index_attendance_sheets_on_course_id_and_date", unique: true
+    t.index ["course_id"], name: "index_attendance_sheets_on_course_id"
   end
 
   create_table "categories", force: :cascade do |t|
@@ -156,6 +176,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_072926) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "attendance_records", "attendance_sheets"
+  add_foreign_key "attendance_records", "members"
+  add_foreign_key "attendance_sheets", "courses"
   add_foreign_key "contacts", "users"
   add_foreign_key "courses", "categories"
   add_foreign_key "courses_subscriptions", "courses"

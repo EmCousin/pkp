@@ -30,4 +30,391 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  defaults:
+    dismiss: "Close"
+    close: "Close"
+    view: "View"
+    show: "View"
+    new: "New %{resource}"
+    edit: "Edit"
+    update: "Update"
+    destroy: "Delete"
+    back: "Back"
+    send: "Send"
+    from: "from"
+    to: "to"
+    login: "Login"
+    logout: "Logout"
+    signup: "Sign Up"
+    forgot_your_password: "Forgot your password?"
+    did_not_receive_confirmation_intructions: "Did not receive confirmation instructions?"
+    did_not_receive_unlock_instructions: "Did not receive unlock instructions?"
+    signin_with: "Sign in with %{provider}"
+    send_reset_password_instructions: "Reset my password"
+    are_you_sure: "Are you sure?"
+    save: "Save"
+    welcome: "Welcome"
+    select: "Select"
+    search: "Search"
+    filter: "Filter"
+    confirm: "Confirm"
+    confirmed_bank_check: "Paid by check"
+    confirmed_cash: "Paid in cash"
+    archived: "Archived"
+    pending: "Pending"
+    continue: "Continue"
+    archive: "Archive"
+    action: "Action"
+    download: "Download"
+    none: "None"
+    replace: "Replace"
+    forbidden: "Unauthorized access"
+    details: "Details"
+    complete_your_profile: "Please complete your profile to continue."
+
+  custom_error_messages:
+    subscription:
+      member_id:
+        taken: "%{full_name} is already enrolled for %{year}"
+
+  activemodel:
+    errors:
+      messages:
+        blank: "can't be blank"
+        invalid: "is invalid"
+    attributes:
+      alumni_access:
+        username: "Username"
+        password: "Password"
+
+  activerecord:
+    errors:
+      messages:
+        record_invalid: "is not valid"
+        blank: "can't be blank"
+        confirmation: "doesn't match"
+        not_a_number: "must be a number"
+        greater_than_or_equal_to: "must be greater than or equal to %{count}"
+        inclusion: "%{value} is not a valid value"
+        invalid: "is not valid"
+        required: "is required"
+        taken: "has already been taken"
+      models:
+        user:
+          attributes:
+            email:
+              invalid_provider: "is invalid. The email provider you provided (%{value}) blocks emails from our platform (registration confirmations, password reset instructions). Please use another email address."
+            password:
+              too_short: "is too short"
+            terms_of_service:
+              accepted: "must be accepted"
+        member:
+          attributes:
+            avatar:
+              content_type: "must be in JPG, JPEG, or PNG format"
+            birthdate:
+              inclusion: "%{value} is not a valid date"
+        subscription:
+          attributes:
+            courses:
+              must_exist: "must have at least one course"
+              limit_exceeded: "maximum %{count} courses"
+              unique_category: "courses must be from the same category"
+              unique_weekday: "courses must not be on the same day"
+              unavailable: "one of the courses is full"
+            member:
+              too_young: "does not meet the minimum age requirement"
+              too_old: "exceeds the maximum age requirement"
+        invoice:
+          attributes:
+            subscription:
+              must_be_paid: "must be paid"
+            subscription_id:
+              taken: "already has an invoice"
+        category:
+          attributes:
+            min_age:
+              less_than: "must be less than the maximum age"
+              greater_than_or_equal_to: "must be greater than or equal to 1"
+            max_age:
+              greater_than: "must be greater than the minimum age"
+              less_than_or_equal_to: "must be less than or equal to 100"
+
+  # Views
+  contacts:
+    confirmations:
+      destroy:
+        success: "Unsubscribed successfully"
+  devise:
+    passwords:
+      edit:
+        title: "Create a new password"
+        minimum_characters: "%{length} characters minimum"
+    registrations:
+      new:
+        minimum_characters: "%{length} characters min."
+        i_have_read_and_accept: "I have read and accept the"
+        terms_of_service: "Terms of Service"
+        signup: "Sign Up"
+        contact_to_essay: "If you want to take a <b>trial class</b>, please send your request directly through our"
+        contact_form: "contact form"
+        full: "It's full!"
+        reopen_when_available: "If spots open up, you will be able to register again."
+        vacation_time: "It's vacation time!"
+        you_can_still_create_an_account: "Classes resume in September. You can still create an account in the meantime, and we will send you an email to notify you when registrations are about to reopen."
+        if_you_have_an_account: "If you already opened an account last year, log in here"
+        if_you_are_alumni: "If you are an alumnus, you can log in/register, then click on 'Choose my courses' and then 'I am an alumnus'"
+      edit:
+        title: "Edit my account"
+        delete_my_account: "Delete my account"
+        click_below_to_delete_your_account: "To delete your account, click the button below."
+        warning_cannot_be_undone: "The data related to your account will be immediately destroyed. This action is irreversible."
+        leave_blank_if_you_wont_change_it: "Only if you want to change it"
+        current_password_needed: "needed to confirm your changes"
+        minimum_characters: "%{length} characters min"
+        are_you_sure: "This action is irreversible. Click OK to permanently delete your account."
+
+  admin:
+    members:
+      index:
+        title: "Members List"
+        search_by_name: "Name"
+        all_categories: "All Categories"
+        all_courses: "All Courses"
+        no_paginate: "Disable Pagination"
+        csv_export: "Export as CSV"
+      show:
+        title: "%{member}"
+        remove_from_course: "Remove"
+        remove_from_course_are_you_sure: "Are you sure you want to remove %{member_full_name} from the course %{course_title}?"
+        new_subscription: "New Subscription"
+        subscriptions: "Subscriptions"
+      new:
+        title: "Add a Member"
+      create:
+        success: "Member created"
+      edit:
+        title: "Edit a Member"
+      update:
+        success: "Member updated"
+      destroy:
+        success: "Member deleted"
+    courses:
+      index:
+        title: "Courses List"
+        inactive: "Inactive"
+      show:
+        new_subscription: "New Subscription"
+      subscription:
+        remove_from_course: "Remove"
+        remove_from_course_are_you_sure: "Are you sure you want to remove %{member_full_name} from the course %{course_title}?"
+        move_to_white_level: "Move to White"
+        move_to_yellow_level: "Move to Yellow"
+        move_to_green_level: "Move to Green"
+        move_to_red_level: "Move to Red"
+      new:
+        title: "Create a Course"
+        create_category: "Create a category for your course"
+      create:
+        success: "Course created"
+      edit:
+        title: "Edit the Course"
+      update:
+        success: "Course updated"
+      destroy:
+        success: "Course deleted"
+      form:
+        new_category: "Add another category"
+    categories:
+      new:
+        title: "Create a Category"
+      create:
+        success: "Category created"
+    subscriptions:
+      index:
+        title: "Subscriptions"
+        new: "New Subscription"
+      show:
+        title: "Subscription No.%{id}"
+        payment: "Payment"
+        paid: "Paid"
+        not_paid_yet: "Pending payment"
+        generate_invoice: "Generate Invoice"
+        generate_credit_note: "Generate Credit Note"
+        preview_invoice: "Preview Invoice"
+        generating: "Generating..."
+      new:
+        title: "Enroll a Member"
+      create:
+        success: "Subscription created"
+      edit:
+        title: "Edit Subscription"
+      update:
+        success: "Subscription updated"
+      destroy:
+        success: "Subscription deleted"
+      confirm:
+        success: "Subscription confirmed"
+        failure: "The subscription is already confirmed"
+      archive:
+        success: "Subscription archived"
+        failure: "The subscription is already archived"
+      unlink_course:
+        success: "Subscription removed"
+      form:
+        users: "Members"
+        select_a_member: "Choose a Member"
+    invoices:
+      show:
+        generate_invoice: "Generate this Invoice"
+      create:
+        success: "Invoice generated"
+      update:
+        success: "Invoice generated"
+    credit_notes:
+      create:
+        success: "Credit Note generated"
+  dashboard:
+    show:
+      add_subscription: "Add a Subscription"
+      choose_my_courses: "Choose my Courses"
+      come_to_your_slots_only: "You cannot attend other classes than those you selected during your registration. Please respect the slots you selected."
+      not_yet_subscribed: "You are not yet enrolled for the %{year} year! Click the button to enroll:"
+      subscription_detailed_info: "Your subscriptions for the %{year} year:"
+      how_to_complete_my_subscription: "How to complete my registration"
+    subscription:
+      pay: "Pay"
+      subscription_form: "Registration Form"
+      download_subscription_form: "Download the Registration Form"
+      upload_signed_form: "Return the Signed Form"
+      upload_medical_certificate: "Attach the Medical Certificate"
+      change_signed_form: "Replace the Form"
+      change_medical_certificate: "Replace the Medical Certificate"
+      edit_member: "Edit Student Profile"
+    edit:
+      title: "My Personal Information"
+    alumni_accesses:
+      failure: &failure
+        not_yet_open: "Re-enrollment for alumni is not yet open"
+      new:
+        <<: *failure
+        title: "Alumni Access"
+        headline: "Enter the username and password that were communicated to you by the coaches. You can find them in the alumni re-enrollment email that was sent to you."
+      create:
+        <<: *failure
+    subscriptions:
+      new:
+        or: "or"
+        create_member: "Please provide the information of the person to enroll"
+        add_member: "New Member"
+        no_courses_available: "Sorry, there are no available %{category_title} courses."
+        full: "Full"
+        select_category: "Select a Category"
+      create:
+        success: "Subscription created successfully!"
+    members:
+      form:
+        advertising_right_statement: "I authorize the use, display, and publication of my image from Parkour Paris activities for promotional purposes (all media) and information about the association's activities (banners, brochures, website)."
+        contact_name: "Full Name of Contact"
+      create:
+        success: "Student added"
+      update:
+        success: "Student updated"
+    payments:
+      new:
+        payment_by_card: "Payment by Credit Card"
+        pay: "Pay %{amount}"
+        already_paid: "You have already paid for your order."
+      create:
+        success: "Registration paid successfully!"
+        error: "An error occurred. Your card was not charged. If the problem persists, please contact us."
+        already_paid: "Your order is already paid. Your card was not charged."
+    medical_certificates:
+      update:
+        success: "Medical Certificate added successfully!"
+    signed_forms:
+      update:
+        success: "Signed Form added successfully!"
+    vacations:
+      show:
+        i_am_alumni: "I am an alumnus"
+
+  layouts:
+    flash:
+      invalid_email_provider:
+        "The email address of your account (%{email}) blocks automatic emails from your service. This means you cannot receive confirmation emails or password reset instructions. We recommend using another email address in your account settings."
+    navbar:
+      admin: "Admin"
+      members: "Members"
+      courses: "Courses"
+      subscriptions: "Subscriptions"
+      my_account: "My Account"
+  kaminari:
+    gap:
+      truncate: '...'
+    first_page:
+      pagination_first: "First"
+    next_page:
+      pagination_next: "Next"
+    prev_page:
+      pagination_previous: "Previous"
+    last_page:
+      pagination_last: "Last"
+
+ # Mailers
+
+  contact_mailer:
+    confirmation_instructions:
+      subject: "You have been added as a contact to notify"
+
+  admin_mailer:
+    email_changed:
+      subject: "A user has changed their email address"
+      body: "Their email has changed from %{before} to %{after}"
+
+  date:
+    formats:
+      long: "%d %B %Y"  # e.g. "15 January 2024"
+      short: "%d/%m/%Y" # e.g. "15/01/2024"
+    day_names: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
+    abbr_day_names: [Sun, Mon, Tue, Wed, Thu, Fri, Sat]
+    month_names: [~, January, February, March, April, May, June, July, August, September, October, November, December]
+    abbr_month_names: [~, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
+    order:
+      - :day
+      - :month
+      - :year
+
+  time:
+    formats:
+      long: "%d %B %Y at %H:%M"  # e.g. "15 January 2024 at 14:30"
+      short: "%d/%m/%Y %H:%M"   # e.g. "15/01/2024 14:30"
+    am: "am"
+    pm: "pm"
+
+  admin:
+    attendance_sheets:
+      show:
+        title: "Attendance Sheet for %{course_title} - %{date}"
+        member: "Member"
+        status: "Status"
+        actions: "Actions"
+      attendance_record:
+        present: "Present"
+        absent: "Absent"
+        mark_present: "Mark Present"
+        mark_absent: "Mark Absent"
+    courses:
+      show:
+        new_subscription: "New Subscription"
+        create_attendance_sheet: "Create Attendance Sheet"
+
+  attendance_mailer:
+    consecutive_absences:
+      subject: "Notice: Multiple Absences from %{course_title}"
+      title: "Notice of Consecutive Absences"
+      greeting: "Dear %{member_name},"
+      message: "We noticed that you've missed the last three sessions of %{course_title}. We hope everything is alright!"
+      contact_message: "If you're having any issues attending the course or would like to discuss your subscription, please don't hesitate to contact us."
+      signature: "Best regards,"
+      team: "Parkour Paris Team"

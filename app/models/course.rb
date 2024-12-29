@@ -11,6 +11,8 @@ class Course < ApplicationRecord
   has_many :courses_subscriptions, dependent: :destroy
   has_many :subscriptions, through: :courses_subscriptions
   has_many :members, through: :subscriptions
+  has_many :attendance_sheets, dependent: :destroy
+  has_many :attendance_records, through: :attendance_sheets
 
   enum weekday: { lundi: 1, mardi: 2, mercredi: 3, jeudi: 4, vendredi: 5, samedi: 6, dimanche: 7 }
 end

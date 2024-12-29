@@ -2,6 +2,7 @@ fr:
   defaults:
     dismiss: Fermer
     close: Fermer
+    view: Voir
     show: Voir
     new: Nouveau %{resource}
     edit: Modifier
@@ -443,3 +444,35 @@ fr:
     am: "am"
     pm: "pm"
 
+  admin:
+    attendance_sheets:
+      show:
+        title: "Feuille de présence pour %{course_title} - %{date}"
+        member: "Membre"
+        status: "Statut"
+        actions: "Actions"
+      attendance_record:
+        present: "Présent"
+        absent: "Absent"
+        mark_present: "Marquer présent"
+        mark_absent: "Marquer absent"
+    courses:
+      show:
+        new_subscription: Nouvelle inscription
+        create_attendance_sheet: "Feuille de présence"
+
+  attendance_mailer:
+    consecutive_absences:
+      subject: "Avis : Absences multiples au cours %{course_title}"
+      title: "Avis d'absences consécutives"
+      greeting: "Cher/Chère %{member_name},"
+      message: "Nous avons remarqué que vous avez manqué les trois dernières séances de %{course_title}. Nous espérons que tout va bien !"
+      contact_message: "Si vous rencontrez des difficultés pour assister au cours ou si vous souhaitez discuter de votre abonnement, n'hésitez pas à nous contacter."
+      signature: "Sportivement,"
+      team: "L'équipe Parkour Paris"
+
+  time:
+    formats:
+      default: "%d/%m/%Y %H:%M"
+      short: "%d/%m/%Y"
+      long: "%A, %d %B %Y"

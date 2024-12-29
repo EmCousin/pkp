@@ -30,7 +30,10 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    resources :courses
+    resources :courses do
+      resources :attendance_sheets, only: [:create]
+    end
+    resources :attendance_sheets, only: [:show, :update]
     resources :categories, only: [:new, :create, :edit, :update, :destroy]
     resources :members
     resources :subscriptions do

@@ -63,7 +63,7 @@ module Admin
     def format_credit_note_table(pdf)
       items = [
         %w[Description Montant],
-        ["Avoir sur #{@subscription.course_name}", "#{@subscription.credit_note_amount}€"]
+        ["Avoir sur #{@subscription.course_title}", "#{@subscription.credit_note_amount}€"]
       ]
 
       pdf.table(items, width: pdf.bounds.width) do

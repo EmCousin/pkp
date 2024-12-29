@@ -26,6 +26,52 @@
     {
       "warning_type": "Unscoped Find",
       "warning_code": 82,
+      "fingerprint": "27030cd1458aa13cbfc9ffed38a3c80bdef9e6b59b28eb6115c8ec83c26eee72",
+      "check_name": "UnscopedFind",
+      "message": "Unscoped call to `AttendanceSheet#find`",
+      "file": "app/controllers/admin/attendance_sheets_controller.rb",
+      "line": 31,
+      "link": "https://brakemanscanner.org/docs/warning_types/unscoped_find/",
+      "code": "AttendanceSheet.find(params[:id])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Admin::AttendanceSheetsController",
+        "method": "set_attendance_sheet"
+      },
+      "user_input": "params[:id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        285
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Unscoped Find",
+      "warning_code": 82,
+      "fingerprint": "286850d33abe280b3ee5e8bbd576cba20340e24e04b9514ae09e9b9c86d0c89e",
+      "check_name": "UnscopedFind",
+      "message": "Unscoped call to `Course#find`",
+      "file": "app/controllers/admin/attendance_sheets_controller.rb",
+      "line": 27,
+      "link": "https://brakemanscanner.org/docs/warning_types/unscoped_find/",
+      "code": "Course.find(params[:course_id])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Admin::AttendanceSheetsController",
+        "method": "set_course"
+      },
+      "user_input": "params[:course_id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        285
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Unscoped Find",
+      "warning_code": 82,
       "fingerprint": "5845e02b1070fe61ff0fae7cab044b2c5707b1ee6f2599ff2c3a2b47fe75ed31",
       "check_name": "UnscopedFind",
       "message": "Unscoped call to `Member#find`",
@@ -70,6 +116,6 @@
       "note": ""
     }
   ],
-  "updated": "2024-08-05 09:58:19 +0200",
+  "updated": "2024-12-29 16:21:39 -0300",
   "brakeman_version": "6.1.2"
 }
