@@ -13,9 +13,6 @@ class Subscription < ApplicationRecord
   has_many :courses_subscriptions, dependent: :destroy
   has_many :courses, through: :courses_subscriptions
 
-  # Add scope for active subscriptions (used by attendance sheet creation)
-  scope :active, -> { where(status: %i[confirmed_bank_check confirmed_cash]) }
-
   delegate :kidz?, :teen?, :adult?, to: :category, prefix: true, allow_nil: true
 
   class << self

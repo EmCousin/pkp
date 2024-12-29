@@ -9,7 +9,7 @@ module Subscriptions
 
       enum status: { pending: 0, confirmed_bank_check: 1, confirmed_cash: 2, archived: 3 }
 
-      scope :confirmed, -> { confirmed_bank_check.or(confirmed_cash) }
+      scope :confirmed, -> { where(status: %i[confirmed_bank_check confirmed_cash]) }
     end
 
     def confirmed?
@@ -21,21 +21,14 @@ module Subscriptions
     end
 
     def available_courses
-      @available_courses = if category_id.present?
-                             Course.active.where(category_id:).order(:created_at)
-                           else
-                             Course.none
-                           end
+      @available_courses ||= category_id.present? ? Course.active.where(category_id:).order(:created_at) : Course.none
     end
 
     def suitable_categories
       if member.nil?
         Category.none
       else
-        Category.where(
-          'min_age <= :age AND max_age >= :age',
-          age: member.age(year)
-        )
+        Category.where('min_age <= :age AND max_age >= :age', age: member.age(year))
       end
     end
 
@@ -44,13 +37,14 @@ module Subscriptions
     end
 
     def status_color
-      case status
-      when 'pending' then 'text-yellow-600'
-      when 'confirmed_bank_check' then 'text-green-600'
-      when 'confirmed_cash' then 'text-blue-600'
-      when 'archived' then 'text-red-600'
-      else 'text-gray-600'
-      end
+      STATUS_COLORS[status.to_sym] || 'text-gray-600'
     end
+
+    STATUS_COLORS = {
+      pending: 'text-yellow-600',
+      confirmed_bank_check: 'text-green-600',
+      confirmed_cash: 'text-blue-600',
+      archived: 'text-red-600'
+    }.freeze
   end
 end
