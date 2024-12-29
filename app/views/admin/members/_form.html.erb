@@ -1,134 +1,183 @@
-<%= form_for [:admin, @member],
-             data: { turbo: false } do |form| %>
-  <% if form.object.errors.any? %>
-    <div id="error_explanation" class="alert alert-danger">
-      <ul>
-        <% form.object.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="form-group">
-    <%= form.label :level %>
-    <%= form.collection_select :level, Member.level_options.map(&:values), :first, :last, { prompt: "Sélectionner un niveau" }, autofocus: true, required: true, class: "form-control" %>
-  </div>
-
-  <div class="form-group">
-    <%= form.label :first_name %>
-    <%= form.text_field :first_name, required: true, class: "form-control" %>
-  </div>
-
-  <div class="form-group">
-    <%= form.label :last_name %>
-    <%= form.text_field :last_name, required: true, class: "form-control" %>
-  </div>
-
-  <div class="form-group">
-    <%= form.label :birthdate %>
-    <%= form.date_field :birthdate, required: true, class: "form-control" %>
-  </div>
-
-  <%= form.fields_for :user, @member.user || @member.build_user do |user_form| %>
-    <%= user_form.hidden_field :id, value: @member.user_id %>
-
-    <div
-      data-controller="places"
-      data-places-app-id="<%= Rails.application.credentials.algolia(:application_id) %>"
-      data-places-api-key="<%= Rails.application.credentials.algolia(:search_key) %>"
-    >
-      <div class="row">
-        <div class="col-sm-8">
-          <div class="form-group">
-            <%= user_form.label :address %>
-            <%= user_form.text_field :address, required: true, class: "form-control", data: { :'places-target' => :address } %>
-          </div>
-        </div>
-
-        <div class="col-sm-4">
-          <div class="form-group">
-            <%= user_form.label :zip_code %>
-            <%= user_form.text_field :zip_code, required: true, class: "form-control", data: { :'places-target' => :zipCode } %>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-sm">
-          <div class="form-group">
-            <%= user_form.label :city %>
-            <%= user_form.text_field :city, required: true, class: "form-control", data: { :'places-target' => :city } %>
-          </div>
-        </div>
-
-        <div class="col-sm">
-          <div class="form-group">
-            <%= user_form.label :country %>
-            <%= user_form.text_field :country, required: true, class: "form-control", data: { :'places-target' => :country } %>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <%= user_form.label :phone_number %>
-      <%= user_form.telephone_field :phone_number, autocomplete: 'tel', required: true, class: "form-control" %>
-    </div>
-
-    <div class="form-group">
-      <%= user_form.label :email %>
-      <%= user_form.email_field :email, required: true, class: "form-control" %>
-    </div>
-
-    <% if @member.new_record? %>
-      <div class="form-group">
-        <%= user_form.label :password %>
-        <%= user_form.password_field :password, autocomplete: "new-password", required: true, class: "form-control", minlength: Devise.password_length.min, maxlength: Devise.password_length.max %>
+<div class="bg-white shadow-sm rounded-lg p-6">
+  <%= form_for [:admin, @member], data: { turbo: false }, class: "space-y-6" do |form| %>
+    <% if form.object.errors.any? %>
+      <div class="rounded-md bg-red-50 p-4 mb-6">
+        <ul class="list-disc pl-5 text-sm text-red-700 space-y-1">
+          <% form.object.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
       </div>
     <% end %>
 
-    <div class="form-group">
-      <%= user_form.label :admin %>
-      <%= user_form.check_box :admin %>
+    <div class="space-y-6">
+      <div>
+        <%= form.label :level, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.collection_select :level,
+            Member.level_options.map(&:values),
+            :first,
+            :last,
+            { prompt: "Sélectionner un niveau" },
+            autofocus: true,
+            required: true,
+            class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm bg-white" %>
+      </div>
+
+      <div>
+        <%= form.label :first_name, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.text_field :first_name,
+            required: true,
+            class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
+      </div>
+
+      <div>
+        <%= form.label :last_name, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.text_field :last_name,
+            required: true,
+            class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
+      </div>
+
+      <div>
+        <%= form.label :birthdate, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.date_field :birthdate,
+            required: true,
+            class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
+      </div>
+
+      <%= form.fields_for :user, @member.user || @member.build_user do |user_form| %>
+        <%= user_form.hidden_field :id, value: @member.user_id %>
+
+        <div data-controller="places"
+             data-places-app-id="<%= Rails.application.credentials.algolia(:application_id) %>"
+             data-places-api-key="<%= Rails.application.credentials.algolia(:search_key) %>">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div class="sm:col-span-2">
+              <%= user_form.label :address, class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= user_form.text_field :address,
+                  required: true,
+                  class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm",
+                  data: { :'places-target' => :address } %>
+            </div>
+
+            <div>
+              <%= user_form.label :zip_code, class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= user_form.text_field :zip_code,
+                  required: true,
+                  class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm",
+                  data: { :'places-target' => :zipCode } %>
+            </div>
+
+            <div>
+              <%= user_form.label :city, class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= user_form.text_field :city,
+                  required: true,
+                  class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm",
+                  data: { :'places-target' => :city } %>
+            </div>
+
+            <div>
+              <%= user_form.label :country, class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= user_form.text_field :country,
+                  required: true,
+                  class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm",
+                  data: { :'places-target' => :country } %>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <%= user_form.label :phone_number, class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= user_form.telephone_field :phone_number,
+              autocomplete: 'tel',
+              required: true,
+              class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
+        </div>
+
+        <div>
+          <%= user_form.label :email, class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= user_form.email_field :email,
+              required: true,
+              class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
+        </div>
+
+        <% if @member.new_record? %>
+          <div>
+            <%= user_form.label :password, class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= user_form.password_field :password,
+                autocomplete: "new-password",
+                required: true,
+                minlength: Devise.password_length.min,
+                maxlength: Devise.password_length.max,
+                class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
+          </div>
+        <% end %>
+
+        <div>
+          <div class="flex items-center">
+            <%= user_form.check_box :admin, class: "h-4 w-4 text-slate-800 border-gray-300 rounded focus:ring-slate-800" %>
+            <%= user_form.label :admin, class: "ml-2 block text-sm text-gray-700" %>
+          </div>
+        </div>
+      <% end %>
+
+      <div>
+        <%= form.label :contact_name, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.text_field :contact_name,
+            required: true,
+            class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
+      </div>
+
+      <div>
+        <%= form.label :contact_phone_number, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.telephone_field :contact_phone_number,
+            required: true,
+            class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
+      </div>
+
+      <div>
+        <%= form.label :contact_relationship, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.collection_select :contact_relationship,
+            Member::CONTACTS,
+            :to_s,
+            :to_s,
+            { include_blank: true },
+            required: true,
+            class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm bg-white" %>
+      </div>
+
+      <div data-controller="image-upload">
+        <%= form.label :avatar, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <div class="mt-1 flex items-center gap-6">
+          <div>
+            <%= form.file_field :avatar,
+                required: !form.object.avatar.attached?,
+                class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-slate-800 file:text-white hover:file:bg-slate-700",
+                data: { image_upload_target: 'input', action: 'image-upload#preview' } %>
+          </div>
+          <div>
+            <% if form.object.avatar.attached? && form.object.persisted? %>
+              <%= image_tag form.object.avatar, class: "w-32 h-32 object-cover rounded-md", data: { image_upload_target: 'output' } %>
+            <% else %>
+              <%= image_tag 'user.svg', class: "w-32 h-32 p-2 bg-gray-100 rounded-md", data: { image_upload_target: 'output' } %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex items-center">
+          <%= form.check_box :agreed_to_advertising_right, class: "h-4 w-4 text-slate-800 border-gray-300 rounded focus:ring-slate-800" %>
+          <%= form.label :agreed_to_advertising_right, class: "ml-2 block text-sm text-gray-700" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-3 pt-6 mt-6 border-t border-gray-200">
+      <%= link_to t('defaults.back'),
+          :back,
+          class: "inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800" %>
+      <%= form.submit t('defaults.save'),
+          class: "inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800" %>
     </div>
   <% end %>
-
-  <div class="form-group">
-    <%= form.label :contact_name %>
-    <%= form.text_field :contact_name, required: true, class: "form-control" %>
-  </div>
-
-  <div class="form-group">
-    <%= form.label :contact_phone_number %>
-    <%= form.telephone_field :contact_phone_number, required: true, class: "form-control" %>
-  </div>
-
-  <div class="form-group">
-    <%= form.label :contact_relationship %><br />
-    <%= form.collection_select(:contact_relationship, Member::CONTACTS, :to_s, :to_s, { include_blank: true }, required: true, class: "form-control") %>
-  </div>
-
-  <div class="form-group" data-controller="image-upload">
-    <%= form.label :avatar %>
-    <%= form.file_field :avatar, required: !form.object.avatar.attached?, data: { image_upload_target: 'input', action: 'image-upload#preview' } %>
-
-    <div class="mt-2">
-      <% if form.object.avatar.attached? && form.object.persisted? %>
-        <%= image_tag form.object.avatar, width: 128, data: { image_upload_target: 'output' } %>
-      <% else %>
-        <%= image_tag 'user.svg', width: 128, class: "bg-light", data: { image_upload_target: 'output' } %>
-      <% end %>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <%= form.label :agreed_to_advertising_right %>
-    <%= form.check_box :agreed_to_advertising_right %>
-  </div>
-
-  <div class="actions d-flex mb-3">
-    <%= link_to t('defaults.back'), :back, class: 'btn btn-default btn-lg flex-fill' %>
-    <%= form.submit t('defaults.save'), class: 'btn btn-dark btn-lg flex-fill' %>
-  </div>
-<% end %>
+</div>

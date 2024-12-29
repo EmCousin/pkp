@@ -48,18 +48,18 @@
 
       <div class="mb-3">
         <%= f.label :contact_relationship, class: "block text-gray-700 text-sm font-bold mb-2" %>
-        <%= f.collection_select(:contact_relationship, Member::CONTACTS, :to_s, :to_s, { include_blank: true }, required: true, class: "w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500") %>
+        <%= f.collection_select(:contact_relationship, Member::CONTACTS, :to_s, :to_s, { include_blank: true }, required: true, class: "w-full px-3 py-2 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500") %>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3" data-controller="image-upload">
         <%= f.label :avatar, class: "block text-gray-700 text-sm font-bold mb-2" %>
-        <%= f.file_field :avatar, required: !f.object.avatar.attached?, class: "w-full" %>
+        <%= f.file_field :avatar, required: !f.object.avatar.attached?, class: "w-full", data: { image_upload_target: 'input', action: 'image-upload#preview' }, accept: 'image/*' %>
 
         <div class="mt-2">
           <% if f.object.avatar.attached? && f.object.persisted?%>
-            <%= image_tag f.object.avatar, class: "w-32" %>
+            <%= image_tag f.object.avatar, class: "w-32", data: { image_upload_target: 'output' } %>
           <% else %>
-            <%= image_tag 'user.svg', class: "w-32 bg-gray-100" %>
+            <%= image_tag 'user.svg', class: "w-32 bg-gray-100", data: { image_upload_target: 'output' } %>
           <% end %>
         </div>
       </div>

@@ -57,8 +57,8 @@ Rails.application.routes.draw do
       resource :medical_certificate, only: [:edit, :update]
       resource :payment, only: [:new, :create]
     end
-    resources :vacations, only: [:index]
-    resources :capacities, only: [:index]
+    resource :vacation, only: [:show]
+    resource :capacity, only: [:show]
     resource :alumni_access, only: %i[new create]
   end
 

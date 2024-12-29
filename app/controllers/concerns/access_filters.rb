@@ -15,10 +15,10 @@ module AccessFilters
   end
 
   def filter_vacation_time!
-    redirect_to dashboard_vacations_path
+    redirect_to dashboard_vacation_path
   end
 
   def filter_full!
-    redirect_to dashboard_capacities_path
+    redirect_to dashboard_capacity_path
   end
 end

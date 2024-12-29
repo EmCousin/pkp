@@ -1,3 +1,8 @@
-<h1 class='page-title'><%= t('.title') %></h1>
-<hr />
-<%= render 'form' %>
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="mb-8">
+    <h1 class="text-2xl text-center font-bold mb-4 text-amber-500"><%= t(".title") %></h1>
+    <div class="border-b border-gray-200"></div>
+  </div>
+
+  <%= render 'form', course: @course %>
+</div>

@@ -12,7 +12,6 @@
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
 
   <body class="h-full">
@@ -22,7 +21,7 @@
       <%= render 'layouts/flash' %>
 
       <main class="flex-grow flex">
-        <div class="max-w-7xl w-full mx-auto py-6 sm:px-6 lg:px-8 bg-white/75">
+        <div class="max-w-7xl w-full mx-auto py-6 sm:px-6 lg:px-8">
           <%= yield %>
         </div>
       </main>

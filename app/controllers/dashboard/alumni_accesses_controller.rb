@@ -12,9 +12,9 @@ module Dashboard
       @alumni_access = AlumniAccess.new(alumni_access_params)
       if @alumni_access.valid?
         session[:alumni_authenticated] = true
-        redirect_to %i[new dashboard subscription]
+        redirect_to %i[new dashboard subscription], status: :see_other
       else
-        render :new, status: :unauthorized
+        render :new, status: :unprocessable_entity
       end
     end
 

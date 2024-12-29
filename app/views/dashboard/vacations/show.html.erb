@@ -1,0 +1,30 @@
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div class="text-center mb-8">
+    <h1 class="text-2xl font-bold text-amber-500 mb-4">C'est les vacances</h1>
+    <div class="border-b border-gray-200"></div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div>
+      <%= image_tag "vacances.webp", class: "w-full rounded-lg" %>
+    </div>
+
+    <div class="bg-white rounded-lg p-6 text-center">
+      <h2 class="text-xl font-medium mb-2">Les cours reprennent en Septembre !</h2>
+      <h5 class="text-gray-600 mb-6">Ouverture des inscriptions le 1er Septembre pour les nouveaux adhérents.</h5>
+
+      <div class="text-sm text-gray-500 space-y-1">
+        <p>Pour suivre notre actualité médiatique, rendez-vous sur</p>
+        <p>Instagram <a href="https://www.instagram.com/parkourparis/?hl=fr" target="_blank" class="text-blue-600 hover:text-blue-800">@ParkourParis</a></p>
+        <p>Facebook <a href="https://www.facebook.com/ParkourParis" class="text-blue-600 hover:text-blue-800">@ParkourParis</a></p>
+        <p>Blog Officiel <a href="https://www.parkourparis.fr/blog" target="_blank" class="text-blue-600 hover:text-blue-800">@ParkourParisOfficiel</a></p>
+      </div>
+
+      <% if alumni_time? %>
+        <%= link_to t('.i_am_alumni'),
+            %i[new dashboard alumni_access],
+            class: "mt-6 inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+      <% end %>
+    </div>
+  </div>
+</div>

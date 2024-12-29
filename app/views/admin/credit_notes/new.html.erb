@@ -18,6 +18,15 @@
       <%= form.number_field :credit_note_amount, min: 0, max: @subscription.fee, step: 0.1, placeholder: "maximum #{@subscription.fee}", class: "form-control" %>
     </div>
 
+    <div class="form-group">
+      <%= form.label :reason %>
+      <%= form.select :reason,
+          options_for_select(CreditNote.reasons_for_select),
+          { include_blank: true },
+          required: true,
+          class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm bg-white' %>
+    </div>
+
     <div class="actions">
       <%= form.submit t('defaults.save'), class: "btn btn-dark float-lg-right" %>
       <%= link_to t('defaults.back'), %i[admin subscriptions], class: "btn btn-link float-left" %>

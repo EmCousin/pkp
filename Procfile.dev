@@ -1,5 +1,4 @@
 web: rails server -p 3000
 worker: bundle exec sidekiq -t 10 -C config/sidekiq.yml
 js: yarn build --watch
-css: yarn build:css --watch
 tailwind: bin/rails tailwindcss:watch

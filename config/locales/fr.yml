@@ -1,5 +1,6 @@
 fr:
   defaults:
+    dismiss: Fermer
     close: Fermer
     show: Voir
     new: Nouveau %{resource}
@@ -233,9 +234,11 @@ fr:
         no_paginate: Désactiver la pagination
         csv_export: Exporter au format CSV
       show:
+        title: "%{member}"
         remove_from_course: Retirer
         remove_from_course_are_you_sure: Êtes-vous sûr·e de vouloir retirer %{member_full_name} du cours %{course_title} ?
         new_subscription: Nouvelle inscription
+        subscriptions: Inscriptions
       new:
         title: Ajouter un membre
       create:
@@ -381,7 +384,7 @@ fr:
       update:
         success: Formulaire signé ajouté avec succès !
     vacations:
-      index:
+      show:
         i_am_alumni: Je suis un·e ancien·ne élève
 
   layouts:
@@ -417,4 +420,24 @@ fr:
     email_changed:
       subject: Un utilisateur a changé son adresse E-mail
       body: "Son E-mail a changé de %{before} à %{after}"
+
+  date:
+    formats:
+      long: "%d %B %Y"  # e.g. "15 janvier 2024"
+      short: "%d/%m/%Y" # e.g. "15/01/2024"
+    day_names: [dimanche, lundi, mardi, mercredi, jeudi, vendredi, samedi]
+    abbr_day_names: [dim, lun, mar, mer, jeu, ven, sam]
+    month_names: [~, janvier, février, mars, avril, mai, juin, juillet, août, septembre, octobre, novembre, décembre]
+    abbr_month_names: [~, jan., fév., mar., avr., mai, juin, juil., août, sept., oct., nov., déc.]
+    order:
+      - :day
+      - :month
+      - :year
+
+  time:
+    formats:
+      long: "%d %B %Y à %H:%M"  # e.g. "15 janvier 2024 à 14:30"
+      short: "%d/%m/%Y %H:%M"   # e.g. "15/01/2024 14:30"
+    am: "am"
+    pm: "pm"
 
