@@ -7,6 +7,6 @@ html, body {
 }
 
 body {
-  @apply bg-repeat bg-lightgray bg-cover bg-center bg-fixed min-h-screen h-full;
+  @apply bg-repeat bg-gray-100 bg-cover bg-center bg-fixed min-h-screen h-full;
   background-image: url("./pkp.webp");
 }
