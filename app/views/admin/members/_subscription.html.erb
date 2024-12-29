@@ -21,7 +21,7 @@
   <div class="space-y-2">
     <% subscription.courses.includes(attendance_sheets: :attendance_records).each do |course| %>
       <div class="flex items-center justify-between text-sm border-b border-gray-200 pb-2">
-        <span class="text-gray-800 font-medium"><%= course.title %></span>
+        <%= link_to course.title, admin_course_path(course), class: "text-gray-800 font-medium", data: { turbo_frame: '_top' } %>
         <ul>
           <% subscription.member.attendance_records_for(course).recent.each do |record| %>
             <% if record.absent? %>
