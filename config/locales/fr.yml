@@ -23,9 +23,11 @@ fr:
     welcome: Bienvenue
     select: Sélectionner
     search: Rechercher
+    filter: Filtrer
     confirm: Confirmer
     confirmed_bank_check: A payé par chèque
     confirmed_cash: A payé en espèces
+    archived: Archivée
     pending: En attente
     continue: Continuer
     archive: Archiver

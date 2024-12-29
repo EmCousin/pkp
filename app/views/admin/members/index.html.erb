@@ -1,7 +1,7 @@
 <h1 class="text-2xl text-center font-bold mb-4 text-amber-500"><%= t(".title") %></h1>
 <div class="border-b border-gray-200 mb-6"></div>
 
-<div class="w-full p-4 bg-white rounded-lg shadow-sm">
+<div class="w-full p-4 bg-slate-100 rounded-lg shadow-sm">
   <%= form_with(url: %i[admin members], local: true, method: :get, data: { turbo: false }) do |f| %>
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
       <div>
@@ -36,7 +36,7 @@
           <% display_fields = [:level, :avatar, :name, :phone_number, :email, :contact_email, :actions] %>
           <% display_fields.each do |field| %>
             <label class="flex items-center gap-2 py-0.5">
-              <%= check_box nil, "display_#{field}",
+              <%= f.check_box "display_#{field}",
                   { checked: params["display_#{field}"] != 'no',
                     class: "rounded border-gray-300 text-slate-800 focus:ring-slate-800" },
                   'yes', 'no' %>
@@ -53,7 +53,7 @@
       <div>
         <span class="block mb-2 font-medium">Afficher les niveaux : </span>
         <div class="space-y-2">
-          <%= collection_check_boxes nil, :level, Member.level_options.map(&:values), :first, :last, { include_hidden: false } do |b| %>
+          <%= f.collection_check_boxes :level, Member.level_options.map(&:values), :first, :last, { include_hidden: false } do |b| %>
             <label class="flex items-center space-x-2">
               <%= b.check_box checked: params[:level].is_a?(Array) && b.value.in?(params[:level]),
                   class: "rounded border-gray-300" %>
@@ -66,23 +66,23 @@
       <div>
         <div class="space-y-2">
           <label class="flex items-center space-x-2">
-            <%= check_box nil, :no_paginate,
+            <%= f.check_box :no_paginate,
                 { checked: params[:no_paginate].present?, class: "rounded border-gray-300" },
                 true, false %>
             <span><%= t('.no_paginate') %></span>
           </label>
 
-          <label class="flex items-center space-x-2">
-            <%= check_box nil, :format,
+          <label class="flex items-center">
+            <%= f.check_box :format,
                 { checked: false, class: "rounded border-gray-300" },
                 'csv', 'html' %>
-            <span><%= t('.csv_export') %></span>
+            <span class="ml-2"><%= t('.csv_export') %></span>
           </label>
         </div>
       </div>
     </div>
 
-    <%= submit_tag t('defaults.search'), class: "bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md" %>
+    <%= f.submit t('defaults.search'), class: "bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md" %>
   <% end %>
 
   <div class="flex justify-end my-6">

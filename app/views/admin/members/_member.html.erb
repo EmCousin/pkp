@@ -1,4 +1,4 @@
-<%= turbo_frame_tag dom_id(member, :row), class: "block bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow" do %>
+<%= turbo_frame_tag dom_id(member, :row), class: "block border bg-white rounded-lg shadow-sm p-4" do %>
   <div class="relative">
     <% unless params[:display_actions] == 'no' %>
       <div class="absolute top-0 right-0">

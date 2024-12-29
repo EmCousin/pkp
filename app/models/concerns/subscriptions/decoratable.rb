@@ -44,14 +44,12 @@ module Subscriptions
     end
 
     def status_color
-      if confirmed_bank_check?
-        'table-success'
-      elsif confirmed_cash?
-        'table-info'
-      elsif archived?
-        'table-secondary'
-      else
-        ''
+      case status
+      when 'pending' then 'text-yellow-600'
+      when 'confirmed_bank_check' then 'text-green-600'
+      when 'confirmed_cash' then 'text-blue-600'
+      when 'archived' then 'text-red-600'
+      else 'text-gray-600'
       end
     end
   end

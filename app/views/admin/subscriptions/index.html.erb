@@ -1,162 +1,63 @@
-<h1 class="page-title"><%= t(".title") %> <%= Subscription.current_year %> - <%= Subscription.next_year %></h1>
-<hr />
-<div class="row mt-4">
+<h1 class="text-2xl text-center font-bold mb-4 text-amber-500"><%= t(".title") %> <%= Subscription.current_year %> - <%= Subscription.next_year %></h1>
+<div class="border-b border-gray-200 mb-6"></div>
+
+<div class="w-full p-4 bg-slate-100 rounded-lg shadow-sm">
   <%= form_with url: %i[admin subscriptions],
                 local: true,
                 method: :get,
-                class: "col-sm-6" do %>
-    <div class="d-flex align-items-center">
-      <%= select_tag(
-          :status,
+                class: "mb-6" do |f| %>
+    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+      <%= f.select :status,
           options_for_select(
             Subscription.status_options.map(&:values).map(&:reverse),
-            params[:status],
+            params[:status]
           ),
-          include_blank: Subscription.human_attribute_name(:status),
-          class: 'h-25 form-control mr-2'
-        ) %>
+          { include_blank: Subscription.human_attribute_name(:status) },
+          class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm' %>
 
+      <%= f.select :year,
+          options_for_select(
+            Subscription.select_options,
+            params[:year]
+          ),
+          { include_blank: Subscription.human_attribute_name(:year) },
+          class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm' %>
 
+      <%= f.select :level,
+          options_for_select(
+            Member.level_options.map(&:values).map(&:reverse),
+            params[:level]
+          ),
+          { include_blank: Member.human_attribute_name(:level) },
+          class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm' %>
 
-      <%= select_tag(
-        :year,
-        options_for_select(
-          Subscription.select_options,
-          params[:year],
-        ),
-        include_blank: Subscription.human_attribute_name(:year),
-        class: 'h-25 form-control mr-2'
-      ) %>
-
-      <%= select_tag(
-        :level,
-        options_for_select(
-          Member.level_options.map(&:values).map(&:reverse),
-          params[:level],
-        ),
-        include_blank: Member.human_attribute_name(:level),
-        class: 'h-25 form-control mr-2'
-      ) %>
-      <%= submit_tag("Filtrer", class: "btn btn-success") %>
+      <div class="flex items-end">
+        <%= f.submit t('defaults.filter'),
+            class: "bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md w-full sm:w-auto" %>
+      </div>
     </div>
   <% end %>
 
-  <div class="col-sm-6 col-md-4 offset-md-2 mt-2 mt-sm-0">
+  <div class="flex justify-end mb-6">
     <%= link_to t('.new'),
-              %i[new admin subscription],
-              class: "btn btn-primary float-right" %>
+        %i[new admin subscription],
+        class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md" %>
+  </div>
+
+  <% if @subscriptions.empty? %>
+    <div class="text-center py-12">
+      <%= link_to t('.new'),
+          %i[new admin subscription],
+          class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md" %>
+    </div>
+  <% else %>
+    <div class="grid grid-cols-1 gap-4">
+      <%= render partial: "admin/subscriptions/subscription", collection: @subscriptions %>
+    </div>
+  <% end %>
+
+  <div class="mt-6">
+    <%= paginate @subscriptions %>
   </div>
 </div>
-
-<table class="table mt-5">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th><%= Member.human_attribute_name(:level) %></th>
-      <th><%= Subscription.human_attribute_name(:member_id) %></th>
-      <th class='d-none d-md-table-cell'><%= Member.human_attribute_name(:email) %></th>
-      <th><%= Subscription.human_attribute_name(:course_ids) %></th>
-      <th class='d-none d-md-table-cell'><%= Subscription.human_attribute_name(:fee) %></th>
-      <th class='d-none d-md-table-cell'><%= Subscription.human_attribute_name(:year) %></th>
-      <th colspan="2"><%= Subscription.human_attribute_name(:status) %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% if @subscriptions.empty? %>
-      <tr>
-        <td colspan="9" class="text-center">
-          <%= link_to t('.new'), %i[new admin subscription] %>
-        </td>
-      </tr>
-    <% else %>
-      <% @subscriptions.each do |subscription| %>
-        <tr class=<%= subscription.status_color %>>
-          <td><%= link_to subscription.id, [:admin, subscription] %></td>
-          <td>
-            <%= tag.div class: "border border-dark",
-                        style: "background-color: #{subscription.member.level}; width: 1rem; height: 1rem;",
-                        title: subscription.member.level_text %>
-          </td>
-          <td>
-            <%= link_to [:admin, subscription.member] do %>
-              <% if subscription.member.avatar.variable? %>
-                <%= image_tag subscription.member.avatar.variant(:mini), width: "30" %>
-              <% else %>
-                <%= image_tag subscription.member.avatar, width: "30" %>
-              <% end %>
-              <%= subscription.member.full_name %>
-            <% end %>
-          </td>
-          <td class='d-none d-md-table-cell'><%= mail_to subscription.member.email, subscription.member.email %></td>
-          <td>
-            <%= link_to t('defaults.details'), nil, data: { toggle: 'tooltip', title: subscription.description } %>
-          </td>
-          <td class='d-none d-md-table-cell'><%= number_to_currency(subscription.fee, unit: "€", separator: ",", format: "%n %u") %></td>
-          <td class='d-none d-md-table-cell'><%= subscription.year %></td>
-          <td><%= Subscription.human_attribute_name(subscription.status) %></td>
-          <td class='d-none d-lg-table-cell'>
-            <div class="dropdown mr-1">
-              <button type="button" class="btn btn-primary dropdown-toggle" id="dropdownMenuOffset" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%= t('defaults.action') %></button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
-                <%= link_to t('defaults.edit'),
-                            [:edit, :admin, subscription],
-                            class: "dropdown-item" %>
-                <%= button_to t('defaults.pending'),
-                              {
-                                controller: 'admin/subscriptions',
-                                action: 'update',
-                                id: subscription.id,
-                                no_notification: true,
-                                subscription: { status: 'pending' }
-                              },
-                              method: :put,
-                              class: "dropdown-item" %>
-                <%= button_to t('defaults.confirmed_bank_check'),
-                              {
-                                controller: 'admin/subscriptions',
-                                action: 'update',
-                                id: subscription.id,
-                                no_notification: true,
-                                subscription: { status: 'confirmed_bank_check' }
-                              },
-                              method: :put,
-                              class: "dropdown-item text-success" %>
-                <%= button_to t('defaults.confirmed_cash'),
-                              {
-                                controller: 'admin/subscriptions',
-                                action: 'update',
-                                id: subscription.id,
-                                no_notification: true,
-                                subscription: { status: 'confirmed_cash' }
-                              },
-                              method: :put,
-                              class: "dropdown-item text-info" %>
-                <%= button_to t('defaults.archive'),
-                              {
-                                controller: 'admin/subscriptions',
-                                action: 'update',
-                                id: subscription.id,
-                                no_notification: true,
-                                subscription: { status: 'archived' }
-                              },
-                              method: :put,
-                              class: "dropdown-item text-danger" %>
-                <%= button_to t('defaults.destroy'),
-                              [:admin, subscription],
-                              method: :delete,
-                              data: {
-                                controller: :confirm,
-                                confirm_message_value: t('defaults.are_you_sure')
-                              },
-                              class: "dropdown-item text-danger" %>
-              </div>
-            </div>
-          </td>
-        </tr>
-      <% end %>
-    <% end %>
-  </tbody>
-</table>
-
-<%= paginate @subscriptions %>
 
