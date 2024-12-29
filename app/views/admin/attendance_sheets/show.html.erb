@@ -1,0 +1,15 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+    <div class="px-4 py-5 sm:px-6">
+      <h2 class="text-lg leading-6 font-medium text-gray-900">
+        <%= t('.title', course_title: @attendance_sheet.course.title, date: l(@attendance_sheet.date, format: :long)) %>
+      </h2>
+    </div>
+
+    <div class="border-t border-gray-200">
+      <div class="divide-y divide-gray-200">
+        <%= render partial: 'attendance_record', collection: @attendance_records %>
+      </div>
+    </div>
+  </div>
+</div>
