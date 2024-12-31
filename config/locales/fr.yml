@@ -226,6 +226,28 @@ fr:
         current_password_needed: nécessaire pour confirmer vos modifications
         minimum_characters: "%{length} caractères min"
         are_you_sure: Cette action est irréversible. Cliquez sur OK pour supprimer définivement votre compte.
+
+  shared:
+    attendance_record: &attendance_record
+      present: "Présent"
+      absent: "Absent"
+      mark_present: "Marquer présent"
+      mark_absent: "Marquer absent"
+
+  coach:
+    attendance_sheets:
+      show:
+        title: "Feuille de présence pour %{course_title} - %{date}"
+        member: "Membre"
+        status: "Statut"
+        actions: "Actions"
+      attendance_record:
+        <<: *attendance_record
+    courses:
+      index:
+        title: "Cours"
+        create_attendance_sheet: "Feuille de présence"
+
   admin:
     attendance_sheets:
       show:
@@ -234,10 +256,7 @@ fr:
         status: "Statut"
         actions: "Actions"
       attendance_record:
-        present: "Présent"
-        absent: "Absent"
-        mark_present: "Marquer présent"
-        mark_absent: "Marquer absent"
+        <<: *attendance_record
     members:
       index:
         title: Liste des membres
@@ -412,11 +431,12 @@ fr:
       invalid_email_provider:
         L'adresse email de votre compte (%{email}) bloque les emails automatiques provenant de votre service. Cela veut dire que vous ne pouvez pas recevoir les emails de confirmation d'inscription ou encore de réinitialisation de votre mot de passe. Nous vous conseillons d'utiliser une autre adresse email en allant dans les paramètres de votre compte.
     navbar:
-      admin: Admin
-      members: Membres
-      courses: Cours
-      subscriptions: Inscriptions
-      my_account: Mon compte
+      admin: "Admin"
+      members: "Membres"
+      courses: "Cours"
+      subscriptions: "Inscriptions"
+      my_account: "Mon compte"
+      logout: "Déconnexion"
   kaminari:
     gap:
       truncate: '...'

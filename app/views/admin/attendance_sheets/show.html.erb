@@ -8,7 +8,7 @@
 
     <div class="border-t border-gray-200">
       <div class="divide-y divide-gray-200">
-        <%= render partial: 'attendance_record', collection: @attendance_records %>
+        <%= render partial: 'shared/attendance_record', collection: @attendance_records, locals: { namespace: :admin } %>
       </div>
     </div>
   </div>

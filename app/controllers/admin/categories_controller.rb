@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Admin
-  class CategoriesController < AdminController
+  class CategoriesController < BaseController
     def new
       @category = Category.new
     end

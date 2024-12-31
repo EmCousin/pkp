@@ -72,4 +72,11 @@ Rails.application.routes.draw do
   devise_scope :user do
     root to: "devise/sessions#new"
   end
+
+  namespace :coach do
+    resources :courses, only: [:index] do
+      resources :attendance_sheets, only: [:create]
+    end
+    resources :attendance_sheets, only: [:show, :update]
+  end
 end

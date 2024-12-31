@@ -2,7 +2,7 @@
 
 module Admin
   module Abstract
-    class SubscriptionsController < AdminController
+    class SubscriptionsController < ::Admin::BaseController
       protected
 
       def set_subscription!

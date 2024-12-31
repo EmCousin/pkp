@@ -3,7 +3,7 @@
 require 'csv'
 
 module Admin
-  class MembersController < AdminController
+  class MembersController < BaseController
     before_action :set_members, only: :index
     before_action :set_member, only: %i[show edit update destroy]
 
