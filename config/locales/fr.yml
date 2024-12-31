@@ -160,6 +160,7 @@ fr:
         category: Catégorie
         weekday: Jour de la semaine
         active: Actif
+        features_attendance_sheet: Feuille de présence
       category:
         title: Titre
         min_age: Âge minimum
@@ -225,6 +226,28 @@ fr:
         current_password_needed: nécessaire pour confirmer vos modifications
         minimum_characters: "%{length} caractères min"
         are_you_sure: Cette action est irréversible. Cliquez sur OK pour supprimer définivement votre compte.
+
+  shared:
+    attendance_record: &attendance_record
+      present: "Présent"
+      absent: "Absent"
+      mark_present: "Marquer présent"
+      mark_absent: "Marquer absent"
+
+  coach:
+    attendance_sheets:
+      show:
+        title: "Feuille de présence pour %{course_title} - %{date}"
+        member: "Membre"
+        status: "Statut"
+        actions: "Actions"
+      attendance_record:
+        <<: *attendance_record
+    courses:
+      index:
+        title: "Cours"
+        create_attendance_sheet: "Feuille de présence"
+
   admin:
     attendance_sheets:
       show:
@@ -233,10 +256,7 @@ fr:
         status: "Statut"
         actions: "Actions"
       attendance_record:
-        present: "Présent"
-        absent: "Absent"
-        mark_present: "Marquer présent"
-        mark_absent: "Marquer absent"
+        <<: *attendance_record
     members:
       index:
         title: Liste des membres
@@ -251,6 +271,9 @@ fr:
         remove_from_course_are_you_sure: Êtes-vous sûr·e de vouloir retirer %{member_full_name} du cours %{course_title} ?
         new_subscription: Nouvelle inscription
         subscriptions: Inscriptions
+        create_attendance: "Créer une feuille de présence"
+        admin_label: "Admin"
+        coach_label: "Coach"
       new:
         title: Ajouter un membre
       create:
@@ -265,6 +288,7 @@ fr:
       index:
         title: Liste des cours
         inactive: Inactif
+        create_attendance_sheet: "Feuille de présence"
       show:
         new_subscription: Nouvelle inscription
         create_attendance_sheet: "Feuille de présence"
@@ -407,11 +431,12 @@ fr:
       invalid_email_provider:
         L'adresse email de votre compte (%{email}) bloque les emails automatiques provenant de votre service. Cela veut dire que vous ne pouvez pas recevoir les emails de confirmation d'inscription ou encore de réinitialisation de votre mot de passe. Nous vous conseillons d'utiliser une autre adresse email en allant dans les paramètres de votre compte.
     navbar:
-      admin: Admin
-      members: Membres
-      courses: Cours
-      subscriptions: Inscriptions
-      my_account: Mon compte
+      admin: "Admin"
+      members: "Membres"
+      courses: "Cours"
+      subscriptions: "Inscriptions"
+      my_account: "Mon compte"
+      logout: "Déconnexion"
   kaminari:
     gap:
       truncate: '...'

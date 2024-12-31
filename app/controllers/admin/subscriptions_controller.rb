@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Admin
-  class SubscriptionsController < AdminController
+  class SubscriptionsController < BaseController
     include Subscriptions::Pdf
     before_action :set_subscription!, only: %i[show edit update destroy unlink_course]
 

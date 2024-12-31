@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Admin
+module Coach
   class AttendanceSheetsController < BaseController
     include AttendanceSheetsControllerConcern
   end

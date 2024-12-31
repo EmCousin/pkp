@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 module Admin
-  class CoursesController < AdminController
+  class CoursesController < BaseController
     before_action :set_course, only: %i[show edit update destroy]
     before_action :set_subscriptions, only: :show
     before_action :filter_available_categories!, only: %i[new], unless: :available_categories?
 
     def index
-      @courses = Course.includes(:subscriptions).order(:created_at)
+      @courses = Course.includes(:subscriptions).order(:weekday, :created_at)
     end
 
     def show
@@ -75,7 +75,7 @@ module Admin
     end
 
     def course_params
-      params.require(:course).permit(:title, :description, :capacity, :category_id, :weekday, :active)
+      params.require(:course).permit(:title, :description, :capacity, :category_id, :weekday, :active, :features_attendance_sheet)
     end
   end
 end

@@ -3,7 +3,7 @@
 require 'csv'
 
 module Admin
-  class MembersController < AdminController
+  class MembersController < BaseController
     before_action :set_members, only: :index
     before_action :set_member, only: %i[show edit update destroy]
 
@@ -60,7 +60,7 @@ module Admin
         :contact_name, :contact_phone_number, :contact_relationship,
         :avatar,
         :agreed_to_advertising_right,
-        user_attributes: %i[id email password address zip_code city country phone_number admin]
+        user_attributes: %i[id email password address zip_code city country phone_number admin coach]
       )
     end
 

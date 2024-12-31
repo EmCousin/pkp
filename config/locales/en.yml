@@ -139,6 +139,9 @@ en:
             max_age:
               greater_than: "must be greater than the minimum age"
               less_than_or_equal_to: "must be less than or equal to 100"
+    attributes:
+      course:
+        features_attendance_sheet: "Attendance Sheet"
 
   # Views
   contacts:
@@ -174,8 +177,14 @@ en:
         minimum_characters: "%{length} characters min"
         are_you_sure: "This action is irreversible. Click OK to permanently delete your account."
 
-  admin:
-    admin:
+  shared:
+    attendance_record: &attendance_record
+      present: "Present"
+      absent: "Absent"
+      mark_present: "Mark Present"
+      mark_absent: "Mark Absent"
+
+  coach:
     attendance_sheets:
       show:
         title: "Attendance Sheet for %{course_title} - %{date}"
@@ -183,10 +192,21 @@ en:
         status: "Status"
         actions: "Actions"
       attendance_record:
-        present: "Present"
-        absent: "Absent"
-        mark_present: "Mark Present"
-        mark_absent: "Mark Absent"
+        <<: *attendance_record
+    courses:
+      index:
+        title: "Courses"
+        create_attendance_sheet: "Attendance Sheet"
+
+  admin:
+    attendance_sheets:
+      show:
+        title: "Attendance Sheet for %{course_title} - %{date}"
+        member: "Member"
+        status: "Status"
+        actions: "Actions"
+      attendance_record:
+        <<: *attendance_record
     members:
       index:
         title: "Members List"
@@ -201,6 +221,9 @@ en:
         remove_from_course_are_you_sure: "Are you sure you want to remove %{member_full_name} from the course %{course_title}?"
         new_subscription: "New Subscription"
         subscriptions: "Subscriptions"
+        create_attendance: "Create Attendance Sheet"
+        admin_label: "Admin"
+        coach_label: "Coach"
       new:
         title: "Add a Member"
       create:
@@ -215,6 +238,7 @@ en:
       index:
         title: "Courses List"
         inactive: "Inactive"
+        create_attendance_sheet: "Attendance Sheet"
       show:
         new_subscription: "New Subscription"
         create_attendance_sheet: "Create Attendance Sheet"
@@ -358,10 +382,12 @@ en:
         "The email address of your account (%{email}) blocks automatic emails from your service. This means you cannot receive confirmation emails or password reset instructions. We recommend using another email address in your account settings."
     navbar:
       admin: "Admin"
+      coach: "Coach"
       members: "Members"
       courses: "Courses"
       subscriptions: "Subscriptions"
       my_account: "My Account"
+      logout: "Logout"
   kaminari:
     gap:
       truncate: '...'
@@ -414,3 +440,13 @@ en:
       contact_message: "If you're having any issues attending the course or would like to discuss your subscription, please don't hesitate to contact us."
       signature: "Best regards,"
       team: "Parkour Paris Team"
+
+  coach:
+    courses:
+      index:
+        title: "Courses"
+        inactive: "Inactive"
+        create_attendance_sheet: "Create attendance sheet"
+    attendance_sheets:
+      show:
+        title: "Attendance sheet for %{course_title} - %{date}"

@@ -98,7 +98,14 @@
 
       <div>
         <div class="flex items-center">
-          <%= f.check_box :active, class: "h-4 w-4 text-slate-800 border-gray-300 rounded focus:ring-slate-800" %>
+          <%= f.check_box :features_attendance_sheet, class: "text-slate-800 border-gray-300 rounded focus:ring-slate-800" %>
+          <%= f.label :features_attendance_sheet, class: "ml-2 block text-sm text-gray-700" %>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex items-center">
+          <%= f.check_box :active, class: "text-slate-800 border-gray-300 rounded focus:ring-slate-800" %>
           <%= f.label :active, class: "ml-2 block text-sm text-gray-700" %>
         </div>
       </div>
