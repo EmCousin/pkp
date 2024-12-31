@@ -26,7 +26,7 @@ module Admin
     private
 
     def set_course
-      @course = Course.find(params[:course_id])
+      @course = Course.featuring_attendance_sheet.find(params[:course_id])
     end
 
     def set_attendance_sheet

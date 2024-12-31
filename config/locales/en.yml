@@ -139,6 +139,9 @@ en:
             max_age:
               greater_than: "must be greater than the minimum age"
               less_than_or_equal_to: "must be less than or equal to 100"
+    attributes:
+      course:
+        features_attendance_sheet: "Attendance Sheet"
 
   # Views
   contacts:
@@ -201,6 +204,9 @@ en:
         remove_from_course_are_you_sure: "Are you sure you want to remove %{member_full_name} from the course %{course_title}?"
         new_subscription: "New Subscription"
         subscriptions: "Subscriptions"
+        create_attendance: "Create Attendance Sheet"
+        admin_label: "Admin"
+        coach_label: "Coach"
       new:
         title: "Add a Member"
       create:
@@ -215,6 +221,7 @@ en:
       index:
         title: "Courses List"
         inactive: "Inactive"
+        create_attendance_sheet: "Attendance Sheet"
       show:
         new_subscription: "New Subscription"
         create_attendance_sheet: "Create Attendance Sheet"

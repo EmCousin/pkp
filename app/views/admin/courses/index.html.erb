@@ -54,6 +54,12 @@
                       confirm_message_value: t('defaults.are_you_sure')
                     },
                     class: "flex-1 sm:flex-initial text-center px-3 py-1.5 border border-red-600 text-red-600 hover:bg-red-50 text-sm rounded-md" %>
+
+                <% if course.features_attendance_sheet? %>
+                  <%= button_to t('.create_attendance_sheet'),
+                      [:admin, course, :attendance_sheets],
+                      class: "flex-1 sm:flex-initial text-center px-3 py-1.5 border border-green-600 text-green-600 hover:bg-green-50 text-sm rounded-md" %>
+                <% end %>
               </div>
             </div>
           </div>

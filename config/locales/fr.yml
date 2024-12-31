@@ -160,6 +160,7 @@ fr:
         category: Catégorie
         weekday: Jour de la semaine
         active: Actif
+        features_attendance_sheet: Feuille de présence
       category:
         title: Titre
         min_age: Âge minimum
@@ -251,6 +252,9 @@ fr:
         remove_from_course_are_you_sure: Êtes-vous sûr·e de vouloir retirer %{member_full_name} du cours %{course_title} ?
         new_subscription: Nouvelle inscription
         subscriptions: Inscriptions
+        create_attendance: "Créer une feuille de présence"
+        admin_label: "Admin"
+        coach_label: "Coach"
       new:
         title: Ajouter un membre
       create:
@@ -265,6 +269,7 @@ fr:
       index:
         title: Liste des cours
         inactive: Inactif
+        create_attendance_sheet: "Feuille de présence"
       show:
         new_subscription: Nouvelle inscription
         create_attendance_sheet: "Feuille de présence"
