@@ -40,6 +40,7 @@ fr:
     forbidden: Accès non-autorisé
     details: Détails
     complete_your_profile: Veuillez compléter votre profil pour continuer.
+    confirmed_bank_transfer: "A payé par virement"
   custom_error_messages:
     subscription:
       member_id:
@@ -192,6 +193,7 @@ fr:
           confirmed_bank_check: A payé par chèque
           confirmed_cash: A payé en espèces
           archived: Archivée
+          confirmed_bank_transfer: "A payé par virement"
 
   # Views
   contacts:

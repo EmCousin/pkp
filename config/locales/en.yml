@@ -71,6 +71,7 @@ en:
     forbidden: "Unauthorized access"
     details: "Details"
     complete_your_profile: "Please complete your profile to continue."
+    confirmed_bank_transfer: "Paid by bank transfer"
 
   custom_error_messages:
     subscription:
@@ -142,6 +143,9 @@ en:
     attributes:
       course:
         features_attendance_sheet: "Attendance Sheet"
+      subscription:
+        statuses:
+          confirmed_bank_transfer: "Paid by bank transfer"
 
   # Views
   contacts:
