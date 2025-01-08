@@ -8,6 +8,9 @@ development:
   signed_form:
     enabled: true
 
+  payment_proof:
+    enabled: true
+
 test:
   online_payment:
     enabled: false
@@ -18,6 +21,9 @@ test:
   signed_form:
     enabled: false
 
+  payment_proof:
+    enabled: true
+
 production:
   online_payment:
     enabled: false
@@ -27,3 +33,6 @@ production:
 
   signed_form:
     enabled: false
+
+  payment_proof:
+    enabled: true

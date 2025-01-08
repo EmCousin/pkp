@@ -31,6 +31,8 @@
 
 en:
   defaults:
+    added: "Added"
+    attach: "Attach"
     dismiss: "Close"
     close: "Close"
     view: "View"
@@ -71,6 +73,7 @@ en:
     forbidden: "Unauthorized access"
     details: "Details"
     complete_your_profile: "Please complete your profile to continue."
+    confirmed_bank_transfer: "Paid by bank transfer"
 
   custom_error_messages:
     subscription:
@@ -142,6 +145,9 @@ en:
     attributes:
       course:
         features_attendance_sheet: "Attendance Sheet"
+      subscription:
+        statuses:
+          confirmed_bank_transfer: "Paid by bank transfer"
 
   # Views
   contacts:
@@ -311,70 +317,9 @@ en:
     credit_notes:
       create:
         success: "Credit Note generated"
-  dashboard:
-    show:
-      add_subscription: "Add a Subscription"
-      choose_my_courses: "Choose my Courses"
-      come_to_your_slots_only: "You cannot attend other classes than those you selected during your registration. Please respect the slots you selected."
-      not_yet_subscribed: "You are not yet enrolled for the %{year} year! Click the button to enroll:"
-      subscription_detailed_info: "Your subscriptions for the %{year} year:"
-      how_to_complete_my_subscription: "How to complete my registration"
-    subscription:
-      pay: "Pay"
-      subscription_form: "Registration Form"
-      download_subscription_form: "Download the Registration Form"
-      upload_signed_form: "Return the Signed Form"
-      upload_medical_certificate: "Attach the Medical Certificate"
-      change_signed_form: "Replace the Form"
-      change_medical_certificate: "Replace the Medical Certificate"
-      edit_member: "Edit Student Profile"
-    edit:
-      title: "My Personal Information"
-    alumni_accesses:
-      failure: &failure
-        not_yet_open: "Re-enrollment for alumni is not yet open"
-      new:
-        <<: *failure
-        title: "Alumni Access"
-        headline: "Enter the username and password that were communicated to you by the coaches. You can find them in the alumni re-enrollment email that was sent to you."
-      create:
-        <<: *failure
     subscriptions:
-      new:
-        or: "or"
-        create_member: "Please provide the information of the person to enroll"
-        add_member: "New Member"
-        no_courses_available: "Sorry, there are no available %{category_title} courses."
-        full: "Full"
-        select_category: "Select a Category"
-      create:
-        success: "Subscription created successfully!"
-    members:
-      form:
-        advertising_right_statement: "I authorize the use, display, and publication of my image from Parkour Paris activities for promotional purposes (all media) and information about the association's activities (banners, brochures, website)."
-        contact_name: "Full Name of Contact"
-      create:
-        success: "Student added"
-      update:
-        success: "Student updated"
-    payments:
-      new:
-        payment_by_card: "Payment by Credit Card"
-        pay: "Pay %{amount}"
-        already_paid: "You have already paid for your order."
-      create:
-        success: "Registration paid successfully!"
-        error: "An error occurred. Your card was not charged. If the problem persists, please contact us."
-        already_paid: "Your order is already paid. Your card was not charged."
-    medical_certificates:
-      update:
-        success: "Medical Certificate added successfully!"
-    signed_forms:
-      update:
-        success: "Signed Form added successfully!"
-    vacations:
       show:
-        i_am_alumni: "I am an alumnus"
+        select_action: "Select an action..."
 
   layouts:
     flash:
@@ -450,3 +395,11 @@ en:
     attendance_sheets:
       show:
         title: "Attendance sheet for %{course_title} - %{date}"
+
+  admin:
+    subscriptions:
+      show:
+        select_action: "Select an action..."
+        mark_as_confirmed_by_check: "Mark as confirmed by check"
+        mark_as_confirmed_by_cash: "Mark as confirmed by cash"
+        mark_as_confirmed_by_transfer: "Mark as confirmed by bank transfer"
