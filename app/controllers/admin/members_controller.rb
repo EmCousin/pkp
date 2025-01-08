@@ -37,7 +37,7 @@ module Admin
 
     def update
       if @member.update(member_params)
-        redirect_to [:admin, @member], notice: t('.success'), status: :see_other
+        redirect_back_or_to [:admin, @member], notice: t('.success'), status: :see_other
       else
         render :edit, status: :unprocessable_entity
       end
