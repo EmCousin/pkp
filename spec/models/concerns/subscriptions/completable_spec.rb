@@ -63,8 +63,8 @@ describe Subscriptions::Completable, type: :model do
       it { expect(subscription.needs_medical_certificate?).to be false }
     end
 
-    context 'when the previous subscription is 3 years old' do
-      let(:year) { subscription.year - 3 }
+    context 'when the previous subscription more than 3 years old' do
+      let(:year) { subscription.year - 4 }
 
       it { expect(subscription.needs_medical_certificate?).to be true }
     end
