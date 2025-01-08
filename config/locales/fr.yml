@@ -1,5 +1,7 @@
 fr:
   defaults:
+    added: "Ajouté"
+    attach: Joindre
     dismiss: Fermer
     close: Fermer
     view: Voir
@@ -183,6 +185,7 @@ fr:
         form: Formulaire
         signed_form: Formulaire signé
         medical_certificate: Certificat médical
+        payment_proof: Justificatif de paiement
         invoice: Facture
         credit_notes: Avoirs
         created_at: Généré le
@@ -377,6 +380,7 @@ fr:
       download_subscription_form: Télécharger le formulaire d'inscription
       upload_signed_form: Retourner le formulaire signé
       upload_medical_certificate: Joindre le certificat médical
+      upload_payment_proof: Joindre le justificatif de paiement
       change_signed_form: Remplacer le formulaire
       change_medical_certificate: Remplacer le certificat médical
       edit_member: Modifier le profil de l'élève
@@ -427,6 +431,9 @@ fr:
     vacations:
       show:
         i_am_alumni: Je suis un·e ancien·ne élève
+    payment_proofs:
+      update:
+        success: "Justificatif de paiement ajouté avec succès !"
 
   layouts:
     flash:
@@ -498,3 +505,11 @@ fr:
       default: "%d/%m/%Y %H:%M"
       short: "%d/%m/%Y"
       long: "%A, %d %B %Y"
+
+  admin:
+    subscriptions:
+      show:
+        select_action: "Sélectionner une action..."
+        mark_as_confirmed_by_check: "Marquer comme confirmé par chèque"
+        mark_as_confirmed_by_cash: "Marquer comme confirmé en espèces"
+        mark_as_confirmed_by_transfer: "Marquer comme confirmé par virement"

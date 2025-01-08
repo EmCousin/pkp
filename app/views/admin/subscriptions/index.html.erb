@@ -1,4 +1,4 @@
-<h1 class="text-2xl text-center font-bold mb-4 text-amber-500"><%= t(".title") %> <%= Subscription.current_year %> - <%= Subscription.next_year %></h1>
+<h1 class="text-2xl text-center font-bold mb-4 text-amber-500"><%= Subscription.model_name.human.pluralize %> <%= Subscription.current_year %> - <%= Subscription.next_year %></h1>
 <div class="border-b border-gray-200 mb-6"></div>
 
 <div class="w-full p-4 bg-slate-100 rounded-lg shadow-sm">

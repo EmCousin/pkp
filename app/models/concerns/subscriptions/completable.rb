@@ -8,7 +8,7 @@ module Subscriptions
       has_one_attached :form
       has_one_attached :signed_form
       has_one_attached :medical_certificate
-      has_one_attached :proof_of_payment
+      has_one_attached :payment_proof
     end
 
     def needs_medical_certificate?
@@ -20,7 +20,7 @@ module Subscriptions
     end
 
     def completed?
-      (paid? || proof_of_payment.attached?) && signed_form.attached? && medical_certificate.attached?
+      (paid? || payment_proof.attached?) && signed_form.attached? && medical_certificate.attached?
     end
   end
 end
