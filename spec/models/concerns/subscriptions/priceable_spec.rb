@@ -140,22 +140,85 @@ describe Subscriptions::Priceable, type: :model do
   end
 
   describe 'spring pricing' do
-
     let(:travel_date) { DateTime.new(Time.now.year, 4).end_of_month }
 
     context 'when there is 1 course' do
       let(:count) { 1 }
 
       it 'should set the fee to 120' do
-        expect(subject.fee).to eq 120
+        expect(subject.fee).to eq 145
       end
     end
 
     context 'when there are 2 courses' do
       let(:count) { 2 }
 
-      it 'should set the fee to 180' do
-        expect(subject.fee).to eq 180
+      it 'should set the fee to 215' do
+        expect(subject.fee).to eq 215
+      end
+    end
+
+    context 'when the category is Adolescent (10 - 12 ans)' do
+      let(:category_title) { 'Adolescent (10 - 12 ans)' }
+
+      context 'when there is 1 course' do
+        let(:count) { 1 }
+
+        it 'should set the fee to 145' do
+          expect(subject.fee).to eq 145
+        end
+      end
+
+      context 'when there are 2 courses' do
+        let(:count) { 2 }
+
+        it 'should set the fee to 215' do
+          expect(subject.fee).to eq 215
+        end
+      end
+    end
+
+    context 'when the category is Adolescent (13 - 15 ans)' do
+      let(:category_title) { 'Adolescent (13 - 15 ans)' }
+
+      context 'when there is 1 course' do
+        let(:count) { 1 }
+
+        it 'should set the fee to 145' do
+          expect(subject.fee).to eq 145
+        end
+      end
+
+      context 'when there are 2 courses' do
+        let(:count) { 2 }
+
+        it 'should set the fee to 215' do
+          expect(subject.fee).to eq 215
+        end
+      end
+    end
+
+    context 'when the category is Kidz (6 - 7 ans)' do
+      let(:category_title) { 'Kidz (6 - 7 ans)' }
+
+      context 'when there is 1 course' do
+        let(:count) { 1 }
+
+        it 'should set the fee to 120' do
+          expect(subject.fee).to eq 120
+        end
+      end
+    end
+
+    context 'when the category is Kidz (8 - 9 ans)' do
+      let(:category_title) { 'Kidz (8 - 9 ans)' }
+
+      context 'when there is 1 course' do
+        let(:count) { 1 }
+
+        it 'should set the fee to 120' do
+          expect(subject.fee).to eq 120
+        end
       end
     end
   end
@@ -166,16 +229,80 @@ describe Subscriptions::Priceable, type: :model do
     context 'when there is 1 course' do
       let(:count) { 1 }
 
-      it 'should set the fee to 170' do
-        expect(subject.fee).to eq 170
+      it 'should set the fee to 205' do
+        expect(subject.fee).to eq 205
       end
     end
 
     context 'when there are 2 courses' do
       let(:count) { 2 }
 
-      it 'should set the fee to 230' do
-        expect(subject.fee).to eq 230
+      it 'should set the fee to 275' do
+        expect(subject.fee).to eq 275
+      end
+    end
+
+    context 'when the category is Adolescent (10 - 12 ans)' do
+      let(:category_title) { 'Adolescent (10 - 12 ans)' }
+
+      context 'when there is 1 course' do
+        let(:count) { 1 }
+
+        it 'should set the fee to 205' do
+          expect(subject.fee).to eq 205
+        end
+      end
+
+      context 'when there are 2 courses' do
+        let(:count) { 2 }
+
+        it 'should set the fee to 275' do
+          expect(subject.fee).to eq 275
+        end
+      end
+    end
+
+    context 'when the category is Adolescent (13 - 15 ans)' do
+      let(:category_title) { 'Adolescent (13 - 15 ans)' }
+
+      context 'when there is 1 course' do
+        let(:count) { 1 }
+
+        it 'should set the fee to 205' do
+          expect(subject.fee).to eq 205
+        end
+      end
+
+      context 'when there are 2 courses' do
+        let(:count) { 2 }
+
+        it 'should set the fee to 275' do
+          expect(subject.fee).to eq 275
+        end
+      end
+    end
+
+    context 'when the category is Kidz (6 - 7 ans)' do
+      let(:category_title) { 'Kidz (6 - 7 ans)' }
+
+      context 'when there is 1 course' do
+        let(:count) { 1 }
+
+        it 'should set the fee to 155' do
+          expect(subject.fee).to eq 155
+        end
+      end
+    end
+
+    context 'when the category is Kidz (8 - 9 ans)' do
+      let(:category_title) { 'Kidz (8 - 9 ans)' }
+
+      context 'when there is 1 course' do
+        let(:count) { 1 }
+
+        it 'should set the fee to 155' do
+          expect(subject.fee).to eq 155
+        end
       end
     end
   end

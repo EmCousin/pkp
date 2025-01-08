@@ -57,18 +57,18 @@ module Subscriptions
     def spring_pricing
       case category.title
       when 'Adulte', 'Adolescent (10 - 12 ans)', 'Adolescent (13 - 15 ans)'
-        [120, 180]
+        [145, 215]
       when 'Kidz (6 - 7 ans)', 'Kidz (8 - 9 ans)'
-        [100]
+        [120]
       end
     end
 
     def winter_pricing
       case category.title
       when 'Adulte', 'Adolescent (10 - 12 ans)', 'Adolescent (13 - 15 ans)'
-        [170, 230]
+        [205, 275]
       when 'Kidz (6 - 7 ans)', 'Kidz (8 - 9 ans)'
-        [130]
+        [155]
       end
     end
 
