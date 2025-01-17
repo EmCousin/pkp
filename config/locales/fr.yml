@@ -510,6 +510,7 @@ fr:
     subscriptions:
       show:
         select_action: "Sélectionner une action..."
+        download_subscription_form: Télécharger le formulaire
         mark_as_confirmed_by_check: "Marquer comme confirmé par chèque"
         mark_as_confirmed_by_cash: "Marquer comme confirmé en espèces"
         mark_as_confirmed_by_transfer: "Marquer comme confirmé par virement"

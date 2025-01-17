@@ -62,6 +62,16 @@
               <span class="text-sm text-gray-500"><%= Subscription.human_attribute_name(:year) %>:</span>
               <span class="ml-1"><%= @subscription.year %></span>
             </div>
+
+            <% if @subscription.form.attached? %>
+              <div>
+                <%= link_to t('.download_subscription_form'),
+                    rails_blob_path(@subscription.form),
+                    disposition: :attachment,
+                    target: '_blank',
+                    class: "inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800" %>
+              </div>
+            <% end %>
           </div>
         </div>
       </div>

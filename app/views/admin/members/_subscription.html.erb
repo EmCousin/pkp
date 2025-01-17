@@ -12,9 +12,17 @@
       <%= link_to t('defaults.view'),
           [:admin, subscription],
           class: "text-sm text-blue-600 hover:text-blue-800 font-medium" %>
+
       <%= link_to t('defaults.edit'),
           [:edit, :admin, subscription],
-          class: "text-sm text-blue-600 hover:text-blue-800 font-medium" %>
+          class: "text-sm text-blue-600 hover:text-blue-800 font-medium",
+          target: '_blank' %>
+
+      <% if subscription.form.attached? %>
+        <%= link_to t('admin.subscriptions.show.download_subscription_form'),
+            rails_blob_path(subscription.form),
+            class: "text-sm text-blue-600 hover:text-blue-800 font-medium" %>
+      <% end %>
     </div>
   </div>
 

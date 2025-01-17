@@ -400,6 +400,7 @@ en:
     subscriptions:
       show:
         select_action: "Select an action..."
+        download_subscription_form: "Download form"
         mark_as_confirmed_by_check: "Mark as confirmed by check"
         mark_as_confirmed_by_cash: "Mark as confirmed by cash"
         mark_as_confirmed_by_transfer: "Mark as confirmed by bank transfer"

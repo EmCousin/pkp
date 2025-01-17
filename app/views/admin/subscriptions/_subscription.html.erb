@@ -15,6 +15,14 @@
                 class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100",
                 data: { turbo_frame: '_top' } %>
 
+            <% if subscription.form.attached? %>
+              <%= link_to t('admin.subscriptions.show.download_subscription_form'),
+                  rails_blob_path(subscription.form),
+                  class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100",
+                  data: { turbo_frame: '_top' },
+                  target: '_blank' %>
+            <% end %>
+
             <% %w[pending confirmed_bank_check confirmed_cash archived].each do |status| %>
               <%= button_to t("defaults.#{status}"),
                   {
