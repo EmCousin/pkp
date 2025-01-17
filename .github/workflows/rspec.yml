@@ -79,4 +79,4 @@ jobs:
           RAILS_ENV: test
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
         run: |
-          bundle exec rake
+          bundle exec rspec
