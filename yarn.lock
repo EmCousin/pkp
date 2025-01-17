@@ -571,11 +571,6 @@ supports-color@^6.1.0:
   dependencies:
     has-flag "^3.0.0"
 
-tail.select.js@^0.5.22:
-  version "0.5.23"
-  resolved "https://registry.yarnpkg.com/tail.select.js/-/tail.select.js-0.5.23.tgz#d6a7881775aa84d41bb7a230322f7629117711e9"
-  integrity sha512-ZyT9YN9FCdhP/k5Av6fDJXa19Tlf6VUjO01foMJwTqWQFCU9rh1NdW0YRt8jU01OPDInALRxtemUz0R81q8N3Q==
-
 type@^2.7.2:
   version "2.7.3"
   resolved "https://registry.yarnpkg.com/type/-/type-2.7.3.tgz#436981652129285cc3ba94f392886c2637ea0486"

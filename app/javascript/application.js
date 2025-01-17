@@ -7,6 +7,4 @@ window.Cable = ActionCable.createConsumer()
 import * as ActiveStorage from '@rails/activestorage'
 ActiveStorage.start()
 
-import "tail.select.js/js/tail.select-full"
-
 import "./controllers"

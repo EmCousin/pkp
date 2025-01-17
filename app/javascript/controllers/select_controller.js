@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-import select from "tail.select.js/js/tail.select-full"
+import tail from '../inits/tail.select.min.js'
 
 export default class SelectController extends Controller {
   static values = {
@@ -7,7 +7,8 @@ export default class SelectController extends Controller {
   }
 
   connect() {
-    select(this.element, {
+    console.log(this.element.id)
+    tail.select('#' + this.element.id, {
       search: true,
       multiSelectAll: true,
       deselect: true,

@@ -1,9 +1,9 @@
 <div class="bg-white shadow-sm rounded-lg p-6">
   <%= form_for [:admin, @subscription],
       data: { turbo: false },
-      class: "space-y-6" do |form| %>
+      html: { class: "space-y-6" } do |form| %>
 
-    <div>
+    <fieldset>
       <%= form.label :member_id, class: "block text-sm font-medium text-gray-700 mb-1" %>
       <div class="relative">
         <%= form.grouped_collection_select :member_id,
@@ -37,9 +37,9 @@
           </ul>
         </div>
       <% end %>
-    </div>
+    </fieldset>
 
-    <div>
+    <fieldset>
       <%= form.label :course_ids, class: "block text-sm font-medium text-gray-700 mb-2" %>
       <div class="space-y-2">
         <%= form.collection_check_boxes :course_ids, Course.order(:created_at), :id, :title do |b| %>
@@ -65,7 +65,7 @@
           </ul>
         </div>
       <% end %>
-    </div>
+    </fieldset>
 
     <div class="flex flex-col sm:flex-row gap-3 pt-5">
       <%= link_to t('defaults.back'),
