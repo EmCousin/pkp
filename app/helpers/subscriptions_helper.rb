@@ -2,12 +2,12 @@
 
 module SubscriptionsHelper
   def subscriptions_year_select_options(year)
-    options = (2019..Subscription.current_year).reverse_each.map { |year| ["#{year} - #{year + 1}", year] }
+    options = (2019..Subscription.current_year).reverse_each.map { |y| ["#{y} - #{y + 1}", y] }
     options_for_select(options, year)
   end
 
   def subscriptions_status_select_options(status)
-    options = Subscription.statuses.map { |key, _value| [key, I18n.t("activerecord.attributes.subscription.statuses")[key.to_sym]] }
+    options = Subscription.statuses.map { |key, _value| [key, I18n.t('activerecord.attributes.subscription.statuses')[key.to_sym]] }
     options_for_select(options, status)
   end
 
@@ -16,6 +16,6 @@ module SubscriptionsHelper
   end
 
   def subscriptions_level_options
-    Member.levels.map { |key, _value| [key, I18n.t("activerecord.attributes.member.levels")[key.to_sym]] }
+    Member.levels.map { |key, _value| [key, I18n.t('activerecord.attributes.member.levels')[key.to_sym]] }
   end
 end
