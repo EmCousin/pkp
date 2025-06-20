@@ -29,21 +29,21 @@
                     controller: 'admin/members',
                     action: 'update',
                     id: subscription.member_id,
-                    member: { level: level }
+                    member: { level: }
                   },
                   method: :put,
                   class: "w-full text-left flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100",
                   form: { data: { turbo_frame: dom_id(subscription, :row) } }) do %>
                   <div class="w-4 h-4 border border-gray-300 rounded mr-2"
                        style="background-color: <%= level %>"
-                       title="<%= subscription.member.level_text %>">
+                       title="<%= t("activerecord.attributes.member.levels")[level] %>">
                   </div>
                   <span><%= t(".move_to_#{level}_level") %></span>
                 <% end %>
               <% end %>
             <% end %>
 
-            <%= render "status_buttons", subscription: subscription %>
+            <%= render "status_buttons", subscription: %>
 
             <%= button_to t('.remove_from_course'),
                 unlink_course_admin_subscription_path(subscription.id, course_id: @course.id),
@@ -68,7 +68,7 @@
         <span class="text-sm text-gray-500"><%= Member.human_attribute_name(:level) %>:</span>
         <div class="w-4 h-4 border border-gray-400 rounded"
              style="background-color: <%= subscription.member.level %>"
-             title="<%= subscription.member.level_text %>">
+             title="<%= member_level_text(subscription.member.level) %>">
         </div>
       </div>
 

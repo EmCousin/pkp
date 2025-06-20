@@ -3,8 +3,6 @@
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
 
-  extend ActiveRecord::HumanEnumName
-
   def next
     self.class.where('created_at > ?', created_at).order(:created_at).first || self.class.first
   end

@@ -20,7 +20,7 @@ class Member < ApplicationRecord
     attachable.variant :mini, resize: '80x80'
   end
 
-  enum level: { white: 'white', yellow: 'yellow', green: 'green', red: 'red' }, _default: 'white'
+  enum :level, white: 'white', yellow: 'yellow', green: 'green', red: 'red'
 
   delegate :full_address, to: :user
 
