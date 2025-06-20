@@ -80,26 +80,17 @@
         class: "mt-8" do |f| %>
       <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
         <%= f.select :status,
-            options_for_select(
-              Subscription.status_options.map(&:values).map(&:reverse),
-              params[:status]
-            ),
+            subscriptions_status_select_options(params[:status]),
             { include_blank: Subscription.human_attribute_name(:status) },
             class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm bg-white' %>
 
         <%= f.select :year,
-            options_for_select(
-              Subscription.select_options,
-              params[:year]
-            ),
+            subscriptions_year_select_options(params[:year]),
             { include_blank: Subscription.human_attribute_name(:year) },
             class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm bg-white' %>
 
         <%= f.select :level,
-            options_for_select(
-              Member.level_options.map(&:values).map(&:reverse),
-              params[:level]
-            ),
+            subscriptions_level_select_options(params[:level]),
             { include_blank: Member.human_attribute_name(:level) },
             class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm bg-white' %>
 

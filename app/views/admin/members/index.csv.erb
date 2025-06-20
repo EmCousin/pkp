@@ -11,7 +11,7 @@
 
 <%- @members.each do |member| -%>
   <% line = [
-    params[:display_level] != 'no' && member.level_text,
+    params[:display_level] != 'no' && member_level_text(member.level),
     params[:display_name] != 'no' && member.full_name,
     params[:display_phone_number] != 'no' && member.user.phone_number,
     params[:display_email] != 'no' && member.user.email,

@@ -32,7 +32,7 @@
               <span class="text-sm text-gray-500"><%= Member.human_attribute_name(:level) %>:</span>
               <div class="w-4 h-4 border border-gray-400 rounded"
                    style="background-color: <%= @subscription.member.level %>"
-                   title="<%= @subscription.member.level_text %>">
+                   title="<%= member_level_text(@subscription.member.level) %>">
               </div>
             </div>
           </div>

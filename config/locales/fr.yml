@@ -262,33 +262,11 @@ fr:
         actions: "Actions"
       attendance_record:
         <<: *attendance_record
-    members:
-      index:
-        title: Liste des membres
-        search_by_name: Nom
-        all_categories: Toutes les catégories
-        all_courses: Tous les cours
-        no_paginate: Désactiver la pagination
-        csv_export: Exporter au format CSV
-      show:
-        title: "%{member}"
-        remove_from_course: Retirer
-        remove_from_course_are_you_sure: Êtes-vous sûr·e de vouloir retirer %{member_full_name} du cours %{course_title} ?
-        new_subscription: Nouvelle inscription
-        subscriptions: Inscriptions
-        create_attendance: "Créer une feuille de présence"
-        admin_label: "Admin"
-        coach_label: "Coach"
+    categories:
       new:
-        title: Ajouter un membre
+        title: Créer une catégorie
       create:
-        success: Membre créé
-      edit:
-        title: Modifier un membre
-      update:
-        success: Membre modifié
-      destroy:
-        success: Membre supprimé
+        success: Catégorie créée
     courses:
       index:
         title: Liste des cours
@@ -317,11 +295,43 @@ fr:
         success: Cours supprimé
       form:
         new_category: Ajouter une autre catégorie
-    categories:
-      new:
-        title: Créer une catégorie
+    credit_notes:
       create:
-        success: Catégorie créée
+        success: Avoir généré
+    invoices:
+      show:
+        generate_invoice: Génerer cette facture
+      create:
+        success: Facture générée
+      update:
+        success: Facture générée
+    members:
+      index:
+        title: Liste des membres
+        search_by_name: Nom
+        all_categories: Toutes les catégories
+        all_courses: Tous les cours
+        no_paginate: Désactiver la pagination
+        csv_export: Exporter au format CSV
+      show:
+        title: "%{member}"
+        remove_from_course: Retirer
+        remove_from_course_are_you_sure: Êtes-vous sûr·e de vouloir retirer %{member_full_name} du cours %{course_title} ?
+        new_subscription: Nouvelle inscription
+        subscriptions: Inscriptions
+        create_attendance: "Créer une feuille de présence"
+        admin_label: "Admin"
+        coach_label: "Coach"
+      new:
+        title: Ajouter un membre
+      create:
+        success: Membre créé
+      edit:
+        title: Modifier un membre
+      update:
+        success: Membre modifié
+      destroy:
+        success: Membre supprimé
     subscriptions:
       index:
         title: Inscriptions
@@ -335,6 +345,11 @@ fr:
         generate_credit_note: Générer un avoir
         preview_invoice: Prévisualiser la facture
         generating: "Génération en cours..."
+        select_action: "Sélectionner une action..."
+        download_subscription_form: Télécharger le formulaire
+        mark_as_confirmed_by_check: "Marquer comme confirmé par chèque"
+        mark_as_confirmed_by_cash: "Marquer comme confirmé en espèces"
+        mark_as_confirmed_by_transfer: "Marquer comme confirmé par virement"
       new:
         title: Inscrire un membre
       create:
@@ -356,16 +371,6 @@ fr:
       form:
         users: Membres
         select_a_member: Choisissez un membre
-    invoices:
-      show:
-        generate_invoice: Génerer cette facture
-      create:
-        success: Facture générée
-      update:
-        success: Facture générée
-    credit_notes:
-      create:
-        success: Avoir généré
   dashboard:
     show:
       add_subscription: Ajouter une inscription
@@ -505,12 +510,3 @@ fr:
       default: "%d/%m/%Y %H:%M"
       short: "%d/%m/%Y"
       long: "%A, %d %B %Y"
-
-  admin:
-    subscriptions:
-      show:
-        select_action: "Sélectionner une action..."
-        download_subscription_form: Télécharger le formulaire
-        mark_as_confirmed_by_check: "Marquer comme confirmé par chèque"
-        mark_as_confirmed_by_cash: "Marquer comme confirmé en espèces"
-        mark_as_confirmed_by_transfer: "Marquer comme confirmé par virement"

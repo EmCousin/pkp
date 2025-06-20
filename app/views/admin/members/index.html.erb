@@ -21,7 +21,7 @@
       </div>
       <div>
         <%= f.select :subscription_year,
-            options_for_select(Subscription.select_options, params[:subscription_year]),
+            subscriptions_year_select_options(params[:subscription_year]),
             { include_blank: 'Année' },
             class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm bg-white' %>
       </div>
@@ -53,7 +53,7 @@
       <div>
         <span class="block mb-2 font-medium">Afficher les niveaux : </span>
         <div class="space-y-2">
-          <%= f.collection_check_boxes :level, Member.level_options.map(&:values), :first, :last, { include_hidden: false } do |b| %>
+          <%= f.collection_check_boxes :level, subscriptions_level_options, :first, :last, { include_hidden: false } do |b| %>
             <label class="flex items-center space-x-2">
               <%= b.check_box checked: params[:level].is_a?(Array) && b.value.in?(params[:level]),
                   class: "rounded border-gray-300" %>
@@ -71,18 +71,16 @@
                 true, false %>
             <span><%= t('.no_paginate') %></span>
           </label>
-
-          <label class="flex items-center">
-            <%= f.check_box :format,
-                { checked: false, class: "rounded border-gray-300" },
-                'csv', 'html' %>
-            <span class="ml-2"><%= t('.csv_export') %></span>
-          </label>
         </div>
       </div>
     </div>
 
-    <%= f.submit t('defaults.search'), class: "bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md" %>
+    <%= f.submit t('defaults.search'), class: "bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md cursor-pointer" %>
+
+    <%= f.label :format, class: "inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md font-medium text-white bg-slate-800 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800 cursor-pointer" do %>
+      <%= t('.csv_export') %>
+      <%= f.submit :csv, name: :format, class: 'hidden' %>
+    <% end %>
   <% end %>
 
   <div class="flex justify-end my-6">
