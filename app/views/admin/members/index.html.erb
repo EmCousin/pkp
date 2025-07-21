@@ -40,24 +40,33 @@
                   { checked: params["display_#{field}"] != 'no',
                     class: "rounded border-gray-300 text-slate-800 focus:ring-slate-800" },
                   'yes', 'no' %>
-              <span class="text-sm text-gray-700"><%= field == :name ? Member.human_attribute_name(:last_name) :
-                       field == :email ? User.human_attribute_name(:email) :
-                       field == :contact_email ? Contact.human_attribute_name(:email) :
-                       field == :actions ? 'Actions' :
-                       Member.human_attribute_name(field) %></span>
+              <span class="text-sm text-gray-700">
+                <% case field %>
+                  <% when :name %>
+                    <%= Member.human_attribute_name(:last_name) %>
+                  <% when :email %>
+                  <%= User.human_attribute_name(:email) %>
+                  <% when :contact_email %>
+                    <%= Contact.human_attribute_name(:email) %>
+                  <% when :actions %>
+                  <%= t('.actions') %>
+                <% else %>
+                  <%= Member.human_attribute_name(field) %>
+                <% end %>
+              </span>
             </label>
           <% end %>
         </div>
       </div>
 
       <div>
-        <span class="block mb-2 font-medium">Afficher les niveaux : </span>
+        <span class="block mb-2 font-medium"><%= t('.display_levels') %></span>
         <div class="space-y-2">
-          <%= f.collection_check_boxes :level, subscriptions_level_options, :first, :last, { include_hidden: false } do |b| %>
+          <%= f.collection_check_boxes :level, subscriptions_level_options, :last, :first, { include_hidden: false } do |b| %>
             <label class="flex items-center space-x-2">
               <%= b.check_box checked: params[:level].is_a?(Array) && b.value.in?(params[:level]),
                   class: "rounded border-gray-300" %>
-              <span><%= b.text %></span>
+              <span class="text-sm text-gray-700"><%= b.text %></span>
             </label>
           <% end %>
         </div>
@@ -79,7 +88,7 @@
 
     <%= f.label :format, class: "inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md font-medium text-white bg-slate-800 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800 cursor-pointer" do %>
       <%= t('.csv_export') %>
-      <%= f.submit :csv, name: :format, class: 'hidden' %>
+      <%= f.submit :csv, name: :format, class: 'hidden', data: { turbo: false } %>
     <% end %>
   <% end %>
 

@@ -313,6 +313,7 @@ fr:
         all_courses: Tous les cours
         no_paginate: Désactiver la pagination
         csv_export: Exporter au format CSV
+        display_levels: Afficher les niveaux
       show:
         title: "%{member}"
         remove_from_course: Retirer
