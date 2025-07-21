@@ -10,9 +10,9 @@ module.exports = {
   theme: {
     extend: {
       keyframes: {
-        'slide-in-down-out-up': {
+        'slide-in-up-out-down': {
           '0%': {
-            transform: 'translateY(-100%)',
+            transform: 'translateY(100%)',
             opacity: '0'
           },
           '5%': {
@@ -24,13 +24,13 @@ module.exports = {
             opacity: '1'
           },
           '100%': {
-            transform: 'translateY(-100%)',
+            transform: 'translateY(100%)',
             opacity: '0'
           }
         }
       },
       animation: {
-        'slide-in-down-out-up': 'slide-in-down-out-up 10s ease-in-out forwards'
+        'slide-in-up-out-down': 'slide-in-up-out-down 5s ease-in-out forwards'
       }
     },
   },
