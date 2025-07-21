@@ -15,7 +15,9 @@
             <% if params[:display_level] != 'no' %>
               <%= tag.span class: "inline-block w-3 h-3 rounded border border-gray-300", style: "background-color: #{member.level};" %>
             <% end %>
-            <%= link_to member.full_name, [:admin, member], class: "text-blue-600 hover:text-blue-800 font-medium" %>
+            <% if params[:display_name] != 'no' %>
+              <%= link_to member.full_name, [:admin, member], class: "text-blue-600 hover:text-blue-800 font-medium" %>
+            <% end %>
           </div>
           <div class="flex flex-wrap gap-2">
             <% if member.user.admin? %>
