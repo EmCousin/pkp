@@ -33,7 +33,11 @@
                     subscription: { status: status }
                   },
                   method: :put,
-                  class: "w-full text-left px-4 py-2 text-sm #{status.include?('confirmed') ? 'text-green-600' : status == 'archived' ? 'text-red-600' : 'text-gray-700'} hover:bg-gray-100" %>
+                  class: class_names(
+                    "w-full text-left px-4 py-2 text-sm",
+                    Subscription::STATUS_COLORS[status.to_sym],
+                    "hover:bg-gray-100"
+                  ) %>
             <% end %>
 
             <%= button_to t('defaults.destroy'),
@@ -103,9 +107,9 @@
 
       <div class="flex items-center space-x-2">
         <span class="text-sm text-gray-500"><%= Subscription.human_attribute_name(:status) %>:</span>
-        <span class="<%= subscription.status_color.gsub('table-', 'text-') %>">
+        <%= tag.span class: subscription.status_color.gsub('table-', 'text-') do %>
           <%= Subscription.human_attribute_name(subscription.status) %>
-        </span>
+        <% end %>
       </div>
     </div>
   </div>
