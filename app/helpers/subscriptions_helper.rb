@@ -7,7 +7,7 @@ module SubscriptionsHelper
   end
 
   def subscriptions_status_select_options(status)
-    options = Subscription.statuses.map { |key, _value| [key, I18n.t('activerecord.attributes.subscription.statuses')[key.to_sym]] }
+    options = Subscription.statuses.each_key.map { |key| [I18n.t('activerecord.attributes.subscription.statuses')[key.to_sym], key] }
     options_for_select(options, status)
   end
 
@@ -16,6 +16,6 @@ module SubscriptionsHelper
   end
 
   def subscriptions_level_options
-    Member.levels.map { |key, _value| [key, I18n.t('activerecord.attributes.member.levels')[key.to_sym]] }
+    Member.levels.each_key.map { |key| [I18n.t('activerecord.attributes.member.levels')[key.to_sym], key] }
   end
 end
