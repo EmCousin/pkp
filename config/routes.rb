@@ -29,11 +29,18 @@ Rails.application.routes.draw do
     end
   end
 
-  namespace :admin do
+  concern :courses_manageable do
     resources :courses do
       resources :attendance_sheets, only: [:create]
     end
-    resources :attendance_sheets, only: [:show, :update]
+    resources :attendance_sheets, only: [:show] do
+      resources :attendance_records, only: [:update]
+    end
+  end
+
+  namespace :admin do
+    concerns :courses_manageable
+
     resources :categories, only: [:new, :create, :edit, :update, :destroy]
     resources :members
     resources :subscriptions do
@@ -75,9 +82,6 @@ Rails.application.routes.draw do
   end
 
   namespace :coach do
-    resources :courses, only: [:index] do
-      resources :attendance_sheets, only: [:create]
-    end
-    resources :attendance_sheets, only: [:show, :update]
+    concerns :courses_manageable
   end
 end

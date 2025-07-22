@@ -115,7 +115,7 @@ fr:
         other: Comptes utilisateur
       member:
         one: Élève
-        other: Élève·s
+        other: Élèves
       course:
         one: Cours
         other: Cours
@@ -126,6 +126,12 @@ fr:
         one: Inscription
         other: Inscriptions
     attributes:
+      attendance_record:
+        status: Statut
+        statuses:
+          present: Présent·e
+          absent: Absent·e
+          excused: Excusé·e
       contact:
         email: E-mail additionnel
       user:

@@ -10,12 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_08_155611) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_22_120955) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension "pg_catalog.plpgsql"
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
+  create_enum "attendance_record_status", ["present", "absent", "excused"]
   create_enum "member_level", ["white", "yellow", "green", "red"]
 
   create_table "action_mailbox_inbound_emails", force: :cascade do |t|
@@ -58,12 +59,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_08_155611) do
   create_table "attendance_records", force: :cascade do |t|
     t.bigint "attendance_sheet_id", null: false
     t.bigint "member_id", null: false
-    t.boolean "absent", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.enum "status", default: "present", null: false, enum_type: "attendance_record_status"
     t.index ["attendance_sheet_id", "member_id"], name: "index_attendance_records_on_attendance_sheet_id_and_member_id", unique: true
     t.index ["attendance_sheet_id"], name: "index_attendance_records_on_attendance_sheet_id"
     t.index ["member_id"], name: "index_attendance_records_on_member_id"
+    t.index ["status"], name: "index_attendance_records_on_status"
   end
 
   create_table "attendance_sheets", force: :cascade do |t|

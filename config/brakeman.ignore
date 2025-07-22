@@ -26,6 +26,29 @@
     {
       "warning_type": "Unscoped Find",
       "warning_code": 82,
+      "fingerprint": "15f0877e3dfe552fea0900ced3d972e0aaac0ead5309f950597f68077d945b38",
+      "check_name": "UnscopedFind",
+      "message": "Unscoped call to `AttendanceSheet#find`",
+      "file": "app/controllers/concerns/attendance_records_controller_concern.rb",
+      "line": 27,
+      "link": "https://brakemanscanner.org/docs/warning_types/unscoped_find/",
+      "code": "AttendanceSheet.find(params[:attendance_sheet_id])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "AttendanceRecordsControllerConcern",
+        "method": "set_attendance_sheet"
+      },
+      "user_input": "params[:attendance_sheet_id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        285
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Unscoped Find",
+      "warning_code": 82,
       "fingerprint": "17df4438f20ab8d965cf70d1c188c3f3aa7a21a8a089f0a7dd69b1217c715639",
       "check_name": "UnscopedFind",
       "message": "Unscoped call to `AttendanceSheet#find`",
@@ -99,7 +122,7 @@
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/admin/members/_member.html.erb",
-      "line": 44,
+      "line": 46,
       "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "Member.new.contacts.map do\n mail_to(c.email, :class => \"hover:text-gray-700\")\n end.join(\" \\u00B7 \")",
       "render_path": [
@@ -117,7 +140,7 @@
         {
           "type": "template",
           "name": "admin/members/index",
-          "line": 102,
+          "line": 109,
           "file": "app/views/admin/members/index.html.erb",
           "rendered": {
             "name": "admin/members/_member",
@@ -137,6 +160,6 @@
       "note": ""
     }
   ],
-  "updated": "2024-12-31 14:56:32 -0300",
+  "updated": "2025-07-22 15:54:58 +0200",
   "brakeman_version": "6.1.2"
 }
