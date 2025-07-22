@@ -6,11 +6,39 @@ class AttendanceRecord < ApplicationRecord
   belongs_to :member
   has_one :user, through: :member
 
+  enum :status, { present: 'present', absent: 'absent', excused: 'excused' }
+
   validates :member, uniqueness: { scope: :attendance_sheet_id }
 
   after_save :check_consecutive_absences, if: :absent?
 
   scope :recent, -> { order(created_at: :desc).limit(3) }
+
+  STATUS_STYLES = {
+    present: {
+      emoji: '✅',
+      label: I18n.t('activerecord.attributes.attendance_record.statuses.present'),
+      color: 'bg-green-100 text-green-800 border-green-300 hover:bg-green-200'
+    },
+    excused: {
+      emoji: '🙏',
+      label: I18n.t('activerecord.attributes.attendance_record.statuses.excused'),
+      color: 'bg-yellow-100 text-yellow-800 border-yellow-300 hover:bg-yellow-200'
+    },
+    absent: {
+      emoji: '❌',
+      label: I18n.t('activerecord.attributes.attendance_record.statuses.absent'),
+      color: 'bg-red-100 text-red-800 border-red-300 hover:bg-red-200'
+    }
+  }.freeze
+
+  def status_style
+    STATUS_STYLES[status.to_sym] || {
+      emoji: '•',
+      label: I18n.t('activerecord.attributes.attendance_record.statuses.unknown', default: 'Inconnu'),
+      color: 'bg-gray-100 text-gray-800 border-gray-300'
+    }
+  end
 
   private
 
