@@ -1,0 +1,91 @@
+<!-- Subscription Recap Card -->
+<div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+  <div class="flex flex-col sm:flex-row sm:items-center gap-6 mb-4">
+    <div class="flex-shrink-0">
+      <%= image_tag url_for(subscription.member.avatar), alt: "Avatar #{subscription.member.first_name}", class: "w-20 h-20 rounded-full object-cover ring-2 ring-indigo-400 shadow" %>
+    </div>
+    <div class="flex-1">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <div>
+          <div class="text-2xl font-bold text-gray-900"><%= subscription.member.full_name %></div>
+          <div class="text-sm text-gray-500 mt-1"><%= t('dashboard.terms.edit.year', year: subscription.year, next_year: subscription.year + 1) %></div>
+        </div>
+        <div class="text-xl font-semibold text-indigo-600">
+          <%= number_to_currency(subscription.fee, unit: "€", separator: ",", format: "%n %u") %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Courses Table -->
+  <div class="overflow-x-auto mt-4">
+    <table class="min-w-full divide-y divide-gray-200 rounded-lg overflow-hidden shadow-sm">
+      <thead class="bg-indigo-50">
+        <tr>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-indigo-700 uppercase tracking-wider"><%= Course.human_attribute_name(:title) %></th>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-indigo-700 uppercase tracking-wider"><%= Course.human_attribute_name(:weekday) %></th>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-indigo-700 uppercase tracking-wider"><%= Course.human_attribute_name(:category) %></th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-100">
+        <% subscription.courses.each do |course| %>
+          <tr class="hover:bg-indigo-50 transition">
+            <td class="px-4 py-3 text-sm text-gray-900 font-medium"><%= course.title %></td>
+            <td class="px-4 py-3 text-sm text-gray-700"><%= course.weekday %></td>
+            <td class="px-4 py-3 text-sm">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                <%= course.category.title %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <!-- End Courses Table -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-700 mt-6">
+    <div>
+      <span class="font-medium text-gray-500"><%= Member.human_attribute_name(:birthdate) %> :</span>
+      <span><%= l(subscription.member.birthdate, format: :long) if subscription.member.birthdate %></span>
+    </div>
+    <div>
+      <span class="font-medium text-gray-500"><%= User.human_attribute_name(:address) %> :</span>
+      <span><%= subscription.member.address %></span>
+    </div>
+    <div>
+      <span class="font-medium text-gray-500"><%= User.human_attribute_name(:zip_code) %> :</span>
+      <span><%= subscription.member.zip_code %></span>
+    </div>
+    <div>
+      <span class="font-medium text-gray-500"><%= User.human_attribute_name(:city) %> :</span>
+      <span><%= subscription.member.city %></span>
+    </div>
+    <div>
+      <span class="font-medium text-gray-500"><%= User.human_attribute_name(:country) %> :</span>
+      <span><%= subscription.member.country %></span>
+    </div>
+    <div>
+      <span class="font-medium text-gray-500"><%= User.human_attribute_name(:phone_number) %> :</span>
+      <span><%= subscription.member.phone_number %></span>
+    </div>
+    <div>
+      <span class="font-medium text-gray-500"><%= User.human_attribute_name(:email) %> :</span>
+      <span><%= subscription.member.email %></span>
+    </div>
+    <div>
+      <span class="font-medium text-gray-500"><%= Member.human_attribute_name(:contact_name) %> :</span>
+      <span><%= subscription.member.contact_name %></span>
+    </div>
+    <div>
+      <span class="font-medium text-gray-500"><%= Member.human_attribute_name(:contact_relationship) %> :</span>
+      <span><%= subscription.member.contact_relationship %></span>
+    </div>
+    <div>
+      <span class="font-medium text-gray-500"><%= Member.human_attribute_name(:contact_phone_number) %> :</span>
+      <span><%= subscription.member.contact_phone_number %></span>
+    </div>
+    <div>
+      <span class="font-medium text-gray-500"><%= Member.human_attribute_name(:agreed_to_advertising_right) %> :</span>
+      <span><%= subscription.member.agreed_to_advertising_right ? t('dashboard.terms.edit.yes') : t('dashboard.terms.edit.no') %></span>
+    </div>
+  </div>
+</div>

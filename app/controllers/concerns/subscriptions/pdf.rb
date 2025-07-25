@@ -114,7 +114,7 @@ module Subscriptions
         add_terms(pdf)
         add_medical_notice(pdf, subscription)
       end
-      add_signature_section(pdf)
+      add_acceptance_section(pdf, subscription)
     end
 
     def add_terms(pdf)
@@ -129,34 +129,37 @@ module Subscriptions
     end
 
     def add_medical_notice(pdf, subscription)
-      return if subscription.needs_medical_certificate?
+      return unless subscription.doctor_certified_at?
 
       pdf.move_down 15
       pdf.text medical_notice_text(subscription), size: 11
     end
 
     def medical_notice_text(subscription)
-      "#{subscription.member.full_name} n'a pas besoin d'apporter de " \
+      "#{subscription.member.full_name} a certifié avoir un " \
         'certificat médical pour cette inscription.'
     end
 
-    def add_signature_section(pdf)
+    def add_acceptance_section(pdf, subscription)
       pdf.move_down 15
-      add_signature_notice(pdf)
-      add_signature_box(pdf)
+      add_acceptance_notice(pdf)
+      add_acceptance_box(pdf, subscription)
     end
 
-    def add_signature_notice(pdf)
-      pdf.text 'Merci de bien vouloir apporter cette fiche signée lors de votre premier cours.',
+    def add_acceptance_notice(pdf)
+      pdf.text 'Merci de bien vouloir apporter cette fiche lors de votre premier cours.',
                size: 11, style: :bold
     end
 
-    def add_signature_box(pdf)
+    def add_acceptance_box(pdf, subscription)
       pdf.move_down 10
       pdf.stroke_rectangle [0, pdf.cursor], 300, 60
       pdf.move_down 5
-      pdf.text "Signature de l'adhérent ou de son représentant légal:",
-               size: 10
+      pdf.text(
+        "#{subscription.member.full_name} a accepté les conditions générales d'utilisation " \
+        'et particulières relatives aux cours décrits dans cette fiche.',
+        size: 10
+      )
     end
   end
 end

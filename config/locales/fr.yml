@@ -1,5 +1,6 @@
 fr:
   defaults:
+    na: "N/A"
     added: "Ajouté"
     attach: Joindre
     dismiss: Fermer
@@ -29,10 +30,12 @@ fr:
     search: Rechercher
     filter: Filtrer
     confirm: Confirmer
-    confirmed_bank_check: A payé par chèque
-    confirmed_cash: A payé en espèces
+    confirmed: Confirmé
     archived: Archivée
     pending: En attente
+    mark_as_confirmed: Confirmer
+    mark_as_archived: Archiver
+    mark_as_pending: Mettre en attente
     continue: Continuer
     archive: Archiver
     action: Action
@@ -42,7 +45,12 @@ fr:
     forbidden: Accès non-autorisé
     details: Détails
     complete_your_profile: Veuillez compléter votre profil pour continuer.
-    confirmed_bank_transfer: "A payé par virement"
+    paid_with_bank_check: "A payé par chèque"
+    paid_with_cash: "A payé en espèces"
+    paid_with_bank_transfer: "A payé par virement"
+    paid_with_credit_card: "A payé par carte bancaire"
+    mark_as_not_paid: "Marquer comme non payé"
+    upload: Téléverser
   custom_error_messages:
     subscription:
       member_id:
@@ -155,11 +163,10 @@ fr:
         avatar: Photo de l'élève
         full_name: Nom complet
         level: Niveau
-        levels:
-          white: Blanc
-          yellow: Jaune
-          green: Vert
-          red: Rouge
+        white: Blanc
+        yellow: Jaune
+        green: Vert
+        red: Rouge
       course:
         title: Titre du cours
         description: Description
@@ -175,6 +182,8 @@ fr:
         min_age: Âge minimum
         max_age: Âge maximum
       subscription:
+        terms_accepted_at: Conditions d'inscription
+        doctor_certified_at: Certificat médical
         category_id: Type de cours
         fee: Cotisation
         year: Année
@@ -184,10 +193,8 @@ fr:
         courses: Cours
         status: Statut
         pending: En attente
-        confirmed: Confirmée
-        confirmed_bank_check: A payé par chèque
-        confirmed_cash: A payé en espèces
-        archived: Archivée
+        confirmed: Confirmé
+        archived: Archivé
         form: Formulaire
         signed_form: Formulaire signé
         medical_certificate: Certificat médical
@@ -197,13 +204,11 @@ fr:
         created_at: Généré le
         credit_note_amount: Montant de l'avoir
         status: Statut
-        statuses:
-          pending: En attente
-          confirmed_bank_check: A payé par chèque
-          confirmed_cash: A payé en espèces
-          archived: Archivée
-          confirmed_bank_transfer: "A payé par virement"
-
+        payment_method: Moyen de paiement
+        cash: Espèces
+        bank_check: Chèque
+        bank_transfer: Virement
+        credit_card: Carte bancaire
   # Views
   contacts:
     confirmations:
@@ -282,7 +287,7 @@ fr:
         new_subscription: Nouvelle inscription
         create_attendance_sheet: "Feuille de présence"
       subscription:
-        remove_from_course: Retirer
+        remove_from_course: Retirer du cours
         remove_from_course_are_you_sure: Êtes-vous sûr·e de vouloir retirer %{member_full_name} du cours %{course_title} ?
         move_to_white_level: Passer en blanc
         move_to_yellow_level: Passer en jaune
@@ -307,6 +312,7 @@ fr:
     invoices:
       show:
         generate_invoice: Génerer cette facture
+        generating: Génération en cours...
       create:
         success: Facture générée
       update:
@@ -322,7 +328,7 @@ fr:
         display_levels: Afficher les niveaux
       show:
         title: "%{member}"
-        remove_from_course: Retirer
+        remove_from_course: Retirer du cours
         remove_from_course_are_you_sure: Êtes-vous sûr·e de vouloir retirer %{member_full_name} du cours %{course_title} ?
         new_subscription: Nouvelle inscription
         subscriptions: Inscriptions
@@ -339,6 +345,12 @@ fr:
         success: Membre modifié
       destroy:
         success: Membre supprimé
+    payments:
+      create:
+        success: Inscription mise à jour
+    statuses:
+      update:
+        success: Inscription mise à jour
     subscriptions:
       index:
         title: Inscriptions
@@ -357,6 +369,18 @@ fr:
         mark_as_confirmed_by_check: "Marquer comme confirmé par chèque"
         mark_as_confirmed_by_cash: "Marquer comme confirmé en espèces"
         mark_as_confirmed_by_transfer: "Marquer comme confirmé par virement"
+        pending_confirmation_status: En attente de confirmation
+        confirmed_status: Confirmé
+        incomplete_status: Incomplet
+        archived_status: Archivé
+        terms_accepted: Accepté
+        terms_not_accepted: Non accepté
+        doctor_certified: Confirmé
+        doctor_not_certified: Non confirmé
+        paid: Payé
+        not_paid: Non payé
+        payment_proof_awaiting_review: Justificatif à vérifier
+        invoicing: Facturation
       new:
         title: Inscrire un membre
       create:
@@ -378,6 +402,18 @@ fr:
       form:
         users: Membres
         select_a_member: Choisissez un membre
+      subscription:
+        terms: Conditions d'inscription
+        terms_accepted: Accepté
+        terms_not_accepted: Non accepté
+        medical_certificate: Certificat médical
+        medical_certified: Oui
+        medical_not_certified: Non
+        payment: Paiement
+        paid: Payé
+        not_paid: Non payé
+        uploaded_payment_proof: Justificatif
+        payment_method: A payé avec %{payment_method}
   dashboard:
     show:
       add_subscription: Ajouter une inscription
@@ -392,10 +428,21 @@ fr:
       download_subscription_form: Télécharger le formulaire d'inscription
       upload_signed_form: Retourner le formulaire signé
       upload_medical_certificate: Joindre le certificat médical
-      upload_payment_proof: Joindre le justificatif de paiement
       change_signed_form: Remplacer le formulaire
       change_medical_certificate: Remplacer le certificat médical
       edit_member: Modifier le profil de l'élève
+      accept_terms: Accepter les conditions
+      terms_accepted: J'ai accepté les conditions d'inscription
+      doctor_certified: J'ai un certificat médical
+      certify_doctor: Certifier par un médecin
+      terms_not_accepted: Conditions non acceptées
+      doctor_not_certified: Non certifié par un médecin
+      payment: Cotisation
+      payment_confirmed: J'ai réglé ma cotisation
+      pay: Régler ma cotisation
+      level: Niveau
+      upload_payment_proof: Joindre un justificatif de paiement
+      payment_proof_in_review: Votre justificatif de paiement est en cours de vérification.
     edit:
       title: Mes informations personnelles
     alumni_accesses:
@@ -430,13 +477,21 @@ fr:
         payment_by_card: Paiement par carte bancaire
         pay: Payer %{amount}
         already_paid: Vous avez déjà payé votre commande.
+        already_paid_title: Vous avez déjà réglé votre cotisation par virement?
+        already_paid_description: Vous pouvez joindre le justificatif de paiement ci-dessous.
+        upload_payment_proof: Joindre un justificatif de paiement
       create:
         success: Inscription payée avec succès !
         error: Une erreur est survenue. Votre carte n'a pas été débitée. Si le problème persiste, contactez-nous.
         already_paid: Votre commande est déjà payée. Votre carte n'a donc pas été débitée.
     medical_certificates:
+      edit:
+        explanation: Vous devez consulter un médecin qui vous remettra un certificat médical autorisant la pratique du Parkour.
+        medical_certificate: Je certifie avoir un certificat médical pour cette inscription
+        already_certified: Vous avez déjà indiqué avoir un certificat médical pour cette inscription.
       update:
-        success: Certificat médical ajouté avec succès !
+        success: Inscription mise à jour
+        already_certified: Vous avez déjà indiqué avoir un certificat médical pour cette inscription.
     signed_forms:
       update:
         success: Formulaire signé ajouté avec succès !
@@ -446,11 +501,21 @@ fr:
     payment_proofs:
       update:
         success: "Justificatif de paiement ajouté avec succès !"
+    terms:
+      edit:
+        year: "Inscription %{year} / %{next_year}"
+        terms_accepted: "J'ai pris pleinement connaissance des détails de l'inscription"
+        yes: "Oui"
+        no: "Non"
+        already_accepted: Les conditions d'inscription ont déjà été acceptées
+      update:
+        success: Inscription mise à jour
+        already_accepted: Les conditions d'inscription ont déjà été acceptées
 
   layouts:
     flash:
       invalid_email_provider:
-        L'adresse email de votre compte (%{email}) bloque les emails automatiques provenant de votre service. Cela veut dire que vous ne pouvez pas recevoir les emails de confirmation d'inscription ou encore de réinitialisation de votre mot de passe. Nous vous conseillons d'utiliser une autre adresse email en allant dans les paramètres de votre compte.
+        L'adresse email de votre compte (%{email}) bloque les emails automatiques provenant de votre service. Cela veut di\re que vous ne pouvez pas recevoir les emails de confirmation d'inscription ou encore de réinitialisation de votre mot de passe. Nous vous conseillons d'utiliser une autre adresse email en allant dans les paramètres de votre compte.
     navbar:
       admin: "Admin"
       members: "Membres"

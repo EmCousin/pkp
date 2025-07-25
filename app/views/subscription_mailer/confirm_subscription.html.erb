@@ -19,39 +19,24 @@
 
 <ul>
   <li>
-    Un formulaire d'inscription pour la saison
-    <%= @subscription.year %> / <%= @subscription.year + 1 %>
+    Un formulaire d'inscription pour la saison <%= @subscription.season %>
   </li>
-  <% if @subscription.needs_medical_certificate? %>
-    <li>
-      Un
-      <strong style="color:red;">certificat médical</strong>
-      d'aptitude à la pratique du Parkour datant de
-      <strong style="color:red;">moins d'un mois</strong>,
-    </li>
-  <% else %>
-    <li>
-      Vous vous êtes inscrit·e l'année dernière ou celle d'avant, vous n'avez donc pas besoin de nous fournir de certificat médical cette année.
-    </li>
-  <% end %>
   <li>
     Le règlement de la cotisation (chèque - 2 chèques maximum - à l'ordre de Parkour Paris ou en espèces)
   </li>
   <li>
-    Les mineurs doivent faire signer le formulaire par leur représentant légal (père, mère ou tuteur).
+    Les mineurs doivent faire accepter le formulaire par leur représentant légal (père, mère ou tuteur).
   </li>
 </ul>
 
 <p>
-  Afin de nous faciliter le contrôle des pièces et gagner du temps lors de la récupération, merci de joindre l'ensemble des pièces (formulaire signé, paiement par chèques/espèces, certificat médical à jour) dans
+  Afin de nous faciliter le contrôle des pièces et gagner du temps lors de la récupération, merci de joindre l'ensemble des pièces (formulaire, paiement si par chèques/espèces) dans
   <strong style="color:red;">une pochette plastique perforée</strong>
   au format A4 comme suit :
 
 <ul>
-  <li>Au recto, face visible : le formulaire et la cotisation</li>
-  <% if @subscription.needs_medical_certificate? %>
-    <li>Au verso, face visible : le certificat médical (obligatoire)</li>
-  <% end %>
+  <li>Au recto: le formulaire</li>
+  <li>Au verso: la cotisation si paiement par chèque ou espèces</li>
 </ul>
 
 <p>

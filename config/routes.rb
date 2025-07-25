@@ -42,8 +42,13 @@ Rails.application.routes.draw do
     concerns :courses_manageable
 
     resources :categories, only: [:new, :create, :edit, :update, :destroy]
-    resources :members
+    resources :members do
+      resource :level, only: [:update]
+    end
+
     resources :subscriptions do
+      resource :payment, only: [:create, :destroy]
+      resource :status, only: [:update]
       member do
         delete :unlink_course
       end
@@ -62,8 +67,8 @@ Rails.application.routes.draw do
 
   namespace :dashboard do
     resources :members, only: [:new, :create, :edit, :update]
-    resources :subscriptions, only: [:new, :create] do
-      resource :signed_form, only: [:edit, :update]
+    resources :subscriptions, only: [:show, :new, :create] do
+      resource :term, as: :terms, only: [:edit, :update]
       resource :medical_certificate, only: [:edit, :update]
       resource :payment_proof, only: [:edit, :update]
       resource :payment, only: [:new, :create]

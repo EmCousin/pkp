@@ -42,6 +42,7 @@ module Admin
       end
     end
 
+    # rubocop:disable Metrics/AbcSize
     def add_header_section(pdf)
       # Company info (left side)
       pdf.text 'Parkour Paris', size: 16, style: :bold
@@ -50,17 +51,20 @@ module Admin
       pdf.move_down 20
 
       # Client info
-      pdf.text 'International School of Paris'
-      pdf.text 'E-mail: lhudson@isparis.edu'
-      pdf.text 'Adresse: Rue Beethoven'
-      pdf.text 'Paris'
+      pdf.text @subscription.member.full_name
+      pdf.text @subscription.member.address
+      pdf.text "#{@subscription.member.zip_code} #{@subscription.member.city}"
+      pdf.text @subscription.member.country
+      pdf.text @subscription.member.email
+      pdf.text @subscription.member.phone_number
     end
+    # rubocop:enable Metrics/AbcSize
 
     def add_invoice_details(pdf)
       pdf.move_down 20
       pdf.text "Facture: ##{@subscription.year}#{@subscription.id}", size: 14, style: :bold
-      pdf.text "Payée le: #{@subscription.paid_at}"
-      pdf.text "Date de délivrance : #{I18n.l(Time.current, format: :long)}"
+      pdf.text "Payée le: #{l(@subscription.paid_at, format: :short)}"
+      pdf.text "Date de délivrance : #{l(Time.current, format: :short)}"
       pdf.move_down 20
     end
 
@@ -72,7 +76,7 @@ module Admin
 
     def invoice_items_data
       [
-        ['Article ou Service', 'Prix', 'Quantité', 'Total'],
+        %w[Cours Prix Quantité Total],
         [
           @subscription.description,
           helpers.number_to_euros(@subscription.fee),

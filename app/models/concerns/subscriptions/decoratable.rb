@@ -8,16 +8,12 @@ module Subscriptions
       attr_accessor :category_id
 
       enum :status, pending: 0,
-                    confirmed_bank_check: 1,
-                    confirmed_cash: 2,
-                    confirmed_bank_transfer: 3,
-                    archived: 4
-
-      scope :confirmed, -> { where(status: %i[confirmed_bank_check confirmed_cash confirmed_bank_transfer]) }
+                    confirmed: 1,
+                    archived: 2
     end
 
-    def confirmed?
-      confirmed_cash? || confirmed_bank_check? || confirmed_bank_transfer?
+    def season
+      "#{year} / #{year + 1}"
     end
 
     def description
@@ -32,7 +28,7 @@ module Subscriptions
       if member.nil?
         Category.none
       else
-        Category.where('min_age <= :age AND max_age >= :age', age: member.age(year))
+        Category.suitable_for_age(member.age(year))
       end
     end
 
@@ -44,12 +40,21 @@ module Subscriptions
       STATUS_COLORS[status.to_sym] || 'text-gray-600'
     end
 
+    def payment_method_color
+      PAYMENT_METHOD_COLORS[payment_method&.to_sym] || 'text-gray-600'
+    end
+
     STATUS_COLORS = {
       pending: 'text-yellow-600',
-      confirmed_bank_check: 'text-green-600',
-      confirmed_cash: 'text-blue-600',
-      confirmed_bank_transfer: 'text-purple-600',
+      confirmed: 'text-green-600',
       archived: 'text-red-600'
+    }.freeze
+
+    PAYMENT_METHOD_COLORS = {
+      bank_check: 'text-indigo-600',
+      cash: 'text-blue-600',
+      bank_transfer: 'text-purple-600',
+      credit_card: 'text-amber-600'
     }.freeze
   end
 end

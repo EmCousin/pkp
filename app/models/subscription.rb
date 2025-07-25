@@ -8,6 +8,7 @@ class Subscription < ApplicationRecord
   include Subscriptions::Invoiceable
   include Subscriptions::Completable
   include Subscriptions::Filterable
+  include Subscriptions::QrEncodeable
 
   belongs_to :member
   has_many :courses_subscriptions, dependent: :destroy

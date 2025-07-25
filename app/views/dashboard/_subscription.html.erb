@@ -1,5 +1,5 @@
 <div class="bg-white border rounded-lg shadow-sm overflow-hidden">
-  <%# Header section with member info and price %>
+  <!-- Header section with member info and price -->
   <div class="p-4 sm:p-6 bg-gradient-to-r from-gray-50 to-white border-b">
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
       <div class="flex items-center gap-4">
@@ -15,7 +15,6 @@
             </div>
           <% end %>
         </div>
-
         <div>
           <%= link_to subscription.member.full_name,
               [:edit, :dashboard, subscription.member],
@@ -26,60 +25,48 @@
         </div>
       </div>
 
-      <%# Action dropdown %>
-      <% unless subscription.completed? %>
-        <div class="relative">
-          <details class="group">
-            <summary class="flex cursor-pointer items-center rounded-md px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-              <%= t('defaults.action') %>
-              <svg class="ml-2 h-5 w-5 text-white transition-transform group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-              </svg>
-            </summary>
+      <div class="relative">
+        <details class="group">
+          <summary class="flex cursor-pointer items-center rounded-md px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+            <%= t('defaults.action') %>
+            <svg class="ml-2 h-5 w-5 text-white transition-transform group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </summary>
+          <div class="absolute right-0 z-10 mt-2 w-56 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 divide-y divide-gray-100">
+            <%= link_to t('defaults.details'),
+                [:dashboard, subscription],
+                class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" %>
+            <%= link_to t('.edit_member'),
+                [:edit, :dashboard, subscription.member],
+                class: "block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors" %>
+            <% unless subscription.terms_accepted_at? %>
+              <%= link_to t('.accept_terms'),
+                  edit_dashboard_subscription_terms_path(subscription.id),
+                  class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" %>
+            <% end %>
+            <% unless subscription.doctor_certified_at? %>
+              <%= link_to t('.certify_doctor'),
+                  edit_dashboard_subscription_medical_certificate_path(subscription.id),
+                  class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" %>
+            <% end %>
+            <% if Rails.configuration.features.payment_proof[:enabled] && !subscription.payment_proof.attached? %>
+              <%= link_to t('.upload_payment_proof'),
+                  edit_dashboard_subscription_payment_proof_path(subscription.id),
+                  class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" %>
+            <% end %>
+            <% if Rails.configuration.features.online_payment[:enabled] && !subscription.paid? %>
+              <%= link_to t('.pay'),
+                  new_dashboard_subscription_payment_path(subscription.id),
+                  class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" %>
+            <% end %>
+          </div>
+        </details>
+      </div>
 
-            <div class="absolute right-0 z-10 mt-2 w-56 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 divide-y divide-gray-100">
-              <%= link_to t('.edit_member'),
-                  [:edit, :dashboard, subscription.member],
-                  class: "block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors" %>
-
-              <% if subscription.form.attached? %>
-                <%= link_to t('.download_subscription_form'),
-                    rails_blob_path(subscription.form),
-                    disposition: "attachment",
-                    class: "block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors" %>
-              <% end %>
-
-              <% if Rails.configuration.features.signed_form[:enabled] && !subscription.signed_form.attached? %>
-                <%= link_to t('.upload_signed_form'),
-                    edit_dashboard_subscription_signed_form_path(subscription.id),
-                    class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" %>
-              <% end %>
-
-              <% if Rails.configuration.features.medical_certificate[:enabled] && !subscription.medical_certificate.attached? %>
-                <%= link_to t('.upload_medical_certificate'),
-                    edit_dashboard_subscription_medical_certificate_path(subscription.id),
-                    class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" %>
-              <% end %>
-
-              <% if Rails.configuration.features.payment_proof[:enabled] && !subscription.payment_proof.attached? %>
-                <%= link_to t('.upload_payment_proof'),
-                    edit_dashboard_subscription_payment_proof_path(subscription.id),
-                    class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" %>
-              <% end %>
-
-              <% if Rails.configuration.features.online_payment[:enabled] && !subscription.paid? %>
-                <%= link_to t('.pay'),
-                    new_dashboard_subscription_payment_path(subscription.id),
-                    class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" %>
-              <% end %>
-            </div>
-          </details>
-        </div>
-      <% end %>
     </div>
   </div>
-
-  <%# Course information table %>
+  <!-- Course information table -->
   <div class="px-4 py-5 sm:p-6">
     <div class="overflow-x-auto -mx-4 sm:mx-0">
       <table class="min-w-full divide-y divide-gray-200">
@@ -111,113 +98,95 @@
         </tbody>
       </table>
     </div>
-
-    <%# Documents and Payment section %>
-    <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <% if Rails.configuration.features.signed_form[:enabled] %>
-        <div class="relative group">
-          <div class="absolute -inset-0.5 bg-gradient-to-r from-indigo-600 to-blue-600 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
-          <div class="relative p-4 bg-white ring-1 ring-gray-200 rounded-lg">
-            <span class="block text-xs font-medium text-gray-500 uppercase mb-3">
-              <%= Subscription.human_attribute_name(:signed_form) %>
-            </span>
-            <div class="space-y-3">
-              <% if subscription.signed_form.attached? %>
-                <div class="flex items-center gap-2 text-sm">
-                  <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                  </svg>
-                  <span class="text-gray-700"><%= t('defaults.added') %></span>
-                </div>
-                <div class="flex gap-2">
-                  <%= link_to t('defaults.download'),
-                      rails_blob_path(subscription.signed_form, disposition: "attachment"),
-                      class: "text-sm text-indigo-600 hover:text-indigo-800" %>
-                  <span class="text-gray-300">•</span>
-                  <%= link_to t('defaults.replace'),
-                      edit_dashboard_subscription_signed_form_path(subscription.id),
-                      class: "text-sm text-indigo-600 hover:text-indigo-800" %>
-                </div>
-              <% else %>
-                <%= link_to t('defaults.attach'),
-                    edit_dashboard_subscription_signed_form_path(subscription.id),
-                    class: "inline-flex items-center px-3 py-2 text-sm font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-md transition-colors" %>
-              <% end %>
+    <!-- New Documents and Certification section -->
+    <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Terms Accepted Card -->
+      <div class="relative group">
+        <div class="relative p-6 rounded-lg flex flex-col items-start border transition-colors duration-300 <%= subscription.terms_accepted_at? ? 'bg-white border-green-200 ring-1 ring-gray-200' : 'bg-rose-50 border-rose-200' %>">
+          <span class="block text-xs font-medium uppercase mb-3 <%= subscription.terms_accepted_at? ? 'text-gray-500' : 'text-rose-700' %>">
+            <%= Subscription.human_attribute_name(:terms_accepted_at) %>
+          </span>
+          <% if subscription.terms_accepted_at? %>
+            <div class="flex items-center gap-2 text-sm mb-2">
+              <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+              <span class="text-gray-700 font-semibold"><%= t('.terms_accepted') %></span>
             </div>
-          </div>
+          <% else %>
+            <%= link_to t('.accept_terms'),
+                edit_dashboard_subscription_terms_path(subscription.id),
+                class: "text-rose-700 text-sm font-medium hover:underline mt-2" %>
+          <% end %>
         </div>
-      <% end %>
+      </div>
 
-      <% if Rails.configuration.features.medical_certificate[:enabled] %>
-        <div>
-          <span class="block text-xs font-medium text-gray-500 uppercase mb-2">
-            <%= Subscription.human_attribute_name(:medical_certificate) %>
+      <!-- Doctor Certification Card -->
+      <div class="relative group">
+        <div class="relative p-6 rounded-lg flex flex-col items-start border transition-colors duration-300 <%= subscription.doctor_certified_at? ? 'bg-white border-green-200 ring-1 ring-gray-200' : 'bg-rose-50 border-rose-200' %>">
+          <span class="block text-xs font-medium uppercase mb-3 <%= subscription.doctor_certified_at? ? 'text-gray-500' : 'text-rose-700' %>">
+            <%= Subscription.human_attribute_name(:doctor_certified_at) %>
           </span>
-          <div class="flex flex-wrap gap-2 items-center">
-            <% if subscription.medical_certificate.attached? %>
-              <span class="text-sm text-gray-700"><%= t('defaults.added') %></span>
-              <span class="text-gray-300">•</span>
-              <%= link_to t('defaults.download'),
-                  rails_blob_path(subscription.medical_certificate, disposition: "attachment"),
-                  class: "text-sm text-gray-600 hover:text-gray-900" %>
-              <span class="text-gray-300">•</span>
-              <%= link_to t('defaults.replace'),
-                  edit_dashboard_subscription_medical_certificate_path(subscription.id),
-                  class: "text-sm text-gray-600 hover:text-gray-900" %>
-            <% else %>
-              <%= link_to t('defaults.attach'),
-                  edit_dashboard_subscription_medical_certificate_path(subscription.id),
-                  class: "inline-flex items-center px-3 py-1.5 text-sm border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 rounded-md" %>
-            <% end %>
-          </div>
+          <% if subscription.doctor_certified_at? %>
+            <div class="flex items-center gap-2 text-sm mb-2">
+              <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+              <span class="text-gray-700 font-semibold"><%= t('.doctor_certified') %></span>
+            </div>
+          <% else %>
+            <%= link_to t('.certify_doctor'),
+                edit_dashboard_subscription_medical_certificate_path(subscription.id),
+                class: "text-rose-700 text-sm font-medium hover:underline mt-2" %>
+          <% end %>
         </div>
-      <% end %>
-
-      <% if Rails.configuration.features.payment_proof[:enabled] %>
-        <div>
-          <span class="block text-xs font-medium text-gray-500 uppercase mb-2">
-            <%= Subscription.human_attribute_name(:payment_proof) %>
-          </span>
-          <div class="flex flex-wrap gap-2 items-center">
-            <% if subscription.payment_proof.attached? %>
-              <span class="text-sm text-gray-700"><%= t('defaults.added') %></span>
-              <span class="text-gray-300">•</span>
-              <%= link_to t('defaults.download'),
-                  rails_blob_path(subscription.payment_proof, disposition: "attachment"),
-                  class: "text-sm text-gray-600 hover:text-gray-900" %>
-              <span class="text-gray-300">•</span>
-              <%= link_to t('defaults.replace'),
-                  edit_dashboard_subscription_payment_proof_path(subscription.id),
-                  class: "text-sm text-gray-600 hover:text-gray-900" %>
-            <% else %>
-              <%= link_to t('defaults.attach'),
-                  edit_dashboard_subscription_payment_proof_path(subscription.id),
-                  class: "inline-flex items-center px-3 py-1.5 text-sm border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 rounded-md" %>
-            <% end %>
-          </div>
-        </div>
-      <% end %>
+      </div>
 
       <% if Rails.configuration.features.online_payment[:enabled] %>
-        <div>
-          <span class="block text-xs font-medium text-gray-500 uppercase mb-2">
-            <%= Subscription.human_attribute_name(:payment) %>
-          </span>
-          <div class="flex flex-wrap gap-2 items-center">
+        <div class="relative group">
+          <%= tag.div class: class_names(
+                "relative p-6 rounded-lg flex flex-col items-start border transition-colors duration-300",
+                'bg-white border-green-200 ring-1 ring-gray-200' => subscription.paid?,
+                'bg-rose-50 border-rose-200' => !subscription.paid?
+              ),
+              data: { turbo_frame: '_top' } do %>
+            <%= tag.span class: class_names(
+                  "block text-xs font-medium uppercase mb-3",
+                  'text-gray-500' => subscription.paid?,
+                  'text-yellow-500' => !subscription.paid? && subscription.payment_proof.attached?,
+                  'text-rose-700' => !subscription.paid? && !subscription.payment_proof.attached?
+                ) do %>
+              <%= t('.payment') %>
+            <% end %>
+
             <% if subscription.paid? %>
-              <span class="text-sm text-gray-700"><%= t('.paid') %></span>
+              <div class="flex items-center gap-2 text-sm mb-2">
+                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                <span class="text-gray-700 font-semibold"><%= t('.payment_confirmed') %></span>
+              </div>
               <% if subscription.invoice.attached? %>
-                <span class="text-gray-300">•</span>
                 <%= link_to t('defaults.download'),
-                    rails_blob_path(subscription.invoice, disposition: "attachment"),
-                    class: "text-sm text-gray-600 hover:text-gray-900" %>
+                            rails_blob_path(subscription.invoice, disposition: "attachment"),
+                            class: "text-sm text-gray-600 hover:text-gray-900" %>
               <% end %>
+            <% elsif subscription.payment_proof.attached? %>
+              <div class="flex items-center gap-2 text-sm mb-2">
+                <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 8V6a1 1 0 10-2 0v5a1 1 0 00.293.707l3 3a1 1 0 001.414-1.414l-2.707-2.707z" clip-rule="evenodd"/>
+                </svg>
+                <span class="text-yellow-700 font-semibold"><%= t('.payment_proof_in_review') %></span>
+              </div>
+              <%= link_to t('defaults.download'),
+                          rails_blob_path(subscription.payment_proof, disposition: "attachment"),
+                          class: "text-yellow-700 text-sm font-medium hover:underline mt-2" %>
             <% else %>
               <%= link_to t('.pay'),
-                  new_dashboard_subscription_payment_path(subscription.id),
-                  class: "inline-flex items-center px-3 py-1.5 text-sm border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 rounded-md" %>
+                          new_dashboard_subscription_payment_path(subscription.id),
+                          class: "text-rose-700 text-sm font-medium hover:underline mt-2" %>
             <% end %>
-          </div>
+          <% end %>
         </div>
       <% end %>
     </div>

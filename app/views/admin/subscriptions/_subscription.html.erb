@@ -1,71 +1,25 @@
 <%= turbo_frame_tag dom_id(subscription, :row), class: "block border bg-white rounded-lg shadow-sm p-4" do %>
   <div class="relative">
     <div class="absolute top-0 right-0">
-      <div class="relative">
-        <details class="group">
-          <summary class="flex items-center gap-1 text-gray-700 hover:text-gray-900 cursor-pointer">
-            <%= t('defaults.action') %>
-            <svg class="w-4 h-4 transition-transform group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-            </svg>
-          </summary>
-          <div class="absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 z-50">
-            <%= link_to t('defaults.edit'),
-                [:edit, :admin, subscription],
-                class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100",
-                data: { turbo_frame: '_top' } %>
-
-            <% if subscription.form.attached? %>
-              <%= link_to t('admin.subscriptions.show.download_subscription_form'),
-                  rails_blob_path(subscription.form),
-                  class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100",
-                  data: { turbo_frame: '_top' },
-                  target: '_blank' %>
-            <% end %>
-
-            <% %w[pending confirmed_bank_check confirmed_cash archived].each do |status| %>
-              <%= button_to t("defaults.#{status}"),
-                  {
-                    controller: 'admin/subscriptions',
-                    action: 'update',
-                    id: subscription.id,
-                    no_notification: true,
-                    subscription: { status: status }
-                  },
-                  method: :put,
-                  class: class_names(
-                    "w-full text-left px-4 py-2 text-sm",
-                    Subscription::STATUS_COLORS[status.to_sym],
-                    "hover:bg-gray-100"
-                  ) %>
-            <% end %>
-
-            <%= button_to t('defaults.destroy'),
-                [:admin, subscription],
-                method: :delete,
-                data: {
-                  controller: :confirm,
-                  confirm_message_value: t('defaults.are_you_sure'),
-                  turbo_frame: '_top'
-                },
-                class: "w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100" %>
-          </div>
-        </details>
-      </div>
+      <%= render 'admin/subscriptions/actions', subscription: %>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
       <div class="flex items-center space-x-2">
         <span class="text-sm text-gray-500">ID:</span>
         <%= link_to subscription.id, [:admin, subscription], class: "text-blue-600 hover:text-blue-800", data: { turbo_frame: '_top' } %>
       </div>
 
       <div class="flex items-center space-x-2">
+        <span class="text-sm text-gray-500"><%= Member.human_attribute_name(:email) %>:</span>
+        <%= mail_to subscription.member.email, subscription.member.email, class: "text-blue-600 hover:text-blue-800" %>
+      </div>
+
+      <div class="flex items-center space-x-2">
         <span class="text-sm text-gray-500"><%= Member.human_attribute_name(:level) %>:</span>
-        <div class="w-4 h-4 border border-gray-400 rounded"
-             style="background-color: <%= subscription.member.level %>"
-             title="<%= member_level_text(subscription.member.level) %>">
-        </div>
+        <%= tag.div class: "w-4 h-4 border border-gray-400 rounded",
+                    style: "background-color: #{subscription.member.level}",
+                    title: Member.human_attribute_name(subscription.member.level) %>
       </div>
 
       <div class="flex items-center space-x-2">
@@ -78,11 +32,6 @@
           <% end %>
           <span><%= subscription.member.full_name %></span>
         <% end %>
-      </div>
-
-      <div class="flex items-center space-x-2">
-        <span class="text-sm text-gray-500"><%= Member.human_attribute_name(:email) %>:</span>
-        <%= mail_to subscription.member.email, subscription.member.email, class: "text-blue-600 hover:text-blue-800" %>
       </div>
 
       <div class="flex items-center space-x-2">
@@ -107,8 +56,85 @@
 
       <div class="flex items-center space-x-2">
         <span class="text-sm text-gray-500"><%= Subscription.human_attribute_name(:status) %>:</span>
-        <%= tag.span class: subscription.status_color.gsub('table-', 'text-') do %>
+        <%= tag.span class: subscription.status_color do %>
           <%= Subscription.human_attribute_name(subscription.status) %>
+        <% end %>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <span class="text-sm text-gray-500"><%= Subscription.human_attribute_name(:payment_method) %>:</span>
+        <% if subscription.payment_method? %>
+          <%= tag.span class: subscription.payment_method_color do %>
+            <%= Subscription.human_attribute_name(subscription.payment_method) %>
+          <% end %>
+        <% else %>
+          <span class="text-gray-500"><%= t('defaults.na') %></span>
+        <% end %>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <span class="text-sm text-gray-500"><%= t('.terms') %>:</span>
+        <% if subscription.terms_accepted_at? %>
+          <span class="flex items-center">
+            <svg class="w-4 h-4 mr-1 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L10 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+            <%= t('.terms_accepted') %>
+          </span>
+        <% else %>
+          <span class="flex items-center">
+            <svg class="w-4 h-4 mr-1 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3-9a1 1 0 00-1.414-1.414L10 8.586 8.414 7.586A1 1 0 007 9l1.586 1.586L7 12.172A1 1 0 108.414 13.586L10 12l1.586 1.586A1 1 0 1013 12.172l-1.586-1.586L13 9a1 1 0 000-1.414z" clip-rule="evenodd"/>
+            </svg>
+            <%= t('.terms_not_accepted') %>
+          </span>
+        <% end %>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <span class="text-sm text-gray-500"><%= t('.medical_certificate') %>:</span>
+        <% if subscription.doctor_certified_at? %>
+          <span class="flex items-center">
+            <svg class="w-4 h-4 mr-1 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L10 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+            <%= t('.medical_certified') %>
+          </span>
+        <% else %>
+          <span class="flex items-center">
+            <svg class="w-4 h-4 mr-1 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3-9a1 1 0 00-1.414-1.414L10 8.586 8.414 7.586A1 1 0 007 9l1.586 1.586L7 12.172A1 1 0 108.414 13.586L10 12l1.586 1.586A1 1 0 1013 12.172l-1.586-1.586L13 9a1 1 0 000-1.414z" clip-rule="evenodd"/>
+            </svg>
+            <%= t('.medical_not_certified') %>
+          </span>
+        <% end %>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <span class="text-sm text-gray-500"><%= t('.payment') %>:</span>
+        <% if subscription.paid? %>
+          <span class="flex items-center">
+            <svg class="w-4 h-4 mr-1 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L10 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+            <%= t('.paid') %>
+          </span>
+        <% elsif subscription.payment_proof.attached? %>
+          <span class="flex items-center">
+            <svg class="w-4 h-4 mr-1 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3-9a1 1 0 00-1.414-1.414L10 8.586 8.414 7.586A1 1 0 007 9l1.586 1.586L7 12.172A1 1 0 108.414 13.586L10 12l1.586 1.586A1 1 0 1013 12.172l-1.586-1.586L13 9a1 1 0 000-1.414z" clip-rule="evenodd"/>
+            </svg>
+            <%= link_to t('.uploaded_payment_proof'),
+                rails_blob_path(subscription.payment_proof, disposition: "attachment"),
+                class: "text-yellow-600 hover:text-yellow-800" %>
+          </span>
+        <% else %>
+          <span class="flex items-center">
+            <svg class="w-4 h-4 mr-1 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3-9a1 1 0 00-1.414-1.414L10 8.586 8.414 7.586A1 1 0 007 9l1.586 1.586L7 12.172A1 1 0 108.414 13.586L10 12l1.586 1.586A1 1 0 1013 12.172l-1.586-1.586L13 9a1 1 0 000-1.414z" clip-rule="evenodd"/>
+            </svg>
+            <%= t('.not_paid') %>
+          </span>
         <% end %>
       </div>
     </div>

@@ -42,11 +42,12 @@ gem 'prawn'
 gem 'prawn-table'
 gem 'rack-cors', require: 'rack/cors'
 gem 'rollbar'
+gem 'rqrcode'
 gem 'sidekiq', '<7'
 gem 'stripe'
 
 # Add this line to your Gemfile
-gem 'tailwindcss-rails'
+gem 'tailwindcss-rails', '~> 3.3.1'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

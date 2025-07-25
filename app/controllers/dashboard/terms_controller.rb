@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module Dashboard
-  class SignedFormsController < Dashboard::Abstract::SubscriptionsController
-    before_action :filter_enabled!
+  class TermsController < Dashboard::Abstract::SubscriptionsController
     before_action :set_subscription!, only: %i[edit update]
+    before_action :filter_already_accepted!, only: %i[edit update]
 
     def edit; end
 
@@ -17,14 +17,12 @@ module Dashboard
 
     private
 
-    def filter_enabled!
-      return false if Rails.configuration.features.signed_form[:enabled]
-
-      redirect_to :dashboard, alert: t('defaults.forbidden')
+    def subscription_params
+      params.require(:subscription).permit(:terms_accepted)
     end
 
-    def subscription_params
-      params.require(:subscription).permit(:signed_form)
+    def filter_already_accepted!
+      redirect_to :dashboard, alert: t('.already_accepted') if @subscription.terms_accepted_at?
     end
   end
 end
