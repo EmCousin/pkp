@@ -60,10 +60,12 @@ en:
     search: "Search"
     filter: "Filter"
     confirm: "Confirm"
-    confirmed_bank_check: "Paid by check"
-    confirmed_cash: "Paid in cash"
+    confirmed: "Confirmed"
     archived: "Archived"
     pending: "Pending"
+    mark_as_confirmed: "Mark as confirmed"
+    mark_as_archived: "Mark as archived"
+    mark_as_pending: "Mark as pending"
     continue: "Continue"
     archive: "Archive"
     action: "Action"
@@ -73,7 +75,10 @@ en:
     forbidden: "Unauthorized access"
     details: "Details"
     complete_your_profile: "Please complete your profile to continue."
-    confirmed_bank_transfer: "Paid by bank transfer"
+    paid_with_bank_check: "Paid by bank check"
+    paid_with_cash: "Paid by cash"
+    paid_with_bank_transfer: "Paid by bank transfer"
+    paid_with_credit_card: "Paid by credit card"
 
   custom_error_messages:
     subscription:
@@ -310,6 +315,7 @@ en:
     invoices:
       show:
         generate_invoice: "Generate this Invoice"
+        generating: "Generating..."
       create:
         success: "Invoice generated"
       update:

@@ -30,6 +30,8 @@ class Category < ApplicationRecord
     if: :min_age?
   }
 
+  scope :suitable_for_age, ->(age) { where(min_age: ..age, max_age: age..) }
+
   def kidz?
     max_age <= 9
   end

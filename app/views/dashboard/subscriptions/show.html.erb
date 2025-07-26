@@ -1,0 +1,7 @@
+<div class="w-full max-w-2xl mx-auto px-4 py-8">
+  <%= render 'dashboard/subscriptions/details', subscription: @subscription %>
+
+  <div class="flex justify-center mt-8 bg-white rounded-lg shadow p-6">
+    <%= @subscription.qr_code_svg.html_safe %>
+  </div>
+</div>

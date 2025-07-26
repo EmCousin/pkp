@@ -2,8 +2,8 @@
 
 module Dashboard
   class MedicalCertificatesController < Dashboard::Abstract::SubscriptionsController
-    before_action :filter_enabled!
-    before_action :set_subscription!, only: %i[edit update]
+    before_action :set_subscription!
+    before_action :filter_already_certified!
 
     def edit; end
 
@@ -17,14 +17,12 @@ module Dashboard
 
     private
 
-    def filter_enabled!
-      return false if Rails.configuration.features.medical_certificate[:enabled]
-
-      redirect_to :dashboard, alert: t('defaults.forbidden')
-    end
-
     def subscription_params
       params.require(:subscription).permit(:medical_certificate)
+    end
+
+    def filter_already_certified!
+      redirect_to :dashboard, alert: t('.already_certified') if @subscription.doctor_certified_at?
     end
   end
 end

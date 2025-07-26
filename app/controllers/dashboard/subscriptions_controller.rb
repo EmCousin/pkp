@@ -7,6 +7,9 @@ module Dashboard
 
     before_action :filter_available_members!, only: %i[new], unless: :available_members?
     before_action :set_member, only: %i[new]
+    before_action :set_subscription, only: %i[show]
+
+    def show; end
 
     def new
       @subscription = current_user.subscriptions.new(member: @member)
@@ -24,6 +27,10 @@ module Dashboard
     end
 
     private
+
+    def set_subscription
+      @subscription = current_user.subscriptions.find_by(id: params[:id])
+    end
 
     def subscription_params
       params.require(:subscription).permit(

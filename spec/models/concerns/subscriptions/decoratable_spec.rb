@@ -10,7 +10,7 @@ describe Subscriptions::Decoratable, type: :model do
   it { is_expected.to respond_to :category_id }
   it { is_expected.to respond_to 'category_id=' }
 
-  it { is_expected.to define_enum_for(:status).with_values(%i[pending confirmed_bank_check confirmed_cash confirmed_bank_transfer archived]) }
+  it { is_expected.to define_enum_for(:status).with_values(%i[pending confirmed archived]) }
 
   describe '#description' do
     it { expect(subject.description).to eq "Lundi Adulte Mixte, Mardi Adulte Mixte" }
@@ -43,7 +43,7 @@ describe Subscriptions::Decoratable, type: :model do
     it { expect(subject.status_color).to eq 'text-yellow-600' }
 
     context 'when the subscription is confirmed' do
-      let(:subscription) { build :subscription, status: :confirmed_bank_check }
+      let(:subscription) { build :subscription, status: :confirmed }
 
       it { expect(subject.status_color).to eq 'text-green-600' }
     end

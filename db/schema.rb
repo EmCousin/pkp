@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_22_120955) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_24_130132) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -18,6 +18,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_22_120955) do
   # Note that some types may not work with other database engines. Be careful if changing database.
   create_enum "attendance_record_status", ["present", "absent", "excused"]
   create_enum "member_level", ["white", "yellow", "green", "red"]
+  create_enum "payment_method", ["cash", "bank_transfer", "bank_check", "credit_card"]
 
   create_table "action_mailbox_inbound_emails", force: :cascade do |t|
     t.integer "status", default: 0, null: false
@@ -142,6 +143,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_22_120955) do
     t.integer "status", default: 0
     t.string "stripe_charge_id"
     t.bigint "member_id"
+    t.datetime "terms_accepted_at"
+    t.datetime "doctor_certified_at"
+    t.datetime "paid_at"
+    t.enum "payment_method", enum_type: "payment_method"
     t.index ["created_at"], name: "index_subscriptions_on_created_at", order: :desc
     t.index ["member_id"], name: "index_subscriptions_on_member_id"
     t.index ["status"], name: "index_subscriptions_on_status"

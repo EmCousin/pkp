@@ -3,217 +3,281 @@
     <h1 class="text-2xl text-center font-bold mb-4 text-amber-500">
       <%= @subscription.id %> - <%= Subscription.model_name.human %> <%= @subscription.year %> - <%= @subscription.member.full_name %>
     </h1>
+    <!-- Completion Status Badge -->
+    <div class="flex justify-center mb-4">
+      <% if @subscription.confirmed? %>
+        <span class="inline-flex items-center px-4 py-2 rounded-full bg-green-100 text-green-800 text-lg font-semibold shadow">
+          <svg class="w-6 h-6 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+          </svg>
+          <%= t('.confirmed_status') %>
+        </span>
+      <% elsif @subscription.pending_confirmation? %>
+        <span class="inline-flex items-center px-4 py-2 rounded-full bg-yellow-100 text-yellow-800 text-lg font-semibold shadow">
+          <svg class="w-6 h-6 mr-2 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L10 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <%= t('.pending_confirmation_status') %>
+        </span>
+      <% elsif @subscription.archived? %>
+        <span class="inline-flex items-center px-4 py-2 rounded-full bg-red-100 text-red-800 text-lg font-semibold shadow">
+          <svg class="w-6 h-6 mr-2 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3-9a1 1 0 00-1.414-1.414L10 8.586 8.414 7.586A1 1 0 007 9l1.586 1.586L7 12.172A1 1 0 108.414 13.586L10 12l1.586 1.586A1 1 0 1013 12.172l-1.586-1.586L13 9a1 1 0 000-1.414z" clip-rule="evenodd"/>
+          </svg>
+          <%= t('.archived_status') %>
+        </span>
+      <% else %>
+        <span class="inline-flex items-center px-4 py-2 rounded-full bg-red-100 text-red-800 text-lg font-semibold shadow">
+          <svg class="w-6 h-6 mr-2 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3-9a1 1 0 00-1.414-1.414L10 8.586 8.414 7.586A1 1 0 007 9l1.586 1.586L7 12.172A1 1 0 108.414 13.586L10 12l1.586 1.586A1 1 0 1013 12.172l-1.586-1.586L13 9a1 1 0 000-1.414z" clip-rule="evenodd"/>
+          </svg>
+          <%= t('.incomplete_status') %>
+        </span>
+      <% end %>
+    </div>
     <div class="border-b border-gray-200"></div>
+    <div class="flex flex-col sm:flex-row sm:justify-end mt-4">
+      <%= render 'actions', subscription: @subscription %>
+    </div>
   </div>
 
-  <div class="space-y-6">
-    <div class="bg-white shadow-sm rounded-lg p-6">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <h3 class="text-lg font-medium text-gray-900 mb-4">
-            <%= Member.model_name.human %>
-          </h3>
-
-          <div class="space-y-3">
-            <div class="flex items-center gap-3">
-              <% if @subscription.member.avatar.variable? %>
-                <%= image_tag @subscription.member.avatar.variant(:mini), class: "w-12 h-12 rounded-full" %>
-              <% else %>
-                <%= image_tag @subscription.member.avatar, class: "w-12 h-12 rounded-full" %>
-              <% end %>
-
-              <div>
-                <div class="font-medium"><%= @subscription.member.full_name %></div>
-                <%= mail_to @subscription.member.email, class: "text-sm text-blue-600 hover:text-blue-800" %>
-              </div>
-            </div>
-
-            <div class="flex items-center space-x-2">
-              <span class="text-sm text-gray-500"><%= Member.human_attribute_name(:level) %>:</span>
-              <div class="w-4 h-4 border border-gray-400 rounded"
-                   style="background-color: <%= @subscription.member.level %>"
-                   title="<%= member_level_text(@subscription.member.level) %>">
-              </div>
-            </div>
+  <!-- Member & Subscription Card -->
+  <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+    <div class="flex flex-col sm:flex-row sm:items-center gap-6 mb-4">
+      <div class="relative flex-shrink-0">
+        <% if @subscription.member.avatar.variable? %>
+          <%= image_tag @subscription.member.avatar.variant(:mini), class: "w-20 h-20 rounded-full object-cover ring-2 ring-indigo-400 shadow" %>
+        <% else %>
+          <%= image_tag @subscription.member.avatar, class: "w-20 h-20 rounded-full object-cover ring-2 ring-indigo-400 shadow" %>
+        <% end %>
+        <% if @subscription.completed? %>
+          <div class="absolute -bottom-1 -right-1 h-7 w-7 bg-green-500 rounded-full ring-2 ring-white flex items-center justify-center">
+            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+            </svg>
           </div>
-        </div>
-
-        <div>
-          <h3 class="text-lg font-medium text-gray-900 mb-4">
-            <%= Subscription.model_name.human %>
-          </h3>
-
-          <div class="space-y-3">
-            <div>
-              <span class="text-sm text-gray-500"><%= Subscription.human_attribute_name(:status) %>:</span>
-              <span class="<%= @subscription.status_color.gsub('table-', 'text-') %> ml-1">
-                <%= Subscription.human_attribute_name(@subscription.status) %>
-              </span>
-            </div>
-
-            <div>
-              <span class="text-sm text-gray-500"><%= Subscription.human_attribute_name(:fee) %>:</span>
-              <span class="ml-1">
-                <%= number_to_currency(@subscription.fee, unit: "€", separator: ",", format: "%n %u") %>
-              </span>
-            </div>
-
-            <div>
-              <span class="text-sm text-gray-500"><%= Subscription.human_attribute_name(:year) %>:</span>
-              <span class="ml-1"><%= @subscription.year %></span>
-            </div>
-
-            <% if @subscription.form.attached? %>
-              <div>
-                <%= link_to t('.download_subscription_form'),
-                    rails_blob_path(@subscription.form),
-                    disposition: :attachment,
-                    target: '_blank',
-                    class: "inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800" %>
-              </div>
-            <% end %>
-          </div>
-        </div>
+        <% end %>
       </div>
-
-      <div class="mt-8">
-        <h3 class="text-lg font-medium text-gray-900 mb-4">
-          <%= Course.model_name.human(count: 2) %>
-        </h3>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <% @subscription.courses.each do |course| %>
-            <%= link_to [:admin, course], class: "block p-4 border rounded-lg hover:bg-gray-50" do %>
-              <div class="font-medium text-gray-900"><%= course.title %></div>
-              <div class="text-sm text-gray-500"><%= course.category.title %></div>
-            <% end %>
-          <% end %>
-        </div>
-      </div>
-    </div>
-
-    <% if Rails.configuration.features.online_payment[:enabled] && @subscription.paid? %>
-      <div class="bg-white shadow-sm rounded-lg p-6">
-        <h3 class="text-lg font-medium text-gray-900 mb-4">
-          <%= t('.payment_documents') %>
-        </h3>
-
-        <div class="space-y-4">
+      <div class="flex-1">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <div>
-            <span class="text-sm font-medium text-gray-700">
-              <%= Subscription.human_attribute_name(:invoice) %>:
-            </span>
-            <div class="mt-2">
-              <% if @subscription.invoice.attached? %>
-                <div class="flex flex-col sm:flex-row gap-3">
-                  <%= link_to t('defaults.download'),
-                      rails_blob_path(@subscription.invoice, disposition: "attachment"),
-                      class: "inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800" %>
+            <div class="text-2xl font-bold text-gray-900"><%= @subscription.member.full_name %></div>
+            <div class="text-sm text-gray-500 mt-1"><%= t('dashboard.terms.edit.year', year: @subscription.year, next_year: @subscription.year + 1) %></div>
+          </div>
+          <div class="text-xl font-semibold text-indigo-600">
+            <%= number_to_currency(@subscription.fee, unit: "€", separator: ",", format: "%n %u") %>
+          </div>
+        </div>
+        <div class="mt-2 text-sm text-gray-500">
+          <%= mail_to @subscription.member.email, class: "hover:text-blue-800" %>
+        </div>
+      </div>
+    </div>
+    <!-- Courses Table -->
+    <div class="overflow-x-auto mt-4">
+      <table class="min-w-full divide-y divide-gray-200 rounded-lg overflow-hidden shadow-sm">
+        <thead class="bg-indigo-50">
+          <tr>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-indigo-700 uppercase tracking-wider"><%= Course.human_attribute_name(:title) %></th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-indigo-700 uppercase tracking-wider"><%= Course.human_attribute_name(:weekday) %></th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-indigo-700 uppercase tracking-wider"><%= Course.human_attribute_name(:category) %></th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-100">
+          <% @subscription.courses.each do |course| %>
+            <tr class="hover:bg-indigo-50 transition">
+              <td class="px-4 py-3 text-sm text-gray-900 font-medium"><%= course.title %></td>
+              <td class="px-4 py-3 text-sm text-gray-700"><%= course.weekday %></td>
+              <td class="px-4 py-3 text-sm">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                  <%= course.category.title %>
+                </span>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <!-- End Courses Table -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-700 mt-6">
+      <div>
+        <span class="font-medium text-gray-500"><%= Member.human_attribute_name(:birthdate) %> :</span>
+        <span><%= l(@subscription.member.birthdate, format: :long) if @subscription.member.birthdate %></span>
+      </div>
+      <div>
+        <span class="font-medium text-gray-500"><%= User.human_attribute_name(:address) %> :</span>
+        <span><%= @subscription.member.address %></span>
+      </div>
+      <div>
+        <span class="font-medium text-gray-500"><%= User.human_attribute_name(:zip_code) %> :</span>
+        <span><%= @subscription.member.zip_code %></span>
+      </div>
+      <div>
+        <span class="font-medium text-gray-500"><%= User.human_attribute_name(:city) %> :</span>
+        <span><%= @subscription.member.city %></span>
+      </div>
+      <div>
+        <span class="font-medium text-gray-500"><%= User.human_attribute_name(:country) %> :</span>
+        <span><%= @subscription.member.country %></span>
+      </div>
+      <div>
+        <span class="font-medium text-gray-500"><%= User.human_attribute_name(:phone_number) %> :</span>
+        <span><%= @subscription.member.phone_number %></span>
+      </div>
+      <div>
+        <span class="font-medium text-gray-500"><%= User.human_attribute_name(:email) %> :</span>
+        <span><%= @subscription.member.email %></span>
+      </div>
+      <div>
+        <span class="font-medium text-gray-500"><%= Member.human_attribute_name(:contact_name) %> :</span>
+        <span><%= @subscription.member.contact_name %></span>
+      </div>
+      <div>
+        <span class="font-medium text-gray-500"><%= Member.human_attribute_name(:contact_relationship) %> :</span>
+        <span><%= @subscription.member.contact_relationship %></span>
+      </div>
+      <div>
+        <span class="font-medium text-gray-500"><%= Member.human_attribute_name(:contact_phone_number) %> :</span>
+        <span><%= @subscription.member.contact_phone_number %></span>
+      </div>
+      <% if @subscription.payment_method.present? %>
+        <div>
+          <span class="font-medium text-gray-500"><%= Subscription.human_attribute_name(:payment_method) %> :</span>
+          <span><%= Subscription.human_attribute_name(@subscription.payment_method) %></span>
+        </div>
+      <% end %>
+      <div>
+        <span class="font-medium text-gray-500"><%= Member.human_attribute_name(:agreed_to_advertising_right) %> :</span>
+        <span><%= @subscription.member.agreed_to_advertising_right ? t('dashboard.terms.edit.yes') : t('dashboard.terms.edit.no') %></span>
+      </div>
+    </div>
+  </div>
 
-                  <%= link_to t('.generate_credit_note'),
-                      new_admin_subscription_credit_note_path(@subscription.id),
-                      class: "inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" %>
-                </div>
-              <% else %>
-                <%= link_to t('.preview_invoice'),
-                    admin_subscription_invoice_path(@subscription.id),
-                    method: :get,
+  <!-- Payment Documents Section -->
+  <% if @subscription.paid? %>
+    <div class="bg-white shadow-sm rounded-lg p-6 mt-8">
+      <h3 class="text-lg font-medium text-gray-900 mb-4">
+        <%= t('.invoicing') %>
+      </h3>
+      <div class="space-y-4">
+        <div>
+          <span class="text-sm font-medium text-gray-700">
+            <%= Subscription.human_attribute_name(:invoice) %>:
+          </span>
+          <div class="mt-2">
+            <% if @subscription.invoice.attached? %>
+              <div class="flex flex-col sm:flex-row gap-3">
+                <%= link_to t('defaults.download'),
+                    rails_blob_path(@subscription.invoice, disposition: "attachment"),
+                    class: "inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800" %>
+                <%= link_to t('.generate_credit_note'),
+                    new_admin_subscription_credit_note_path(@subscription.id),
                     class: "inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" %>
-              <% end %>
+              </div>
+            <% else %>
+              <%= link_to t('.preview_invoice'),
+                  admin_subscription_invoice_path(@subscription.id),
+                  method: :get,
+                  class: "inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" %>
+            <% end %>
+          </div>
+        </div>
+        <% if @subscription.credit_notes.any? %>
+          <div class="mt-6">
+            <h4 class="text-base font-medium text-gray-900 mb-3">
+              <%= Subscription.human_attribute_name(:credit_notes) %>
+            </h4>
+            <div class="bg-white shadow overflow-hidden rounded-md">
+              <ul class="divide-y divide-gray-200">
+                <% @subscription.credit_notes.each do |credit_note| %>
+                  <li class="px-4 py-3">
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center space-x-4">
+                        <span class="text-sm text-gray-500">#<%= credit_note.id %></span>
+                        <span class="text-sm text-gray-500">
+                          <%= l(credit_note.created_at, format: :short) %>
+                        </span>
+                      </div>
+                      <%= link_to t('defaults.download'),
+                          rails_blob_path(credit_note, disposition: "attachment"),
+                          class: "text-sm text-blue-600 hover:text-blue-800" %>
+                    </div>
+                  </li>
+                <% end %>
+              </ul>
             </div>
           </div>
-
-          <% if @subscription.credit_notes.any? %>
-            <div class="mt-6">
-              <h4 class="text-base font-medium text-gray-900 mb-3">
-                <%= Subscription.human_attribute_name(:credit_notes) %>
-              </h4>
-              <div class="bg-white shadow overflow-hidden rounded-md">
-                <ul class="divide-y divide-gray-200">
-                  <% @subscription.credit_notes.each do |credit_note| %>
-                    <li class="px-4 py-3">
-                      <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-4">
-                          <span class="text-sm text-gray-500">#<%= credit_note.id %></span>
-                          <span class="text-sm text-gray-500">
-                            <%= l(credit_note.created_at, format: :short) %>
-                          </span>
-                        </div>
-                        <%= link_to t('defaults.download'),
-                            rails_blob_path(credit_note, disposition: "attachment"),
-                            class: "text-sm text-blue-600 hover:text-blue-800" %>
-                      </div>
-                    </li>
-                  <% end %>
-                </ul>
-              </div>
-            </div>
-          <% end %>
-        </div>
+        <% end %>
       </div>
-    <% end %>
-
-    <% if Rails.configuration.features.medical_certificate[:enabled] || Rails.configuration.features.signed_form[:enabled] %>
-      <div class="bg-white shadow-sm rounded-lg p-6">
-        <h3 class="text-lg font-medium text-gray-900 mb-4">
-          <%= t('.documents') %>
-        </h3>
-
-        <div class="space-y-4">
-          <% if Rails.configuration.features.medical_certificate[:enabled] %>
-            <div>
-              <span class="text-sm font-medium text-gray-700">
-                <%= Subscription.human_attribute_name(:medical_certificate) %>:
-              </span>
-              <div class="mt-2">
-                <% if @subscription.medical_certificate.attached? %>
-                  <%= link_to t('defaults.download'),
-                      rails_blob_path(@subscription.medical_certificate, disposition: "attachment"),
-                      class: "inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800" %>
-                <% else %>
-                  <span class="text-sm text-gray-500"><%= t('defaults.none') %></span>
-                <% end %>
-              </div>
-            </div>
-          <% end %>
-
-          <% if Rails.configuration.features.signed_form[:enabled] %>
-            <div>
-              <span class="text-sm font-medium text-gray-700">
-                <%= Subscription.human_attribute_name(:signed_form) %>:
-              </span>
-              <div class="mt-2">
-                <% if @subscription.signed_form.attached? %>
-                  <%= link_to t('defaults.download'),
-                      rails_blob_path(@subscription.signed_form, disposition: "attachment"),
-                      class: "inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800" %>
-                <% else %>
-                  <span class="text-sm text-gray-500"><%= t('defaults.none') %></span>
-                <% end %>
-              </div>
-            </div>
-          <% end %>
-        </div>
-      </div>
-    <% end %>
-
-    <div class="flex flex-col sm:flex-row gap-3 pt-6">
-      <%= link_to t('defaults.back'),
-          %i[admin subscriptions],
-          class: "inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800" %>
-
-      <%= link_to t('defaults.edit'),
-          [:edit, :admin, @subscription],
-          class: "inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800" %>
-
-      <%= button_to t('defaults.destroy'),
-          [:admin, @subscription],
-          method: :delete,
-          data: {
-            controller: :confirm,
-            confirm_message_value: t('defaults.are_you_sure')
-          },
-          class: "inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" %>
     </div>
+  <% end %>
+
+  <!-- Completion Status Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+    <!-- Terms Accepted Card -->
+    <div class="relative group">
+      <div class="absolute -inset-0.5 bg-gradient-to-r from-indigo-600 to-blue-600 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+      <div class="relative p-6 bg-white ring-1 ring-gray-200 rounded-lg flex flex-col items-start">
+        <span class="block text-xs font-medium text-gray-500 uppercase mb-3">
+          <%= Subscription.human_attribute_name(:terms_accepted_at) %>
+        </span>
+        <% if @subscription.terms_accepted_at? %>
+          <span class="text-gray-700 font-semibold">✅ <%= t('.terms_accepted') %></span>
+        <% else %>
+          <span class="text-red-600 font-semibold"><%= t('.terms_not_accepted') %></span>
+        <% end %>
+      </div>
+    </div>
+    <!-- Doctor Certification Card -->
+    <div class="relative group">
+      <div class="absolute -inset-0.5 bg-gradient-to-r from-green-400 to-blue-500 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+      <div class="relative p-6 bg-white ring-1 ring-gray-200 rounded-lg flex flex-col items-start">
+        <span class="block text-xs font-medium text-gray-500 uppercase mb-3">
+          <%= Subscription.human_attribute_name(:doctor_certified_at) %>
+        </span>
+        <% if @subscription.doctor_certified_at? %>
+          <span class="text-gray-700 font-semibold">✅ <%= t('.doctor_certified') %></span>
+        <% else %>
+          <span class="text-red-600 font-semibold"><%= t('.doctor_not_certified') %></span>
+        <% end %>
+      </div>
+    </div>
+    <!-- Payment Card -->
+    <div class="relative group">
+      <div class="absolute -inset-0.5 bg-gradient-to-r from-pink-400 to-pink-600 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+      <div class="relative p-6 bg-white ring-1 ring-gray-200 rounded-lg flex flex-col items-start">
+        <span class="block text-xs font-medium text-gray-500 uppercase mb-3">
+          <%= t('.payment') %>
+        </span>
+        <% if @subscription.paid? %>
+          <span class="text-gray-700 font-semibold">✅ <%= t('.paid') %></span>
+        <% elsif @subscription.payment_proof.attached? %>
+          <span class="text-yellow-700 font-semibold">⚠️ <%= t('.payment_proof_awaiting_review') %></span>
+          <%= link_to t('defaults.download'),
+                          rails_blob_path(@subscription.payment_proof, disposition: "attachment"),
+                          class: "text-yellow-700 text-sm font-medium hover:underline mt-2" %>
+        <% else %>
+          <span class="text-red-600 font-semibold"><%= t('.not_paid') %></span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Actions -->
+  <div class="flex flex-col sm:flex-row gap-3 pt-8 justify-end">
+    <%= link_to t('defaults.back'),
+        %i[admin subscriptions],
+        class: "inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800" %>
+    <%= link_to t('defaults.edit'),
+        [:edit, :admin, @subscription],
+        class: "inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800" %>
+    <%= button_to t('defaults.destroy'),
+        [:admin, @subscription],
+        method: :delete,
+        data: {
+          controller: :confirm,
+          confirm_message_value: t('defaults.are_you_sure')
+        },
+        class: "inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" %>
   </div>
 </div>

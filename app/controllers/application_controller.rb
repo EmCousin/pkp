@@ -6,4 +6,6 @@ class ApplicationController < ActionController::Base
   include DeviseOverrides
   include ProfileCompletable
   include AccessFilteringHelpers
+
+  default_form_builder ::FormBuilder
 end

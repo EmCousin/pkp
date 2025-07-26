@@ -12,12 +12,13 @@
       </div>
     <% end %>
     <div>
-      <p>Parkour Paris</p>
+      <p><strong>Parkour Paris</strong></p>
       <p>ID société : 750 838 609 00014</p>
       <p>parkour.paris@gmail.com</p>
-      <p>International School of Paris</p>
-      <p>E-mail: lhudson@isparis.edu</p>
-      <p>Adresse: Rue Beethoven, Paris</p>
+      <p><strong><%= @subscription.member.full_name %></strong></p>
+      <p><%= @subscription.member.address %></p>
+      <p><%= @subscription.member.zip_code %> <%= @subscription.member.city %>, <%= @subscription.member.country %></p>
+      <p><%= mail_to @subscription.member.email %>, <%= @subscription.member.phone_number %></p>
     </div>
     <div class="form-group">
       <%= form.label :invoice %>

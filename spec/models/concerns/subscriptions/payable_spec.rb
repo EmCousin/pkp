@@ -21,6 +21,8 @@ describe Subscriptions::Payable, type: :model do
     )
   end
 
+  it { is_expected.to respond_to :payment_proof }
+
   before do
     freeze_time do
       allow(Stripe::Charge).to receive(:create).with(
@@ -34,11 +36,11 @@ describe Subscriptions::Payable, type: :model do
         stripe_charge_id
       ).and_return(stripe_charge)
 
-      subject.pay!(stripe_token)
+      subject.pay_with_stripe!(stripe_token)
     end
   end
 
-  describe '#pay!' do
+  describe '#pay_with_stripe!' do
     it 'creates a stripe charge id' do
       expect(subject.stripe_charge_id).to eq stripe_charge_id
     end

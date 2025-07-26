@@ -3,22 +3,22 @@
     <div class="absolute top-0 right-0">
       <div class="relative">
         <details class="group">
-          <summary class="flex items-center gap-1 text-gray-700 hover:text-gray-900 cursor-pointer">
+          <summary class="flex cursor-pointer items-center rounded-md px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
             <%= t('defaults.action') %>
-            <svg class="w-4 h-4 transition-transform group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <svg class="ml-2 h-5 w-5 text-white transition-transform group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
             </svg>
           </summary>
-          <div class="absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg py-1 ring-1 ring-black ring-opacity-5 z-50">
+          <div class="absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg py-1 ring-1 ring-black ring-opacity-5 z-50 divide-y divide-gray-100">
             <%= link_to t('defaults.edit'),
                 [:edit, :admin, subscription],
-                class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100",
+                class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50",
                 data: { turbo_frame: '_top' } %>
 
             <% if subscription.form.attached? %>
               <%= link_to t('admin.subscriptions.show.download_subscription_form'),
                   rails_blob_path(subscription.form),
-                  class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100",
+                  class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50",
                   data: { turbo_frame: '_top' },
                   target: '_blank' %>
             <% end %>
@@ -26,24 +26,23 @@
             <% Member.levels.each_key do |level| %>
               <% unless subscription.member.level == level %>
                 <%= button_to({
-                    controller: 'admin/members',
+                    controller: 'admin/levels',
                     action: 'update',
-                    id: subscription.member_id,
+                    member_id: subscription.member_id,
                     member: { level: }
                   },
                   method: :put,
-                  class: "w-full text-left flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100",
+                  class: "w-full text-left flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50",
                   form: { data: { turbo_frame: dom_id(subscription, :row) } }) do %>
-                  <div class="w-4 h-4 border border-gray-300 rounded mr-2"
-                       style="background-color: <%= level %>"
-                       title="<%= t("activerecord.attributes.member.levels")[level] %>">
-                  </div>
+                  <%= tag.div class: "w-4 h-4 border border-gray-300 rounded mr-2",
+                       style: "background-color: #{level}",
+                       title: Member.human_attribute_name(level) %>
                   <span><%= t(".move_to_#{level}_level") %></span>
                 <% end %>
               <% end %>
             <% end %>
 
-            <%= render "status_buttons", subscription: %>
+            <%= render "action_buttons", subscription: subscription %>
 
             <%= button_to t('.remove_from_course'),
                 unlink_course_admin_subscription_path(subscription.id, course_id: @course.id),
@@ -65,14 +64,6 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       <div class="flex items-center space-x-2">
-        <span class="text-sm text-gray-500"><%= Member.human_attribute_name(:level) %>:</span>
-        <div class="w-4 h-4 border border-gray-400 rounded"
-             style="background-color: <%= subscription.member.level %>"
-             title="<%= member_level_text(subscription.member.level) %>">
-        </div>
-      </div>
-
-      <div class="flex items-center space-x-2">
         <span class="text-sm text-gray-500">ID:</span>
         <%= link_to subscription.id, [:admin, subscription], class: "text-blue-600 hover:text-blue-800", data: { turbo_frame: '_top' } %>
       </div>
@@ -87,6 +78,13 @@
           <% end %>
           <span><%= subscription.member.full_name %></span>
         <% end %>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <span class="text-sm text-gray-500"><%= Member.human_attribute_name(:level) %>:</span>
+        <%= tag.div class: "w-4 h-4 border border-gray-400 rounded",
+             style: "background-color: #{subscription.member.level}",
+             title: Member.human_attribute_name(subscription.member.level) %>
       </div>
 
       <div class="flex items-center space-x-2">

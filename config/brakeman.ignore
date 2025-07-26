@@ -70,6 +70,40 @@
       "note": ""
     },
     {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "4096eeb0d6ea92e5f38070e75b3de27dec9aa15bedd6180d7a737722f3d44d33",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/dashboard/subscriptions/show.html.erb",
+      "line": 5,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "current_user.subscriptions.find_by(:id => params[:id]).qr_code_svg",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Dashboard::SubscriptionsController",
+          "method": "show",
+          "line": 13,
+          "file": "app/controllers/dashboard/subscriptions_controller.rb",
+          "rendered": {
+            "name": "dashboard/subscriptions/show",
+            "file": "app/views/dashboard/subscriptions/show.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "dashboard/subscriptions/show"
+      },
+      "user_input": "current_user.subscriptions.find_by(:id => params[:id])",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "Unscoped Find",
       "warning_code": 82,
       "fingerprint": "5845e02b1070fe61ff0fae7cab044b2c5707b1ee6f2599ff2c3a2b47fe75ed31",
@@ -95,6 +129,29 @@
     {
       "warning_type": "Unscoped Find",
       "warning_code": 82,
+      "fingerprint": "5b19206318f35ee1415c229b833f4b5d1bb8d3fc686ac4820d11927b01df264a",
+      "check_name": "UnscopedFind",
+      "message": "Unscoped call to `Subscription#find`",
+      "file": "app/controllers/admin/payments_controller.rb",
+      "line": 20,
+      "link": "https://brakemanscanner.org/docs/warning_types/unscoped_find/",
+      "code": "Subscription.find(params[:subscription_id])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Admin::PaymentsController",
+        "method": "set_subscription!"
+      },
+      "user_input": "params[:subscription_id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        285
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Unscoped Find",
+      "warning_code": 82,
       "fingerprint": "5d68f031210a7cfce4269315252a92e7b3cec31099a60814913e9fd90e0b577d",
       "check_name": "UnscopedFind",
       "message": "Unscoped call to `Subscription#find`",
@@ -109,6 +166,29 @@
         "method": "set_subscription!"
       },
       "user_input": "params[:id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        285
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Unscoped Find",
+      "warning_code": 82,
+      "fingerprint": "a4d38a756067f698f7f6e442c62b847db313cce9342d0cf661f464ed33d80285",
+      "check_name": "UnscopedFind",
+      "message": "Unscoped call to `Member#find`",
+      "file": "app/controllers/admin/levels_controller.rb",
+      "line": 15,
+      "link": "https://brakemanscanner.org/docs/warning_types/unscoped_find/",
+      "code": "Member.find(params[:member_id])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Admin::LevelsController",
+        "method": "set_member!"
+      },
+      "user_input": "params[:member_id]",
       "confidence": "Weak",
       "cwe_id": [
         285
@@ -158,8 +238,31 @@
         79
       ],
       "note": ""
+    },
+    {
+      "warning_type": "Unscoped Find",
+      "warning_code": 82,
+      "fingerprint": "c5a4159ed5c81619866c7b4de34feb97a2e4348f5cb1790f32efa2fef447dc9b",
+      "check_name": "UnscopedFind",
+      "message": "Unscoped call to `Subscription#find`",
+      "file": "app/controllers/admin/statuses_controller.rb",
+      "line": 15,
+      "link": "https://brakemanscanner.org/docs/warning_types/unscoped_find/",
+      "code": "Subscription.find(params[:subscription_id])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Admin::StatusesController",
+        "method": "set_subscription!"
+      },
+      "user_input": "params[:subscription_id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        285
+      ],
+      "note": ""
     }
   ],
-  "updated": "2025-07-22 15:54:58 +0200",
+  "updated": "2025-07-26 13:13:25 +0200",
   "brakeman_version": "6.1.2"
 }

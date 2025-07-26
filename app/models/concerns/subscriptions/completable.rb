@@ -5,22 +5,28 @@ module Subscriptions
     extend ActiveSupport::Concern
 
     included do
+      attribute :terms_accepted, :boolean, default: false
+      attribute :medical_certificate, :boolean, default: false
+
       has_one_attached :form
-      has_one_attached :signed_form
-      has_one_attached :medical_certificate
-      has_one_attached :payment_proof
-    end
-
-    def needs_medical_certificate?
-      previous_subscription.nil? || !previous_subscription.confirmed?
-    end
-
-    def previous_subscription
-      @previous_subscription ||= member.subscriptions.find_by(year: [year - 1, year - 2])
     end
 
     def completed?
-      (paid? || payment_proof.attached?) && signed_form.attached? && medical_certificate.attached?
+      paid? && terms_accepted_at? && doctor_certified_at?
+    end
+
+    def pending_confirmation?
+      pending? && completed?
+    end
+
+    def terms_accepted=(value)
+      accepted = super
+      self.terms_accepted_at = accepted ? Time.current : nil
+    end
+
+    def medical_certificate=(value)
+      certified = super
+      self.doctor_certified_at = certified ? Time.current : nil
     end
   end
 end

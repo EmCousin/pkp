@@ -1,88 +1,102 @@
 <% total_amount = number_to_euros(@subscription.fee) %>
 
-<div class="row">
-  <div class="col-8 offset-2 border">
-    <div class="row">
-      <div class="col-md-3 offset-md-1">
-        <%= image_tag "Logo_PKP.webp" %>
-        <div class="mt-5">
-          <p>Parkour Paris</p>
-          <p>ID société : 750 838 609 00014</p>
-          <p>parkour.paris@gmail.com</p>
+<div class="flex justify-center items-center min-h-screen bg-gray-100 py-8 print:bg-white print:py-0">
+  <div class="w-full max-w-3xl bg-white rounded-xl shadow-lg p-8 print:shadow-none print:border print:rounded-none">
+    <div class="flex flex-col md:flex-row md:justify-between md:items-start border-b pb-6 mb-6">
+      <div class="flex flex-col items-start space-y-2">
+        <%= image_tag "Logo_PKP.webp", class: "h-16 w-auto mb-4" %>
+        <div>
+          <p class="font-bold text-lg text-gray-800">Parkour Paris</p>
+          <p class="text-gray-500 text-sm">ID société : 750 838 609 00014</p>
+          <p class="text-gray-500 text-sm">parkour.paris@gmail.com</p>
         </div>
-        <div class="mt-5">
-          <p>International School of Paris</p>
-          <p>E-mail: lhudson@isparis.edu</p>
-          <p>Adresse: Rue Beethoven</p>
-          <p>Paris</p>
+        <div class="mt-4">
+          <p class="font-semibold text-gray-700"><%= @subscription.member.full_name %></p>
+          <p class="text-gray-500 text-sm"><%= @subscription.member.address %></p>
+          <p class="text-gray-500 text-sm"><%= @subscription.member.zip_code %> <%= @subscription.member.city %>, <%= @subscription.member.country %></p>
+          <p class="text-gray-500 text-sm"><%= mail_to @subscription.member.email %></p>
+          <p class="text-gray-500 text-sm"><%= @subscription.member.phone_number %></p>
         </div>
       </div>
-      <div class="col-md-3 offset-md-4">
-        <div class="mt-5">
-          <h3>Facture: #<%= @subscription.year %><%= @subscription.id %></h3>
-          <p>Payée le: <%= @subscription.paid_at %>
-          <p>Date de délivrance : <%= Time.now %></p>
+      <div class="mt-8 md:mt-0 text-right space-y-2">
+        <h2 class="text-2xl font-bold text-indigo-700">Facture</h2>
+        <p class="text-gray-700 font-semibold">#<%= @subscription.year %><%= @subscription.id %></p>
+        <p class="text-gray-500 text-sm">Payée le: <%= l(@subscription.paid_at, format: :short) %></p>
+        <p class="text-gray-500 text-sm">Date de délivrance : <%= l(Time.current, format: :short) %></p>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-sm text-gray-700 mb-6">
+        <thead>
+          <tr class="bg-indigo-50">
+            <th class="py-2 px-4 font-semibold text-left">Cours</th>
+            <th class="py-2 px-4 font-semibold text-center">Prix</th>
+            <th class="py-2 px-4 font-semibold text-center">Quantité</th>
+            <th class="py-2 px-4 font-semibold text-center">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b">
+            <td class="py-2 px-4"><%= @subscription.description %></td>
+            <td class="py-2 px-4 text-center"><%= total_amount %></td>
+            <td class="py-2 px-4 text-center">1</td>
+            <td class="py-2 px-4 text-center"><%= total_amount %></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex flex-col md:flex-row md:justify-end gap-4 mb-8">
+      <div class="w-full md:w-1/2">
+        <div class="bg-gray-50 rounded-lg p-4 space-y-2">
+          <div class="flex justify-between">
+            <span class="font-medium">Sous-total :</span>
+            <span><%= total_amount %></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-medium">Total facture :</span>
+            <span><%= total_amount %></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-medium">Montant payé :</span>
+            <span><%= number_to_euros(@subscription.paid_amount) %></span>
+          </div>
+          <div class="flex justify-between border-t pt-2">
+            <span class="font-bold text-indigo-700">Solde :</span>
+            <span class="font-bold text-indigo-700"><%= number_to_euros(@subscription.balance) %></span>
+          </div>
         </div>
       </div>
     </div>
 
-    <table class="table mt-5 text-center">
-      <thead>
-        <tr>
-          <th>Article ou Service</th>
-          <th>Prix</th>
-          <th>Quantité</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr>
-          <td><%= @subscription.description %></td>
-          <td><%= total_amount %></td>
-          <td>1</td>
-          <td><%= total_amount %></td>
-        </tr>
-        <tr>
-          <td colspan="4"></td>
-        </tr>
-        <tr>
-          <td>Sous-total :</td>
-          <td><%= total_amount %></td>
-        </tr>
-        <tr>
-          <td>Total facture :</td>
-          <td><%= total_amount %></td>
-        </tr>
-        <tr colspan="2">
-          <td>Montant payé :</td>
-          <td><%= number_to_euros(@subscription.paid_amount) %></td>
-        </tr>
-        <tr colspan="2">
-          <td>Solde :</td>
-          <td><%= number_to_euros(@subscription.balance) %></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-8 offset-2">
-    <%= link_to t('.generate_invoice'), admin_subscription_invoice_path(@subscription.id), method: :post, class: "btn btn-success w-100 mt-3", data: { turbo_submits_with: t('.generating') } %>
-
-    <%= form_with(model: @subscription, local: true, url:   admin_subscription_invoice_path(@subscription.id)) do |form| %>
-      <div class="mt-5">
-        <div class="form-group">
-          <p>Charger une facture:</p>
-          <%= form.label :invoice %>
-          <%= form.file_field :invoice, required: true %>
-        </div>
-        <div class="actions">
-          <%= form.submit t('defaults.save'), class: "btn btn-dark float-lg-right" %>
-          <%= link_to t('defaults.back'), admin_subscription_path(@subscription.id), class: "btn btn-link float-left" %>
-        </div>
+    <div class="flex flex-col gap-8 mt-6">
+      <!-- Generate Invoice Section -->
+      <div class="bg-green-50 rounded-lg p-6 flex flex-col items-center shadow-sm">
+        <h3 class="text-lg font-bold text-green-800 mb-2">Générer automatiquement la facture</h3>
+        <p class="text-gray-600 mb-4 text-center">Cliquez ci-dessous pour générer une facture à partir des informations de l'inscription.</p>
+        <%= button_to t('.generate_invoice'), admin_subscription_invoice_path(@subscription.id), method: :post, class: "w-full md:w-auto btn btn-success text-white font-semibold py-2 px-4 rounded shadow hover:bg-green-700 transition", data: { turbo_submits_with: t('.generating') } %>
       </div>
-    <% end %>
+
+      <div class="flex items-center justify-center">
+        <span class="border-t border-gray-300 w-full"></span>
+        <span class="mx-4 text-gray-400 font-semibold">ou</span>
+        <span class="border-t border-gray-300 w-full"></span>
+      </div>
+
+      <!-- Upload Manual Invoice Section -->
+      <div class="bg-blue-50 rounded-lg p-6 shadow-sm">
+        <h3 class="text-lg font-bold text-blue-800 mb-2">Téléverser une facture manuelle</h3>
+        <p class="text-gray-600 mb-4">Si vous avez déjà une facture, vous pouvez la téléverser ici.</p>
+        <%= form_with(model: @subscription, local: true, url: admin_subscription_invoice_path(@subscription.id), html: { class: 'flex flex-col md:flex-row w-full gap-2 items-center' }) do |form| %>
+          <div class="flex flex-col md:flex-row w-full gap-2 items-center">
+            <label class="font-medium md:sr-only"><%= t('defaults.upload_invoice') || 'Upload Invoice' %></label>
+            <%= form.file_field :invoice, required: true, class: "form-control-file w-full md:w-auto" %>
+            <%= form.submit t('defaults.upload'), class: "w-full md:w-auto btn btn-dark bg-gray-800 text-white font-semibold py-2 px-4 rounded shadow hover:bg-gray-900 transition" %>
+            <%= link_to t('defaults.back'), admin_subscription_path(@subscription.id), class: "w-full md:w-auto btn btn-link text-blue-600 font-semibold py-2 px-4 rounded hover:underline text-center" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>
