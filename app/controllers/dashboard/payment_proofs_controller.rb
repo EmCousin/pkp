@@ -2,7 +2,6 @@
 
 module Dashboard
   class PaymentProofsController < Dashboard::Abstract::SubscriptionsController
-    before_action :filter_enabled!
     before_action :set_subscription!, only: %i[edit update]
 
     def edit; end
@@ -16,12 +15,6 @@ module Dashboard
     end
 
     private
-
-    def filter_enabled!
-      return false if Rails.configuration.features.payment_proof[:enabled]
-
-      redirect_to :dashboard, alert: t('defaults.forbidden')
-    end
 
     def subscription_params
       params.require(:subscription).permit(:payment_proof)

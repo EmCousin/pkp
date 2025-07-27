@@ -2,7 +2,6 @@
 
 module Dashboard
   class PaymentsController < Dashboard::Abstract::SubscriptionsController
-    before_action :filter_enabled!
     before_action :set_subscription!, only: %i[new create]
     before_action :filter_already_paid!
 
@@ -17,12 +16,6 @@ module Dashboard
     end
 
     private
-
-    def filter_enabled!
-      return false if Rails.configuration.features.online_payment[:enabled]
-
-      redirect_to :dashboard, alert: t('defaults.forbidden')
-    end
 
     def filter_already_paid!
       redirect_back fallback_location: root_path, alert: t('.already_paid') if @subscription.paid?

@@ -50,12 +50,12 @@
                   edit_dashboard_subscription_medical_certificate_path(subscription.id),
                   class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" %>
             <% end %>
-            <% if Rails.configuration.features.payment_proof[:enabled] && !subscription.payment_proof.attached? %>
+            <% unless subscription.payment_proof.attached? %>
               <%= link_to t('.upload_payment_proof'),
                   edit_dashboard_subscription_payment_proof_path(subscription.id),
                   class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" %>
             <% end %>
-            <% if Rails.configuration.features.online_payment[:enabled] && !subscription.paid? %>
+            <% unless subscription.paid? %>
               <%= link_to t('.pay'),
                   new_dashboard_subscription_payment_path(subscription.id),
                   class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" %>
@@ -142,53 +142,52 @@
         </div>
       </div>
 
-      <% if Rails.configuration.features.online_payment[:enabled] %>
-        <div class="relative group">
-          <%= tag.div class: class_names(
-                "relative p-6 rounded-lg flex flex-col items-start border transition-colors duration-300",
-                'bg-white border-green-200 ring-1 ring-gray-200' => subscription.paid?,
-                'bg-rose-50 border-rose-200' => !subscription.paid?
-              ),
-              data: { turbo_frame: '_top' } do %>
-            <%= tag.span class: class_names(
-                  "block text-xs font-medium uppercase mb-3",
-                  'text-gray-500' => subscription.paid?,
-                  'text-yellow-500' => !subscription.paid? && subscription.payment_proof.attached?,
-                  'text-rose-700' => !subscription.paid? && !subscription.payment_proof.attached?
-                ) do %>
-              <%= t('.payment') %>
-            <% end %>
 
-            <% if subscription.paid? %>
-              <div class="flex items-center gap-2 text-sm mb-2">
-                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span class="text-gray-700 font-semibold"><%= t('.payment_confirmed') %></span>
-              </div>
-              <% if subscription.invoice.attached? %>
-                <%= link_to t('defaults.download'),
-                            rails_blob_path(subscription.invoice, disposition: "attachment"),
-                            class: "text-sm text-gray-600 hover:text-gray-900" %>
-              <% end %>
-            <% elsif subscription.payment_proof.attached? %>
-              <div class="flex items-center gap-2 text-sm mb-2">
-                <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 8V6a1 1 0 10-2 0v5a1 1 0 00.293.707l3 3a1 1 0 001.414-1.414l-2.707-2.707z" clip-rule="evenodd"/>
-                </svg>
-                <span class="text-yellow-700 font-semibold"><%= t('.payment_proof_in_review') %></span>
-              </div>
-              <%= link_to t('defaults.download'),
-                          rails_blob_path(subscription.payment_proof, disposition: "attachment"),
-                          class: "text-yellow-700 text-sm font-medium hover:underline mt-2" %>
-            <% else %>
-              <%= link_to t('.pay'),
-                          new_dashboard_subscription_payment_path(subscription.id),
-                          class: "text-rose-700 text-sm font-medium hover:underline mt-2" %>
-            <% end %>
+      <div class="relative group">
+        <%= tag.div class: class_names(
+              "relative p-6 rounded-lg flex flex-col items-start border transition-colors duration-300",
+              'bg-white border-green-200 ring-1 ring-gray-200' => subscription.paid?,
+              'bg-rose-50 border-rose-200' => !subscription.paid?
+            ),
+            data: { turbo_frame: '_top' } do %>
+          <%= tag.span class: class_names(
+                "block text-xs font-medium uppercase mb-3",
+                'text-gray-500' => subscription.paid?,
+                'text-yellow-500' => !subscription.paid? && subscription.payment_proof.attached?,
+                'text-rose-700' => !subscription.paid? && !subscription.payment_proof.attached?
+              ) do %>
+            <%= t('.payment') %>
           <% end %>
-        </div>
-      <% end %>
+
+          <% if subscription.paid? %>
+            <div class="flex items-center gap-2 text-sm mb-2">
+              <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+              <span class="text-gray-700 font-semibold"><%= t('.payment_confirmed') %></span>
+            </div>
+            <% if subscription.invoice.attached? %>
+              <%= link_to t('defaults.download'),
+                          rails_blob_path(subscription.invoice, disposition: "attachment"),
+                          class: "text-sm text-gray-600 hover:text-gray-900" %>
+            <% end %>
+          <% elsif subscription.payment_proof.attached? %>
+            <div class="flex items-center gap-2 text-sm mb-2">
+              <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 8V6a1 1 0 10-2 0v5a1 1 0 00.293.707l3 3a1 1 0 001.414-1.414l-2.707-2.707z" clip-rule="evenodd"/>
+              </svg>
+              <span class="text-yellow-700 font-semibold"><%= t('.payment_proof_in_review') %></span>
+            </div>
+            <%= link_to t('defaults.download'),
+                        rails_blob_path(subscription.payment_proof, disposition: "attachment"),
+                        class: "text-yellow-700 text-sm font-medium hover:underline mt-2" %>
+          <% else %>
+            <%= link_to t('.pay'),
+                        new_dashboard_subscription_payment_path(subscription.id),
+                        class: "text-rose-700 text-sm font-medium hover:underline mt-2" %>
+          <% end %>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>
