@@ -423,7 +423,6 @@ fr:
       subscription_detailed_info: "Vos inscriptions pour l'année %{year} :"
       how_to_complete_my_subscription: Comment compléter mon dossier
     subscription:
-      pay: Payer
       subscription_form: Formulaire d'inscription
       download_subscription_form: Télécharger le formulaire d'inscription
       upload_signed_form: Retourner le formulaire signé
@@ -443,6 +442,8 @@ fr:
       level: Niveau
       upload_payment_proof: Joindre un justificatif de paiement
       payment_proof_in_review: Votre justificatif de paiement est en cours de vérification.
+      download_payment_proof: Télécharger le justificatif
+      pay_directly: Payer directement par carte bancaire
     edit:
       title: Mes informations personnelles
     alumni_accesses:
@@ -464,6 +465,9 @@ fr:
         select_category: Sélectionner une catégorie
       create:
         success: Inscription créée avec succès !
+      payment_tabs:
+        payment_by_card: Payer par carte bancaire
+        upload_payment_proof: Joindre un justificatif
     members:
       form:
         advertising_right_statement: J'autorise l'utilisation, l'affichage et la publication de mon image provenant des activités de Parkour Paris, à des fins de promotion (tous médias) et d'information des activités de l'association. (panneaux, plaquettes, site internet).
@@ -476,6 +480,7 @@ fr:
       new:
         payment_by_card: Paiement par carte bancaire
         pay: Payer %{amount}
+        paying: "En cours de paiement..."
         already_paid: Vous avez déjà payé votre commande.
         already_paid_title: Vous avez déjà réglé votre cotisation par virement?
         already_paid_description: Vous pouvez joindre le justificatif de paiement ci-dessous.
@@ -492,9 +497,6 @@ fr:
       update:
         success: Inscription mise à jour
         already_certified: Vous avez déjà indiqué avoir un certificat médical pour cette inscription.
-    signed_forms:
-      update:
-        success: Formulaire signé ajouté avec succès !
     vacations:
       show:
         i_am_alumni: Je suis un·e ancien·ne élève

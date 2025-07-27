@@ -9,7 +9,7 @@ module Dashboard
 
     def create
       if @subscription.pay_with_stripe!(params.require(:stripeToken))
-        redirect_to :dashboard, notice: t('.success'), status: :see_other
+        redirect_to next_completion_step_path(@subscription), status: :see_other
       else
         redirect_back fallback_location: root_path, alert: t('.error')
       end

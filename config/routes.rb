@@ -3,6 +3,14 @@ Rails.application.routes.draw do
     registrations: 'registrations'
   }
 
+  direct :next_completion_step do |subscription|
+    next edit_dashboard_subscription_terms_path(subscription) unless subscription.terms_accepted_at?
+    next edit_dashboard_subscription_medical_certificate_path(subscription) unless subscription.doctor_certified_at?
+    next new_dashboard_subscription_payment_path(subscription) unless subscription.paid? || subscription.payment_proof.attached?
+
+    dashboard_subscription_path(subscription)
+  end
+
   authenticated :user do
     root to: "dashboard#show", as: :authenticated
   end

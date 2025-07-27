@@ -3,7 +3,6 @@
 module Dashboard
   class SubscriptionsController < DashboardController
     include AccessFilters
-    include Subscriptions::Pdf
 
     before_action :filter_available_members!, only: %i[new], unless: :available_members?
     before_action :set_member, only: %i[new]
@@ -17,10 +16,8 @@ module Dashboard
 
     def create
       @subscription = current_user.subscriptions.new(subscription_params)
-
       if @subscription.save
-        process_after_save(@subscription)
-        redirect_to :dashboard, notice: t('.success'), status: :see_other
+        redirect_to next_completion_step_path(@subscription), status: :see_other
       else
         render :new, status: :unprocessable_entity
       end

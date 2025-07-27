@@ -50,7 +50,7 @@
                   edit_dashboard_subscription_medical_certificate_path(subscription.id),
                   class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" %>
             <% end %>
-            <% unless subscription.payment_proof.attached? %>
+            <% unless subscription.paid? || subscription.payment_proof.attached? %>
               <%= link_to t('.upload_payment_proof'),
                   edit_dashboard_subscription_payment_proof_path(subscription.id),
                   class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" %>
@@ -178,8 +178,12 @@
               </svg>
               <span class="text-yellow-700 font-semibold"><%= t('.payment_proof_in_review') %></span>
             </div>
-            <%= link_to t('defaults.download'),
+            <%= link_to t('.download_payment_proof'),
                         rails_blob_path(subscription.payment_proof, disposition: "attachment"),
+                        class: "text-yellow-700 text-sm font-medium hover:underline mt-2" %>
+
+            <%= link_to t('.pay_directly'),
+                        new_dashboard_subscription_payment_path(subscription.id),
                         class: "text-yellow-700 text-sm font-medium hover:underline mt-2" %>
           <% else %>
             <%= link_to t('.pay'),
