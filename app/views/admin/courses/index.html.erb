@@ -5,65 +5,50 @@
   </div>
 
   <div class="bg-white shadow-sm rounded-lg p-6">
-    <div class="flex justify-end mb-6">
+    <div class="flex justify-between items-center mb-6">
       <%= link_to t('defaults.new', resource: Course.model_name.human.downcase),
           %i[new admin course],
           class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md" %>
     </div>
 
     <div class="grid grid-cols-1 gap-4">
-      <% if @courses.empty? %>
-        <div class="text-center py-12">
-          <%= link_to t('.add_course'),
-              %i[new admin course],
-              class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md" %>
-        </div>
-      <% else %>
-        <% @courses.each do |course| %>
-          <div class="block border bg-white rounded-lg shadow-sm p-4">
-            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-              <div class="flex-grow">
-                <div class="flex flex-wrap items-center gap-x-2">
-                  <%= link_to course.title, [:admin, course], class: "text-blue-600 hover:text-blue-800 font-medium" %>
-                  <% unless course.active? %>
-                    <span class="text-gray-500 text-sm">(<%= t('.inactive') %>)</span>
-                  <% end %>
-                </div>
-                <div class="mt-2 flex flex-wrap items-center gap-x-6 text-sm text-gray-500">
-                  <div class="flex items-center gap-x-1">
-                    <span><%= Course.human_attribute_name(:capacity) %>:</span>
-                    <span class="text-gray-900"><%= course.capacity %></span>
-                  </div>
-                  <div class="flex items-center gap-x-1">
-                    <span><%= Course.human_attribute_name(:availability) %>:</span>
-                    <span class="text-gray-900"><%= course.availability %></span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="flex items-center gap-2 w-full sm:w-auto">
-                <%= link_to t('defaults.edit'),
-                    [:edit, :admin, course],
-                    class: "flex-1 sm:flex-initial text-center px-3 py-1.5 border border-yellow-600 text-yellow-600 hover:bg-yellow-50 text-sm rounded-md" %>
-
-                <%= button_to t('defaults.destroy'),
-                    [:admin, course],
-                    method: :delete,
-                    data: {
-                      controller: :confirm,
-                      confirm_message_value: t('defaults.are_you_sure')
-                    },
-                    class: "flex-1 sm:flex-initial text-center px-3 py-1.5 border border-red-600 text-red-600 hover:bg-red-50 text-sm rounded-md" %>
-
-                <% if course.features_attendance_sheet? %>
-                  <%= button_to t('.create_attendance_sheet'),
-                      [:admin, course, :attendance_sheets],
-                      class: "flex-1 sm:flex-initial text-center px-3 py-1.5 border border-green-600 text-green-600 hover:bg-green-50 text-sm rounded-md" %>
+      <% @courses.each do |course| %>
+        <div class="block border bg-white rounded-lg shadow-sm p-4">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div class="flex-grow">
+              <div class="flex flex-wrap items-center gap-x-2">
+                <span><%= course.title %></span>
+                <% unless course.active? %>
+                  <span class="text-gray-500 text-sm">(<%= t('.inactive') %>)</span>
                 <% end %>
               </div>
+              <div class="text-sm text-gray-500 mt-1">
+                <%= course.category.title %> - <%= course.weekday %>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 w-full sm:w-auto sm:ml-auto">
+              <%= link_to t('defaults.edit'),
+                  [:edit, :admin, course],
+                  class: "flex-1 sm:flex-initial text-center px-3 py-1.5 border border-yellow-600 text-yellow-600 hover:bg-yellow-50 text-sm rounded-md" %>
+
+              <%= button_to t('defaults.destroy'),
+                  [:admin, course],
+                  method: :delete,
+                  data: {
+                    controller: :confirm,
+                    confirm_message_value: t('defaults.are_you_sure')
+                  },
+                  class: "flex-1 sm:flex-initial text-center px-3 py-1.5 border border-red-600 text-red-600 hover:bg-red-50 text-sm rounded-md" %>
+
+              <% if course.features_attendance_sheet? %>
+                <%= button_to t('.create_attendance_sheet'),
+                    [:admin, course, :attendance_sheets],
+                    class: "flex-1 sm:flex-initial text-center px-3 py-1.5 border border-green-600 text-green-600 hover:bg-green-50 text-sm rounded-md" %>
+              <% end %>
             </div>
           </div>
-        <% end %>
+        </div>
       <% end %>
     </div>
   </div>

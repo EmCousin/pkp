@@ -3,13 +3,16 @@
 
   <%= form_for @subscription,
                url: dashboard_subscription_medical_certificate_path(@subscription),
-               class: "mt-6",
-               data: { controller: :form } do |form| %>
+               html: { class: "mt-6 animate-slide-in-from-left animation-duration-500" } do |form| %>
     <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
+      <p class="mt-2 mb-6">
+        <%= t('.explanation') %>
+      </p>
       <div class="flex items-center space-x-3 mb-6">
         <%= form.switch :medical_certificate, required: true %>
         <%= form.label :medical_certificate, t('.medical_certificate'), class: "block font-medium text-gray-700" %>
       </div>
+
       <div class="flex flex-col sm:flex-row gap-3 w-full justify-center">
         <%= link_to t('defaults.back'),
                     :dashboard,

@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     next edit_dashboard_subscription_medical_certificate_path(subscription) unless subscription.doctor_certified_at?
     next new_dashboard_subscription_payment_path(subscription) unless subscription.paid? || subscription.payment_proof.attached?
 
-    dashboard_subscription_path(subscription)
+    dashboard_path
   end
 
   authenticated :user do

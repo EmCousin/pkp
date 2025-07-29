@@ -1,36 +1,47 @@
 <div class="w-full max-w-2xl mx-auto px-4 py-8">
-  <%= render 'dashboard/subscriptions/payment_tabs', subscription: @subscription %>
+  <%= render 'dashboard/subscriptions/details', subscription: @subscription %>
 
-  <div class="bg-white rounded-xl shadow-lg p-8 flex flex-col gap-6">
-    <h2 class="text-xl font-bold mb-2">Joindre un justificatif de paiement</h2>
-    <%= form_for @subscription,
+  <div class="mt-6">
+    <%= render 'dashboard/subscriptions/payment_tabs', subscription: @subscription %>
+
+    <div class="bg-white rounded-xl shadow-lg p-8 flex flex-col gap-6 animate-slide-in-from-left animation-duration-500">
+      <h2 class="text-xl font-bold text-gray-900">
+        <%= t('.title') %>
+      </h2>
+
+      <%= form_for @subscription,
                   url: dashboard_subscription_payment_proof_path(@subscription),
-                  class: "space-y-4 mt-2",
-                  data: { controller: :form } do |form| %>
-      <% if form.object.errors.any? %>
-        <div class="rounded-md bg-red-50 p-4 mb-6">
-          <h2 class="text-lg font-medium text-red-800 mb-2">
-            <%= pluralize(form.object.errors.count, "error") %> prohibited this subscription from being saved:
-          </h2>
-          <ul class="list-disc pl-5 text-sm text-red-700">
-            <% form.object.errors.full_messages.each do |message| %>
-              <li><%= message %></li>
-            <% end %>
-          </ul>
+                  html: { class: "space-y-6" } do |form| %>
+        <% if form.object.errors.any? %>
+          <div class="rounded-md bg-red-50 p-4 mb-6">
+            <h2 class="text-lg font-medium text-red-800 mb-2">
+              <%= pluralize(form.object.errors.count, "error") %> prohibited this subscription from being saved:
+            </h2>
+            <ul class="list-disc pl-5 text-sm text-red-700">
+              <% form.object.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="space-y-2">
+          <div class="relative">
+            <%= form.file_field :payment_proof,
+                                required: true,
+                                class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-l-md file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 file:cursor-pointer cursor-pointer border border-gray-300 rounded-md bg-white",
+                                accept: ".pdf,.jpg,.jpeg,.png" %>
+          </div>
+          <p class="text-xs text-gray-500 mt-1">
+            Formats acceptés : PDF, JPG, JPEG, PNG
+          </p>
+        </div>
+
+        <div class="flex justify-between items-center pt-4">
+          <%= link_to "Retour", :dashboard, class: "inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors" %>
+          <%= form.submit "Sauvegarder", class: "inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors" %>
         </div>
       <% end %>
-      <div>
-        <%= form.label :payment_proof, class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <div class="mt-1">
-          <%= form.file_field :payment_proof,
-                              required: true,
-                              class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-slate-800 file:text-white hover:file:bg-slate-900" %>
-        </div>
-      </div>
-      <div class="flex flex-col sm:flex-row gap-3 mt-8">
-        <%= link_to t('defaults.back'), :dashboard, class: "inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800" %>
-        <%= form.submit t('defaults.save'), class: "inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800", data: { form_target: :submit } %>
-      </div>
-    <% end %>
+    </div>
   </div>
 </div>
