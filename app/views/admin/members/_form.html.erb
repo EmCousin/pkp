@@ -14,9 +14,9 @@
       <div>
         <%= form.label :level, class: "block text-sm font-medium text-gray-700 mb-1" %>
         <%= form.collection_select :level,
-            Member.level_options.map(&:values),
-            :first,
-            :last,
+            Member.levels.keys,
+            :to_s,
+            ->(level) { Member.human_attribute_name(level) },
             { prompt: "Sélectionner un niveau" },
             autofocus: true,
             required: true,

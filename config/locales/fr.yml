@@ -95,11 +95,11 @@ fr:
         subscription:
           attributes:
             courses:
-              must_exist: ": minimum un cours"
-              limit_exceeded: ": maximum %{count} cours"
-              unique_category: ": Les cours doivent être de la même catégorie"
-              unique_weekday: ": Les cours ne doivent pas être le même jour"
-              unavailable: ": L'un des cours est complet"
+              must_exist: "Minimum un cours"
+              limit_exceeded: "Maximum %{count} cours"
+              unique_category: "Les cours doivent être de la même catégorie"
+              unique_weekday: "Les cours ne doivent pas être le même jour"
+              unavailable: "L'un des cours est complet"
             member:
               too_young: n'a pas l'âge minimum requis
               too_old: n'a pas l'âge maximum requis
@@ -402,6 +402,12 @@ fr:
       form:
         users: Membres
         select_a_member: Choisissez un membre
+        member: Membre
+        courses: Cours
+        select_member_description: Choisissez le membre pour cette inscription
+        select_courses_description: Sélectionnez les cours souhaités
+        member_required: Membre requis
+        courses_required: Cours requis
       subscription:
         terms: Conditions d'inscription
         terms_accepted: Accepté
@@ -423,7 +429,6 @@ fr:
       subscription_detailed_info: "Vos inscriptions pour l'année %{year} :"
       how_to_complete_my_subscription: Comment compléter mon dossier
     subscription:
-      pay: Payer
       subscription_form: Formulaire d'inscription
       download_subscription_form: Télécharger le formulaire d'inscription
       upload_signed_form: Retourner le formulaire signé
@@ -443,6 +448,8 @@ fr:
       level: Niveau
       upload_payment_proof: Joindre un justificatif de paiement
       payment_proof_in_review: Votre justificatif de paiement est en cours de vérification.
+      download_payment_proof: Télécharger le justificatif
+      pay_directly: Payer directement par carte bancaire
     edit:
       title: Mes informations personnelles
     alumni_accesses:
@@ -455,15 +462,18 @@ fr:
       create:
         <<: *failure
     subscriptions:
-      new:
+      create:
+        success: Inscription créée avec succès !
+      create_member: Veuillez renseigner les informations de la personne à inscrire
+      form:
         or: ou
-        create_member: Veuillez renseigner les informations de la personne à inscrire
         add_member: Nouveau membre
         no_courses_available: Désolé, il n'y a plus de cours %{category_title} disponibles.
         full: Complet
         select_category: Sélectionner une catégorie
-      create:
-        success: Inscription créée avec succès !
+      payment_tabs:
+        payment_by_card: Payer par carte bancaire
+        upload_payment_proof: Joindre un justificatif
     members:
       form:
         advertising_right_statement: J'autorise l'utilisation, l'affichage et la publication de mon image provenant des activités de Parkour Paris, à des fins de promotion (tous médias) et d'information des activités de l'association. (panneaux, plaquettes, site internet).
@@ -474,8 +484,10 @@ fr:
         success: Élève modifié·e
     payments:
       new:
+        title: Payer par carte bancaire
         payment_by_card: Paiement par carte bancaire
         pay: Payer %{amount}
+        paying: "En cours de paiement..."
         already_paid: Vous avez déjà payé votre commande.
         already_paid_title: Vous avez déjà réglé votre cotisation par virement?
         already_paid_description: Vous pouvez joindre le justificatif de paiement ci-dessous.
@@ -486,25 +498,25 @@ fr:
         already_paid: Votre commande est déjà payée. Votre carte n'a donc pas été débitée.
     medical_certificates:
       edit:
-        explanation: Vous devez consulter un médecin qui vous remettra un certificat médical autorisant la pratique du Parkour.
+        explanation: Pour valider votre inscription, vous devez avoir un certificat médical autorisant la pratique du Parkour délivré par un médecin.
         medical_certificate: Je certifie avoir un certificat médical pour cette inscription
         already_certified: Vous avez déjà indiqué avoir un certificat médical pour cette inscription.
       update:
         success: Inscription mise à jour
         already_certified: Vous avez déjà indiqué avoir un certificat médical pour cette inscription.
-    signed_forms:
-      update:
-        success: Formulaire signé ajouté avec succès !
     vacations:
       show:
         i_am_alumni: Je suis un·e ancien·ne élève
     payment_proofs:
+      edit:
+        title: Joindre un justificatif de paiement
+        upload_payment_proof: Joindre un justificatif
       update:
         success: "Justificatif de paiement ajouté avec succès !"
     terms:
       edit:
         year: "Inscription %{year} / %{next_year}"
-        terms_accepted: "J'ai pris pleinement connaissance des détails de l'inscription"
+        terms_accepted: En complétant cette inscription, je reconnais avoir pris connaissance des conditions d'inscription et je certifie que les informations de l'élève sont correctes.
         yes: "Oui"
         no: "Non"
         already_accepted: Les conditions d'inscription ont déjà été acceptées

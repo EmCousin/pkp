@@ -1,36 +1,17 @@
 <div class="w-full max-w-2xl mx-auto px-4 py-8">
-  <div class="flex justify-center mb-8">
-    <button type="button" id="stripeTab" class="tab-btn active flex-1 py-3 rounded-l-lg text-lg font-semibold bg-slate-800 text-white hover:bg-slate-900 transition">💳 Payer par carte bancaire</button>
-    <button type="button" id="proofTab" class="tab-btn flex-1 py-3 rounded-r-lg text-lg font-semibold bg-white text-slate-800 border border-l-0 border-slate-200 hover:bg-slate-100 transition">📄 Joindre un justificatif</button>
-  </div>
+  <%= render 'dashboard/subscriptions/details', subscription: @subscription %>
 
-  <!-- Stripe Payment Form -->
-  <div id="stripeForm" class="tab-content">
-    <div class="bg-white rounded-xl shadow-lg p-8 flex flex-col gap-6">
-      <h2 class="text-xl font-bold mb-2">Paiement par carte bancaire</h2>
-      <div class="mb-4">
-        <!-- Placeholder for Stripe Elements -->
-        <input type="text" placeholder="Numéro de carte" class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-slate-800 focus:border-slate-800 mb-2" disabled>
-        <div class="flex gap-2">
-          <input type="text" placeholder="MM / AA" class="w-1/2 rounded-md border-gray-300 shadow-sm focus:ring-slate-800 focus:border-slate-800" disabled>
-          <input type="text" placeholder="CVC" class="w-1/2 rounded-md border-gray-300 shadow-sm focus:ring-slate-800 focus:border-slate-800" disabled>
-        </div>
-      </div>
-      <div class="flex flex-col sm:flex-row gap-3 mt-4">
-        <%= link_to t('defaults.back'), :dashboard, class: "inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800" %>
-        <button class="inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800">Payer 240,00 €</button>
-      </div>
-    </div>
-  </div>
+  <div class="mt-6">
+    <%= render 'dashboard/subscriptions/payment_tabs', subscription: @subscription %>
 
-  <!-- Payment Proof Upload Form -->
-  <div id="proofForm" class="tab-content hidden">
-    <div class="bg-white rounded-xl shadow-lg p-8 flex flex-col gap-6">
-      <h2 class="text-xl font-bold mb-2">Joindre un justificatif de paiement</h2>
+    <div class="bg-white rounded-xl shadow-lg p-8 flex flex-col gap-6 animate-slide-in-from-left animation-duration-500">
+      <h2 class="text-xl font-bold text-gray-900">
+        <%= t('.title') %>
+      </h2>
+
       <%= form_for @subscription,
-                   url: dashboard_subscription_payment_proof_path(@subscription),
-                   class: "space-y-4 mt-2",
-                   data: { controller: :form } do |form| %>
+                  url: dashboard_subscription_payment_proof_path(@subscription),
+                  html: { class: "space-y-6" } do |form| %>
         <% if form.object.errors.any? %>
           <div class="rounded-md bg-red-50 p-4 mb-6">
             <h2 class="text-lg font-medium text-red-800 mb-2">
@@ -43,50 +24,24 @@
             </ul>
           </div>
         <% end %>
-        <div>
-          <%= form.label :payment_proof, class: "block text-sm font-medium text-gray-700 mb-1" %>
-          <div class="mt-1">
+
+        <div class="space-y-2">
+          <div class="relative">
             <%= form.file_field :payment_proof,
-                               required: true,
-                               class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-slate-800 file:text-white hover:file:bg-slate-900" %>
+                                required: true,
+                                class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-l-md file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 file:cursor-pointer cursor-pointer border border-gray-300 rounded-md bg-white",
+                                accept: ".pdf,.jpg,.jpeg,.png" %>
           </div>
+          <p class="text-xs text-gray-500 mt-1">
+            Formats acceptés : PDF, JPG, JPEG, PNG
+          </p>
         </div>
-        <div class="flex flex-col sm:flex-row gap-3 mt-8">
-          <%= link_to t('defaults.back'), :dashboard, class: "inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800" %>
-          <%= form.submit t('defaults.save'), class: "inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800", data: { form_target: :submit } %>
+
+        <div class="flex justify-between items-center pt-4">
+          <%= link_to "Retour", :dashboard, class: "inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors" %>
+          <%= form.submit "Sauvegarder", class: "inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors" %>
         </div>
       <% end %>
     </div>
   </div>
 </div>
-
-<script>
-  // Simple tab toggle logic
-  document.addEventListener('DOMContentLoaded', function() {
-    const stripeTab = document.getElementById('stripeTab');
-    const proofTab = document.getElementById('proofTab');
-    const stripeForm = document.getElementById('stripeForm');
-    const proofForm = document.getElementById('proofForm');
-    function activate(tab, form) {
-      stripeTab.classList.remove('bg-slate-800', 'text-white', 'active');
-      stripeTab.classList.add('bg-white', 'text-slate-800');
-      proofTab.classList.remove('bg-slate-800', 'text-white', 'active');
-      proofTab.classList.add('bg-white', 'text-slate-800');
-      stripeForm.classList.add('hidden');
-      proofForm.classList.add('hidden');
-      tab.classList.add('bg-slate-800', 'text-white', 'active');
-      tab.classList.remove('bg-white', 'text-slate-800');
-      form.classList.remove('hidden');
-    }
-    stripeTab.addEventListener('click', function() { activate(stripeTab, stripeForm); });
-    proofTab.addEventListener('click', function() { activate(proofTab, proofForm); });
-  });
-</script>
-
-<style>
-  /* Optional: for a little extra polish on the tab buttons */
-  .tab-btn.active {
-    box-shadow: 0 2px 8px 0 rgba(30,41,59,0.10);
-    z-index: 1;
-  }
-</style>

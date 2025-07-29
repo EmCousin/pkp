@@ -8,7 +8,7 @@ module Dashboard
 
     def update
       if @subscription.update(subscription_params)
-        redirect_to :dashboard, notice: t('.success')
+        redirect_to next_completion_step_path(@subscription), status: :see_other
       else
         render :edit, status: :unprocessable_entity
       end

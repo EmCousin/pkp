@@ -2,7 +2,6 @@
 
 module Admin
   class SubscriptionsController < BaseController
-    include Subscriptions::Pdf
     before_action :set_subscription!, only: %i[show edit update destroy unlink_course]
 
     def index
@@ -29,7 +28,7 @@ module Admin
     def create
       @subscription = Subscription.new(subscription_params)
       if @subscription.save
-        process_after_save(@subscription)
+        @subscription.notify_confirmation!
         redirect_to %i[admin subscriptions], notice: t('.success'), status: :see_other
       else
         render :new, status: :unprocessable_entity

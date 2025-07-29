@@ -15,4 +15,8 @@ class Subscription < ApplicationRecord
   has_many :courses, through: :courses_subscriptions
 
   delegate :kidz?, :teen?, :adult?, to: :category, prefix: true, allow_nil: true
+
+  def notify_confirmation!
+    SubscriptionMailer.confirm_subscription(self).deliver_later
+  end
 end

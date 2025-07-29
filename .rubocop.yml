@@ -17,7 +17,6 @@ AllCops:
     - test/**/*
     - spec/**/*
     - vendor/bundle/**/*
-    - app/controllers/pdfs_controller.rb
     - app/mailers/application_mailer.rb
 
 Metrics/ClassLength:

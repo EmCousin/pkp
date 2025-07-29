@@ -1,0 +1,16 @@
+<div class="flex justify-center mb-8">
+  <%= link_to t('.payment_by_card'),
+              [:new, :dashboard, subscription, :payment],
+              class: class_names(
+                "flex-1 py-3 rounded-l-lg text-center text-lg font-semibold hover:bg-slate-900 transition cursor-pointer",
+                "bg-white text-slate-800" => controller_name == 'payments',
+                "bg-slate-800 text-white" => controller_name == 'payment_proofs'
+              ) %>
+  <%= link_to t('.upload_payment_proof'),
+              [:edit, :dashboard, subscription, :payment_proof],
+              class: class_names(
+                "flex-1 py-3 rounded-r-lg text-center text-lg font-semibold border border-l-0 border-slate-200 hover:bg-slate-100 transition cursor-pointer",
+                "bg-slate-800 text-white" => controller_name == 'payments',
+                "bg-white text-slate-800" => controller_name == 'payment_proofs'
+              ) %>
+</div>

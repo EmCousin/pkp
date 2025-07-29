@@ -1,62 +1,69 @@
-<h1 class="text-2xl text-center font-bold mb-4 text-amber-500">
-  <%= Subscription.model_name.human.pluralize %>
-  <% if params[:year].present? %>
-    <%= params[:year] %> - <%= params[:year].to_i + 1 %>
-  <% else %>
-    <%= Subscription.current_year %> - <%= Subscription.next_year %>
-  <% end %>
-</h1>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="mb-8">
+    <h1 class="text-2xl text-center font-bold mb-4 text-amber-500">
+      <%= Subscription.model_name.human.pluralize %>
+      <% if params[:year].present? %>
+        <%= params[:year] %> - <%= params[:year].to_i + 1 %>
+      <% else %>
+        <%= Subscription.current_year %> - <%= Subscription.next_year %>
+      <% end %>
+    </h1>
 
-<div class="border-b border-gray-200 mb-6"></div>
+    <div class="border-b border-gray-200 mb-6"></div>
 
-<div class="w-full p-4 bg-slate-100 rounded-lg shadow-sm">
-  <%= form_with url: %i[admin subscriptions],
-                local: true,
-                method: :get,
-                class: "mb-6" do |f| %>
-    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
-      <%= f.select :status,
-          subscriptions_status_select_options(params[:status]),
-          { include_blank: Subscription.human_attribute_name(:status) },
-          class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm' %>
+    <div class="w-full p-4 bg-slate-100 rounded-lg shadow-sm">
+      <%= form_with url: %i[admin subscriptions],
+                    local: true,
+                    method: :get,
+                    class: "mb-6" do |f| %>
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <%= f.select :status,
+              subscriptions_status_select_options(params[:status]),
+              { include_blank: Subscription.human_attribute_name(:status) },
+              class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm' %>
 
-      <%= f.select :year,
-          subscriptions_year_select_options(params[:year]),
-          { include_blank: Subscription.human_attribute_name(:year) },
-          class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm' %>
+          <%= f.select :year,
+              subscriptions_year_select_options(params[:year]),
+              { include_blank: Subscription.human_attribute_name(:year) },
+              class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm' %>
 
-      <%= f.select :level,
-          subscriptions_level_select_options(params[:level]),
-          { include_blank: Member.human_attribute_name(:level) },
-          class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm' %>
+          <%= f.select :level,
+              subscriptions_level_select_options(params[:level]),
+              { include_blank: Member.human_attribute_name(:level) },
+              class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm' %>
 
-      <div class="flex items-end">
-        <%= f.submit t('defaults.filter'),
-            class: "bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md w-full sm:w-auto" %>
-      </div>
+          <div class="flex items-end">
+            <%= f.submit t('defaults.filter'),
+                class: "bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md w-full sm:w-auto" %>
+          </div>
+        </div>
+      <% end %>
     </div>
-  <% end %>
-
-  <div class="flex justify-end mb-6">
-    <%= link_to t('.new'),
-        %i[new admin subscription],
-        class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md" %>
   </div>
 
-  <% if @subscriptions.empty? %>
-    <div class="text-center py-12">
-      <%= link_to t('.new'),
-          %i[new admin subscription],
+  <div class="bg-white shadow-sm rounded-lg p-6">
+    <div class="flex justify-between items-center mb-6">
+      <%= link_to t('.new'), %i[new admin subscription],
           class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md" %>
     </div>
-  <% else %>
-    <div class="grid grid-cols-1 gap-4">
-      <%= render partial: "admin/subscriptions/subscription", collection: @subscriptions %>
-    </div>
-  <% end %>
 
-  <div class="mt-6">
-    <%= paginate @subscriptions %>
+    <div class="grid grid-cols-1 gap-4">
+      <% if @subscriptions.empty? %>
+        <div class="text-center py-12">
+          <p class="text-gray-500 mb-4"><%= t('.no_subscriptions') %></p>
+          <%= link_to t('.new'), %i[new admin subscription],
+              class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md" %>
+        </div>
+      <% else %>
+        <%= render partial: 'subscription', collection: @subscriptions, as: :subscription %>
+      <% end %>
+    </div>
+
+    <% unless params[:no_paginate] == '1' %>
+      <div class="mt-6">
+        <%= paginate @subscriptions %>
+      </div>
+    <% end %>
   </div>
 </div>
 
