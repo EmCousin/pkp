@@ -155,7 +155,53 @@ feature "Subscription Workflow", type: :feature do
 
     click_button 'Continuer'
 
-    expect(page).to have_text('Inscription créée avec succès !')
+    # After creating subscription, user is redirected to terms page
+    expect(page).to have_text("Inscription #{Subscription.current_year} / #{Subscription.next_year}")
+    expect(page).to have_text('En complétant cette inscription, je reconnais avoir pris connaissance des conditions d\'inscription et je certifie que les informations de l\'élève sont correctes.')
+
+    # Accept terms
+    check "subscription_terms_accepted"
+    click_button 'Sauvegarder'
+
+    # After accepting terms, user is redirected to medical certificate page
+    expect(page).to have_text('Pour valider votre inscription, vous devez avoir un certificat médical autorisant la pratique du Parkour délivré par un médecin.')
+
+    # Accept medical certificate
+    check "subscription_medical_certificate"
+    click_button 'Sauvegarder'
+
+    # After medical certificate, user is redirected to payment page
+    expect(page).to have_text('Payer par carte bancaire')
+
+                                        # Verify we're on the payment page
+    expect(page).to have_text('Payer par carte bancaire')
+    expect(page).to have_text('Paiement par carte bancaire')
+
+    # The payment form should be present
+    expect(page).to have_selector('form[data-stripe-target="form"]')
+
+                # Mock Stripe payment for testing
+    stripe_charge = OpenStruct.new(
+      id: 'ch_test_123',
+      paid: true,
+      created: Time.current.to_i,
+      amount: 36000  # 360.00 EUR in cents
+    )
+
+    allow(Stripe::Charge).to receive(:create).with(
+      amount: 36000,
+      currency: 'eur',
+      source: 'tok_test_123',
+      description: anything
+    ).and_return(stripe_charge)
+
+            # Submit the form with the stripe token parameter
+    # This simulates what happens when Stripe creates a token and submits the form
+    form = find('form[data-stripe-target="form"]')
+    page.driver.submit form[:method], form[:action], { stripeToken: 'tok_test_123' }
+
+    # After successful payment, should redirect to dashboard with success message
+    expect(page).to have_text('Inscription payée avec succès !')
     expect(page).to have_text('Bienvenue !')
     expect(page).to have_text("Vos inscriptions pour l'année #{Subscription.current_year} :")
     expect(page).to have_text('Ajouter une inscription')

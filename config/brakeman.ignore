@@ -84,7 +84,7 @@
           "type": "controller",
           "class": "Dashboard::SubscriptionsController",
           "method": "show",
-          "line": 13,
+          "line": 12,
           "file": "app/controllers/dashboard/subscriptions_controller.rb",
           "rendered": {
             "name": "dashboard/subscriptions/show",
@@ -156,7 +156,7 @@
       "check_name": "UnscopedFind",
       "message": "Unscoped call to `Subscription#find`",
       "file": "app/controllers/admin/subscriptions_controller.rb",
-      "line": 62,
+      "line": 61,
       "link": "https://brakemanscanner.org/docs/warning_types/unscoped_find/",
       "code": "Subscription.find(params[:id])",
       "render_path": null,
@@ -196,50 +196,6 @@
       "note": ""
     },
     {
-      "warning_type": "Cross-Site Scripting",
-      "warning_code": 2,
-      "fingerprint": "bd132a3aaebfb2dd47a663ffe012f235b46615191062a793025b50bbd69e66c8",
-      "check_name": "CrossSiteScripting",
-      "message": "Unescaped model attribute",
-      "file": "app/views/admin/members/_member.html.erb",
-      "line": 46,
-      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "Member.new.contacts.map do\n mail_to(c.email, :class => \"hover:text-gray-700\")\n end.join(\" \\u00B7 \")",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "Admin::MembersController",
-          "method": "index",
-          "line": 12,
-          "file": "app/controllers/admin/members_controller.rb",
-          "rendered": {
-            "name": "admin/members/index",
-            "file": "app/views/admin/members/index.html.erb"
-          }
-        },
-        {
-          "type": "template",
-          "name": "admin/members/index",
-          "line": 109,
-          "file": "app/views/admin/members/index.html.erb",
-          "rendered": {
-            "name": "admin/members/_member",
-            "file": "app/views/admin/members/_member.html.erb"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "admin/members/_member"
-      },
-      "user_input": "Member.new.contacts",
-      "confidence": "Weak",
-      "cwe_id": [
-        79
-      ],
-      "note": ""
-    },
-    {
       "warning_type": "Unscoped Find",
       "warning_code": 82,
       "fingerprint": "c5a4159ed5c81619866c7b4de34feb97a2e4348f5cb1790f32efa2fef447dc9b",
@@ -263,6 +219,6 @@
       "note": ""
     }
   ],
-  "updated": "2025-07-26 13:13:25 +0200",
+  "updated": "2025-07-29 15:18:08 +0200",
   "brakeman_version": "6.1.2"
 }

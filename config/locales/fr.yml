@@ -464,9 +464,9 @@ fr:
     subscriptions:
       create:
         success: Inscription créée avec succès !
+      create_member: Veuillez renseigner les informations de la personne à inscrire
       form:
         or: ou
-        create_member: Veuillez renseigner les informations de la personne à inscrire
         add_member: Nouveau membre
         no_courses_available: Désolé, il n'y a plus de cours %{category_title} disponibles.
         full: Complet
