@@ -19,7 +19,7 @@ module Dashboard
     private
 
     def subscription_params
-      params.require(:subscription).permit(:terms_accepted)
+      params.expect(subscription: [:terms_accepted])
     end
 
     def filter_already_accepted!

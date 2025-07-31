@@ -30,10 +30,10 @@ module Dashboard
     end
 
     def subscription_params
-      params.require(:subscription).permit(
-        :member_id,
-        :category_id,
-        course_ids: []
+      params.expect(
+        subscription: [:member_id,
+                       :category_id,
+                       { course_ids: [] }]
       )
     end
 

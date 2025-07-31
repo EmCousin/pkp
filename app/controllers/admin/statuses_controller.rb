@@ -20,7 +20,7 @@ module Admin
     end
 
     def subscription_params
-      params.require(:subscription).permit(:status)
+      params.expect(subscription: [:status])
     end
   end
 end

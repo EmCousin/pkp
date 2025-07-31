@@ -29,7 +29,7 @@ module Admin
     private
 
     def subscription_params
-      params.require(:subscription).permit(:invoice)
+      params.expect(subscription: [:invoice])
     end
 
     def generate_invoice_pdf

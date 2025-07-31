@@ -17,7 +17,7 @@ module Dashboard
     private
 
     def subscription_params
-      params.require(:subscription).permit(:payment_proof)
+      params.expect(subscription: [:payment_proof])
     end
   end
 end

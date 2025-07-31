@@ -75,7 +75,7 @@ module Admin
     end
 
     def course_params
-      params.require(:course).permit(:title, :description, :capacity, :category_id, :weekday, :active, :features_attendance_sheet)
+      params.expect(course: %i[title description capacity category_id weekday active features_attendance_sheet])
     end
   end
 end

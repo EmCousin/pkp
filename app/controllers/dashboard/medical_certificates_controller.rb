@@ -19,7 +19,7 @@ module Dashboard
     private
 
     def subscription_params
-      params.require(:subscription).permit(:medical_certificate)
+      params.expect(subscription: [:medical_certificate])
     end
 
     def filter_already_certified!

@@ -81,7 +81,7 @@ module Admin
     end
 
     def subscription_params
-      params.require(:subscription).permit(:credit_note_amount)
+      params.expect(subscription: [:credit_note_amount])
     end
   end
 end

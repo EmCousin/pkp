@@ -25,7 +25,7 @@ module Dashboard
     end
 
     def alumni_access_params
-      params.require(:alumni_access).permit(:username, :password)
+      params.expect(alumni_access: %i[username password])
     end
   end
 end

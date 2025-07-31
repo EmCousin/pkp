@@ -62,7 +62,7 @@ module Admin
     end
 
     def subscription_params
-      params.require(:subscription).permit(:member_id, :status, course_ids: [])
+      params.expect(subscription: [:member_id, :status, { course_ids: [] }])
     end
   end
 end

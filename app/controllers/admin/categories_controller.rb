@@ -18,7 +18,7 @@ module Admin
     private
 
     def category_params
-      params.require(:category).permit(:title, :min_age, :max_age)
+      params.expect(category: %i[title min_age max_age])
     end
   end
 end
