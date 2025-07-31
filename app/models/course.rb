@@ -4,8 +4,10 @@ class Course < ApplicationRecord
   VACATION_MONTHS = (7..8).to_a.freeze
   ALUMNI_MONTHS = VACATION_MONTHS[-1..].freeze
 
-  include Courses::Validatable
   include Courses::Available
+
+  validates :title, :capacity, presence: true
+  validates :capacity, numericality: { greater_than_or_equal_to: 1, only_integer: true }
 
   belongs_to :category
   has_many :courses_subscriptions, dependent: :destroy
