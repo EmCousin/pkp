@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'csv'
-
 module Admin
   class MembersController < BaseController
     before_action :set_members, only: :index
