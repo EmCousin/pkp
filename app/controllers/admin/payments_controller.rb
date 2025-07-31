@@ -25,7 +25,7 @@ module Admin
     end
 
     def subscription_params
-      params.require(:subscription).permit(:payment_method)
+      params.expect(subscription: [:payment_method])
     end
   end
 end

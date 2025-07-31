@@ -20,7 +20,7 @@ module Admin
     end
 
     def member_params
-      params.require(:member).permit(:level)
+      params.expect(member: [:level])
     end
   end
 end

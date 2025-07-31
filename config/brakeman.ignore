@@ -106,6 +106,29 @@
     {
       "warning_type": "Unscoped Find",
       "warning_code": 82,
+      "fingerprint": "4b0aaee46899f0016123a5e7fcf709793a974d4bcd2f56308b6a35acbfd9dfbf",
+      "check_name": "UnscopedFind",
+      "message": "Unscoped call to `Subscription#find_by!`",
+      "file": "app/controllers/admin/abstract/subscriptions_controller.rb",
+      "line": 11,
+      "link": "https://brakemanscanner.org/docs/warning_types/unscoped_find/",
+      "code": "Subscription.find_by!(:id => params[:subscription_id], :year => Subscription.current_year)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Admin::Abstract::SubscriptionsController",
+        "method": "set_subscription!"
+      },
+      "user_input": "Subscription.current_year",
+      "confidence": "Weak",
+      "cwe_id": [
+        285
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Unscoped Find",
+      "warning_code": 82,
       "fingerprint": "5845e02b1070fe61ff0fae7cab044b2c5707b1ee6f2599ff2c3a2b47fe75ed31",
       "check_name": "UnscopedFind",
       "message": "Unscoped call to `Member#find`",
@@ -219,6 +242,5 @@
       "note": ""
     }
   ],
-  "updated": "2025-07-29 15:18:08 +0200",
-  "brakeman_version": "6.1.2"
+  "brakeman_version": "7.1.0"
 }

@@ -4,6 +4,53 @@ class FormBuilder < ActionView::Helpers::FormBuilder
   include ActionView::Context
   include ActionView::Helpers::TagHelper
 
+  SWITCH_LABEL_DEFAULT_CLASSES = %w[
+    pt-0.5
+  ].freeze
+
+  SWITCH_INPUT_DEFAULT_CLASSES = %w[
+    peer
+    opacity-0
+    h-0
+    w-0
+    z-[-1]
+  ].freeze
+
+  SWITCH_SLIDER_DEFAULT_CLASSES = %w[
+    bg-gray-200
+    peer-checked:bg-slate-800
+    relative
+    inline-flex
+    flex-shrink-0
+    h-6
+    w-11
+    border-2
+    border-transparent
+    rounded-full
+    cursor-pointer
+    transition-colors
+    ease-in-out
+    duration-200
+    focus:outline-none
+    focus:ring-2
+    focus:ring-offset-2
+    focus:ring-indigo-500
+    after:translate-x-0
+    after:peer-checked:translate-x-5
+    after:pointer-events-none
+    after:inline-block
+    after:h-5
+    after:w-5
+    after:rounded-full
+    after:bg-white
+    after:shadow
+    after:transform
+    after:ring-0
+    after:transition
+    after:ease-in-out
+    after:duration-200
+  ].freeze
+
   def error_for(attribute)
     return unless object.errors[attribute].any?
 
@@ -53,51 +100,4 @@ class FormBuilder < ActionView::Helpers::FormBuilder
 
     aria_options
   end
-
-  SWITCH_LABEL_DEFAULT_CLASSES = %w[
-    pt-0.5
-  ].freeze
-
-  SWITCH_INPUT_DEFAULT_CLASSES = %w[
-    peer
-    opacity-0
-    h-0
-    w-0
-    z-[-1]
-  ].freeze
-
-  SWITCH_SLIDER_DEFAULT_CLASSES = %w[
-    bg-gray-200
-    peer-checked:bg-slate-800
-    relative
-    inline-flex
-    flex-shrink-0
-    h-6
-    w-11
-    border-2
-    border-transparent
-    rounded-full
-    cursor-pointer
-    transition-colors
-    ease-in-out
-    duration-200
-    focus:outline-none
-    focus:ring-2
-    focus:ring-offset-2
-    focus:ring-indigo-500
-    after:translate-x-0
-    after:peer-checked:translate-x-5
-    after:pointer-events-none
-    after:inline-block
-    after:h-5
-    after:w-5
-    after:rounded-full
-    after:bg-white
-    after:shadow
-    after:transform
-    after:ring-0
-    after:transition
-    after:ease-in-out
-    after:duration-200
-  ].freeze
 end

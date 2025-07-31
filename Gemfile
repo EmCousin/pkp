@@ -7,14 +7,14 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-ruby '3.2.0'
+ruby '3.4.5'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 8'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
-gem 'puma', '~> 5.6'
+gem 'puma', '~> 6'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
@@ -43,7 +43,7 @@ gem 'prawn-table'
 gem 'rack-cors', require: 'rack/cors'
 gem 'rollbar'
 gem 'rqrcode'
-gem 'sidekiq', '<7'
+gem 'sidekiq'
 gem 'stripe'
 
 # Add this line to your Gemfile

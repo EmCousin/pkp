@@ -38,11 +38,11 @@ module Dashboard
     end
 
     def member_params
-      params.require(:member).permit(
-        :first_name, :last_name, :birthdate,
-        :contact_name, :contact_phone_number, :contact_relationship,
-        :agreed_to_advertising_right,
-        :avatar
+      params.expect(
+        member: %i[first_name last_name birthdate
+                   contact_name contact_phone_number contact_relationship
+                   agreed_to_advertising_right
+                   avatar]
       )
     end
   end

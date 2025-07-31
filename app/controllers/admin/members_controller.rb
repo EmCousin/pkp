@@ -55,12 +55,12 @@ module Admin
     end
 
     def member_params
-      params.require(:member).permit(
-        :level, :first_name, :last_name, :birthdate,
-        :contact_name, :contact_phone_number, :contact_relationship,
-        :avatar,
-        :agreed_to_advertising_right,
-        user_attributes: %i[id email password address zip_code city country phone_number admin coach]
+      params.expect(
+        member: [:level, :first_name, :last_name, :birthdate,
+                 :contact_name, :contact_phone_number, :contact_relationship,
+                 :avatar,
+                 :agreed_to_advertising_right,
+                 { user_attributes: %i[id email password address zip_code city country phone_number admin coach] }]
       )
     end
 

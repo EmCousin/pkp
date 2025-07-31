@@ -21,6 +21,8 @@ class BlobValidator < ActiveModel::EachValidator
   #     validates :video_portfolios, blob: { video: true, size_range: 1024..4096 }
   #   end
 
+  ROTATIONS = /Right-top|Left-bottom|Top-right|Bottom-left/
+
   include ActiveSupport::NumberHelper
 
   def validate_each(record, attribute, values)
@@ -124,7 +126,6 @@ class BlobValidator < ActiveModel::EachValidator
     record.errors.add(attribute, :square)
   end
 
-  ROTATIONS = /Right-top|Left-bottom|Top-right|Bottom-left/
   def rotated_image?(image)
     ROTATIONS === image.get('exif-ifd0-Orientation')
   rescue Vips::Error

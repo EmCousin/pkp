@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  INVALID_EMAIL_PROVIDERS = %w[@wanadoo.fr @orange.fr].freeze
+
   devise :database_authenticatable,
          :registerable,
          :recoverable,
@@ -47,8 +49,6 @@ class User < ApplicationRecord
   def email_confirmation_required?
     new_record? && email.present? && email_confirmation.present?
   end
-
-  INVALID_EMAIL_PROVIDERS = %w[@wanadoo.fr @orange.fr].freeze
 
   def valid_email_provider
     errors.add(:email, :invalid_provider) if invalid_email_provider?
