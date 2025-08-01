@@ -1,0 +1,167 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="mb-6">
+    <div class="flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-gray-900"><%= @camp.title %></h1>
+      <div class="flex space-x-3">
+        <%= link_to t('.edit'), edit_admin_camp_path(@camp), class: "inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50" %>
+        <%= link_to t('.back'), admin_camps_path, class: "inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Camp Details -->
+    <div class="lg:col-span-2">
+      <div class="bg-white shadow sm:rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+          <div class="mb-6">
+            <% if @camp.cover_picture.attached? %>
+              <%= image_tag @camp.cover_picture, class: "w-full h-64 object-cover rounded-lg" %>
+            <% end %>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+            <div>
+              <dt class="text-sm font-medium text-gray-500"><%= t('.starts_at') %></dt>
+              <dd class="mt-1 text-sm text-gray-900"><%= l(@camp.starts_at, format: :long) %></dd>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-500"><%= t('.ends_at') %></dt>
+              <dd class="mt-1 text-sm text-gray-900"><%= l(@camp.ends_at, format: :long) %></dd>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-500"><%= t('.duration') %></dt>
+              <dd class="mt-1 text-sm text-gray-900"><%= t('.duration_days', count: @camp.duration_days) %></dd>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-500"><%= t('.price') %></dt>
+              <dd class="mt-1 text-sm text-gray-900"><%= number_to_currency(@camp.price, unit: "€") %></dd>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-500"><%= t('.capacity') %></dt>
+              <dd class="mt-1 text-sm text-gray-900"><%= t('.capacity', current: @camp.subscriptions.confirmed.count, count: @camp.capacity) %></dd>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-500"><%= t('.status') %></dt>
+              <dd class="mt-1">
+                <% if @camp.active? %>
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    <%= t('.active') %>
+                  </span>
+                <% else %>
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                    <%= t('.inactive') %>
+                  </span>
+                <% end %>
+              </dd>
+            </div>
+          </div>
+
+          <% if @camp.description.present? %>
+            <div>
+              <dt class="text-sm font-medium text-gray-500 mb-2"><%= t('.description') %></dt>
+              <dd class="text-sm text-gray-900 prose prose-sm max-w-none">
+                <%= @camp.description %>
+              </dd>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Subscriptions -->
+    <div class="lg:col-span-1">
+      <div class="bg-white shadow sm:rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+          <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+            <%= t('.subscriptions') %>
+          </h3>
+
+          <!-- Filter Form -->
+          <form class="mb-4">
+            <div class="grid grid-cols-1 gap-4">
+              <div>
+                <label for="status" class="block text-sm font-medium text-gray-700"><%= t('.filter_by_status') %></label>
+                <select name="status" id="status" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                  <option value=""><%= t('.all_statuses') %></option>
+                  <option value="confirmed" <%= 'selected' if params[:status] == 'confirmed' %>><%= t('.confirmed') %></option>
+                  <option value="pending" <%= 'selected' if params[:status] == 'pending' %>><%= t('.pending') %></option>
+                </select>
+              </div>
+            </div>
+            <div class="mt-4">
+              <button type="submit" class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                <%= t('.filter') %>
+              </button>
+            </div>
+          </form>
+
+          <% if @subscriptions.any? %>
+            <div class="space-y-3">
+              <% @subscriptions.each do |subscription| %>
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div class="flex items-center">
+                    <%= image_tag url_for(subscription.member.avatar), class: "h-8 w-8 rounded-full" %>
+                    <div class="ml-3">
+                      <p class="text-sm font-medium text-gray-900"><%= link_to subscription.member.full_name, [:admin, subscription.member], data: { turbo_frame: '_top' } %></p>
+                      <p class="text-xs text-gray-500"><%= mail_to subscription.member.user.email, subscription.member.user.email %></p>
+                    </div>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <div class="flex items-center">
+                      <%= tag.span Subscription.human_attribute_name(subscription.status),
+                                   class: class_names(
+                                            "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
+                                            "bg-green-100 text-green-800" => subscription.confirmed?,
+                                            "bg-yellow-100 text-yellow-800" => subscription.pending?
+                                          ),
+                                  title: Subscription.human_attribute_name(subscription.status) %>
+                    </div>
+                    <div class="relative">
+                      <details class="group">
+                        <summary class="flex cursor-pointer items-center rounded-md px-2 py-1 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                          <%= t('defaults.action') %>
+                          <svg class="ml-1 h-3 w-3 text-gray-600 transition-transform group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                          </svg>
+                        </summary>
+                        <div class="absolute right-0 z-10 mt-1 w-48 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 divide-y divide-gray-100">
+                          <% Subscription.statuses.each_key do |status| %>
+                            <%= next if subscription.status == status %>
+
+                            <%= button_to t("defaults.mark_as_#{status}"),
+                                {
+                                  controller: 'admin/statuses',
+                                  action: 'update',
+                                  subscription_id: subscription.id,
+                                  subscription: { status: }
+                                },
+                                method: :put,
+                                class: class_names(
+                                  "w-full text-left px-3 py-2 text-xs hover:bg-gray-50",
+                                  Subscription::STATUS_COLORS[status.to_sym]
+                                ) %>
+                          <% end %>
+
+                          <%= button_to t('.unsubscribe'),
+                                        [:admin, @camp, subscription],
+                                        method: :delete,
+                                        data: { turbo_confirm: t('.confirm_unsubscribe') },
+                                        class: "w-full text-left px-3 py-2 text-xs text-red-600 hover:bg-red-50" %>
+                        </div>
+                      </details>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% else %>
+            <div class="text-center py-4">
+              <p class="text-sm text-gray-500"><%= t('.no_subscriptions') %></p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

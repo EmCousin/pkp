@@ -65,4 +65,30 @@ describe Member, type: :model do
     expect(too_young_member).to be_invalid
     expect(too_young_member.errors[:birthdate]).not_to be_empty
   end
+
+  describe '#can_subscribe?' do
+    let(:camp) { create(:camp) }
+    let(:member) { create(:member) }
+    let(:subscription) { create(:subscription, member: member, status: :confirmed) }
+
+    it 'returns true when all conditions are met' do
+      expect(camp.can_subscribe?(member)).to be_truthy
+    end
+
+    it 'returns false when camp is fully booked' do
+      camp.update!(capacity: 1)
+      create(:camps_subscription, camp: camp, subscription: subscription)
+      expect(camp.can_subscribe?(member)).to be_falsey
+    end
+
+    it 'returns false when member has no confirmed subscription' do
+      subscription.update!(status: :pending)
+      expect(camp.can_subscribe?(member)).to be_falsey
+    end
+
+    it 'returns false when member is already subscribed to this camp' do
+      create(:camps_subscription, camp: camp, subscription: subscription)
+      expect(camp.can_subscribe?(member)).to be_falsey
+    end
+  end
 end

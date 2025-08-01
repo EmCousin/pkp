@@ -1,56 +1,57 @@
 fr:
   defaults:
-    na: "N/A"
+    action: Action
     added: "Ajouté"
-    attach: Joindre
-    dismiss: Fermer
-    close: Fermer
-    view: Voir
-    show: Voir
-    new: Nouveau %{resource}
-    edit: Modifier
-    update: Mettre à jour
-    destroy: Supprimer
-    back: Retour
-    send: Envoyer
-    from: de
-    to: à
-    login: Connexion
-    logout: Déconnexion
-    signup: Inscription
-    forgot_your_password: Mot de passe oublié ?
-    did_not_receive_confirmation_intructions: "Vous n'avez pas reçu les instructions pour confirmer votre compte ?"
-    did_not_receive_unlock_instructions: "Vous n'avez pas reçu les instructions pour débloquer votre compte ?"
-    signin_with: Connexion avec %{provider}
-    send_reset_password_instructions: "Réinitialiser mon mot de passe"
+    archive: Archiver
+    archived: Archivée
     are_you_sure: "Vous êtes sûr ?"
-    save: Sauvegarder
-    welcome: Bienvenue
-    select: Sélectionner
-    search: Rechercher
-    filter: Filtrer
+    attach: Joindre
+    back: Retour
+    close: Fermer
+    complete_your_profile: Veuillez compléter votre profil pour continuer.
     confirm: Confirmer
     confirmed: Confirmé
-    archived: Archivée
-    pending: En attente
-    mark_as_confirmed: Confirmer
-    mark_as_archived: Archiver
-    mark_as_pending: Mettre en attente
     continue: Continuer
-    archive: Archiver
-    action: Action
-    download: Télécharger
-    none: Aucun
-    replace: Remplacer
-    forbidden: Accès non-autorisé
     details: Détails
-    complete_your_profile: Veuillez compléter votre profil pour continuer.
-    paid_with_bank_check: "A payé par chèque"
-    paid_with_cash: "A payé en espèces"
-    paid_with_bank_transfer: "A payé par virement"
-    paid_with_credit_card: "A payé par carte bancaire"
+    destroy: Supprimer
+    did_not_receive_confirmation_intructions: "Vous n'avez pas reçu les instructions pour confirmer votre compte ?"
+    did_not_receive_unlock_instructions: "Vous n'avez pas reçu les instructions pour débloquer votre compte ?"
+    dismiss: Fermer
+    download: Télécharger
+    edit: Modifier
+    filter: Filtrer
+    forbidden: Accès non-autorisé
+    forgot_your_password: Mot de passe oublié ?
+    from: de
+    login: Connexion
+    logout: Déconnexion
+    mark_as_archived: Archiver
+    mark_as_confirmed: Confirmer
     mark_as_not_paid: "Marquer comme non payé"
+    mark_as_pending: Mettre en attente
+    na: "N/A"
+    new: Nouveau %{resource}
+    none: Aucun
+    paid_with_bank_check: "A payé par chèque"
+    paid_with_bank_transfer: "A payé par virement"
+    paid_with_cash: "A payé en espèces"
+    paid_with_credit_card: "A payé par carte bancaire"
+    pay: Payer
+    pending: En attente
+    replace: Remplacer
+    save: Sauvegarder
+    search: Rechercher
+    select: Sélectionner
+    send: Envoyer
+    send_reset_password_instructions: "Réinitialiser mon mot de passe"
+    show: Voir
+    signup: Inscription
+    signin_with: Connexion avec %{provider}
+    to: à
+    update: Mettre à jour
     upload: Téléverser
+    view: Voir
+    welcome: Bienvenue
   custom_error_messages:
     subscription:
       member_id:
@@ -78,6 +79,11 @@ fr:
         required: est requis
         taken: est dejà pris
       models:
+        camp:
+          attributes:
+            cover_picture:
+              content_type: doit être au format PNG, JPG, JPEG ou WEBP
+      models:
         user:
           attributes:
             email:
@@ -100,6 +106,8 @@ fr:
               unique_category: "Les cours doivent être de la même catégorie"
               unique_weekday: "Les cours ne doivent pas être le même jour"
               unavailable: "L'un des cours est complet"
+            parent_subscription:
+              required_for_camp: "Une inscription parent est requise pour un stage"
             member:
               too_young: n'a pas l'âge minimum requis
               too_old: n'a pas l'âge maximum requis
@@ -117,7 +125,14 @@ fr:
             max_age:
               greater_than: doit être supérieur à l'âge minimum
               less_than_or_equal_to: doit être inférieur ou égal à 100
+        camps_subscription:
+          attributes:
+            subscription:
+              already_has_camp: "Cette inscription a déjà un stage"
     models:
+      camp:
+        one: Stage
+        other: Stages
       user:
         one: Compte utilisateur
         other: Comptes utilisateur
@@ -134,6 +149,15 @@ fr:
         one: Inscription
         other: Inscriptions
     attributes:
+      camp:
+        title: Titre
+        description: Description
+        price: Prix
+        capacity: Capacité
+        starts_at: Date de début
+        ends_at: Date de fin
+        cover_picture: Image de couverture
+        active: Actif
       attendance_record:
         status: Statut
         statuses:
@@ -182,6 +206,7 @@ fr:
         min_age: Âge minimum
         max_age: Âge maximum
       subscription:
+        camp: Stage
         terms_accepted_at: Conditions d'inscription
         doctor_certified_at: Certificat médical
         category_id: Type de cours
@@ -209,6 +234,13 @@ fr:
         bank_check: Chèque
         bank_transfer: Virement
         credit_card: Carte bancaire
+
+  helpers:
+    submit:
+      camp:
+        create: Créer le stage
+        update: Mettre à jour le stage
+
   # Views
   contacts:
     confirmations:
@@ -273,14 +305,82 @@ fr:
         actions: "Actions"
       attendance_record:
         <<: *attendance_record
+
+    camps:
+      camp:
+        inactive: "Inactif"
+        duration_days:
+          one: "%{count} jour"
+          other: "%{count} jours"
+        price: "%{price}"
+        capacity:
+          one: "%{current}/%{count} place"
+          other: "%{current}/%{count} places"
+        view: "Voir"
+        edit: "Modifier"
+        delete: "Supprimer"
+        confirm_delete: "Êtes-vous sûr de vouloir supprimer ce stage ?"
+      index:
+        title: "Stages"
+        new_camp: "Nouveau stage"
+      new:
+        title: "Nouveau stage"
+      edit:
+        title: "Modifier le stage %{camp}"
+      show:
+        edit: "Modifier"
+        back: "Retour"
+        starts_at: "Date de début"
+        ends_at: "Date de fin"
+        duration: "Durée"
+        price: "Prix"
+        capacity: "Capacité"
+        capacity_info:
+          one: "%{current}/%{count} place occupée"
+          other: "%{current}/%{count} places occupées"
+        status: "Statut"
+        active: "Actif"
+        inactive: "Inactif"
+        description: "Description"
+        subscriptions: "Inscriptions"
+        filter_by_status: "Filtrer par statut"
+        all_statuses: "Tous les statuts"
+        confirmed: "Confirmé"
+        pending: "En attente"
+        filter: "Filtrer"
+        no_subscriptions: "Aucune inscription"
+        unsubscribe: "Désinscrire"
+        confirm_unsubscribe: "Êtes-vous sûr de vouloir désinscrire ce membre ?"
+      form:
+        basic_information: "Informations de base"
+        cover_picture_headline: "Ajoutez une image représentative du stage"
+        description_headline: "Décrivez le contenu et les objectifs du stage"
+        active_headline: "Activez ou désactivez le stage"
+        upload_file: "Téléverser un fichier"
+        or_drag_drop: "ou glisser-déposer"
+        cancel: "Annuler"
+      create:
+        success: Stage créé
+      update:
+        success: Stage modifié
+      destroy:
+        success: Stage supprimé
+      subscriptions:
+        create:
+          success: "Membre inscrit au stage avec succès"
+        destroy:
+          success: "Membre désinscrit du stage avec succès"
+          error: "Erreur lors de la désinscription"
+
     categories:
       new:
         title: Créer une catégorie
       create:
         success: Catégorie créée
+
     courses:
       index:
-        title: Liste des cours
+        title: Cours
         inactive: Inactif
         create_attendance_sheet: "Feuille de présence"
       show:
@@ -317,9 +417,10 @@ fr:
         success: Facture générée
       update:
         success: Facture générée
+
     members:
       index:
-        title: Liste des membres
+        title: Membres
         search_by_name: Nom
         all_categories: Toutes les catégories
         all_courses: Tous les cours
@@ -408,6 +509,22 @@ fr:
         select_courses_description: Sélectionnez les cours souhaités
         member_required: Membre requis
         courses_required: Cours requis
+        parent_subscription: "Inscription parent"
+        parent_subscription_description: "Sélectionnez optionnellement une inscription parent pour ce membre"
+        no_parent_subscription: "Aucune inscription parent"
+        subscription_type: "Type d'inscription"
+        subscription_type_description: "Choisissez entre cours ou stage"
+        camp: "Stage"
+        camp_required: "Un stage est requis"
+        select_a_camp: "Choisissez un stage"
+        no_courses_available: "Aucun cours disponible"
+        no_courses_available_description: "Il n'y a actuellement aucun cours disponible pour la sélection."
+        no_camps_available: "Aucun stage disponible"
+        no_camps_available_description: "Il n'y a actuellement aucun stage disponible pour la sélection."
+        current_year_subscriptions: "Inscriptions de l'année en cours"
+        courses_count:
+          one: "cours"
+          other: "cours"
       subscription:
         terms: Conditions d'inscription
         terms_accepted: Accepté
@@ -421,6 +538,70 @@ fr:
         uploaded_payment_proof: Justificatif
         payment_method: A payé avec %{payment_method}
   dashboard:
+    camps:
+      camp:
+        duration_days:
+          one: "%{count} jour"
+          other: "%{count} jours"
+        price: "%{price}"
+        capacity:
+          one: "%{current}/%{count} place"
+          other: "%{current}/%{count} places"
+        view: "Voir"
+        edit: "Modifier"
+        delete: "Supprimer"
+        confirm_delete: "Êtes-vous sûr de vouloir supprimer ce stage ?"
+        view_details: "Voir les détails"
+      index:
+        title: "Stages disponibles"
+        description: "Découvrez nos stages et inscrivez-vous !"
+        no_camps_title: "Aucun stage disponible"
+        no_camps_description: "Il n'y a actuellement aucun stage disponible."
+      payment_proofs:
+        edit:
+          title: "Joindre un justificatif de paiement"
+          upload_payment_proof: "Joindre un justificatif"
+          already_paid_for: "%{member} a déjà payé pour ce stage"
+        form:
+          accepted_formats: "Formats acceptés : PDF, JPG, JPEG, PNG"
+        update:
+          success: "Justificatif de paiement ajouté avec succès !"
+          already_paid_for: "%{member} a déjà payé pour ce stage"
+      show:
+        back_to_camps: "Retour aux stages"
+        details: "Détails"
+        starts_at: "Date de début"
+        ends_at: "Date de fin"
+        duration: "Durée"
+        price: "Prix"
+        capacity: "Capacité"
+        capacity_info:
+          one: "%{current}/%{count} place occupée"
+          other: "%{current}/%{count} places occupées"
+        fully_booked: "Complet"
+        subscription: "Inscription"
+        already_subscribed: "Déjà inscrit"
+        confirm_unsubscribe: "Êtes-vous sûr de vouloir vous désinscrire de ce stage ?"
+        available_for_subscription: "Disponible pour inscription"
+        choose_member: "Choisissez un membre pour vous inscrire :"
+        no_confirmed_subscriptions: "Aucune inscription confirmée"
+        need_confirmed_subscription: "Vous devez avoir une inscription confirmée pour vous inscrire aux stages."
+        description: "Description"
+        duration_days:
+          one: "%{count} jour"
+          other: "%{count} jours"
+        capacity: Nombre de places
+      subscription:
+        unsubscribe: "Se désinscrire"
+        subscribe_with: "S'inscrire avec %{member}"
+        cannot_subscribe_with: "Impossible de s'inscrire avec %{member}"
+      subscriptions:
+        create:
+          success: "Inscription au stage confirmée"
+        destroy:
+          success: "Désinscription du stage confirmée"
+          error: "Erreur lors de la désinscription"
+
     show:
       add_subscription: Ajouter une inscription
       choose_my_courses: Choisir mes cours
@@ -428,6 +609,10 @@ fr:
       not_yet_subscribed: "Vous n'êtes pas encore inscrit·e pour l'année %{year} ! Cliquez sur le bouton pour vous inscrire :"
       subscription_detailed_info: "Vos inscriptions pour l'année %{year} :"
       how_to_complete_my_subscription: Comment compléter mon dossier
+      camps_section_title: "Stages"
+      camps_section_description: "Découvrez nos stages et inscrivez-vous !"
+      browse_camps: "Parcourir les stages"
+
     subscription:
       subscription_form: Formulaire d'inscription
       download_subscription_form: Télécharger le formulaire d'inscription
@@ -447,9 +632,12 @@ fr:
       pay: Régler ma cotisation
       level: Niveau
       upload_payment_proof: Joindre un justificatif de paiement
+      change_payment_proof: Remplacer le justificatif
       payment_proof_in_review: Votre justificatif de paiement est en cours de vérification.
       download_payment_proof: Télécharger le justificatif
       pay_directly: Payer directement par carte bancaire
+      additional_subscriptions: "Inscriptions supplémentaires"
+      additional_courses: "Cours supplémentaires"
     edit:
       title: Mes informations personnelles
     alumni_accesses:
@@ -511,6 +699,8 @@ fr:
       edit:
         title: Joindre un justificatif de paiement
         upload_payment_proof: Joindre un justificatif
+      form:
+        accepted_formats: "Formats acceptés : PDF, JPG, JPEG, PNG"
       update:
         success: "Justificatif de paiement ajouté avec succès !"
     terms:
@@ -532,6 +722,7 @@ fr:
       admin: "Admin"
       members: "Membres"
       courses: "Cours"
+      camps: "Stages"
       subscriptions: "Inscriptions"
       my_account: "Mon compte"
       logout: "Déconnexion"

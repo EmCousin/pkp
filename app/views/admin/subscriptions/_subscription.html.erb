@@ -35,13 +35,17 @@
       </div>
 
       <div class="flex items-center space-x-2">
-        <span class="text-sm text-gray-500"><%= Subscription.human_attribute_name(:course_ids) %>:</span>
+        <% if subscription.camp.present? %>
+          <span class="text-sm text-gray-500"><%= Subscription.human_attribute_name(:camp) %>:</span>
+          <%= link_to subscription.camp.title, [:admin, subscription.camp], class: "text-blue-600 hover:text-blue-800", data: { turbo_frame: '_top' } %>
+        <% else %>
+          <span class="text-sm text-gray-500"><%= Subscription.human_attribute_name(:course_ids) %>:</span>
 
-        <% subscription.courses.each do |course| %>
-          <%= link_to course.title, [:admin, course], class: "text-blue-600 hover:text-blue-800", data: { turbo_frame: '_top' } %>
-          <span class="last:hidden">,</span>
+          <% subscription.courses.each do |course| %>
+            <%= link_to course.title, [:admin, course], class: "text-blue-600 hover:text-blue-800", data: { turbo_frame: '_top' } %>
+            <span class="last:hidden">,</span>
+          <% end %>
         <% end %>
-
       </div>
 
       <div class="flex items-center space-x-2">

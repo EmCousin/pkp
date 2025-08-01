@@ -1,0 +1,98 @@
+<!-- Camp Subscription Recap Card -->
+<div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+  <div class="flex flex-col sm:flex-row sm:items-center gap-6 mb-4">
+    <div class="flex-shrink-0">
+      <%= image_tag url_for(subscription.member.avatar), alt: "Avatar #{subscription.member.first_name}", class: "w-20 h-20 rounded-full object-cover ring-2 ring-indigo-400 shadow" %>
+    </div>
+    <div class="flex-1">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <div>
+          <div class="text-2xl font-bold text-gray-900"><%= subscription.member.full_name %></div>
+          <div class="text-sm text-gray-500 mt-1"><%= t('dashboard.terms.edit.year', year: subscription.year, next_year: subscription.year + 1) %></div>
+        </div>
+        <div class="text-xl font-semibold text-indigo-600">
+          <%= number_to_currency(camp.price, unit: "€", separator: ",", format: "%n %u") %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Camp Details -->
+  <div class="bg-indigo-50 rounded-lg p-0 mb-4 overflow-hidden">
+    <% if camp.cover_picture.attached? %>
+      <div class="w-full h-40 sm:h-56 bg-gray-200 relative">
+        <%= image_tag url_for(camp.cover_picture), alt: camp.title, class: "object-cover w-full h-full" %>
+        <div class="absolute inset-0 bg-gradient-to-t from-indigo-900/40 to-transparent"></div>
+      </div>
+    <% end %>
+    <div class="p-4">
+      <h3 class="text-lg font-semibold text-indigo-900 mb-2"><%= camp.title %></h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-indigo-800">
+        <div>
+          <span class="font-medium"><%= Camp.human_attribute_name(:starts_at) %> :</span>
+          <span><%= l(camp.starts_at, format: :long) %></span>
+        </div>
+        <div>
+          <span class="font-medium"><%= Camp.human_attribute_name(:ends_at) %> :</span>
+          <span><%= l(camp.ends_at, format: :long) %></span>
+        </div>
+        <div>
+          <span class="font-medium"><%= Camp.human_attribute_name(:duration_days) %> :</span>
+          <span><%= t('dashboard.camps.camp.duration_days', count: camp.duration_days) %></span>
+        </div>
+        <div>
+          <span class="font-medium"><%= Camp.human_attribute_name(:capacity) %> :</span>
+          <span><%= camp.subscriptions.confirmed.count %>/<%= camp.capacity %> <%= t('dashboard.camps.camp.participants') %></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Member Information -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-700">
+    <div>
+      <span class="font-medium text-gray-500"><%= Member.human_attribute_name(:birthdate) %> :</span>
+      <span><%= l(subscription.member.birthdate, format: :long) if subscription.member.birthdate %></span>
+    </div>
+    <div>
+      <span class="font-medium text-gray-500"><%= User.human_attribute_name(:address) %> :</span>
+      <span><%= subscription.member.address %></span>
+    </div>
+    <div>
+      <span class="font-medium text-gray-500"><%= User.human_attribute_name(:zip_code) %> :</span>
+      <span><%= subscription.member.zip_code %></span>
+    </div>
+    <div>
+      <span class="font-medium text-gray-500"><%= User.human_attribute_name(:city) %> :</span>
+      <span><%= subscription.member.city %></span>
+    </div>
+    <div>
+      <span class="font-medium text-gray-500"><%= User.human_attribute_name(:country) %> :</span>
+      <span><%= subscription.member.country %></span>
+    </div>
+    <div>
+      <span class="font-medium text-gray-500"><%= User.human_attribute_name(:phone_number) %> :</span>
+      <span><%= subscription.member.phone_number %></span>
+    </div>
+    <div>
+      <span class="font-medium text-gray-500"><%= User.human_attribute_name(:email) %> :</span>
+      <span><%= subscription.member.email %></span>
+    </div>
+    <div>
+      <span class="font-medium text-gray-500"><%= Member.human_attribute_name(:contact_name) %> :</span>
+      <span><%= subscription.member.contact_name %></span>
+    </div>
+    <div>
+      <span class="font-medium text-gray-500"><%= Member.human_attribute_name(:contact_relationship) %> :</span>
+      <span><%= subscription.member.contact_relationship %></span>
+    </div>
+    <div>
+      <span class="font-medium text-gray-500"><%= Member.human_attribute_name(:contact_phone_number) %> :</span>
+      <span><%= subscription.member.contact_phone_number %></span>
+    </div>
+    <div>
+      <span class="font-medium text-gray-500"><%= Member.human_attribute_name(:agreed_to_advertising_right) %> :</span>
+      <span><%= subscription.member.agreed_to_advertising_right ? t('dashboard.terms.edit.yes') : t('dashboard.terms.edit.no') %></span>
+    </div>
+  </div>
+</div>

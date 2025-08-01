@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_31_091315) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_31_132118) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -27,6 +27,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_31_091315) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["message_id", "message_checksum"], name: "index_action_mailbox_inbound_emails_uniqueness", unique: true
+  end
+
+  create_table "action_text_rich_texts", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "body"
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
   end
 
   create_table "active_storage_attachments", force: :cascade do |t|
@@ -76,6 +86,27 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_31_091315) do
     t.datetime "updated_at", null: false
     t.index ["course_id", "date"], name: "index_attendance_sheets_on_course_id_and_date", unique: true
     t.index ["course_id"], name: "index_attendance_sheets_on_course_id"
+  end
+
+  create_table "camps", force: :cascade do |t|
+    t.string "title"
+    t.integer "capacity"
+    t.date "starts_at"
+    t.date "ends_at"
+    t.decimal "price"
+    t.boolean "active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "camps_subscriptions", force: :cascade do |t|
+    t.bigint "camp_id"
+    t.bigint "subscription_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["camp_id", "subscription_id"], name: "index_camps_subscriptions_on_camp_id_and_subscription_id", unique: true
+    t.index ["camp_id"], name: "index_camps_subscriptions_on_camp_id"
+    t.index ["subscription_id"], name: "index_camps_subscriptions_on_subscription_id"
   end
 
   create_table "categories", force: :cascade do |t|
@@ -147,9 +178,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_31_091315) do
     t.datetime "doctor_certified_at"
     t.datetime "paid_at"
     t.enum "payment_method", enum_type: "payment_method"
+    t.bigint "parent_subscription_id"
     t.index ["created_at"], name: "index_subscriptions_on_created_at", order: :desc
-    t.index ["member_id", "year"], name: "index_subscriptions_on_member_id_and_year", unique: true
     t.index ["member_id"], name: "index_subscriptions_on_member_id"
+    t.index ["parent_subscription_id"], name: "index_subscriptions_on_parent_subscription_id"
     t.index ["status"], name: "index_subscriptions_on_status"
     t.index ["year"], name: "index_subscriptions_on_year"
   end
@@ -189,10 +221,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_31_091315) do
   add_foreign_key "attendance_records", "attendance_sheets"
   add_foreign_key "attendance_records", "members"
   add_foreign_key "attendance_sheets", "courses"
+  add_foreign_key "camps_subscriptions", "camps"
+  add_foreign_key "camps_subscriptions", "subscriptions"
   add_foreign_key "contacts", "users"
   add_foreign_key "courses", "categories"
   add_foreign_key "courses_subscriptions", "courses"
   add_foreign_key "courses_subscriptions", "subscriptions"
   add_foreign_key "members", "users"
   add_foreign_key "subscriptions", "members"
+  add_foreign_key "subscriptions", "subscriptions", column: "parent_subscription_id"
 end

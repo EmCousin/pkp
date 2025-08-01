@@ -54,6 +54,10 @@ Rails.application.routes.draw do
       resource :level, only: [:update]
     end
 
+    resources :camps do
+      resources :subscriptions, only: [:create, :destroy], controller: 'camps/subscriptions'
+    end
+
     resources :subscriptions do
       resource :payment, only: [:create, :destroy]
       resource :status, only: [:update]
@@ -80,6 +84,11 @@ Rails.application.routes.draw do
       resource :medical_certificate, only: [:edit, :update]
       resource :payment_proof, only: [:edit, :update]
       resource :payment, only: [:new, :create]
+    end
+    resources :camps, only: [:index, :show] do
+      resources :subscriptions, only: [:create, :destroy], controller: 'camps/subscriptions' do
+        resource :payment_proof, only: [:edit, :update], module: :camps
+      end
     end
     resource :vacation, only: [:show]
     resource :capacity, only: [:show]

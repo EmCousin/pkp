@@ -17,7 +17,7 @@
           <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <div class="flex-grow">
               <div class="flex flex-wrap items-center gap-x-2">
-                <span><%= course.title %></span>
+                <%= link_to course.title, [:admin, course] %>
                 <% unless course.active? %>
                   <span class="text-gray-500 text-sm">(<%= t('.inactive') %>)</span>
                 <% end %>

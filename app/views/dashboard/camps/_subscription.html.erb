@@ -1,0 +1,64 @@
+<% if subscription.member.can_subscribe?(@camp) %>
+  <div class="relative">
+    <details class="group">
+      <summary class="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200 shadow-sm">
+        <span><%= t('.subscribe_with', member: subscription.member.full_name) %></span>
+        <svg class="h-4 w-4 text-white transition-transform duration-200 group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+        </svg>
+      </summary>
+      <div class="absolute right-0 z-10 mt-1 w-56 rounded-lg bg-white shadow-xl ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 border border-gray-200">
+        <%= button_to t('.subscribe_with', member: subscription.member.full_name),
+            dashboard_camp_subscriptions_path(@camp, subscription_id: subscription.id),
+            method: :post,
+            class: "w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors duration-150" %>
+      </div>
+    </details>
+  </div>
+<% elsif subscription.member.camps.include?(@camp) %>
+  <% camp_subscription = subscription.child_subscriptions.joins(:camps_subscription).find_by(camps_subscriptions: { camp_id: @camp.id }) %>
+
+  <div class="relative">
+    <details class="group">
+      <summary class="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2.5 text-sm font-medium bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200 shadow-sm border">
+        <div class="pl-5">
+          <% if camp_subscription.paid? %>
+            <div class="absolute bottom-2.5 left-2 h-5 w-5 bg-green-500 rounded-full ring-2 ring-white flex items-center justify-center">
+              <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+          <% else %>
+            <div class="absolute bottom-2.5 left-2 h-5 w-5 bg-yellow-500 rounded-full ring-2 ring-white flex items-center justify-center">
+              <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-12.25a.75.75 0 00-1.5 0v4.25c0 .414.336.75.75.75h3a.75.75 0 000-1.5h-2.25V5.75z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+          <% end %>
+          <%= camp_subscription.member.full_name %>
+        </div>
+        <svg class="h-4 w-4 transition-transform duration-200 group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+        </svg>
+      </summary>
+      <% unless camp_subscription.paid? %>
+        <div class="absolute right-0 z-10 mt-1 w-56 rounded-lg bg-white shadow-xl ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 border border-gray-200">
+          <%= link_to camp_subscription.payment_proof.attached? ? t('dashboard.subscription.change_payment_proof') : t('dashboard.subscription.upload_payment_proof'),
+              [:edit, :dashboard, @camp, camp_subscription, :payment_proof],
+              class: "block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors duration-150",
+              data: { turbo_frame: '_top' } %>
+
+          <%= button_to t('.unsubscribe'),
+            [:dashboard, @camp, camp_subscription],
+            method: :delete,
+            class: "w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors duration-150",
+            data: { confirm: t('.unsubscribe_confirm', member: camp_subscription.member.full_name) } %>
+        </div>
+      <% end %>
+    </details>
+  </div>
+<% else %>
+  <div class="text-sm text-gray-500 bg-gray-50 rounded-lg px-4 py-2.5 border border-gray-200">
+    <%= t('.cannot_subscribe_with', member: subscription.member.full_name) %>
+  </div>
+<% end %>

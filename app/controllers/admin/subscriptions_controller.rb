@@ -8,10 +8,12 @@ module Admin
       @subscriptions = Subscription.filter_by_status(params[:status])
                                    .filter_by_level(params[:level])
                                    .filter_by_year(params[:year])
+                                   .filter_by_course_ids(params[:course_ids])
+                                   .filter_by_camp_id(params[:camp_id])
                                    .order(created_at: :desc)
                                    .page(params[:page])
                                    .per(25)
-                                   .includes(:courses, member: :avatar_attachment)
+                                   .includes(:camp, :courses, member: :avatar_attachment)
     end
 
     def show; end
@@ -62,7 +64,7 @@ module Admin
     end
 
     def subscription_params
-      params.expect(subscription: [:member_id, :status, { course_ids: [] }])
+      params.require(:subscription).permit(:member_id, :status, :parent_subscription_id, { course_ids: [] }, camps_subscription_attributes: [:camp_id])
     end
   end
 end
