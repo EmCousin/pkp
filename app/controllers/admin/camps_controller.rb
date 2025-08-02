@@ -30,7 +30,7 @@ module Admin
 
     def update
       if @camp.update(camp_params)
-        redirect_back_or_to admin_camp_path(@camp, success: true), notice: t('.success'), status: :see_other
+        redirect_to admin_camp_path(@camp, success: true), notice: t('.success'), status: :see_other
       else
         render :edit, status: :unprocessable_entity
       end
