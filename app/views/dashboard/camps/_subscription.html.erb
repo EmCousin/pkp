@@ -1,20 +1,8 @@
 <% if subscription.member.can_subscribe?(@camp) %>
-  <div class="relative">
-    <details class="group">
-      <summary class="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200 shadow-sm">
-        <span><%= t('.subscribe_with', member: subscription.member.full_name) %></span>
-        <svg class="h-4 w-4 text-white transition-transform duration-200 group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-        </svg>
-      </summary>
-      <div class="absolute right-0 z-10 mt-1 w-56 rounded-lg bg-white shadow-xl ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 border border-gray-200">
-        <%= button_to t('.subscribe_with', member: subscription.member.full_name),
-            dashboard_camp_subscriptions_path(@camp, subscription_id: subscription.id),
-            method: :post,
-            class: "w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors duration-150" %>
-      </div>
-    </details>
-  </div>
+  <%= button_to t('.subscribe_with', member: subscription.member.full_name),
+      dashboard_camp_subscriptions_path(@camp, subscription_id: subscription.id),
+      method: :post,
+      class: "w-full flex items-center text-left cursor-pointer rounded-lg px-4 py-2.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200 shadow-sm" %>
 <% elsif subscription.member.camps.include?(@camp) %>
   <% camp_subscription = subscription.child_subscriptions.joins(:camps_subscription).find_by(camps_subscriptions: { camp_id: @camp.id }) %>
 

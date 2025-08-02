@@ -4,7 +4,7 @@ describe Member, type: :model do
   subject { member }
 
   let(:user) { create :user }
-  let(:member) { create :member, user: user, first_name: 'mickey', last_name: 'MoUse' }
+  let(:member) { create :member, user:, first_name: 'mickey', last_name: 'MoUse' }
   let(:too_old_member) { build :member, user: user, birthdate: 100.years.ago }
   let(:too_young_member) { build :member, user: user, birthdate: 5.years.ago }
 
@@ -69,26 +69,27 @@ describe Member, type: :model do
   describe '#can_subscribe?' do
     let(:camp) { create(:camp) }
     let(:member) { create(:member) }
-    let(:subscription) { create(:subscription, member: member, status: :confirmed) }
+    let(:course) { create(:course) }
+    let!(:subscription) { create(:subscription, member:, status: :confirmed, courses: [course]) }
 
     it 'returns true when all conditions are met' do
-      expect(camp.can_subscribe?(member)).to be_truthy
+      expect(member.can_subscribe?(camp)).to be true
     end
 
     it 'returns false when camp is fully booked' do
       camp.update!(capacity: 1)
       create(:camps_subscription, camp: camp, subscription: subscription)
-      expect(camp.can_subscribe?(member)).to be_falsey
+      expect(member.can_subscribe?(camp)).to be false
     end
 
     it 'returns false when member has no confirmed subscription' do
       subscription.update!(status: :pending)
-      expect(camp.can_subscribe?(member)).to be_falsey
+      expect(member.can_subscribe?(camp)).to be false
     end
 
     it 'returns false when member is already subscribed to this camp' do
       create(:camps_subscription, camp: camp, subscription: subscription)
-      expect(camp.can_subscribe?(member)).to be_falsey
+      expect(member.can_subscribe?(camp)).to be false
     end
   end
 end

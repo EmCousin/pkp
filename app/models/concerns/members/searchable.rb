@@ -4,7 +4,27 @@ module Members
   module Searchable
     extend ActiveSupport::Concern
 
-    included do
+    included do # rubocop:disable Metrics/BlockLength
+      scope(:search_and_filter, lambda do |attributes|
+        search(attributes[:q])
+          .filter_by_level(attributes[:level])
+          .filter_by_subscription_year(attributes[:subscription_year])
+          .filter_by_course_ids(attributes[:course_ids])
+          .filter_by_camp_ids(attributes[:camp_ids])
+      end)
+
+      scope(:search, lambda do |query|
+        return all if query.blank?
+
+        joins(:user).where(
+          'LOWER(first_name) LIKE :search
+          OR LOWER(last_name) LIKE :search
+          OR LOWER(users.email) LIKE :search
+          OR users.phone_number LIKE :search',
+          search: "%#{query.downcase}%"
+        )
+      end)
+
       scope(:filter_by_level, ->(level) { level.present? ? where(level:) : all })
 
       scope(:filter_by_subscription_year, ->(year) { year.present? ? left_joins(:subscriptions).rewhere(subscriptions: { year: }) : all })
@@ -20,20 +40,6 @@ module Members
 
         where(id: left_joins(subscriptions: :camps_subscription).where(camps_subscriptions: { camp_id: camp_ids }))
       end)
-    end
-
-    class_methods do
-      def search(query)
-        return all if query.blank?
-
-        joins(:user).where(
-          'LOWER(first_name) LIKE :search
-          OR LOWER(last_name) LIKE :search
-          OR LOWER(users.email) LIKE :search
-          OR users.phone_number LIKE :search',
-          search: "%#{query.downcase}%"
-        )
-      end
     end
   end
 end

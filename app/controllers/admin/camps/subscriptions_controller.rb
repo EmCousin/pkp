@@ -4,41 +4,41 @@ module Admin
   module Camps
     class SubscriptionsController < BaseController
       before_action :set_camp
+      before_action :set_parent_subscription, only: %i[create]
+      before_action :set_subscription, only: %i[destroy]
 
-                        def create
-        parent_subscription = Subscription.find(params[:subscription_id])
-
-        # Create a new subscription for the camp
-        @subscription = Subscription.new(
-          member: parent_subscription.member,
-          year: parent_subscription.year,
-          parent_subscription: parent_subscription,
-          status: :confirmed
+      def create
+        @subscription = @parent_subscription.build_child_subscription(
+          camps_subscription_attributes: { camp_id: @camp.id }
         )
 
         if @subscription.save
-          @camps_subscription = CampsSubscription.create(camp: @camp, subscription: @subscription)
-          @subscription.save! # Re-save to compute the fee based on the camp
-          redirect_to admin_camp_path(@camp), notice: t('.success'), status: :see_other
+          redirect_to [:admin, @camp], notice: t('.success'), status: :see_other
         else
-          redirect_to admin_camp_path(@camp), alert: @subscription.errors.full_messages.join(', '), status: :unprocessable_entity
+          redirect_to [:admin, @camp], alert: @subscription.errors.full_messages.to_sentence, status: :unprocessable_entity
         end
       end
 
-            def destroy
-        @subscription = Subscription.find(params[:id])
-
+      def destroy
         if @subscription.destroy
-          redirect_to admin_camp_path(@camp), notice: t('.success'), status: :see_other
+          redirect_to [:admin, @camp], notice: t('.success'), status: :see_other
         else
-          redirect_to admin_camp_path(@camp), alert: t('.error'), status: :unprocessable_entity
+          redirect_to [:admin, @camp], alert: t('.error'), status: :unprocessable_entity
         end
       end
 
       private
 
       def set_camp
-        @camp = Camp.find(params[:camp_id])
+        @camp = Camp.find(params.require(:camp_id))
+      end
+
+      def set_parent_subscription
+        @parent_subscription = Subscription.find(params.require(:subscription_id))
+      end
+
+      def set_subscription
+        @subscription = Subscription.find(params.require(:subscription_id))
       end
     end
   end

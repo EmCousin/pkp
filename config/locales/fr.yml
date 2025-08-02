@@ -81,9 +81,13 @@ fr:
       models:
         camp:
           attributes:
+            ends_at:
+              later_than_or_equal_to: doit être plus tard ou le même jour la date de début (%{date})
             cover_picture:
               content_type: doit être au format PNG, JPG, JPEG ou WEBP
-      models:
+        camps_subscription:
+          attributes:
+            already_subscribed_to_this_camp: "L'élève est déjà inscrit à ce stage"
         user:
           attributes:
             email:
@@ -100,9 +104,10 @@ fr:
               inclusion: "%{value} n'est pas une date valide"
         subscription:
           attributes:
+            courses_count:
+              limit_exceeded: "Maximum %{count} cours"
             courses:
               must_exist: "Minimum un cours"
-              limit_exceeded: "Maximum %{count} cours"
               unique_category: "Les cours doivent être de la même catégorie"
               unique_weekday: "Les cours ne doivent pas être le même jour"
               unavailable: "L'un des cours est complet"

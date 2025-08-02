@@ -56,7 +56,7 @@ module Admin
     end
 
     def camp_params
-      params.require(:camp).permit(:title, :description, :capacity, :starts_at, :ends_at, :price, :active, :cover_picture)
+      params.expect(camp: %i[title description capacity starts_at ends_at price active cover_picture])
     end
   end
 end

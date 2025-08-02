@@ -45,8 +45,11 @@ class Member < ApplicationRecord
   delegate :email, :phone_number, :address, :zip_code, :city, :country, :full_address,
            to: :user
 
+  normalizes :first_name, with: ->(first_name) { first_name.strip.downcase.titleize }
+  normalizes :last_name, with: ->(last_name) { last_name.strip.downcase.titleize }
+
   def full_name
-    "#{first_name} #{last_name}".downcase.titleize
+    "#{first_name.strip.downcase.titleize} #{last_name.strip.downcase.titleize}"
   end
 
   def age(year = Time.current.year)

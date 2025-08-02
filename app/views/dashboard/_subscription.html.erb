@@ -229,11 +229,13 @@
                   <div>
                     <p class="text-sm font-medium text-gray-900">
                       <% if child_sub.camp.present? %>
-                        <%= child_sub.camp.title %>
+                        <%= link_to child_sub.camp.title, [:dashboard, child_sub.camp] %>
                       <% elsif child_sub.courses.any? %>
-                        <%= child_sub.courses.first.title %>
-                      <% else %>
-                        <%= t('.additional_courses') %>
+                        <ul>
+                          <% child_sub.courses.each do |course| %>
+                            <li><%= course.title %></li>
+                          <% end %>
+                        </ul>
                       <% end %>
                      </p>
                     <p class="text-xs text-gray-500">
@@ -242,9 +244,13 @@
                   </div>
                 </div>
                 <div class="flex items-center gap-2">
-                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                    <%= t(".#{child_sub.status}") %>
-                  </span>
+                  <%= tag.span class: class_names(
+                                        "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
+                                        'bg-green-100 text-green-800' => child_sub.confirmed?,
+                                        'bg-yellow-100 text-yellow-800' => !child_sub.confirmed?
+                                      ) do %>
+                    <%= Subscription.human_attribute_name(child_sub.status) %>
+                  <% end %>
                 </div>
               </div>
             <% end %>

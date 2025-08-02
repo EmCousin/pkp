@@ -7,14 +7,23 @@ class Camp < ApplicationRecord
   validates :title, :capacity, :starts_at, :ends_at, :price, presence: true
   validates :capacity, numericality: { greater_than_or_equal_to: 1, only_integer: true }
   validates :price, numericality: { greater_than: 0 }
-  validates :ends_at, comparison: { greater_than_or_equal_to: :starts_at, message: 'must be greater than or equal to starts_at' }
+  validates :ends_at, comparison: {
+    greater_than_or_equal_to: :starts_at,
+    message: lambda { |object, _options|
+      I18n.t(
+        'activerecord.errors.models.camp.attributes.ends_at.later_than_or_equal_to',
+        date: I18n.l(object.starts_at, format: :short)
+      )
+    },
+    if: :ends_at?
+  }
 
   has_many :camps_subscriptions, dependent: :destroy
   has_many :subscriptions, through: :camps_subscriptions
   has_many :members, through: :subscriptions
 
   scope :active, -> { where(active: true) }
-  scope :upcoming, -> { where('starts_at >= ?', Date.current) }
+  scope :upcoming, -> { where(starts_at: Date.current..) }
   scope :available, -> { active.upcoming }
 
   def duration_days

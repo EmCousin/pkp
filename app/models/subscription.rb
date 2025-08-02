@@ -11,7 +11,7 @@ class Subscription < ApplicationRecord
   belongs_to :member
   has_many :courses_subscriptions, dependent: :destroy
   has_many :courses, through: :courses_subscriptions
-  has_many :child_subscriptions, class_name: 'Subscription', foreign_key: 'parent_subscription_id', dependent: :destroy
+  has_many :child_subscriptions, class_name: 'Subscription', foreign_key: 'parent_subscription_id', inverse_of: :parent_subscription, dependent: :destroy
   belongs_to :parent_subscription, class_name: 'Subscription', optional: true
   has_one :camps_subscription, dependent: :destroy
   accepts_nested_attributes_for :camps_subscription, reject_if: :all_blank
@@ -52,7 +52,9 @@ class Subscription < ApplicationRecord
     validates :courses_count, numericality: { greater_than: 0, message: :must_exist }
     validates :courses_count, numericality: { less_than_or_equal_to: 3, message: :limit_exceeded }
     validates :courses_count, numericality: { less_than_or_equal_to: 2, message: :limit_exceeded, on: :create, if: -> { Subscription.winter_time? } }
-    validates :courses_count, numericality: { less_than_or_equal_to: 1, message: :limit_exceeded, on: :create, if: -> { Subscription.winter_time? && category_kidz? } }
+    validates :courses_count, numericality: { less_than_or_equal_to: 1, message: :limit_exceeded, on: :create, if: lambda {
+      Subscription.winter_time? && category_kidz?
+    } }
     validate :courses_are_of_the_same_category
     validate :maximum_one_course_per_day
     validate :courses_must_be_available, on: :create
@@ -85,12 +87,14 @@ class Subscription < ApplicationRecord
     parent_subscription&.root_subscription || self
   end
 
-  def is_root?
-    parent_subscription.nil?
-  end
-
-  def is_child?
-    parent_subscription.present?
+  def build_child_subscription(child_attributes)
+    child_subscriptions.confirmed.new(
+      member:,
+      year:,
+      terms_accepted_at:,
+      doctor_certified_at:,
+      **child_attributes
+    )
   end
 
   def season
@@ -98,11 +102,11 @@ class Subscription < ApplicationRecord
   end
 
   def description
-    if is_child? && camp.present?
-      @description ||= camp.title
-    else
-      @description ||= courses.map(&:title).join(', ')
-    end
+    @description ||= if parent_subscription.present? && camp.present?
+                       camp.title
+                     else
+                       courses.map(&:title).join(', ')
+                     end
   end
 
   def available_courses
@@ -150,6 +154,7 @@ class Subscription < ApplicationRecord
 
   def courses_are_of_the_same_category
     return if courses.empty? # Skip if no courses
+
     unique_category = courses.map(&:category).uniq.size == 1
 
     errors.add(:courses, :unique_category) unless unique_category
@@ -157,6 +162,7 @@ class Subscription < ApplicationRecord
 
   def maximum_one_course_per_day
     return if courses.empty? # Skip if no courses
+
     weekdays = courses.map(&:weekday)
 
     errors.add(:courses, :unique_weekday) if weekdays.uniq.size < weekdays.size
@@ -164,6 +170,7 @@ class Subscription < ApplicationRecord
 
   def courses_must_be_available
     return if courses.empty? # Skip if no courses
+
     errors.add(:courses, :unavailable) if courses.any? { |c| !c.available? }
   end
 

@@ -5,11 +5,7 @@ module Admin
     before_action :set_member, only: %i[show edit update destroy]
 
     def index
-      @members = Member.search(params[:q])
-                       .filter_by_level(params[:level])
-                       .filter_by_subscription_year(params[:subscription_year])
-                       .filter_by_course_ids(params[:course_ids])
-                       .filter_by_camp_ids(params[:camp_ids])
+      @members = Member.search_and_filter(params.to_unsafe_h.slice(:q, :level, :subscription_year, :course_ids, :camp_ids))
                        .includes(:user, :contacts).with_attached_avatar
                        .page(params[:page]).per(25)
 

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Camp, type: :model do
+describe Camp, type: :model do
   it { is_expected.to have_rich_text(:description) }
   it { is_expected.to have_one_attached(:cover_picture) }
 
@@ -21,7 +21,7 @@ RSpec.describe Camp, type: :model do
     it 'validates ends_at is after starts_at' do
       camp = build(:camp, starts_at: 1.week.from_now, ends_at: 1.week.ago)
       expect(camp).not_to be_valid
-      expect(camp.errors[:ends_at]).to include('must be greater than or equal to starts_at')
+      expect(camp.errors[:ends_at]).to include("doit être plus tard ou le même jour la date de début (#{I18n.l(camp.starts_at, format: :short)})")
     end
 
     it 'allows same day for starts_at and ends_at' do
@@ -39,22 +39,22 @@ RSpec.describe Camp, type: :model do
 
     describe '.active' do
       it 'returns only active camps' do
-        expect(Camp.active).to include(active_camp)
-        expect(Camp.active).not_to include(inactive_camp)
+        expect(described_class.active).to include(active_camp)
+        expect(described_class.active).not_to include(inactive_camp)
       end
     end
 
     describe '.upcoming' do
       it 'returns only upcoming camps' do
-        expect(Camp.upcoming).to include(future_camp)
-        expect(Camp.upcoming).not_to include(past_camp)
+        expect(described_class.upcoming).to include(future_camp)
+        expect(described_class.upcoming).not_to include(past_camp)
       end
     end
 
     describe '.available' do
       it 'returns only active and upcoming camps' do
-        expect(Camp.available).to include(active_camp, future_camp)
-        expect(Camp.available).not_to include(inactive_camp, past_camp)
+        expect(described_class.available).to include(active_camp, future_camp)
+        expect(described_class.available).not_to include(inactive_camp, past_camp)
       end
     end
   end
@@ -80,14 +80,20 @@ RSpec.describe Camp, type: :model do
     end
 
     it 'returns remaining slots after subscriptions' do
-      subscription = create(:subscription, status: :confirmed)
-      create(:camps_subscription, camp: camp, subscription: subscription)
+      member = create(:member)
+      course = create(:course)
+      parent_subscription = create(:subscription, status: :confirmed, courses: [course], member:)
+      subscription = build(:subscription, status: :confirmed, parent_subscription:, member:)
+      create(:camps_subscription, camp:, subscription:)
       expect(camp.available_slots).to eq(9)
     end
 
     it 'does not count pending subscriptions' do
-      subscription = create(:subscription, status: :pending)
-      create(:camps_subscription, camp: camp, subscription: subscription)
+      member = create(:member)
+      course = create(:course)
+      parent_subscription = create(:subscription, status: :confirmed, courses: [course], member:)
+      subscription = build(:subscription, status: :pending, parent_subscription:, member:)
+      create(:camps_subscription, camp:, subscription:)
       expect(camp.available_slots).to eq(10)
     end
   end
@@ -100,8 +106,11 @@ RSpec.describe Camp, type: :model do
     end
 
     it 'returns true when no slots available' do
-      subscription = create(:subscription, status: :confirmed)
-      create(:camps_subscription, camp: camp, subscription: subscription)
+      member = create(:member)
+      course = create(:course)
+      parent_subscription = create(:subscription, status: :confirmed, courses: [course], member:)
+      subscription = build(:subscription, status: :confirmed, parent_subscription:, member:)
+      create(:camps_subscription, camp:, subscription:)
       expect(camp.fully_booked?).to be_truthy
     end
   end

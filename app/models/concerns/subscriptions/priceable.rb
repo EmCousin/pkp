@@ -44,11 +44,11 @@ module Subscriptions
     end
 
     def set_fee
-      if is_child? && subscription_camp.present?
-        self.fee = subscription_camp.price
-      else
-        self.fee = pricing[courses.size - 1]
-      end
+      self.fee = if parent_subscription.present? && subscription_camp.present?
+                   subscription_camp.price
+                 else
+                   pricing[courses.size - 1]
+                 end
     end
 
     def pricing
