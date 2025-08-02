@@ -39,13 +39,23 @@ describe Subscription, type: :model do
         context 'when the subscription has no courses' do
           let(:courses) { [] }
 
-          it { expect(subscription.errors.of_kind?(:courses, :must_exist)).to be true }
+          it 'invalidates the subscription' do
+            expect(subscription.errors.of_kind?(:courses, :blank)).to be true
+          end
         end
 
         context 'when the subscription has more than three courses' do
           let(:courses) { build_list :course, 4 }
 
-          it { expect(subscription.errors.of_kind?(:courses, :limit_exceeded)).to be true }
+          it 'invalidates the subscription' do
+            error = subscription.errors.first
+            expect(error.type).to eq :less_than_or_equal_to
+            expect(error.attribute).to eq :courses_count
+            expect(error.options[:count]).to eq 3
+            expect(error.options[:value]).to eq 4
+            expect(error.options[:message]).to eq :limit_exceeded
+            expect(error.message).to eq "Maximum 3 cours"
+          end
 
           context "when it is winter time" do
             let(:courses) { build_list :course, 3 }
@@ -56,7 +66,15 @@ describe Subscription, type: :model do
               subscription.validate
             end
 
-            it { expect(subscription.errors.of_kind?(:courses, :limit_exceeded)).to be true }
+            it 'invalidates the subscription' do
+              error = subscription.errors.first
+              expect(error.type).to eq :less_than_or_equal_to
+              expect(error.attribute).to eq :courses_count
+              expect(error.options[:count]).to eq 2
+              expect(error.options[:value]).to eq 3
+              expect(error.options[:message]).to eq :limit_exceeded
+              expect(error.message).to eq "Maximum 2 cours"
+            end
 
             after { travel_back }
 
@@ -69,7 +87,15 @@ describe Subscription, type: :model do
                 subscription.validate
               end
 
-              it { expect(subscription.errors.of_kind?(:courses, :limit_exceeded)).to be true }
+              it 'invalidates the subscription' do
+                error = subscription.errors.first
+                expect(error.type).to eq :less_than_or_equal_to
+                expect(error.attribute).to eq :courses_count
+                expect(error.options[:count]).to eq 1
+                expect(error.options[:value]).to eq 2
+                expect(error.options[:message]).to eq :limit_exceeded
+                expect(error.message).to eq "Maximum 1 cours"
+              end
 
               after { travel_back }
             end

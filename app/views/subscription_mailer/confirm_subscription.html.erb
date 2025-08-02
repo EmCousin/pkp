@@ -3,38 +3,14 @@
 </p>
 
 <p>
-  Votre inscription a bien été prise en compte.
+  Votre inscription est confirmée ! Vous pouvez désormais participer aux cours suivants :
 <p>
-
-<p>
-  N'oubliez pas que pour être
-  <strong style="color:green;">valide</strong>, vous devez
-  <strong style="color:red;">obligatoirement</strong> :
-</p>
 
 <ul>
-  <li>
-    <%= link_to "accepter les conditions d'inscription", edit_dashboard_subscription_terms_url(@subscription) %>
-    pour la saison <%= @subscription.season %>
-  </li>
-  <li>
-    avoir un
-    <%= link_to "certificat médical", edit_dashboard_subscription_medical_certificate_url(@subscription) %>
-    faisant état de votre aptitude à la pratique du parkour
-  </li>
-  <li>
-    <%= link_to "régler votre cotisation par carte bancaire", new_dashboard_subscription_payment_url(@subscription) %>
-  </li>
+  <% @subscription.courses.each do |course| %>
+    <li><%= course.title %></li>
+  <% end %>
 </ul>
-
-<p>
-  Vous devez absolument avoir complété ces étapes
-  <strong style="color:red;">avant de commencer votre première séance</strong>.
-</p>
-
-<p>
-  Toute inscription <strong style="color:red;">incomplète</strong> sera systématiquement <strong style="color:red;">refusée</strong> et vous ne pourrez pas participer aux cours.
-</p>
 
 <p>
   Vous trouverez toutes les informations nécessaires concernant les lieux des cours dans l'agenda :

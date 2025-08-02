@@ -1,0 +1,24 @@
+<p>
+  Bonjour <%= @subscription.member.first_name %>,
+</p>
+
+<p>
+  Votre inscription au stage <%= @subscription.camp.title %> a bien été prise en compte.
+<p>
+
+<p>
+  Vous trouverez toutes les informations nécessaires concernant le stage ici :
+  <%= link_to @subscription.camp.title, dashboard_camp_url(@subscription.camp), style: "color: #ffa000";%>.
+</p>
+
+<p>Bon stage !</p>
+
+<p>Sportivement,</p>
+
+<p>L'équipe Parkour Paris</p>
+
+<%= link_to "www.parkourparis.fr", "www.parkourparis.fr", style: "color: #ffa000"; %>
+<br/>
+<%= link_to "https://www.facebook.com/ParkourParis", "https://www.facebook.com/ParkourParis", style: "color: #ffa000"; %>
+<br/>
+<%= link_to "https://twitter.com/Parkour_Paris", "https://twitter.com/Parkour_Paris", style: "color: #ffa000"; %>

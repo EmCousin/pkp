@@ -3,11 +3,10 @@
                data: { controller: :form } do |form| %>
     <% if @subscription.errors.any? %>
       <div id="error_explanation">
-        <h2><%= pluralize(@subscription.errors.count, "error") %> prohibited this invoice from being generated:</h2>
         <ul>
-        <% @subscription.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
+          <% @subscription.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
         </ul>
       </div>
     <% end %>

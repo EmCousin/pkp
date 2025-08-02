@@ -6,6 +6,7 @@ class DashboardController < ApplicationController
   def show
     @subscriptions = current_user.subscriptions
                                  .where(year: Subscription.current_year)
-                                 .includes(:member)
+                                 .where(parent_subscription_id: nil)
+                                 .includes(:member, :child_subscriptions)
   end
 end

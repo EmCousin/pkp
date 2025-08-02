@@ -1,58 +1,36 @@
 <p>
-  Pour être
-  <strong class="text-green-600">complet</strong>, votre dossier doit
+  Pour que votre inscription soit
+  <strong class="text-green-600">acceptée</strong>, vous devez
   <strong class="text-red-600">obligatoirement</strong>
-  comporter :
+  avoir complété les étapes suivantes : <br>
 </p>
 
 <ul class="list-disc ml-6 space-y-2">
   <li>
-    Un formulaire d'inscription pour la saison
-    <%= Subscription.current_year %> / <%= Subscription.next_year %>
+    Avoir pris connaissance des conditions d'inscription et certifié que les informations de l'élève sont correctes.
   </li>
   <li>
-    Un
+    Avoir certifié que l'élève dispose d'un
     <strong class="text-red-600">certificat médical</strong>
     d'aptitude à la pratique du Parkour datant de
-    <strong class="text-red-600">moins d'un mois</strong>
-    sauf si vous étiez déjà inscrit·e pour <em>l'année précédente ou celle d'avant</em>,
+    <strong class="text-red-600">moins d'un mois</strong>.
+    sauf si l'élève était déjà inscrit·e pour <em>l'année précédente ou celle d'avant</em>
   </li>
   <li>
-    Le règlement de la cotisation:
-    <ol class="list-decimal ml-6">
-      <li>Par virement bancaire (Joindre la preuve de paiement) (IBAN: FR76 3000 4015 2300 0100 7182 238 - BIC: BNPAERPPPBY)</li>
-      <li>Par chèque - 2 chèques maximum - à l'ordre de Parkour Paris</li>
-      <li>Par espèces</li>
-    </ol>
-  </li>
-  <li>
-    Les mineurs doivent faire signer le formulaire par leur représentant légal (père, mère ou tuteur).
+    Avoir réglé l'inscription par carte bancaire en ligne
   </li>
 </ul>
 
 <p class="mt-4">
-  Afin de nous faciliter le contrôle des pièces et gagner du temps lors de la récupération, merci de joindre l'ensemble des pièces (formulaire signé, paiement par chèques/espèces, certificat médical à jour) dans
-  <strong class="text-red-600">une pochette plastique perforée</strong>
-  au format A4 comme suit :
-</p>
-
-<ul class="list-disc ml-6 space-y-2">
-  <li>Au recto, face visible : le formulaire et la cotisation</li>
-  <li>
-    Au verso, face visible : le certificat médical (obligatoire sauf si vous étiez déjà inscrit·e en
-    <em><%= Subscription.previous_year  %> / <%= Subscription.current_year %></em>
-    ou
-    <em><%= Subscription.previous_year - 1  %> / <%= Subscription.previous_year %></em>)
-  </li>
-</ul>
-
-<p class="mt-4">
-  Pour valider votre inscription, vous devez absolument apporter votre dossier <strong>complet</strong> et le remettre directement aux coachs présents,
-  <strong class="text-red-600">lors de votre premier cours au plus tard</strong>.
+  <strong class="text-red-600">Important :</strong> Toutes ces étapes doivent être complétées en ligne. Il n'y a plus besoin de présenter un formulaire d'inscription au format papier.
 </p>
 
 <p class="mt-4">
-  Tout dossier <strong class="text-red-600">incomplet</strong> se verra systématiquement <strong class="text-red-600">refusé</strong> et vous ne serez pas autorisé à participer aux cours.
+  Pour valider votre inscription, vous devez absolument compléter l'ensemble du processus en ligne avant de participer aux cours.
+</p>
+
+<p class="mt-4">
+  Toute inscription <strong class="text-red-600">incomplète</strong> se verra systématiquement <strong class="text-red-600">refusée</strong> et vous ne serez pas autorisé à participer aux cours.
 </p>
 
 <p class="mt-4">

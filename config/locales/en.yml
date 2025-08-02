@@ -108,6 +108,9 @@ en:
         required: "is required"
         taken: "has already been taken"
       models:
+        camp:
+          one: "Camp"
+          other: "Camps"
         user:
           attributes:
             email:
@@ -148,6 +151,15 @@ en:
               greater_than: "must be greater than the minimum age"
               less_than_or_equal_to: "must be less than or equal to 100"
     attributes:
+      camp:
+        title: "Title"
+        description: "Description"
+        price: "Price"
+        capacity: "Capacity"
+        starts_at: "Start date"
+        ends_at: "End date"
+        cover_picture: "Cover picture"
+        active: "Active"
       course:
         features_attendance_sheet: "Attendance Sheet"
       subscription:
@@ -312,6 +324,27 @@ en:
       form:
         users: "Members"
         select_a_member: "Choose a Member"
+        member: "Member"
+        select_member_description: "Choose the member for this subscription"
+        member_required: "Member is required"
+        parent_subscription: "Parent Subscription"
+        parent_subscription_description: "Optionally select a parent subscription for this member"
+        no_parent_subscription: "No parent subscription"
+        subscription_type: "Subscription Type"
+        subscription_type_description: "Choose between courses or camp"
+        courses: "Courses"
+        camp: "Camp"
+        courses_required: "At least one course is required"
+        camp_required: "A camp is required"
+        select_a_camp: "Choose a Camp"
+        no_courses_available: "No courses available"
+        no_courses_available_description: "There are currently no courses available for selection."
+        no_camps_available: "No camps available"
+        no_camps_available_description: "There are currently no camps available for selection."
+        current_year_subscriptions: "Current Year Subscriptions"
+        courses_count:
+          one: "course"
+          other: "courses"
     invoices:
       show:
         generate_invoice: "Generate this Invoice"
@@ -410,3 +443,70 @@ en:
         mark_as_confirmed_by_check: "Mark as confirmed by check"
         mark_as_confirmed_by_cash: "Mark as confirmed by cash"
         mark_as_confirmed_by_transfer: "Mark as confirmed by bank transfer"
+
+  dashboard:
+    camps:
+      camp:
+        duration_days:
+          one: "%{count} day"
+          other: "%{count} days"
+        participants: "participants"
+        price: "%{price}"
+        capacity:
+          one: "%{current}/%{count} place"
+          other: "%{current}/%{count} places"
+        view: "View"
+        edit: "Edit"
+        delete: "Delete"
+        confirm_delete: "Are you sure you want to delete this camp?"
+        view_details: "View details"
+      index:
+        title: "Available Camps"
+        description: "Discover our camps and register!"
+        no_camps_title: "No camps available"
+        no_camps_description: "There are currently no camps available."
+      show:
+        back_to_camps: "Back to camps"
+        details: "Details"
+        starts_at: "Start date"
+        ends_at: "End date"
+        duration: "Duration"
+        price: "Price"
+        capacity: "Capacity"
+        capacity_info:
+          one: "%{current}/%{count} place occupied"
+          other: "%{current}/%{count} places occupied"
+        fully_booked: "Full"
+        subscription: "Registration"
+        already_subscribed: "Already registered"
+        confirm_unsubscribe: "Are you sure you want to unsubscribe from this camp?"
+        available_for_subscription: "Available for registration"
+        choose_member: "Choose a member to register:"
+        no_confirmed_subscriptions: "No confirmed registrations"
+        need_confirmed_subscription: "You must have a confirmed registration to register for camps."
+        description: "Description"
+        duration_days:
+          one: "%{count} day"
+          other: "%{count} days"
+        capacity: "Number of places"
+      subscription:
+        unsubscribe: "Unsubscribe"
+        subscribe_with: "Register with %{member}"
+        cannot_subscribe_with: "Cannot register with %{member}"
+      subscriptions:
+        create:
+          success: "Camp registration confirmed"
+        destroy:
+          success: "Camp unsubscription confirmed"
+          error: "Error during unsubscription"
+      payment_proofs:
+        edit:
+          title: "Upload Payment Proof"
+        form:
+          accepted_formats: "Accepted formats: PDF, JPG, JPEG, PNG"
+    subscriptions:
+      payment_tabs:
+        payment_by_card: "Pay by Card"
+        upload_payment_proof: "Upload Payment Proof"
+      details:
+        title: "Subscription Details"

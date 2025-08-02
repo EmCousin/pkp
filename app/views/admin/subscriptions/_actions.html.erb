@@ -37,20 +37,23 @@
             ) %>
       <% end %>
 
-      <% Subscription.payment_methods.each_key do |payment_method| %>
-        <%= next if subscription.payment_method == payment_method %>
+      <% unless subscription.paid? %>
+        <% Subscription.payment_methods.each_key do |payment_method| %>
+          <%= next if subscription.payment_method == payment_method %>
+          <% next if payment_method == 'credit_card' && subscription.payable_by_credit_card? %>
 
-        <%= button_to t("defaults.paid_with_#{payment_method}"),
-            {
-              controller: 'admin/payments',
-              action: 'create',
-              subscription_id: subscription.id,
-              subscription: { payment_method: }
-            },
-            class: class_names(
-              "w-full text-left px-4 py-2 text-sm hover:bg-gray-50",
-              Subscription::PAYMENT_METHOD_COLORS[payment_method.to_sym]
-            ) %>
+          <%= button_to t("defaults.paid_with_#{payment_method}"),
+              {
+                controller: 'admin/payments',
+                action: 'create',
+                subscription_id: subscription.id,
+                subscription: { payment_method: }
+              },
+              class: class_names(
+                "w-full text-left px-4 py-2 text-sm hover:bg-gray-50",
+                Subscription::PAYMENT_METHOD_COLORS[payment_method.to_sym]
+              ) %>
+        <% end %>
       <% end %>
 
       <%= button_to t('defaults.mark_as_not_paid'),

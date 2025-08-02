@@ -81,6 +81,8 @@ feature "Subscription Workflow", type: :feature do
     ]
   end
 
+  let!(:camp) { create(:camp, title: 'Stage Nature', starts_at: 1.month.from_now, ends_at: 1.month.from_now + 5.days, active: true) }
+
   before do
     travel_to Time.zone.local(Subscription.current_year, 9, 1, 9, 0, 0)
   end
@@ -207,5 +209,20 @@ feature "Subscription Workflow", type: :feature do
     expect(page).to have_text('Ajouter une inscription')
     expect(page).to have_text(available_courses.first.title)
     expect(page).to have_text(available_courses.last.title)
+
+    expect(page).to have_text('Parcourir les stages')
+    click_link 'Parcourir les stages'
+
+    expect(page).to have_text('Stage Nature')
+    click_link 'Voir les détails'
+
+    expect(page).to have_text('Choisissez un membre pour vous inscrire')
+    click_button "S'inscrire avec #{member.full_name}"
+
+    expect(page).to have_text('Joindre un justificatif de paiement')
+    attach_file('subscription[payment_proof]', avatar.path) # dummy file
+    click_button 'Sauvegarder'
+
+    expect(page).to have_text('Justificatif de paiement ajouté avec succès')
   end
 end

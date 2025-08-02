@@ -20,14 +20,50 @@
           new_dashboard_subscription_path,
           class: "mt-6 block w-full text-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors" %>
 
-      <details class="mt-6">
-        <summary class="cursor-pointer w-full text-center py-2 px-4 border border-amber-500 text-amber-500 hover:bg-amber-50 rounded-md transition-colors">
-          <%= t('.how_to_complete_my_subscription') %>
-        </summary>
-        <div class="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-          <%= render 'dashboard/subscription_instructions' %>
+      <div class="mt-6 border-t border-gray-200 pt-6">
+        <h3 class="text-lg font-semibold text-center mb-4">
+          <%= t('.camps_section_title') %>
+        </h3>
+        <p class="text-center text-gray-600 mb-4">
+          <%= t('.camps_section_description') %>
+        </p>
+        <%= link_to t('.browse_camps'),
+            dashboard_camps_path,
+            class: "block w-full text-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors" %>
+      </div>
+
+      <button
+        class="mt-6 w-full text-center py-2 px-4 border border-amber-500 text-amber-500 hover:bg-amber-50 rounded-md transition-colors"
+        onclick="this.nextElementSibling.showModal()">
+        <%= t('.how_to_complete_my_subscription') %>
+      </button>
+
+      <dialog class="backdrop:bg-black/50 backdrop:backdrop-blur-sm rounded-lg shadow-xl border-0 p-0 w-full max-w-2xl mx-auto">
+        <div class="bg-white rounded-lg p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold text-gray-900">
+              <%= t('.how_to_complete_my_subscription') %>
+            </h3>
+            <form method="dialog">
+              <button class="text-gray-400 hover:text-gray-600 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </button>
+            </form>
+          </div>
+          <div class="prose prose-sm max-w-none">
+            <%= render 'dashboard/subscription_instructions' %>
+          </div>
+          <div class="mt-6 flex justify-end">
+            <form method="dialog">
+              <button class="px-4 py-2 bg-amber-500 text-white rounded-md hover:bg-amber-600 transition-colors">
+                Fermer
+              </button>
+            </form>
+          </div>
         </div>
-      </details>
+      </dialog>
     <% else %>
       <div class="text-center">
         <p class="mb-6 text-gray-600 max-w-sm mx-auto">

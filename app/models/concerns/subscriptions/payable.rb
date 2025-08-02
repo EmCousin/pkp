@@ -53,6 +53,10 @@ module Subscriptions
       fee - paid_amount
     end
 
+    def payable_by_credit_card?
+      subscription_camp.present?
+    end
+
     private
 
     def create_stripe_charge(stripe_token)

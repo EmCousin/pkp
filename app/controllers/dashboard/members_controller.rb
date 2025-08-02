@@ -24,7 +24,6 @@ module Dashboard
 
     def update
       if @member.update(member_params)
-        @member.current_subscription&.notify_confirmation!
         redirect_to :dashboard, notice: t('.success')
       else
         render :edit, status: :unprocessable_entity

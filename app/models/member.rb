@@ -25,8 +25,9 @@ class Member < ApplicationRecord
 
   has_many :contacts, through: :user
   has_many :subscriptions, dependent: :destroy
-  has_one :current_subscription, -> { find_by(year: Subscription.current_year) }, class_name: 'Subscription', inverse_of: :member, dependent: :destroy
+  has_one :current_subscription, -> { where(year: Subscription.current_year) }, class_name: 'Subscription', inverse_of: :member, dependent: :destroy
   has_many :courses, through: :subscriptions
+  has_many :camps, through: :subscriptions
   has_many :attendance_records, dependent: :destroy
   has_many :attendance_sheets, through: :attendance_records
 
@@ -44,8 +45,11 @@ class Member < ApplicationRecord
   delegate :email, :phone_number, :address, :zip_code, :city, :country, :full_address,
            to: :user
 
+  normalizes :first_name, with: ->(first_name) { first_name.strip.downcase.titleize }
+  normalizes :last_name, with: ->(last_name) { last_name.strip.downcase.titleize }
+
   def full_name
-    "#{first_name} #{last_name}".downcase.titleize
+    "#{first_name.strip.downcase.titleize} #{last_name.strip.downcase.titleize}"
   end
 
   def age(year = Time.current.year)
@@ -58,5 +62,13 @@ class Member < ApplicationRecord
     else
       attendance_records.joins(:attendance_sheet).where(attendance_sheets: { course: })
     end
+  end
+
+  def can_subscribe?(camp)
+    return false if camp.fully_booked?
+    return false unless current_subscription&.confirmed?
+    return false if camps.include?(camp)
+
+    true
   end
 end

@@ -29,7 +29,7 @@ module Subscriptions
     end
 
     included do
-      before_save :set_category_id
+      before_save :set_category_id, if: -> { courses.any? }
       before_save :set_fee
     end
 
@@ -44,7 +44,11 @@ module Subscriptions
     end
 
     def set_fee
-      self.fee = pricing[courses.size - 1]
+      self.fee = if parent_subscription.present? && subscription_camp.present?
+                   subscription_camp.price
+                 else
+                   pricing[courses.size - 1]
+                 end
     end
 
     def pricing

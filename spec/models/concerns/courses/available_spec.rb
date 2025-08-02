@@ -31,9 +31,9 @@ describe Courses::Available, type: :model do
     let(:year) { Subscription.current_year }
     let(:capacity) { 60 }
     let(:active) { true }
-    let(:course) { create :course, capacity: capacity, active: active, category: category }
+    let(:course) { create :course, capacity:, active:, category: }
     let(:status) { :pending }
-    let!(:subscription) { create :subscription, courses: [course], status: status, year: year }
+    let!(:subscription) { create :subscription, courses: [course], status:, year: }
 
     describe '.available' do
       it 'includes the course' do

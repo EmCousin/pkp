@@ -6,23 +6,27 @@
     <link rel="apple-touch-icon" href="/assets/pkp-192.png">
     <meta name="view-transition" content="same-origin" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="turbo-refresh-method" content="morph">
+    <meta name="turbo-refresh-scroll" content="preserve">
+
+    <%= tag.link rel: "manifest", href: manifest_path(format: :webmanifest) %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= favicon_link_tag '/favicon.ico' %>
 
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "actiontext", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "tail.select", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
   </head>
 
-  <body class="h-full bg-repeat bg-gray-100 bg-cover bg-center bg-fixed min-h-screen">
+  <body class="h-full min-h-screen">
+    <%= render 'layouts/flash' %>
+
     <div class="min-h-full flex flex-col">
       <%= render 'layouts/pwa' %>
       <%= render 'layouts/navbar' %>
-      <%= render 'layouts/flash' %>
 
       <main class="flex-grow flex">
         <div class="max-w-7xl w-full mx-auto py-6 sm:px-6 lg:px-8">
