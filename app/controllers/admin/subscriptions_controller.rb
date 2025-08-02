@@ -26,7 +26,6 @@ module Admin
     def create
       @subscription = Subscription.new(subscription_params)
       if @subscription.save
-        @subscription.notify_confirmation!
         redirect_to %i[admin subscriptions], notice: t('.success'), status: :see_other
       else
         render :new, status: :unprocessable_entity

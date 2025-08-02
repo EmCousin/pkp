@@ -3,21 +3,15 @@
 </p>
 
 <p>
-  Votre inscription est confirmée ! Vous pouvez désormais participer aux cours suivants :
+  Votre inscription au stage <%= @subscription.camp.title %> a bien été prise en compte.
 <p>
 
-<ul>
-  <% @subscription.courses.each do |course| %>
-    <li><%= course.title %></li>
-  <% end %>
-</ul>
-
 <p>
-  Vous trouverez toutes les informations nécessaires concernant les lieux des cours dans l'agenda :
-  <%= link_to "Agenda Parkour Paris", "https://www.parkourparis.fr/agenda", style: "color: #ffa000";%>.
+  Vous trouverez toutes les informations nécessaires concernant le stage ici :
+  <%= link_to @subscription.camp.title, dashboard_camp_url(@subscription.camp), style: "color: #ffa000";%>.
 </p>
 
-<p>Bonne rentrée !</p>
+<p>Bon stage !</p>
 
 <p>Sportivement,</p>
 

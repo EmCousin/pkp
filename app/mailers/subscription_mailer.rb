@@ -9,6 +9,14 @@ class SubscriptionMailer < ApplicationMailer
          subject: "Inscription Parkour Paris #{subscription.year} / #{subscription.year + 1}"
   end
 
+  def confirm_camp_subscription(subscription)
+    @subscription = subscription
+
+    mail to: subscription.member.email,
+         cc: cc_emails(subscription),
+         subject: "Inscription Stage Parkour Paris - #{subscription.camp.title}"
+  end
+
   private
 
   def cc_emails(subscription)

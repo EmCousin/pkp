@@ -5,6 +5,7 @@ class Subscription < ApplicationRecord
   include Subscriptions::Payable
   include Subscriptions::Invoiceable
   include Subscriptions::Completable
+  include Subscriptions::Confirmable
   include Subscriptions::Filterable
   include Subscriptions::QrEncodeable
 
@@ -77,10 +78,6 @@ class Subscription < ApplicationRecord
     def next_year
       current_year + 1
     end
-  end
-
-  def notify_confirmation!
-    SubscriptionMailer.confirm_subscription(self).deliver_later
   end
 
   def root_subscription
