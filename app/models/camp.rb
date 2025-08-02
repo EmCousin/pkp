@@ -28,4 +28,18 @@ class Camp < ApplicationRecord
   def fully_booked?
     available_slots <= 0
   end
+
+  def year
+    Subscription.current_year(starts_at).to_s
+  end
+
+  class << self
+    def struct_by_year
+      hash = order(created_at: :desc).group_by { |camp| Subscription.current_year(camp.starts_at) }
+      hash.map do |year, camps|
+        struct = Struct.new(:year, :camps)
+        struct.new(year, camps)
+      end
+    end
+  end
 end

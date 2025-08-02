@@ -68,9 +68,8 @@ class Subscription < ApplicationRecord
       current_year - 1
     end
 
-    def current_year
-      now = Time.current
-      now.month < Course::VACATION_MONTHS.first ? now.year - 1 : now.year
+    def current_year(datetime = Time.current)
+      datetime.month < Course::VACATION_MONTHS.first ? datetime.year - 1 : datetime.year
     end
 
     def next_year

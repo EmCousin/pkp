@@ -2,10 +2,17 @@
 
 module Admin
   class MembersController < BaseController
-    before_action :set_members, only: :index
     before_action :set_member, only: %i[show edit update destroy]
 
     def index
+      @members = Member.search(params[:q])
+                       .filter_by_level(params[:level])
+                       .filter_by_subscription_year(params[:subscription_year])
+                       .filter_by_course_ids(params[:course_ids])
+                       .filter_by_camp_ids(params[:camp_ids])
+                       .includes(:user, :contacts).with_attached_avatar
+                       .page(params[:page]).per(25)
+
       respond_to do |format|
         format.html
         format.csv do
@@ -60,16 +67,6 @@ module Admin
                  :agreed_to_advertising_right,
                  { user_attributes: %i[id email password address zip_code city country phone_number admin coach] }]
       )
-    end
-
-    def set_members # rubocop:disable Metrics/AbcSize
-      members = Member.search(params[:q])
-      members = members.for_category(params[:category]) if params[:category].present?
-      members = members.where(level: params[:level]) if params[:level].present?
-      members = members.for_subscription_year(params[:subscription_year]) if params[:subscription_year].present?
-      members = members.for_subscription_course(params[:course_id]) if params[:course_id].present?
-      members = members.page(params[:page]).per(25) if params[:no_paginate].blank?
-      @members = members.includes(:user, :contacts).with_attached_avatar
     end
 
     def respond_with_csv(view_name)

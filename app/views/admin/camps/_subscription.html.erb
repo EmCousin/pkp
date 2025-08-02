@@ -1,0 +1,54 @@
+<div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+  <div class="flex items-center">
+    <%= image_tag url_for(subscription.member.avatar), class: "h-8 w-8 rounded-full" %>
+    <div class="ml-3">
+      <p class="text-sm font-medium text-gray-900"><%= link_to subscription.member.full_name, [:admin, subscription.member], data: { turbo_frame: '_top' } %></p>
+      <p class="text-xs text-gray-500"><%= mail_to subscription.member.user.email, subscription.member.user.email %></p>
+    </div>
+  </div>
+  <div class="flex items-center space-x-2">
+    <div class="flex items-center">
+      <%= tag.span Subscription.human_attribute_name(subscription.status),
+                    class: class_names(
+                            "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
+                            "bg-green-100 text-green-800" => subscription.confirmed?,
+                            "bg-yellow-100 text-yellow-800" => subscription.pending?
+                          ),
+                  title: Subscription.human_attribute_name(subscription.status) %>
+    </div>
+    <div class="relative">
+      <details class="group">
+        <summary class="flex cursor-pointer items-center rounded-md px-2 py-1 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+          <%= t('defaults.action') %>
+          <svg class="ml-1 h-3 w-3 text-gray-600 transition-transform group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        </summary>
+        <div class="absolute right-0 z-10 mt-1 w-48 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 divide-y divide-gray-100">
+          <% Subscription.statuses.each_key do |status| %>
+            <%= next if subscription.status == status %>
+
+            <%= button_to t("defaults.mark_as_#{status}"),
+                {
+                  controller: 'admin/statuses',
+                  action: 'update',
+                  subscription_id: subscription.id,
+                  subscription: { status: }
+                },
+                method: :put,
+                class: class_names(
+                  "w-full text-left px-3 py-2 text-xs hover:bg-gray-50",
+                  Subscription::STATUS_COLORS[status.to_sym]
+                ) %>
+          <% end %>
+
+          <%= button_to t('.unsubscribe'),
+                        [:admin, @camp, subscription],
+                        method: :delete,
+                        data: { turbo_confirm: t('.confirm_unsubscribe') },
+                        class: "w-full text-left px-3 py-2 text-xs text-red-600 hover:bg-red-50" %>
+        </div>
+      </details>
+    </div>
+  </div>
+</div>

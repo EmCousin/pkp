@@ -349,8 +349,6 @@ fr:
         pending: "En attente"
         filter: "Filtrer"
         no_subscriptions: "Aucune inscription"
-        unsubscribe: "Désinscrire"
-        confirm_unsubscribe: "Êtes-vous sûr de vouloir désinscrire ce membre ?"
       form:
         basic_information: "Informations de base"
         cover_picture_headline: "Ajoutez une image représentative du stage"
@@ -365,6 +363,9 @@ fr:
         success: Stage modifié
       destroy:
         success: Stage supprimé
+      subscription:
+        unsubscribe: "Désinscrire"
+        confirm_unsubscribe: "Êtes-vous sûr de vouloir désinscrire ce membre ?"
       subscriptions:
         create:
           success: "Membre inscrit au stage avec succès"
@@ -427,6 +428,7 @@ fr:
         no_paginate: Désactiver la pagination
         csv_export: Exporter au format CSV
         display_levels: Afficher les niveaux
+        new_member: Nouvel élève
       show:
         title: "%{member}"
         remove_from_course: Retirer du cours
@@ -446,6 +448,8 @@ fr:
         success: Membre modifié
       destroy:
         success: Membre supprimé
+      subscription:
+        view_camp: Voir le stage
     payments:
       create:
         success: Inscription mise à jour
@@ -482,6 +486,7 @@ fr:
         not_paid: Non payé
         payment_proof_awaiting_review: Justificatif à vérifier
         invoicing: Facturation
+        invalid_subscription: Inscription invalide
       new:
         title: Inscrire un membre
       create:

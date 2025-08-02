@@ -27,26 +27,62 @@
   </div>
 
   <div class="space-y-2">
-    <% subscription.courses.includes(attendance_sheets: :attendance_records).each do |course| %>
-      <div class="flex items-center justify-between text-sm border-b border-gray-200 pb-2">
-        <%= link_to course.title, admin_course_path(course), class: "text-gray-800 font-medium", data: { turbo_frame: '_top' } %>
-        <ul>
-          <% subscription.member.attendance_records_for(course).recent.each do |record| %>
-            <% if record.absent? %>
-              <li>
-                <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                  <circle cx="10" cy="10" r="8" />
-                </svg>
-              </li>
-            <% else %>
-              <li>
-                <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-3.5-9.5a1 1 0 011.414 1.414L10 10.586l2.086-2.086a1 1 0 011.414 1.414L10 13.414l-4.5-4.5a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                </svg>
-              </li>
-            <% end %>
+    <% if subscription.courses.any? %>
+      <% subscription.courses.includes(:category, attendance_sheets: :attendance_records).each do |course| %>
+        <%= link_to admin_course_path(course), class: "block p-3 border border-gray-200 rounded-lg bg-gray-50 hover:bg-gray-100 transition", data: { turbo_frame: '_top' } do %>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div>
+                <div class="font-medium text-gray-900">
+                  <%= course.title %>
+                </div>
+                <div class="text-sm text-gray-600">
+                  <%= course.category.title %>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-1">
+              <% subscription.member.attendance_records_for(course).recent.each do |record| %>
+                <% if record.absent? %>
+                  <div class="w-2 h-2 bg-red-500 rounded-full" title="Absent"></div>
+                <% elsif record.excused? %>
+                  <div class="w-2 h-2 bg-yellow-500 rounded-full" title="Excused"></div>
+                <% else %>
+                  <div class="w-2 h-2 bg-green-500 rounded-full" title="Present"></div>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    <% elsif subscription.camp.present? %>
+      <%= link_to [:admin, subscription.camp], class: "flex items-center justify-between p-3 border border-gray-200 rounded-lg bg-gray-50" do %>
+        <div class="flex items-center gap-3">
+          <% if subscription.camp.cover_picture.attached? %>
+            <%= image_tag subscription.camp.cover_picture, class: "w-8 h-8 rounded object-cover" %>
+          <% else %>
+            <div class="w-8 h-8 bg-gray-200 rounded flex items-center justify-center">
+              <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+              </svg>
+            </div>
           <% end %>
-        </ul>
+          <div>
+            <div class="font-medium text-gray-900">
+              <%= subscription.camp.title %>
+            </div>
+            <div class="text-sm text-gray-600">
+              <%= l(subscription.camp.starts_at, format: :long) %>
+              <% if subscription.camp.ends_at && subscription.camp.ends_at != subscription.camp.starts_at %>
+                &ndash; <%= l(subscription.camp.ends_at, format: :long) %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="text-sm text-gray-500">
+        <%= t('.invalid_subscription') %>
       </div>
     <% end %>
   </div>

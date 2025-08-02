@@ -5,20 +5,20 @@ module Members
     extend ActiveSupport::Concern
 
     included do
-      scope(:for_category, lambda do |category_id|
-        joins(subscriptions: { courses: :category })
-          .where(subscriptions: { year: Subscription.current_year })
-          .where(categories: { id: category_id })
+      scope(:filter_by_level, ->(level) { level.present? ? where(level:) : all })
+
+      scope(:filter_by_subscription_year, ->(year) { year.present? ? left_joins(:subscriptions).rewhere(subscriptions: { year: }) : all })
+
+      scope(:filter_by_course_ids, lambda do |course_ids|
+        return all if course_ids&.compact_blank.blank?
+
+        where(id: left_joins(subscriptions: :courses_subscriptions).where(courses_subscriptions: { course_id: course_ids }))
       end)
 
-      scope(:for_subscription_year, lambda do |subscription_year|
-        joins(:subscriptions)
-          .rewhere(subscriptions: { year: subscription_year })
-      end)
+      scope(:filter_by_camp_ids, lambda do |camp_ids|
+        return all if camp_ids&.compact_blank.blank?
 
-      scope(:for_subscription_course, lambda do |course_id|
-        joins(subscriptions: :courses)
-          .where(courses: { id: course_id })
+        where(id: left_joins(subscriptions: :camps_subscription).where(camps_subscriptions: { camp_id: camp_ids }))
       end)
     end
 
