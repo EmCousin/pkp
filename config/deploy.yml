@@ -51,6 +51,7 @@ env:
     DB_HOST: db
     DOCKER: true
   secret:
+ 
     - RAILS_MASTER_KEY
 
 # Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:
@@ -97,8 +98,6 @@ accessories:
       secret:
         - POSTGRES_PASSWORD
         - GRAFANA_POSTGRES_PASSWORD
-        - POSTGRES_SSL_CERT
-        - POSTGRES_SSL_KEY
     files:
       - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
       - db/init.sh:/docker-entrypoint-initdb.d/init.sh

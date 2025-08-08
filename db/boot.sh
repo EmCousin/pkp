@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# This script is called after PostgreSQL is initialized
 # Set the PGDATA variable to the appropriate PostgreSQL data directory
 export PGDATA=/var/lib/postgresql/data
 
@@ -20,9 +21,9 @@ if [ -n "$POSTGRES_SSL_CERT" ] && [ -n "$POSTGRES_SSL_KEY" ]; then
   chown postgres:postgres /var/lib/postgresql/server.crt
   chmod 644 /var/lib/postgresql/server.crt
 
-  # Wait for PostgreSQL to initialize, then configure SSL
-  echo "Waiting for PostgreSQL to initialize..."
-  while [ ! -f "$PGDATA/postgresql.conf" ]; do
+  # Wait for PostgreSQL to be fully initialized
+  echo "Waiting for PostgreSQL to be ready..."
+  until pg_isready -h localhost -p 5432; do
     sleep 1
   done
 
@@ -32,10 +33,11 @@ if [ -n "$POSTGRES_SSL_CERT" ] && [ -n "$POSTGRES_SSL_KEY" ]; then
   echo "ssl_cert_file = '/var/lib/postgresql/server.crt'" >> "$PGDATA/postgresql.conf"
   echo "ssl_key_file = '/var/lib/postgresql/server.key'" >> "$PGDATA/postgresql.conf"
 
+  # Restart PostgreSQL to apply SSL configuration
+  echo "Restarting PostgreSQL to apply SSL configuration..."
+  pg_ctl -D "$PGDATA" reload
+
   echo "SSL configuration complete."
 else
   echo "No SSL certificates provided, PostgreSQL will run without SSL."
 fi
-
-# Let the standard PostgreSQL entrypoint handle the rest
-exec /usr/local/bin/docker-entrypoint.sh postgres
