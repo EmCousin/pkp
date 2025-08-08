@@ -20,10 +20,22 @@ if [ -n "$POSTGRES_SSL_CERT" ] && [ -n "$POSTGRES_SSL_KEY" ]; then
   chown postgres:postgres /var/lib/postgresql/server.crt
   chmod 644 /var/lib/postgresql/server.crt
 
-  # Start PostgreSQL as the postgres user with SSL enabled
-  su - postgres -c "postgres -D $PGDATA -c ssl=on -c ssl_cert_file=/var/lib/postgresql/server.crt -c ssl_key_file=/var/lib/postgresql/server.key"
+  # Wait for PostgreSQL to initialize, then configure SSL
+  echo "Waiting for PostgreSQL to initialize..."
+  while [ ! -f "$PGDATA/postgresql.conf" ]; do
+    sleep 1
+  done
+
+  # Configure SSL in postgresql.conf
+  echo "Configuring SSL in postgresql.conf..."
+  echo "ssl = on" >> "$PGDATA/postgresql.conf"
+  echo "ssl_cert_file = '/var/lib/postgresql/server.crt'" >> "$PGDATA/postgresql.conf"
+  echo "ssl_key_file = '/var/lib/postgresql/server.key'" >> "$PGDATA/postgresql.conf"
+
+  echo "SSL configuration complete."
 else
-  echo "No SSL certificates provided, starting PostgreSQL without SSL..."
-  # Start PostgreSQL as the postgres user without SSL
-  su - postgres -c "postgres -D $PGDATA"
+  echo "No SSL certificates provided, PostgreSQL will run without SSL."
 fi
+
+# Let the standard PostgreSQL entrypoint handle the rest
+exec /usr/local/bin/docker-entrypoint.sh postgres
