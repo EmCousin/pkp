@@ -7,9 +7,10 @@ image: emcousin/pkp
 # Deploy to these servers.
 servers:
   web:
-    - 46.255.164.98
-  options:
-    "add-host": host.docker.internal:host-gateway
+    hosts:
+      - 46.255.164.98
+    options:
+      "add-host": host.docker.internal:host-gateway
   # job:
   #   hosts:
   #     - 192.168.0.1
