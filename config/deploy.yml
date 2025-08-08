@@ -101,7 +101,6 @@ accessories:
     files:
       - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
       - db/init.sh:/docker-entrypoint-initdb.d/init.sh
-      - db/boot.sh:/docker-entrypoint-initdb.d/boot.sh
     directories:
       - postgres_data:/var/lib/postgresql/data
 
