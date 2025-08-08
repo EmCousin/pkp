@@ -1,4 +1,4 @@
-web: rails server -p 3000
-worker: bundle exec sidekiq -t 10 -C config/sidekiq.yml
+web: OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES rails server -p 3000
+worker: OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES bundle exec rake solid_queue:start
 js: yarn build --watch
 tailwind: bin/rails tailwindcss:watch

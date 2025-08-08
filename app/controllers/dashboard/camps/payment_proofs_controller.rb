@@ -14,7 +14,7 @@ module Dashboard
           redirect_to [:dashboard, @camp], notice: t('.success'), status: :see_other
         else
           redirect_back_or_to [:edit, :dashboard, @camp, @subscription, :payment_proof], alert: @subscription.errors.full_messages.to_sentence,
-                                                                                         status: :unprocessable_entity
+                                                                                         status: :unprocessable_content
         end
       end
 

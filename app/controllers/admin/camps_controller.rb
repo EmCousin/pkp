@@ -24,7 +24,7 @@ module Admin
       if @camp.save
         redirect_back_or_to [:admin, @camp], notice: t('.success'), status: :see_other
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 
@@ -32,7 +32,7 @@ module Admin
       if @camp.update(camp_params)
         redirect_to admin_camp_path(@camp, success: true), notice: t('.success'), status: :see_other
       else
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       end
     end
 

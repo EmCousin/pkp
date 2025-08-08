@@ -3,7 +3,7 @@
 class RegistrationsController < Devise::RegistrationsController
   def create
     super do |resource|
-      return render :new, status: :unprocessable_entity if resource.errors.any?
+      return render :new, status: :unprocessable_content if resource.errors.any?
     end
   end
 

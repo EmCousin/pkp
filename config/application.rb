@@ -13,8 +13,6 @@ module Pkp
 
     config.add_autoload_paths_to_load_path = false
 
-    config.active_job.queue_adapter = :sidekiq
-
     config.autoload_paths << "#{root}/app/form_builders"
 
     # Settings in config/environments/* take precedence over those specified here.

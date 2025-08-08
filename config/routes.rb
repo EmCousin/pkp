@@ -15,8 +15,10 @@ Rails.application.routes.draw do
     root to: "dashboard#show", as: :authenticated
   end
 
+
   authenticate :user, ->(user) { user.admin? } do
-    mount Sidekiq::Web => '/sidekiq'
+    mount MissionControl::Jobs::Engine, at: "/jobs"
+    mount PgHero::Engine, at: "/pghero"
   end
 
   resources :errors, only: [] do

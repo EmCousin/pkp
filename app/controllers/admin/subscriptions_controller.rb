@@ -28,7 +28,7 @@ module Admin
       if @subscription.save
         redirect_to %i[admin subscriptions], notice: t('.success'), status: :see_other
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 
@@ -37,7 +37,7 @@ module Admin
         process_after_save(@subscription)
         redirect_back_or_to [:admin, @subscription], notice: t('.success'), status: :see_other
       else
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       end
     end
 

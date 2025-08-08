@@ -19,7 +19,7 @@ module Dashboard
       if @subscription.save
         redirect_to next_completion_step_path(@subscription), status: :see_other
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 

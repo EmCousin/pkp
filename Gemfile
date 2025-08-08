@@ -13,10 +13,14 @@ ruby '3.4.5'
 gem 'rails', '~> 8'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
+gem 'pghero'
+# Use SQLite3 as the database for SolidQueue, SolidCache and SolidCable
+gem 'sqlite3'
+
 # Use Puma as the app server
+# Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]
+gem 'thruster', require: false
 gem 'puma', '~> 6'
-# See https://github.com/rails/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
 
 # Assets
 gem 'jsbundling-rails'
@@ -26,8 +30,6 @@ gem 'turbo-rails'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
-# Use Redis adapter to run Action Cable in production
-gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 gem 'aws-sdk-s3', require: false
@@ -44,11 +46,35 @@ gem 'prawn-table'
 gem 'rack-cors', require: 'rack/cors'
 gem 'rollbar'
 gem 'rqrcode'
-gem 'sidekiq'
+
+# Background processing
+gem 'mission_control-jobs'
+gem 'solid_queue'
+
+# Action Cable adapter
+gem 'solid_cable', '~> 3.0'
+
+# Disk-based Cache store adapter
+gem 'solid_cache', '~> 1.0'
+
+# Stripe
 gem 'stripe'
 
-# Add this line to your Gemfile
+# TailwindCSS
 gem 'tailwindcss-rails', '~> 3.3.1'
+
+# Reduces boot times through caching; required in config/boot.rb
+gem 'bootsnap', '>= 1.4.2', require: false
+
+# Deploy this application anywhere as a Docker container [https://kamal-deploy.org]
+gem 'kamal', '>= 2.0.0.rc2', require: false
+
+# Observability
+# Observability
+gem 'yabeda'
+gem 'yabeda-prometheus-mmap'
+gem 'yabeda-puma-plugin'
+gem 'yabeda-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -57,7 +83,6 @@ group :development, :test do
   gem 'brakeman', require: false
   gem 'capybara'
   gem 'database_cleaner'
-  gem 'dotenv-rails'
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'letter_opener'

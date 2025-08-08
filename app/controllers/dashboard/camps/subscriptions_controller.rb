@@ -23,7 +23,7 @@ module Dashboard
         if @subscription.destroy
           redirect_back_or_to [:dashboard, @camp], notice: t('.success'), status: :see_other
         else
-          redirect_back_or_to [:dashboard, @camp], alert: t('.error'), status: :unprocessable_entity
+          redirect_back_or_to [:dashboard, @camp], alert: t('.error'), status: :unprocessable_content
         end
       end
 
