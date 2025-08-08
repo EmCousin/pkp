@@ -8,6 +8,8 @@ image: emcousin/pkp
 servers:
   web:
     - 46.255.164.98
+  options:
+    "add-host": host.docker.internal:host-gateway
   # job:
   #   hosts:
   #     - 192.168.0.1
@@ -44,6 +46,7 @@ builder:
 #
 env:
   clear:
+    SOLID_QUEUE_IN_PUMA: true
     DB_HOST: 46.255.164.98
     DOCKER: true
   secret:
@@ -65,8 +68,8 @@ aliases:
 
 # Use a persistent storage volume.
 #
-# volumes:
-#   - "app_storage:/app/storage"
+volumes:
+  - "pkp_storage:/app/storage"
 
 # Bridge fingerprinted assets, like JS and CSS, between versions to avoid
 # hitting 404 on in-flight requests. Combines all files from new and old
@@ -102,6 +105,7 @@ accessories:
     directories:
       - postgres_data:/var/lib/postgresql/data
     cmd: /bin/bash /usr/local/bin/deploy-scripts/boot.sh
+
   db_backup:
     image: emcousin/postgres-backup-s3:17
     host: 46.255.164.98
