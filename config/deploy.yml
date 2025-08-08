@@ -48,7 +48,7 @@ builder:
 env:
   clear:
     SOLID_QUEUE_IN_PUMA: true
-    DB_HOST: 46.255.164.98
+    DB_HOST: db
     DOCKER: true
   secret:
     - RAILS_MASTER_KEY
@@ -102,10 +102,9 @@ accessories:
     files:
       - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
       - db/init.sh:/docker-entrypoint-initdb.d/init.sh
-      - db/boot.sh:/usr/local/bin/deploy-scripts/boot.sh
+      - db/boot.sh:/docker-entrypoint-initdb.d/boot.sh
     directories:
       - postgres_data:/var/lib/postgresql/data
-    cmd: /bin/bash /usr/local/bin/deploy-scripts/boot.sh
 
   db_backup:
     image: emcousin/postgres-backup-s3:17
