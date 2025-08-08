@@ -77,11 +77,11 @@ Rails.application.configure do
   config.i18n.fallbacks = true
 
   config.action_mailer.smtp_settings = {
-      port:           Rails.application.credentials.mailgun[:smtp_port],
-      address:        Rails.application.credentials.mailgun[:smtp_server],
-      user_name:      Rails.application.credentials.mailgun[:smtp_login],
-      password:       Rails.application.credentials.mailgun[:smtp_password],
-      domain:         Rails.application.credentials.mailgun[:domain],
+      port:           Rails.application.credentials.dig(:mailgun, :smtp_port),
+      address:        Rails.application.credentials.dig(:mailgun, :smtp_server),
+      user_name:      Rails.application.credentials.dig(:mailgun, :smtp_login),
+      password:       Rails.application.credentials.dig(:mailgun, :smtp_password),
+      domain:         Rails.application.credentials.dig(:mailgun, :domain),
       authentication: :plain
   }
   config.action_mailer.delivery_method = :smtp
