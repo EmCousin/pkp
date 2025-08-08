@@ -64,7 +64,7 @@ Rails.application.configure do
   # config.active_job.queue_name_prefix = "pkp_#{Rails.env}"
   config.action_mailer.perform_caching = false
   config.action_mailer.default_url_options = {
-    host: Rails.application.credentials.url_options[:host],
+    host: Rails.application.credentials.dig(:url_options, :host) || 'localhost',
     protocol: 'https'
   }
 
