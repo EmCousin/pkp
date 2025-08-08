@@ -117,7 +117,7 @@ accessories:
         S3_REGION: rbx
         S3_BUCKET:  pkp-backup
         S3_PREFIX: backups
-        POSTGRES_HOST: db
+        POSTGRES_HOST: 46.255.164.98
         POSTGRES_DATABASE: pkp_production
         POSTGRES_USER: rails
       secret:
