@@ -51,7 +51,7 @@ env:
     DB_HOST: db
     DOCKER: true
   secret:
- 
+
     - RAILS_MASTER_KEY
 
 # Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:
