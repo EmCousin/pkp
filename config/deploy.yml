@@ -48,7 +48,7 @@ builder:
 env:
   clear:
     SOLID_QUEUE_IN_PUMA: true
-    DB_HOST: db
+    DB_HOST: 46.255.164.98
     DOCKER: true
   secret:
 
