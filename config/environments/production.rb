@@ -47,6 +47,8 @@ Rails.application.configure do
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = true
+  # Skip http-to-https redirect for the default health check endpoint.
+  config.ssl_options = { redirect: { exclude: ->(request) { request.path == config.silence_healthcheck_path || request.port == 9394 } } }
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
