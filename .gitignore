@@ -19,7 +19,10 @@
 .byebug_history
 .yalc
 yalc.lock
-storage
+
+# Ignore uploaded files in development.
+/storage/*
+!/storage/.keep
 
 /public/packs
 /public/packs-test
