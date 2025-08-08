@@ -46,3 +46,8 @@ coverage
 docker-compose.yml
 
 .env
+
+db/server.crt
+db/server.key
+db/certificates/*
+!db/certificates/.keep
