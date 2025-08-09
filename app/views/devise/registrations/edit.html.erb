@@ -15,6 +15,7 @@
           <%= f.label :email, class: "block text-sm font-medium text-gray-700" %>
           <%= f.email_field :email, autofocus: true, autocomplete: "email",
               class: "mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
+          <%= f.error_for :email, full_messages: true %>
         </div>
 
         <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
@@ -27,30 +28,35 @@
           <%= f.label :phone_number, class: "block text-sm font-medium text-gray-700" %>
           <%= f.telephone_field :phone_number,
               class: "mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
+          <%= f.error_for :phone_number, full_messages: true %>
         </div>
 
         <div>
           <%= f.label :address, class: "block text-sm font-medium text-gray-700" %>
           <%= f.text_field :address,
               class: "mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
+          <%= f.error_for :address, full_messages: true %>
         </div>
 
         <div>
           <%= f.label :zip_code, class: "block text-sm font-medium text-gray-700" %>
           <%= f.text_field :zip_code,
               class: "mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
+          <%= f.error_for :zip_code, full_messages: true %>
         </div>
 
         <div>
           <%= f.label :city, class: "block text-sm font-medium text-gray-700" %>
           <%= f.text_field :city,
               class: "mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
+          <%= f.error_for :city, full_messages: true %>
         </div>
 
         <div>
           <%= f.label :country, class: "block text-sm font-medium text-gray-700" %>
           <%= f.text_field :country,
               class: "mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
+          <%= f.error_for :country, full_messages: true %>
         </div>
 
         <div>
@@ -61,6 +67,7 @@
           <p class="mt-2 text-sm text-gray-500">
             <%= t('.leave_blank_if_you_don_t_want_to_change_it').capitalize %>
           </p>
+          <%= f.error_for :password, full_messages: true %>
         </div>
 
         <div>
@@ -71,6 +78,7 @@
           <p class="mt-2 text-sm text-gray-500">
             <%= t('.we_need_your_current_password_to_confirm_your_changes').capitalize %>
           </p>
+          <%= f.error_for :current_password, full_messages: true %>
         </div>
 
         <%= f.submit t('defaults.save'),

@@ -7,6 +7,14 @@ class RegistrationsController < Devise::RegistrationsController
     end
   end
 
+  def update
+    super do |resource|
+      return render :edit, status: :unprocessable_content if resource.errors.any?
+
+      return redirect_to :dashboard, status: :see_other, notice: t('devise.registrations.updated')
+    end
+  end
+
   protected
 
   def after_inactive_sign_up_path_for(_resource)
