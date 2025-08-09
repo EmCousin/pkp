@@ -41,6 +41,5 @@ Rails.application.configure do
   config.active_storage.service = :test
 
   # Run Active Job in test mode.
-  config.active_job.queue_adapter = :solid_queue
-  config.solid_queue.connects_to = { database: { writing: :queue } }
+  config.active_job.queue_adapter = :test
 end
