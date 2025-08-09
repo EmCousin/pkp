@@ -48,7 +48,7 @@ builder:
 env:
   clear:
     SOLID_QUEUE_IN_PUMA: true
-    DB_HOST: pkp-db
+    DB_HOST: 46.255.164.98
     DOCKER: true
     RAILS_SERVE_STATIC_FILES: true
   secret:
@@ -98,9 +98,13 @@ accessories:
       secret:
         - POSTGRES_PASSWORD
         - GRAFANA_POSTGRES_PASSWORD
+        - POSTGRES_SSL_CERT
+        - POSTGRES_SSL_KEY
     files:
       - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
       - db/init.sh:/docker-entrypoint-initdb.d/init.sh
+      - db/boot.sh:/usr/local/bin/deploy-scripts/boot.sh
+
     directories:
       - postgres_data:/var/lib/postgresql/data
 

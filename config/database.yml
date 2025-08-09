@@ -136,6 +136,7 @@ production:
     <<: *primary
     <<: *live
     database: pkp_production
+    sslmode: require
   cable:
     <<: *cable
     database: storage/production_cable.sqlite3
