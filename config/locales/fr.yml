@@ -381,6 +381,10 @@ fr:
     categories:
       new:
         title: Créer une catégorie
+        description: Les catégories sont utilisées pour classer les cours. Elles définissent l'âge minimum et maximum des élèves.
+      form:
+        title: Informations de base
+        description: Renseignez le nom et les âges
       create:
         success: Catégorie créée
 
