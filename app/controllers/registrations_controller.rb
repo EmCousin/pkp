@@ -3,7 +3,15 @@
 class RegistrationsController < Devise::RegistrationsController
   def create
     super do |resource|
-      return render :new, status: :unprocessable_entity if resource.errors.any?
+      return render :new, status: :unprocessable_content if resource.errors.any?
+    end
+  end
+
+  def update
+    super do |resource|
+      return render :edit, status: :unprocessable_content if resource.errors.any?
+
+      return redirect_to :dashboard, status: :see_other, notice: t('devise.registrations.updated')
     end
   end
 

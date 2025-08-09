@@ -1,0 +1,136 @@
+# Name of your application. Used to uniquely configure containers.
+service: pkp
+
+# Name of the container image.
+image: emcousin/pkp
+
+# Deploy to these servers.
+servers:
+  web:
+    hosts:
+      - 46.255.164.98
+    options:
+      "add-host": host.docker.internal:host-gateway
+  # job:
+  #   hosts:
+  #     - 192.168.0.1
+  #   cmd: bin/jobs
+
+# Enable SSL auto certification via Let's Encrypt and allow for multiple apps on a single web server.
+# Remove this section when using multiple web servers and ensure you terminate SSL at your load balancer.
+#
+# Note: If using Cloudflare, set encryption mode in SSL/TLS setting to "Full" to enable CF-to-app encryption.
+proxy:
+  ssl: true
+  host: inscriptions.parkourparis.fr
+  # Proxy connects to your container on port 80 by default.
+  app_port: 3000
+
+# Credentials for your image host.
+registry:
+  # Specify the registry server, if you're not using Docker Hub
+  # server: registry.digitalocean.com / ghcr.io / ...
+  username: emcousin
+
+  # Always use an access token rather than real password (pulled from .kamal/secrets).
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+# Configure builder setup.
+builder:
+  arch: amd64
+  # Pass in additional build args needed for your Dockerfile.
+  # args:
+  #   RUBY_VERSION: <%= ENV["RBENV_VERSION"] || ENV["rvm_ruby_string"] || "#{RUBY_ENGINE}-#{RUBY_ENGINE_VERSION}" %>
+
+# Inject ENV variables into containers (secrets come from .kamal/secrets).
+#
+env:
+  clear:
+    SOLID_QUEUE_IN_PUMA: true
+    DB_HOST: pkp-db
+    DOCKER: true
+    RAILS_SERVE_STATIC_FILES: true
+  secret:
+    - RAILS_MASTER_KEY
+
+# Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:
+# "bin/kamal app logs -r job" will tail logs from the first server in the job section.
+#
+aliases:
+  console: app exec --interactive --reuse "bin/rails console"
+  shell: app exec --interactive --reuse "bash"
+  logs: app logs -f
+  dbc: app exec --interactive --reuse "bin/rails dbconsole"
+
+# Use a different ssh user than root
+#
+# ssh:
+#   user: app
+
+# Use a persistent storage volume.
+#
+volumes:
+  - "pkp_storage:/app/storage"
+
+# Bridge fingerprinted assets, like JS and CSS, between versions to avoid
+# hitting 404 on in-flight requests. Combines all files from new and old
+# version inside the asset_path.
+#
+asset_path: /rails/public/assets
+
+# Configure rolling deploys by setting a wait time between batches of restarts.
+#
+# boot:
+#   limit: 10 # Can also specify as a percentage of total hosts, such as "25%"
+#   wait: 2
+
+# Use accessory services (secrets come from .kamal/secrets).
+#
+accessories:
+  db:
+    image: postgres:17-alpine
+    host: 46.255.164.98
+    port: 5432
+    env:
+      clear:
+        POSTGRES_USER: rails
+      secret:
+        - POSTGRES_PASSWORD
+        - GRAFANA_POSTGRES_PASSWORD
+    files:
+      - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
+      - db/init.sh:/docker-entrypoint-initdb.d/init.sh
+    directories:
+      - postgres_data:/var/lib/postgresql/data
+
+  db_backup:
+    image: emcousin/postgres-backup-s3:17
+    host: 46.255.164.98
+    env:
+      clear:
+        SCHEDULE: "@daily"
+        BACKUP_KEEP_DAYS: 7
+        S3_REGION: rbx
+        S3_BUCKET:  pkp-backup
+        S3_PREFIX: backups
+        POSTGRES_HOST: 46.255.164.98
+        POSTGRES_DATABASE: pkp_production
+        POSTGRES_USER: rails
+      secret:
+        - POSTGRES_PASSWORD
+        - S3_ACCESS_KEY_ID
+        - S3_SECRET_ACCESS_KEY
+        - S3_ENDPOINT
+
+  otel_collector:
+    image: otel/opentelemetry-collector:latest
+    port: 9394
+    files:
+      - config/otel_collector.yml:/etc/otelcol/config.yaml
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    options:
+      user: 0 # if you run Docker as root
+    roles:
+      - web

@@ -16,7 +16,7 @@ Rails.application.configure do
   if Rails.root.join('tmp/caching-dev.txt').exist?
     config.action_controller.perform_caching = true
 
-    config.cache_store = :memory_store
+    config.cache_store = :solid_cache_store
     config.public_file_server.headers = {
       'Cache-Control' => "public, max-age=#{2.days.seconds.to_i}"
     }
@@ -43,6 +43,9 @@ Rails.application.configure do
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
 
+  config.active_job.queue_adapter = :solid_queue
+  config.solid_queue.connects_to = { database: { writing: :queue } }
+
   # Debug mode disables concatenation and preprocessing of assets.
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
@@ -59,5 +62,5 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   # Store files locally.
-  config.active_storage.service = :local
+  config.active_storage.service = :ovh
 end

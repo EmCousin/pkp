@@ -1,0 +1,146 @@
+services:
+  db:
+    labels:
+      - "role=db"
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: TBD
+      POSTGRES_PASSWORD: TBD
+      GRAFANA_POSTGRES_PASSWORD: TBD
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # - ./db/certificates/server.crt:/var/lib/postgresql/server.crt  # SSL cert
+      # - ./db/certificates/server.key:/var/lib/postgresql/server.key  # SSL key
+    networks:
+      - mynetwork
+    ports:
+      - "5432:5432"
+    # command: >
+    #   postgres -c ssl=on
+    #            -c ssl_cert_file=/var/lib/postgresql/server.crt
+    #            -c ssl_key_file=/var/lib/postgresql/server.key
+
+  db_backup:
+    image: emcousin/postgres-backup-s3:17
+    environment:
+      SCHEDULE: "@daily"
+      BACKUP_KEEP_DAYS: 7
+      S3_REGION: rbx
+      S3_BUCKET: pkp-backup-development
+      S3_PREFIX: backups
+      POSTGRES_HOST: db
+      POSTGRES_DATABASE: pkp_development
+      POSTGRES_USER: TBD
+      POSTGRES_PASSWORD: TBD
+      S3_ACCESS_KEY_ID: TBD
+      S3_SECRET_ACCESS_KEY: TBD
+      S3_ENDPOINT: TBD
+    networks:
+      - mynetwork
+
+  web:
+    labels:
+      - "role=web"
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: bundle exec rails server -b 0.0.0.0 -p 3001
+    environment:
+      DOCKER: true
+    volumes:
+      - .:/pkp
+      - ./config/credentials/development.key:/pkp/config/credentials/development.key
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+    stdin_open: true
+    tty: true
+    expose:
+      - "9394" # Expose only internally, no external access
+
+  worker:
+    labels:
+      - "role=worker"
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: bundle exec rake solid_queue:start
+    environment:
+      DOCKER: true
+    volumes:
+      - .:/simple_social_network
+      - ./config/credentials/development.key:/simple_social_network/config/credentials/development.key
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+
+  css:
+    labels:
+      - "role=css"
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: bin/rails tailwindcss:watch
+    networks:
+      - mynetwork
+    tty: true
+
+  otel_collector:
+    labels:
+      - "role=otel_collector"
+    image: otel/opentelemetry-collector:latest
+    ports:
+      - "9394:9394"
+    volumes:
+      - ./config/otel_collector.yml:/etc/otelcol/config.yaml
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --config /etc/otelcol/config.yaml
+    depends_on:
+      - web
+      - worker
+    restart: always
+    networks:
+      - mynetwork
+
+  prometheus:
+    labels:
+      - "role=prometheus"
+    networks:
+      - mynetwork
+    image: prom/prometheus:latest
+    volumes:
+      - "./config/prometheus.yml.dev:/etc/prometheus/prometheus.yml"
+    ports:
+      - "9090:9090"
+
+  grafana:
+    labels:
+      - "role=grafana"
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+     - '3000:3000'
+    links:
+      - web
+      - worker
+      - otel_collector
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  postgres_cable_data:
+  postgres_cache_data:
+  postgres_queue_data:
+  grafana-storage:

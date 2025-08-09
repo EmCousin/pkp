@@ -14,7 +14,7 @@ module Dashboard
         session[:alumni_authenticated] = true
         redirect_to %i[new dashboard subscription], status: :see_other
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 

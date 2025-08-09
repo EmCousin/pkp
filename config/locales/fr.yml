@@ -673,9 +673,24 @@ fr:
         payment_by_card: Payer par carte bancaire
         upload_payment_proof: Joindre un justificatif
     members:
+      new:
+        title: Ajouter un·e élève
+        description: "Vous pourrez ensuite l'inscrire aux cours et stages."
       form:
-        advertising_right_statement: J'autorise l'utilisation, l'affichage et la publication de mon image provenant des activités de Parkour Paris, à des fins de promotion (tous médias) et d'information des activités de l'association. (panneaux, plaquettes, site internet).
+        personal_information: Informations personnelles
+        personal_information_description: Les informations de base de l'élève
+        advertising_right_statement: J'autorise l'utilisation, l'affichage et la publication de mon image.
         contact_name: Nom complet du contact
+        contact_name_description: Personne à contacter en cas d'urgence
+        select_contact_relationship: Sélectionner un lien de parenté
+        avatar_description: Photo pour identifier l'élève
+        select_avatar: Sélectionner une photo
+        click_to_upload: Cliquez pour télécharger
+        or_drag_and_drop: ou glissez-déposez
+        allowed_formats: PNG, JPG, GIF jusqu'à 10MB
+        permissions: Autorisations
+        permissions_description: Consentement pour l'utilisation d'images
+        advertising_right_statement_description: J'autorise l'utilisation, l'affichage et la publication de mon image provenant des activités de Parkour Paris, à des fins de promotion (tous médias) et d'information des activités de l'association. (panneaux, plaquettes, site internet).
       create:
         success: Élève ajouté·e
       update:

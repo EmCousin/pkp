@@ -175,7 +175,7 @@ feature "Subscription Workflow", type: :feature do
     # After medical certificate, user is redirected to payment page
     expect(page).to have_text('Payer par carte bancaire')
 
-                                        # Verify we're on the payment page
+    # Verify we're on the payment page
     expect(page).to have_text('Payer par carte bancaire')
     expect(page).to have_text('Paiement par carte bancaire')
 
@@ -200,7 +200,11 @@ feature "Subscription Workflow", type: :feature do
             # Submit the form with the stripe token parameter
     # This simulates what happens when Stripe creates a token and submits the form
     form = find('form[data-stripe-target="form"]')
-    page.driver.submit form[:method], form[:action], { stripeToken: 'tok_test_123' }
+    csrf_token = form.find('input[name="authenticity_token"]', visible: false)[:value]
+    page.driver.submit form[:method], form[:action], {
+      stripeToken: 'tok_test_123',
+      authenticity_token: csrf_token
+    }
 
     # After successful payment, should redirect to dashboard with success message
     expect(page).to have_text('Inscription payée avec succès !')

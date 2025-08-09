@@ -15,7 +15,7 @@ module Admin
         if @subscription.save
           redirect_to [:admin, @camp], notice: t('.success'), status: :see_other
         else
-          redirect_to [:admin, @camp], alert: @subscription.errors.full_messages.to_sentence, status: :unprocessable_entity
+          redirect_to [:admin, @camp], alert: @subscription.errors.full_messages.to_sentence, status: :unprocessable_content
         end
       end
 
@@ -23,7 +23,7 @@ module Admin
         if @subscription.destroy
           redirect_to [:admin, @camp], notice: t('.success'), status: :see_other
         else
-          redirect_to [:admin, @camp], alert: t('.error'), status: :unprocessable_entity
+          redirect_to [:admin, @camp], alert: t('.error'), status: :unprocessable_content
         end
       end
 

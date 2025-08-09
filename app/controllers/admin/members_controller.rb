@@ -32,7 +32,7 @@ module Admin
       if @member.save
         redirect_to %i[admin members], notice: t('.success'), status: :see_other
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 
@@ -40,7 +40,7 @@ module Admin
       if @member.update(member_params)
         redirect_back_or_to [:admin, @member], notice: t('.success'), status: :see_other
       else
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       end
     end
 
