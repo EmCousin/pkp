@@ -65,8 +65,8 @@ aliases:
 
 # Use a different ssh user than root
 #
-# ssh:
-#   user: app
+ssh:
+  keys: [ "~/.ssh/id_rsa_pkp" ]
 
 # Use a persistent storage volume.
 #
