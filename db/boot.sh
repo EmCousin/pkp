@@ -35,7 +35,7 @@ if [ -n "$POSTGRES_SSL_CERT" ] && [ -n "$POSTGRES_SSL_KEY" ]; then
 
   # Restart PostgreSQL to apply SSL configuration
   echo "Restarting PostgreSQL to apply SSL configuration..."
-  pg_ctl -D "$PGDATA" reload
+  su -s /bin/sh postgres -c "pg_ctl -D '$PGDATA' reload"
 
   echo "SSL configuration complete."
 else
