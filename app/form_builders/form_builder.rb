@@ -51,12 +51,18 @@ class FormBuilder < ActionView::Helpers::FormBuilder
     after:duration-200
   ].freeze
 
-  def error_for(attribute)
+  def error_for(attribute, full_messages: false)
     return unless object.errors[attribute].any?
 
     @template.content_tag(:ul, class: 'list-disc pl-5 text-sm text-red-700') do
-      object.errors[attribute].each do |message|
-        @template.concat @template.content_tag(:li, message)
+      if full_messages
+        object.errors.full_messages_for(attribute).each do |message|
+          @template.concat @template.content_tag(:li, message)
+        end
+      else
+        object.errors[attribute].each do |message|
+          @template.concat @template.content_tag(:li, message)
+        end
       end
     end
   end
