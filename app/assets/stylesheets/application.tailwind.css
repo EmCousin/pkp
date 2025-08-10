@@ -3,14 +3,14 @@
 @tailwind utilities;
 
 html {
+  min-height: 100vh;
+}
+
+body {
   background-image: url("./pkp.webp");
   background-repeat: repeat;
   background-size: 100% auto;
   background-position: center top;
   background-attachment: scroll;
-  min-height: 100vh;
-}
-
-body {
   min-height: 100vh;
 }
