@@ -47,11 +47,13 @@
     <div class="bg-white border border-gray-200 rounded-lg p-5 mt-4">
       <h2 class="text-lg font-semibold text-gray-900 mb-4"><%= t('.courses_title') %></h2>
 
-      <% if @category.courses.any? %>
-        <%= render partial: 'admin/courses/course', collection: @category.courses %>
-      <% else %>
-        <p class="text-sm text-gray-600"><%= t('.no_courses') %></p>
-      <% end %>
+      <div class="space-y-3">
+          <% if @category.courses.any? %>
+            <%= render partial: 'admin/courses/course', collection: @category.courses %>
+        <% else %>
+          <p class="text-sm text-gray-600"><%= t('.no_courses') %></p>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>

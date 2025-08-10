@@ -2,49 +2,49 @@ monday_female_adult:
   title: "Lundi Adulte Féminin 19h - 20h30"
   description: "Lundi Adulte Féminin"
   capacity: 30
-  weekday: 0
+  weekday: 1
   category: adult
 
 monday_adult:
   title: "Lundi Adulte 19h - 20h30"
   description: "Lundi Adulte Mixte"
   capacity: 60
-  weekday: 0
+  weekday: 1
   category: adult
 
 tuesday_adult:
   title: "Mardi Adulte 19h - 20h30"
   description: "Mardi Adulte Mixte"
   capacity: 60
-  weekday: 1
+  weekday: 2
   category: adult
 
 wednesday_adult:
   title: "Mercredi Adulte 19h - 20h30"
   description: "Mercredi Adulte Mixte"
   capacity: 60
-  weekday: 2
+  weekday: 3
   category: adult
 
 thursday_adult:
   title: "Jeudi Adulte 19h - 20h30"
   description: "Jeudi Adulte Mixte"
   capacity: 60
-  weekday: 3
+  weekday: 4
   category: adult
 
 friday_adult:
   title: "Vendredi Adulte 19h - 20h30"
   description: "Vendredi Adulte Mixte"
   capacity: 60
-  weekday: 4
+  weekday: 5
   category: adult
 
 wednesday_teen_13_15:
   title: "Mercredi Ados (13-15 ans) 14h15 - 15h30"
   description: "Mercredi Ados (13-15 ans)"
   capacity: 25
-  weekday: 2
+  weekday: 3
   category: teen_13_15
   features_attendance_sheet: true
 
@@ -52,7 +52,7 @@ wednesday_teen_10_12:
   title: "Mercredi Ados (10-12 ans) 15h30 - 16h45"
   description: "Mercredi Ados (10-12 ans)"
   capacity: 25
-  weekday: 2
+  weekday: 3
   category: teen_10_12
   features_attendance_sheet: true
 
@@ -60,7 +60,7 @@ saturtday_teen_13_15_a:
   title: "Samedi Ados A (13-15 ans) 14h15 - 15h30"
   description: "Samedi Ados A (13-15 ans)"
   capacity: 25
-  weekday: 5
+  weekday: 6
   category: teen_13_15
   features_attendance_sheet: true
 
@@ -68,7 +68,7 @@ saturtday_teen_13_15_b:
   title: "Samedi Ados B (13-15 ans) 15h30 - 16h45"
   description: "Samedi Ados B (13-15 ans)"
   capacity: 25
-  weekday: 5
+  weekday: 6
   category: teen_13_15
   features_attendance_sheet: true
 
@@ -76,7 +76,7 @@ saturtday_teen_10_12_a:
   title: "Samedi Ados A (10-12 ans) 14h15 - 15h30"
   description: "Samedi Ados A (10-12 ans)"
   capacity: 25
-  weekday: 5
+  weekday: 6
   category: teen_10_12
   features_attendance_sheet: true
 
@@ -84,7 +84,7 @@ saturtday_teen_10_12_b:
   title: "Samedi Ados B (10-12 ans) 15h30 - 16h45"
   description: "Samedi Ados B (10-12 ans)"
   capacity: 25
-  weekday: 5
+  weekday: 6
   category: teen_10_12
   features_attendance_sheet: true
 
@@ -92,7 +92,7 @@ saturtday_kidz_6_7:
   title: "Samedi Kidz (6-7 ans) 11h - 12h"
   description: "Samedi Kidz (6-7 ans)"
   capacity: 25
-  weekday: 5
+  weekday: 6
   category: kidz_6_7
   features_attendance_sheet: true
 
@@ -100,6 +100,6 @@ saturtday_kidz_8_9:
   title: "Samedi Kidz (8-9 ans) 11h - 12h"
   description: "Samedi Kidz (8-9 ans)"
   capacity: 25
-  weekday: 5
+  weekday: 6
   category: kidz_8_9
   features_attendance_sheet: true
