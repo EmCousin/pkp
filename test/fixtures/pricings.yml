@@ -4,7 +4,7 @@ adult_regular:
     - 280
     - 420
     - 490
-  starts_at: "<%= Subscription.current_year - 1 %>-09-01"
+  starts_at: "<%= Subscription.current_year - 1 %>-08-01"
   ends_at: "<%= Subscription.current_year %>-06-30"
   category: adult
 
@@ -30,7 +30,7 @@ teen_13_15_regular:
   prices:
     - 280
     - 420
-  starts_at: "<%= Subscription.current_year - 1 %>-09-01"
+  starts_at: "<%= Subscription.current_year - 1 %>-08-01"
   ends_at: "<%= Subscription.current_year %>-06-30"
   category: teen_13_15
 
@@ -39,7 +39,7 @@ teen_10_12_regular:
   prices:
     - 280
     - 420
-  starts_at: "<%= Subscription.current_year - 1 %>-09-01"
+  starts_at: "<%= Subscription.current_year - 1 %>-08-01"
   ends_at: "<%= Subscription.current_year %>-06-30"
   category: teen_10_12
 
@@ -81,7 +81,7 @@ kidz_8_9_regular:
   name: "Tarif annuel (septembre à juin) - Kidz (8 - 9 ans)"
   prices:
     - 250
-  starts_at: "<%= Subscription.current_year - 1 %>-09-01"
+  starts_at: "<%= Subscription.current_year - 1 %>-08-01"
   ends_at: "<%= Subscription.current_year %>-06-30"
   category: kidz_8_9
 
@@ -89,7 +89,7 @@ kidz_6_7_regular:
   name: "Tarif annuel (septembre à juin) - Kidz (6-7 ans)"
   prices:
     - 250
-  starts_at: "<%= Subscription.current_year - 1%>-09-01"
+  starts_at: "<%= Subscription.current_year - 1%>-08-01"
   ends_at: "<%= Subscription.current_year %>-06-30"
   category: kidz_6_7
 

@@ -16,7 +16,7 @@ class Pricing < ApplicationRecord
   scope :current, -> { covering(Date.current) }
   scope :for_category, ->(category) { where(category_id: category.is_a?(Category) ? category.id : category) }
   scope :covering, ->(date) { where(starts_at: ..date, ends_at: date..) }
-  scope :covering_year, ->(year) { where(starts_at: Date.new(year - 1, 9, 1).., ends_at: ..Date.new(year, 8, 31)) }
+  scope :covering_year, ->(year) { where(starts_at: Date.new(year - 1, 8, 1).., ends_at: ..Date.new(year, 7, 31)) }
 
   def prices
     # Ensure we always expose an array of BigDecimals
