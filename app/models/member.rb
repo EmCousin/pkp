@@ -4,6 +4,8 @@ class Member < ApplicationRecord
   include Members::Available
   include Members::Searchable
 
+  MAJORITY_AGE = 18
+
   CONTACTS = [
     'Père',
     'Mère',
@@ -54,6 +56,10 @@ class Member < ApplicationRecord
 
   def age(year = Time.current.year)
     year - birthdate.year
+  end
+
+  def minor?(year = Time.current.year)
+    age(year) < MAJORITY_AGE
   end
 
   def attendance_records_for(course)

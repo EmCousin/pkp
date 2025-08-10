@@ -30,6 +30,7 @@ fr:
     mark_as_not_paid: "Marquer comme non payé"
     mark_as_pending: Mettre en attente
     na: "N/A"
+    no: Non
     new: Nouveau %{resource}
     none: Aucun
     paid_with_bank_check: "A payé par chèque"
@@ -52,6 +53,7 @@ fr:
     upload: Téléverser
     view: Voir
     welcome: Bienvenue
+    yes: Oui
   custom_error_messages:
     subscription:
       member_id:
@@ -762,9 +764,18 @@ fr:
     terms:
       edit:
         year: "Inscription %{year} / %{next_year}"
-        terms_accepted: En complétant cette inscription, je reconnais avoir pris connaissance des conditions d'inscription et je certifie que les informations de l'élève sont correctes.
-        yes: "Oui"
-        no: "Non"
+        responsibility_discharge_title: "Décharge de responsabilité et consentement éclairé"
+        responsibility_discharge_health_declaration: "Je certifie être en bonne santé et apte à la pratique du parkour."
+        responsibility_discharge_risks_declaration: "Je reconnais que cette activité comporte des risques physiques (blessures, chutes, etc.) et nécessite un engagement physique."
+        responsibility_discharge_commitment: "Je m'engage à respecter toutes les consignes données par les encadrants, à utiliser les installations et le matériel conformément aux règles, et à ne pas réaliser de figures dangereuses sans validation préalable."
+        responsibility_discharge_responsibility: "Je comprends que l'organisateur ne pourra être tenu responsable des blessures résultant du non-respect des règles ou d'un comportement imprudent, sauf en cas de faute prouvée de l'encadrant ou de défaut de sécurité."
+        terms_accepted: J'ai lu et j'accepte la décharge de responsabilité et le consentement éclairé ci-dessus.
+        responsibility_discharge_minor_representative: "En tant que représentant légal de l'enfant :"
+        responsibility_discharge_minor_health_declaration: "Je certifie que mon enfant est en bonne santé et apte à la pratique du parkour."
+        responsibility_discharge_minor_risks_declaration: "Je reconnais que cette activité comporte des risques physiques (blessures, chutes, etc.) et nécessite un engagement physique."
+        responsibility_discharge_minor_commitment: "Je m'engage à ce que mon enfant respecte toutes les consignes données par les encadrants, utilise les installations et le matériel conformément aux règles, et ne réalise pas de figures dangereuses sans validation préalable."
+        responsibility_discharge_minor_responsibility: "Je comprends que l'organisateur ne pourra être tenu responsable des blessures subies par mon enfant résultant du non-respect des règles ou d'un comportement imprudent, sauf en cas de faute prouvée de l'encadrant ou de défaut de sécurité."
+        terms_accepted_minor: En tant que représentant légal, j'ai lu et j'accepte la décharge de responsabilité et le consentement éclairé ci-dessus, et j'autorise mon enfant à participer aux cours de parkour.
         already_accepted: Les conditions d'inscription ont déjà été acceptées
       update:
         success: Inscription mise à jour

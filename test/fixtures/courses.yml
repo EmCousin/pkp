@@ -41,48 +41,48 @@ friday_adult:
   category: adult
 
 wednesday_teen_13_15:
-  title: "Mercredi Ados (13-15 ans) 14h15 - 15h30"
-  description: "Mercredi Ados (13-15 ans)"
+  title: "Mercredi Ados (13 - 15 ans) 14h15 - 15h30"
+  description: "Mercredi Ados (13 - 15 ans)"
   capacity: 25
   weekday: 3
   category: teen_13_15
   features_attendance_sheet: true
 
 wednesday_teen_10_12:
-  title: "Mercredi Ados (10-12 ans) 15h30 - 16h45"
-  description: "Mercredi Ados (10-12 ans)"
+  title: "Mercredi Ados (10 - 12 ans) 15h30 - 16h45"
+  description: "Mercredi Ados (10 - 12 ans)"
   capacity: 25
   weekday: 3
   category: teen_10_12
   features_attendance_sheet: true
 
 saturtday_teen_13_15_a:
-  title: "Samedi Ados A (13-15 ans) 14h15 - 15h30"
-  description: "Samedi Ados A (13-15 ans)"
+  title: "Samedi Ados A (13 - 15 ans) 14h15 - 15h30"
+  description: "Samedi Ados A (13 - 15 ans)"
   capacity: 25
   weekday: 6
   category: teen_13_15
   features_attendance_sheet: true
 
 saturtday_teen_13_15_b:
-  title: "Samedi Ados B (13-15 ans) 15h30 - 16h45"
-  description: "Samedi Ados B (13-15 ans)"
+  title: "Samedi Ados B (13 - 15 ans) 15h30 - 16h45"
+  description: "Samedi Ados B (13 - 15 ans)"
   capacity: 25
   weekday: 6
   category: teen_13_15
   features_attendance_sheet: true
 
 saturtday_teen_10_12_a:
-  title: "Samedi Ados A (10-12 ans) 14h15 - 15h30"
-  description: "Samedi Ados A (10-12 ans)"
+  title: "Samedi Ados A (10 - 12 ans) 14h15 - 15h30"
+  description: "Samedi Ados A (10 - 12 ans)"
   capacity: 25
   weekday: 6
   category: teen_10_12
   features_attendance_sheet: true
 
 saturtday_teen_10_12_b:
-  title: "Samedi Ados B (10-12 ans) 15h30 - 16h45"
-  description: "Samedi Ados B (10-12 ans)"
+  title: "Samedi Ados B (10 - 12 ans) 15h30 - 16h45"
+  description: "Samedi Ados B (10 - 12 ans)"
   capacity: 25
   weekday: 6
   category: teen_10_12
@@ -97,8 +97,8 @@ saturtday_kidz_6_7:
   features_attendance_sheet: true
 
 saturtday_kidz_8_9:
-  title: "Samedi Kidz (8-9 ans) 11h - 12h"
-  description: "Samedi Kidz (8-9 ans)"
+  title: "Samedi Kidz (8 - 9 ans) 11h - 12h"
+  description: "Samedi Kidz (8 - 9 ans)"
   capacity: 25
   weekday: 6
   category: kidz_8_9

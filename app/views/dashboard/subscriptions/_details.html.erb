@@ -85,7 +85,7 @@
     </div>
     <div>
       <span class="font-medium text-gray-500"><%= Member.human_attribute_name(:agreed_to_advertising_right) %> :</span>
-      <span><%= subscription.member.agreed_to_advertising_right ? t('dashboard.terms.edit.yes') : t('dashboard.terms.edit.no') %></span>
+      <span><%= subscription.member.agreed_to_advertising_right ? t('defaults.yes') : t('defaults.no') %></span>
     </div>
   </div>
 </div>

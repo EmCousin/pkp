@@ -3,7 +3,7 @@ require "rails_helper"
 feature "Subscription Workflow", type: :feature do
   include ActiveSupport::Testing::TimeHelpers
   let(:user) { build :user }
-  let(:member) { build :member, user: user }
+  let(:member) { build :member, :minor, user: }
   let(:avatar) { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'file_examples', 'avatar.jpg')) }
 
   let(:password) { SecureRandom.hex }
@@ -27,6 +27,8 @@ feature "Subscription Workflow", type: :feature do
                         max_age: 9)
     ]
   end
+
+  let(:category) { categories.third }
 
   let!(:courses) do
     [
@@ -144,11 +146,11 @@ feature "Subscription Workflow", type: :feature do
 
     expect(page).to have_text('Élève ajouté·e')
     expect(find_field('subscription_member_id').find('option[selected]').text).to eq member.full_name
-    select(categories.first.title, from: 'subscription_category_id')
+    select(category.title, from: 'subscription_category_id')
 
     click_button 'Continuer'
 
-    available_courses = categories.first.courses
+    available_courses = category.courses
     available_courses.each do |course|
       expect(find_field("subscription_course_ids_#{course.id}").visible?).to be true
     end
@@ -160,11 +162,12 @@ feature "Subscription Workflow", type: :feature do
     # After creating subscription, user is redirected to terms page
     expect(page).to have_text("Inscription #{Subscription.current_year} / #{Subscription.next_year}")
     expect(page).to have_text('Décharge de responsabilité et consentement éclairé')
-    expect(page).to have_text('Je certifie être en bonne santé et apte à la pratique du parkour.')
+    expect(page).to have_text('En tant que représentant légal de l\'enfant :')
+    expect(page).to have_text('Je certifie que mon enfant est en bonne santé et apte à la pratique du parkour.')
     expect(page).to have_text('Je reconnais que cette activité comporte des risques physiques (blessures, chutes, etc.) et nécessite un engagement physique.')
-    expect(page).to have_text('Je m\'engage à respecter toutes les consignes données par les encadrants, à utiliser les installations et le matériel conformément aux règles, et à ne pas réaliser de figures dangereuses sans validation préalable.')
-    expect(page).to have_text('Je comprends que l\'organisateur ne pourra être tenu responsable des blessures résultant du non-respect des règles ou d\'un comportement imprudent, sauf en cas de faute prouvée de l\'encadrant ou de défaut de sécurité.')
-    expect(page).to have_text('J\'ai lu et j\'accepte la décharge de responsabilité et le consentement éclairé ci-dessus.')
+    expect(page).to have_text('Je m\'engage à ce que mon enfant respecte toutes les consignes données par les encadrants, utilise les installations et le matériel conformément aux règles, et ne réalise pas de figures dangereuses sans validation préalable.')
+    expect(page).to have_text('Je comprends que l\'organisateur ne pourra être tenu responsable des blessures subies par mon enfant résultant du non-respect des règles ou d\'un comportement imprudent, sauf en cas de faute prouvée de l\'encadrant ou de défaut de sécurité.')
+    expect(page).to have_text('En tant que représentant légal, j\'ai lu et j\'accepte la décharge de responsabilité et le consentement éclairé ci-dessus, et j\'autorise mon enfant à participer aux cours de parkour.')
 
     # Accept terms
     check "subscription_terms_accepted"
