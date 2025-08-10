@@ -394,8 +394,10 @@ fr:
         ages: Âges
         year: Année
         no_pricing: Aucun tarif pour l'année sélectionnée.
+        add_pricing: Ajouter un tarif
         courses_title: Cours
         no_courses: Aucun cours pour cette catégorie.
+        add_course: Ajouter un cours
       new:
         title: Créer une catégorie
         description: Les catégories sont utilisées pour classer les cours. Elles définissent l'âge minimum et maximum des élèves.

@@ -45,7 +45,10 @@
     </div>
 
     <div class="bg-white border border-gray-200 rounded-lg p-5 mt-4">
-      <h2 class="text-lg font-semibold text-gray-900 mb-4"><%= t('.courses_title') %></h2>
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-semibold text-gray-900"><%= t('.courses_title') %></h2>
+        <%= link_to t('.add_course'), new_admin_course_path(category_id: @category.id), class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-slate-800 hover:bg-slate-900" %>
+      </div>
 
       <div class="space-y-3">
           <% if @category.courses.any? %>

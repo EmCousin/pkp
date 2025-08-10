@@ -20,7 +20,7 @@ module Admin
     def create
       @category = Category.new(category_params)
       if @category.save
-        redirect_to new_admin_course_path(category_id: @category.id), notice: t('.success'), status: :see_other
+        redirect_to [:admin, @category], notice: t('.success'), status: :see_other
       else
         render :new, status: :unprocessable_content
       end
@@ -28,7 +28,7 @@ module Admin
 
     def update
       if @category.update(category_params)
-        redirect_to new_admin_course_path(category_id: @category.id), notice: t('.success'), status: :see_other
+        redirect_to admin_category_path(@category, success: true), notice: t('.success'), status: :see_other
       else
         render :edit, status: :unprocessable_content
       end
