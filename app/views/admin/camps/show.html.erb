@@ -42,17 +42,15 @@
               <dd class="mt-1 text-sm text-gray-900"><%= t('.capacity', current: @camp.subscriptions.confirmed.count, count: @camp.capacity) %></dd>
             </div>
             <div>
-              <dt class="text-sm font-medium text-gray-500"><%= t('.status') %></dt>
+              <dt class="text-sm font-medium text-gray-500"><%= t('.active') %></dt>
               <dd class="mt-1">
-                <% if @camp.active? %>
-                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                    <%= t('.active') %>
-                  </span>
-                <% else %>
-                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                    <%= t('.inactive') %>
-                  </span>
-                <% end %>
+                <%= render 'admin/camps/active_status', camp: @camp %>
+              </dd>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-500"><%= t('.open') %></dt>
+              <dd class="mt-1">
+                <%= render 'admin/camps/open_status', camp: @camp %>
               </dd>
             </div>
           </div>

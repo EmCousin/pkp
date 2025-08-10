@@ -107,16 +107,29 @@
     </div>
   </div>
 
-  <!-- Status Section -->
+  <!-- Visibility Section -->
   <div class="bg-white border border-gray-200 rounded-lg p-6">
     <div class="mb-6">
-      <h3 class="text-lg font-semibold text-gray-900">Statut</h3>
-      <p class="text-sm text-gray-600">Activez ou désactivez le stage</p>
+      <h3 class="text-lg font-semibold text-gray-900"><%= t('.visibility_title') %></h3>
+      <p class="text-sm text-gray-600"><%= t('.visibility_headline') %></p>
     </div>
 
     <div class="flex items-center">
       <%= form.switch :active %>
       <%= form.label :active, class: "ml-2 block text-sm text-gray-900" %>
+    </div>
+  </div>
+
+  <!-- Open Section -->
+  <div class="bg-white border border-gray-200 rounded-lg p-6">
+    <div class="mb-6">
+      <h3 class="text-lg font-semibold text-gray-900"><%= t('.open_title') %></h3>
+      <p class="text-sm text-gray-600"><%= t('.open_headline') %></p>
+    </div>
+
+    <div class="flex items-center">
+      <%= form.switch :open %>
+      <%= form.label :open, class: "ml-2 block text-sm text-gray-900" %>
     </div>
   </div>
 

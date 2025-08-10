@@ -56,7 +56,7 @@ module Admin
     end
 
     def camp_params
-      params.expect(camp: %i[title description capacity starts_at ends_at price active cover_picture])
+      params.expect(camp: %i[title description capacity starts_at ends_at price active open cover_picture])
     end
   end
 end
