@@ -34,7 +34,8 @@ class Subscription < ApplicationRecord
                             )
                           end
                         },
-                        unless: :parent_subscription_id?
+                        unless: :parent_subscription_id?,
+                        on: :create
 
   with_options if: :parent_subscription_id? do
     validates :subscription_camp, presence: { if: -> { courses.empty? } }
