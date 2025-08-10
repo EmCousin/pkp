@@ -55,7 +55,7 @@ Rails.application.routes.draw do
   namespace :admin do
     concerns :courses_manageable
 
-    resources :categories, only: [:new, :create, :edit, :update, :destroy]
+    resources :categories, only: [:index, :show, :new, :create, :edit, :update, :destroy]
     resources :members do
       resource :level, only: [:update]
     end

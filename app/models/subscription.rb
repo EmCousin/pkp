@@ -4,10 +4,12 @@ class Subscription < ApplicationRecord
   include Subscriptions::Priceable
   include Subscriptions::Payable
   include Subscriptions::Invoiceable
+  include Subscriptions::Limitable
   include Subscriptions::Completable
   include Subscriptions::Confirmable
   include Subscriptions::Filterable
   include Subscriptions::QrEncodeable
+  include Subscriptions::Seasonable
 
   belongs_to :member
   has_many :courses_subscriptions, dependent: :destroy
@@ -21,10 +23,7 @@ class Subscription < ApplicationRecord
 
   enum :status, pending: 0, confirmed: 1, archived: 2
 
-  after_initialize :set_current_year
-
   validates :fee, numericality: { greater_than_or_equal_to: 0, allow_blank: true }
-  validates :year, presence: true
   validates :member_id, uniqueness: {
                           scope: :year,
                           message: lambda do |subscription, _data|
@@ -48,54 +47,23 @@ class Subscription < ApplicationRecord
     validates :courses, absence: true
   end
 
-  with_options unless: :subscription_camp do
-    validates :courses, presence: { message: :must_exist }
-    validates :courses_count, numericality: { greater_than: 0, message: :must_exist }
-    validates :courses_count, numericality: { less_than_or_equal_to: 3, message: :limit_exceeded }
-    validates :courses_count, numericality: { less_than_or_equal_to: 2, message: :limit_exceeded, on: :create, if: -> { Subscription.winter_time? } }
-    validates :courses_count, numericality: { less_than_or_equal_to: 1, message: :limit_exceeded, on: :create, if: lambda {
-      Subscription.winter_time? && category_kidz?
-    } }
-    validate :courses_are_of_the_same_category
-    validate :maximum_one_course_per_day
-    validate :courses_must_be_available, on: :create
-  end
-
   attr_accessor :category_id
 
   delegate :kidz?, :teen?, :adult?, to: :category, prefix: true, allow_nil: true
   delegate :member, to: :parent_subscription, prefix: true, allow_nil: true
-
-  class << self
-    def previous_year
-      current_year - 1
-    end
-
-    def current_year(datetime = Time.current)
-      datetime.month < Course::VACATION_MONTHS.first ? datetime.year - 1 : datetime.year
-    end
-
-    def next_year
-      current_year + 1
-    end
-  end
 
   def root_subscription
     parent_subscription&.root_subscription || self
   end
 
   def build_child_subscription(child_attributes)
-    child_subscriptions.confirmed.new(
+    child_subscriptions.new(
       member:,
       year:,
       terms_accepted_at:,
       doctor_certified_at:,
       **child_attributes
     )
-  end
-
-  def season
-    "#{year} / #{year + 1}"
   end
 
   def description
@@ -116,6 +84,10 @@ class Subscription < ApplicationRecord
     else
       Category.suitable_for_age(member.age(year))
     end
+  end
+
+  def courses_category
+    @courses_category ||= courses.first&.category
   end
 
   def category
@@ -142,36 +114,4 @@ class Subscription < ApplicationRecord
     bank_transfer: 'text-purple-600',
     credit_card: 'text-amber-600'
   }.freeze
-
-  private
-
-  def courses_count
-    courses.size
-  end
-
-  def courses_are_of_the_same_category
-    return if courses.empty? # Skip if no courses
-
-    unique_category = courses.map(&:category).uniq.size == 1
-
-    errors.add(:courses, :unique_category) unless unique_category
-  end
-
-  def maximum_one_course_per_day
-    return if courses.empty? # Skip if no courses
-
-    weekdays = courses.map(&:weekday)
-
-    errors.add(:courses, :unique_weekday) if weekdays.uniq.size < weekdays.size
-  end
-
-  def courses_must_be_available
-    return if courses.empty? # Skip if no courses
-
-    errors.add(:courses, :unavailable) if courses.any? { |c| !c.available? }
-  end
-
-  def set_current_year
-    self.year ||= self.class.current_year
-  end
 end

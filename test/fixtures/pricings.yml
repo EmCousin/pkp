@@ -1,0 +1,126 @@
+adult_regular:
+  name: "Tarif annuel (septembre à juin) - Adulte"
+  prices:
+    - 280
+    - 420
+    - 490
+  starts_at: "<%= Subscription.current_year - 1 %>-09-01"
+  ends_at: "<%= Subscription.current_year %>-06-30"
+  category: adult
+
+adult_winter:
+  name: "Tarif semestriel (janvier à juin) - Adulte"
+  prices:
+    - 210
+    - 320
+  starts_at: "<%= Subscription.current_year %>-01-01"
+  ends_at: "<%= Subscription.current_year %>-06-30"
+  category: adult
+
+adult_spring:
+  name: "Tarif 4 mois (mars à juin) - Adulte"
+  prices:
+    - 165
+  starts_at: "<%= Subscription.current_year %>-03-01"
+  ends_at: "<%= Subscription.current_year %>-06-30"
+  category: adult
+
+teen_13_15_regular:
+  name: "Tarif annuel (septembre à juin) - Ados (13-15 ans)"
+  prices:
+    - 280
+    - 420
+  starts_at: "<%= Subscription.current_year - 1 %>-09-01"
+  ends_at: "<%= Subscription.current_year %>-06-30"
+  category: teen_13_15
+
+teen_10_12_regular:
+  name: "Tarif annuel (septembre à juin) - Ados (10-12 ans)"
+  prices:
+    - 280
+    - 420
+  starts_at: "<%= Subscription.current_year - 1 %>-09-01"
+  ends_at: "<%= Subscription.current_year %>-06-30"
+  category: teen_10_12
+
+teen_13_15_winter:
+  name: "Tarif semestriel (janvier à juin) - Ados (13-15 ans)"
+  prices:
+    - 210
+    - 320
+  starts_at: "<%= Subscription.current_year %>-01-01"
+  ends_at: "<%= Subscription.current_year %>-06-30"
+  category: teen_13_15
+
+teen_10_12_winter:
+  name: "Tarif semestriel (janvier à juin) - Ados (10-12 ans)"
+  prices:
+    - 210
+    - 320
+  starts_at: "<%= Subscription.current_year %>-01-01"
+  ends_at: "<%= Subscription.current_year %>-06-30"
+  category: teen_10_12
+
+teen_13_15_spring:
+  name: "Tarif 4 mois (mars à juin) - Ados (13-15 ans)"
+  prices:
+    - 165
+  starts_at: "<%= Subscription.current_year %>-03-01"
+  ends_at: "<%= Subscription.current_year %>-06-30"
+  category: teen_13_15
+
+teen_10_12_spring:
+  name: "Tarif 4 mois (mars à juin) - Ados (10-12 ans)"
+  prices:
+    - 165
+  starts_at: "<%= Subscription.current_year %>-03-01"
+  ends_at: "<%= Subscription.current_year %>-06-30"
+  category: teen_10_12
+
+kidz_8_9_regular:
+  name: "Tarif annuel (septembre à juin) - Kidz (8-9 ans)"
+  prices:
+    - 250
+  starts_at: "<%= Subscription.current_year - 1 %>-09-01"
+  ends_at: "<%= Subscription.current_year %>-06-30"
+  category: kidz_8_9
+
+kidz_6_7_regular:
+  name: "Tarif annuel (septembre à juin) - Kidz (6-7 ans)"
+  prices:
+    - 250
+  starts_at: "<%= Subscription.current_year - 1%>-09-01"
+  ends_at: "<%= Subscription.current_year %>-06-30"
+  category: kidz_6_7
+
+kidz_8_9_winter:
+  name: "Tarif semestriel (janvier à juin) - Kidz (8-9 ans)"
+  prices:
+    - 275
+  starts_at: "<%= Subscription.current_year %>-01-01"
+  ends_at: "<%= Subscription.current_year %>-06-30"
+  category: kidz_8_9
+
+kidz_6_7_winter:
+  name: "Tarif semestriel (janvier à juin) - Kidz (6-7 ans)"
+  prices:
+    - 275
+  starts_at: "<%= Subscription.current_year %>-01-01"
+  ends_at: "<%= Subscription.current_year %>-06-30"
+  category: kidz_6_7
+
+kidz_8_9_spring:
+  name: "Tarif 4 mois (mars à juin) - Kidz (8-9 ans)"
+  prices:
+    - 140
+  starts_at: "<%= Subscription.current_year %>-03-01"
+  ends_at: "<%= Subscription.current_year %>-06-30"
+  category: kidz_8_9
+
+kidz_6_7_spring:
+  name: "Tarif 4 mois (mars à juin) - Kidz (6-7 ans)"
+  prices:
+    - 140
+  starts_at: "<%= Subscription.current_year - 1 %>-03-01"
+  ends_at: "<%= Subscription.current_year %>-06-30"
+  category: kidz_6_7

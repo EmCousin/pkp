@@ -1,4 +1,4 @@
-<%= form_with model: [:admin, @category], builder: FormBuilder, class: "space-y-8" do |form| %>
+<%= form_with model: [:admin, @category], class: "space-y-8" do |form| %>
   <% if form.object.errors.any? %>
     <div class="bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg">
       <div class="flex">
@@ -43,6 +43,84 @@
       <div>
         <%= form.label :max_age, class: "block text-sm font-medium text-gray-700" %>
         <%= form.number_field :max_age, required: true, min: Category::MIN_AGE, max: Category::MAX_AGE, class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded-lg p-6">
+    <div class="mb-6">
+      <h3 class="text-lg font-semibold text-gray-900"><%= t('.pricings_title', default: 'Pricings') %></h3>
+      <p class="text-sm text-gray-600"><%= t('.pricings_description', default: 'Define pricing periods and prices per number of courses (comma-separated).') %></p>
+    </div>
+
+    <div class="space-y-6" data-controller="input">
+      <%= form.fields_for :pricings do |pf| %>
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-6 border rounded-md p-4">
+          <div class="sm:col-span-2">
+            <%= pf.label :name, class: "block text-sm font-medium text-gray-700" %>
+            <%= pf.text_field :name, class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" %>
+            <%= pf.error_for :name %>
+          </div>
+          <div class="sm:col-span-2">
+            <%= pf.label :starts_at, class: "block text-sm font-medium text-gray-700" %>
+            <%= pf.date_field :starts_at, class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" %>
+            <%= pf.error_for :starts_at %>
+          </div>
+          <div class="sm:col-span-2">
+            <%= pf.label :ends_at, class: "block text-sm font-medium text-gray-700" %>
+            <%= pf.date_field :ends_at, class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" %>
+            <%= pf.error_for :ends_at %>
+          </div>
+          <div class="sm:col-span-4">
+            <%= pf.label :prices_string, class: "block text-sm font-medium text-gray-700" %>
+            <%= pf.text_field :prices_string, value: (pf.object.prices&.join(', ')), placeholder: 'e.g. 240, 360, 420', class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" %>
+            <p class="mt-1 text-xs text-gray-500">Index: 1 course, 2 courses, 3 courses, ...</p>
+            <%= pf.error_for :prices_string %>
+          </div>
+          <div class="sm:col-span-2 flex items-end">
+            <%= pf.hidden_field :id if pf.object.persisted? %>
+            <%= pf.switch :_destroy, class: "h-4 w-4 text-red-600 border-gray-300 rounded" %>
+            <%= pf.label :_destroy, t('.remove_pricing'), class: "ml-2 text-sm text-gray-700" %>
+          </div>
+        </div>
+      <% end %>
+
+      <template id="pricing-template">
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-6 border rounded-md p-4">
+          <div class="sm:col-span-2">
+            <label class="block text-sm font-medium text-gray-700" for="category_pricings_attributes_NEW_name">Name</label>
+            <input type="text" name="category[pricings_attributes][NEW][name]" id="category_pricings_attributes_NEW_name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" />
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-sm font-medium text-gray-700" for="category_pricings_attributes_NEW_starts_at">Starts at</label>
+            <input type="date" name="category[pricings_attributes][NEW][starts_at]" id="category_pricings_attributes_NEW_starts_at" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" />
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-sm font-medium text-gray-700" for="category_pricings_attributes_NEW_ends_at">Ends at</label>
+            <input type="date" name="category[pricings_attributes][NEW][ends_at]" id="category_pricings_attributes_NEW_ends_at" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" />
+          </div>
+          <div class="sm:col-span-4">
+            <label class="block text-sm font-medium text-gray-700" for="category_pricings_attributes_NEW_prices_string">Prices</label>
+            <input type="text" name="category[pricings_attributes][NEW][prices_string]" id="category_pricings_attributes_NEW_prices_string" placeholder="e.g. 240, 360, 420" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" />
+            <p class="mt-1 text-xs text-gray-500">Index: 1 course, 2 courses, 3 courses, ...</p>
+          </div>
+          <div class="sm:col-span-2 flex items-end">
+            <input type="checkbox" name="category[pricings_attributes][NEW][_destroy]" id="category_pricings_attributes_NEW__destroy" class="h-4 w-4 text-red-600 border-gray-300 rounded" />
+            <label for="category_pricings_attributes_NEW__destroy" class="ml-2 text-sm text-gray-700">Remove</label>
+          </div>
+        </div>
+      </template>
+
+      <div>
+        <button type="button" class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm bg-white hover:bg-gray-50"
+                onclick="(function(){
+                  const container = this.closest('form').querySelector('[data-controller=\'input\']');
+                  const template = this.closest('form').querySelector('#pricing-template');
+                  const html = template.innerHTML.replaceAll('NEW', new Date().getTime());
+                  container.insertAdjacentHTML('beforeend', html);
+                }).call(this)">
+          + <%= t('.add_pricing', default: 'Add pricing') %>
+        </button>
       </div>
     </div>
   </div>

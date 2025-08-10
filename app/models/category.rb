@@ -5,6 +5,9 @@ class Category < ApplicationRecord
   MAX_AGE = 100
 
   has_many :courses, dependent: :restrict_with_error
+  has_many :pricings, dependent: :destroy
+
+  accepts_nested_attributes_for :pricings, allow_destroy: true, reject_if: :all_blank
 
   validates :title, presence: true, uniqueness: true
 
@@ -31,6 +34,10 @@ class Category < ApplicationRecord
   }
 
   scope :suitable_for_age, ->(age) { where(min_age: ..age, max_age: age..) }
+
+  def current_pricing
+    pricings.current.order(starts_at: :desc).first
+  end
 
   def kidz?
     max_age <= 9
