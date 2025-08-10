@@ -7,6 +7,11 @@
       </svg>
     </summary>
     <div class="absolute right-0 z-10 mt-2 w-56 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 divide-y divide-gray-100">
+      <%= link_to t('defaults.view'),
+          [:admin, subscription],
+          class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50",
+          data: { turbo_frame: '_top' } %>
+
       <%= link_to t('defaults.edit'),
           [:edit, :admin, subscription],
           class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50",
