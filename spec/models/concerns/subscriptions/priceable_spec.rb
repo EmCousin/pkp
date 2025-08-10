@@ -22,7 +22,7 @@ describe Subscriptions::Priceable, type: :model do
       course.weekday = index + 1
     end
 
-    subject.save!
+    subject.save
   end
 
   after do
@@ -176,8 +176,9 @@ describe Subscriptions::Priceable, type: :model do
                    ends_at: Date.new(Time.current.year + 1, 6, 30))
           end
 
-          it 'should use the last available price' do
-            expect(subject.fee).to eq BigDecimal('420')
+          it 'should be invalid due to exceeding maximum course count' do
+            expect(subject).not_to be_valid
+            expect(subject.errors.of_kind?(:courses_count, :less_than_or_equal_to)).to be true
           end
         end
       end
@@ -417,8 +418,9 @@ describe Subscriptions::Priceable, type: :model do
                ends_at: Date.new(Time.current.year + 1, 6, 30))
       end
 
-      it 'should fallback to legacy pricing when dynamic pricing has no price for course count' do
-        expect(subject.fee).to eq 420 # Falls back to legacy pricing for 3 courses
+      it 'should be invalid due to exceeding maximum course count' do
+        expect(subject).not_to be_valid
+        expect(subject.errors.of_kind?(:courses_count, :less_than_or_equal_to)).to be true
       end
     end
   end

@@ -58,7 +58,13 @@ describe Subscription, type: :model do
           end
 
           context "when it is winter time" do
-            let(:courses) { build_list :course, 3 }
+            let(:courses) do
+              [
+                build(:course, category: category, weekday: 1),
+                build(:course, category: category, weekday: 2),
+                build(:course, category: category, weekday: 3)
+              ]
+            end
             let(:winter_time) { 1.month.after(Subscription.winter_time_range.first) }
 
             before do
@@ -80,7 +86,12 @@ describe Subscription, type: :model do
 
             context "when the subscription is for Kidz" do
               let(:category) { create :category, :kidz }
-              let(:courses) { build_list :course, 2, category: category }
+              let(:courses) do
+                [
+                  build(:course, category: category, weekday: 1),
+                  build(:course, category: category, weekday: 2)
+                ]
+              end
 
               before do
                 travel_to(winter_time)
