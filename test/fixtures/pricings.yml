@@ -26,7 +26,7 @@ adult_spring:
   category: adult
 
 teen_13_15_regular:
-  name: "Tarif annuel (septembre à juin) - Ados (13-15 ans)"
+  name: "Tarif annuel (septembre à juin) - Ados (13 - 15 ans)"
   prices:
     - 280
     - 420
@@ -35,7 +35,7 @@ teen_13_15_regular:
   category: teen_13_15
 
 teen_10_12_regular:
-  name: "Tarif annuel (septembre à juin) - Ados (10-12 ans)"
+  name: "Tarif annuel (septembre à juin) - Ados (10 - 12 ans)"
   prices:
     - 280
     - 420
@@ -44,7 +44,7 @@ teen_10_12_regular:
   category: teen_10_12
 
 teen_13_15_winter:
-  name: "Tarif semestriel (janvier à juin) - Ados (13-15 ans)"
+  name: "Tarif semestriel (janvier à juin) - Ados (13 - 15 ans)"
   prices:
     - 210
     - 320
@@ -53,7 +53,7 @@ teen_13_15_winter:
   category: teen_13_15
 
 teen_10_12_winter:
-  name: "Tarif semestriel (janvier à juin) - Ados (10-12 ans)"
+  name: "Tarif semestriel (janvier à juin) - Ados (10 - 12 ans)"
   prices:
     - 210
     - 320
@@ -62,7 +62,7 @@ teen_10_12_winter:
   category: teen_10_12
 
 teen_13_15_spring:
-  name: "Tarif 4 mois (mars à juin) - Ados (13-15 ans)"
+  name: "Tarif 4 mois (mars à juin) - Ados (13 - 15 ans)"
   prices:
     - 165
   starts_at: "<%= Subscription.current_year %>-03-01"
@@ -70,7 +70,7 @@ teen_13_15_spring:
   category: teen_13_15
 
 teen_10_12_spring:
-  name: "Tarif 4 mois (mars à juin) - Ados (10-12 ans)"
+  name: "Tarif 4 mois (mars à juin) - Ados (10 - 12 ans)"
   prices:
     - 165
   starts_at: "<%= Subscription.current_year %>-03-01"
@@ -78,7 +78,7 @@ teen_10_12_spring:
   category: teen_10_12
 
 kidz_8_9_regular:
-  name: "Tarif annuel (septembre à juin) - Kidz (8-9 ans)"
+  name: "Tarif annuel (septembre à juin) - Kidz (8 - 9 ans)"
   prices:
     - 250
   starts_at: "<%= Subscription.current_year - 1 %>-09-01"
@@ -94,7 +94,7 @@ kidz_6_7_regular:
   category: kidz_6_7
 
 kidz_8_9_winter:
-  name: "Tarif semestriel (janvier à juin) - Kidz (8-9 ans)"
+  name: "Tarif semestriel (janvier à juin) - Kidz (8 - 9 ans)"
   prices:
     - 275
   starts_at: "<%= Subscription.current_year %>-01-01"
@@ -110,7 +110,7 @@ kidz_6_7_winter:
   category: kidz_6_7
 
 kidz_8_9_spring:
-  name: "Tarif 4 mois (mars à juin) - Kidz (8-9 ans)"
+  name: "Tarif 4 mois (mars à juin) - Kidz (8 - 9 ans)"
   prices:
     - 140
   starts_at: "<%= Subscription.current_year %>-03-01"
