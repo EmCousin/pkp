@@ -6,10 +6,10 @@ module Admin
 
     def update
       if @subscription.update(status: status_param)
-        @subscription.notify_confirmation! if @subscription.confirmed?
+        @subscription.notify_confirmation! if status_param == 'confirmed'
         redirect_back_or_to [:admin, @subscription], notice: t('.success'), status: :see_other
       else
-        redirect_back_or_to [:admin, @subscription], alert: t('.error'), status: :see_other
+        redirect_back_or_to [:admin, @subscription], alert: @subscription.errors.full_messages.to_sentence, status: :see_other
       end
     end
 

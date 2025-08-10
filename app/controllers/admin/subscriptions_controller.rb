@@ -43,7 +43,7 @@ module Admin
 
     def destroy
       @subscription.destroy
-      redirect_to %i[admin subscriptions], notice: t('.success'), status: :see_other
+      redirect_to admin_subscriptions_path(destroyed: true), notice: t('.success'), status: :see_other
     end
 
     def unlink_course
