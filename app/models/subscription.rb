@@ -85,7 +85,7 @@ class Subscription < ApplicationRecord
   end
 
   def build_child_subscription(child_attributes)
-    child_subscriptions.confirmed.new(
+    child_subscriptions.new(
       member:,
       year:,
       terms_accepted_at:,
@@ -116,6 +116,10 @@ class Subscription < ApplicationRecord
     else
       Category.suitable_for_age(member.age(year))
     end
+  end
+
+  def courses_category
+    @courses_category ||= courses.first&.category
   end
 
   def category

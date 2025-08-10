@@ -1,0 +1,24 @@
+adult:
+  title: Adulte
+  min_age: 18
+  max_age: 100
+
+teen_13_15:
+  title: Adolescent (13-15 ans)
+  min_age: 13
+  max_age: 15
+
+teen_10_12:
+  title: Adolescent (10-12 ans)
+  min_age: 10
+  max_age: 12
+
+kidz_8_9:
+  title: Kidz (8-9 ans)
+  min_age: 8
+  max_age: 9
+
+kidz_6_7:
+  title: Kidz (6-7 ans)
+  min_age: 6
+  max_age: 7

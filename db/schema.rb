@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_31_132118) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_09_121000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -166,6 +166,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_31_132118) do
     t.index ["user_id"], name: "index_members_on_user_id"
   end
 
+  create_table "pricings", force: :cascade do |t|
+    t.bigint "category_id", null: false
+    t.string "name", null: false
+    t.jsonb "prices", default: [], null: false
+    t.date "starts_at", null: false
+    t.date "ends_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id", "starts_at", "ends_at"], name: "index_pricings_on_category_and_period"
+    t.index ["category_id"], name: "index_pricings_on_category_id"
+    t.check_constraint "starts_at <= ends_at", name: "pricings_starts_at_before_or_equal_ends_at"
+  end
+
   create_table "subscriptions", force: :cascade do |t|
     t.integer "year", null: false
     t.decimal "fee", null: false
@@ -228,6 +241,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_31_132118) do
   add_foreign_key "courses_subscriptions", "courses"
   add_foreign_key "courses_subscriptions", "subscriptions"
   add_foreign_key "members", "users"
+  add_foreign_key "pricings", "categories"
   add_foreign_key "subscriptions", "members"
   add_foreign_key "subscriptions", "subscriptions", column: "parent_subscription_id"
 end

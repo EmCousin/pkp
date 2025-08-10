@@ -150,6 +150,9 @@ fr:
       category:
         one: Catégorie
         other: Catégories
+      pricing:
+        one: Tarif
+        other: Tarifs
       subscription:
         one: Inscription
         other: Inscriptions
@@ -379,20 +382,42 @@ fr:
           error: "Erreur lors de la désinscription"
 
     categories:
+      index:
+        title: Catégories
+        description: Gérez les catégories et leurs grilles tarifaires
+        new_category: Nouvelle catégorie
+      show:
+        title: Catégorie
+        pricings_title: Tarifs
+        ages: Âges
+        year: Année
+        no_pricing: Aucun tarif pour l'année sélectionnée.
+        courses_title: Cours
+        no_courses: Aucun cours pour cette catégorie.
       new:
         title: Créer une catégorie
         description: Les catégories sont utilisées pour classer les cours. Elles définissent l'âge minimum et maximum des élèves.
+      edit:
+        title: Modifier la catégorie
+        description: Mettez à jour la catégorie et gérez ses grilles tarifaires.
       form:
         title: Informations de base
         description: Renseignez le nom et les âges
+        pricings_title: Tarifs
+        pricings_description: Définissez des périodes et des tarifs par nombre de cours (séparés par des virgules).
+        add_pricing: Ajouter un tarif
+        remove_pricing: Supprimer
       create:
         success: Catégorie créée
+      update:
+        success: Les informations de la catégorie ont été mises à jour
+      destroy:
+        success: La catégorie a été supprimée
 
     courses:
       index:
         title: Cours
         inactive: Inactif
-        create_attendance_sheet: "Feuille de présence"
       show:
         new_subscription: Nouvelle inscription
         create_attendance_sheet: "Feuille de présence"
@@ -416,6 +441,8 @@ fr:
         success: Cours supprimé
       form:
         new_category: Ajouter une autre catégorie
+      course:
+        create_attendance_sheet: "Feuille de présence"
     credit_notes:
       create:
         success: Avoir généré
@@ -750,6 +777,7 @@ fr:
     navbar:
       admin: "Admin"
       members: "Membres"
+      categories: "Catégories"
       courses: "Cours"
       camps: "Stages"
       subscriptions: "Inscriptions"

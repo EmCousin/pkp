@@ -47,8 +47,24 @@ module Subscriptions
       self.fee = if parent_subscription.present? && subscription_camp.present?
                    subscription_camp.price
                  else
-                   pricing[courses.size - 1]
+                   dynamic_price_for_courses_count || leagcy_price_for_courses_count
                  end
+    end
+
+    def dynamic_price_for_courses_count
+      return unless courses_category
+
+      current = courses_category.current_pricing
+      return unless current
+
+      index = [courses.size - 1, 0].max
+      return unless current.prices[index]
+
+      BigDecimal(current.prices[index].to_s)
+    end
+
+    def leagcy_price_for_courses_count
+      pricing[courses.size - 1]
     end
 
     def pricing
