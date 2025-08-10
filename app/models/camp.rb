@@ -26,6 +26,10 @@ class Camp < ApplicationRecord
   scope :upcoming, -> { where(starts_at: Date.current..) }
   scope :available, -> { active.upcoming }
 
+  def closed?
+    !open?
+  end
+
   def duration_days
     (ends_at - starts_at).to_i + 1
   end

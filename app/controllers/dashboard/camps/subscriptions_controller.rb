@@ -6,6 +6,7 @@ module Dashboard
       before_action :set_camp
       before_action :set_parent_subscription, only: [:create]
       before_action :set_subscription, only: [:destroy]
+      before_action :check_open_status, only: [:create]
 
       def create
         @subscription = @parent_subscription.build_child_subscription(
@@ -39,6 +40,10 @@ module Dashboard
 
       def set_subscription
         @subscription = current_user.subscriptions.find(params[:id])
+      end
+
+      def check_open_status
+        redirect_to [:dashboard, @camp], alert: t('.closed') unless @camp.open?
       end
     end
   end

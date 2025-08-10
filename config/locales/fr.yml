@@ -167,7 +167,8 @@ fr:
         starts_at: Date de début
         ends_at: Date de fin
         cover_picture: Image de couverture
-        active: Actif
+        active: Visible
+        open: Ouvert
       attendance_record:
         status: Statut
         statuses:
@@ -317,8 +318,13 @@ fr:
         <<: *attendance_record
 
     camps:
+      active_status:
+        active: "Visible"
+        inactive: "Non-visible"
+      open_status:
+        open: "Ouvert"
+        closed: "Fermé"
       camp:
-        inactive: "Inactif"
         duration_days:
           one: "%{count} jour"
           other: "%{count} jours"
@@ -367,6 +373,10 @@ fr:
         upload_file: "Téléverser un fichier"
         or_drag_drop: "ou glisser-déposer"
         cancel: "Annuler"
+        visibility_title: "Visibilité"
+        visibility_headline: "Rendez le stage visible ou invisible par les élèves"
+        open_title: "Ouvert aux inscriptions"
+        open_headline: "Indiquez si le stage est ouvert aux inscriptions"
       create:
         success: Stage créé
       update:
@@ -636,6 +646,8 @@ fr:
           one: "%{count} jour"
           other: "%{count} jours"
         capacity: Nombre de places
+        closed: "Fermé aux inscriptions"
+        closed_description: "Ce stage n'est pas ouvert aux inscriptions pour le moment."
       subscription:
         unsubscribe: "Se désinscrire"
         subscribe_with: "S'inscrire avec %{member}"
@@ -643,6 +655,7 @@ fr:
       subscriptions:
         create:
           success: "Inscription au stage confirmée"
+          closed: "Ce stage n'est pas ouvert aux inscriptions."
         destroy:
           success: "Désinscription du stage confirmée"
           error: "Erreur lors de la désinscription"

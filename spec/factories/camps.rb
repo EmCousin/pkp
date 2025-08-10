@@ -7,9 +7,14 @@ FactoryBot.define do
     ends_at { 1.month.from_now + 5.days }
     price { 150.0 }
     active { true }
+    open { true }
 
     trait :inactive do
       active { false }
+    end
+
+    trait :closed do
+      open { false }
     end
 
     trait :fully_booked do
