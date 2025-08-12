@@ -3,67 +3,51 @@ import { loadStripe } from '@stripe/stripe-js'
 
 export default class StripeController extends Controller {
   static targets = ["form", "cardElement", "cardErrors"]
-  static values = { key: String, locale: { type: String, default: 'fr' } }
-
-  async connect() {
-    const stripe = await loadStripe(this.keyValue, { locale: this.localeValue })
-    const card = this.mountCard(stripe)
-
-    this.sendTokenToServerOnSubmit(stripe, card)
+  static values = {
+    key: String,
+    locale: { type: String, default: 'fr' },
+    paymentIntentClientSecret: String,
+    returnUrl: String
   }
 
-  mountCard(stripe) {
-    const style = {
-      base: {
-        color: '#303238',
-        fontSize: '16px',
-        fontFamily: '"Open Sans", sans-serif',
-        fontSmoothing: 'antialiased',
-        '::placeholder': {
-          color: '#CFD7DF',
-        },
-      },
-      invalid: {
-        color: '#e5424d',
-        ':focus': {
-          color: '#303238',
-        },
-      },
-    }
+  async connect() {
+    this.stripe = await loadStripe(this.keyValue, { locale: this.localeValue })
+    this.mountPaymentElement()
+  }
 
-    const card = stripe.elements().create('card', {style})
-    card.mount(this.cardElementTarget)
-    card.addEventListener('change', (event) => {
+  mountPaymentElement() {
+    const appearance = { theme: 'stripe' }
+    const clientSecret = this.paymentIntentClientSecretValue
+    this.elements = this.stripe.elements({ appearance, clientSecret })
+    const paymentElementOptions = { layout: "accordion" }
+    const paymentElement = this.elements.create('payment', paymentElementOptions)
+    paymentElement.mount(this.cardElementTarget)
+
+    paymentElement.on('change', (event) => {
       this.displayError(event?.error?.message || '')
     })
 
-    return card
+    return paymentElement
   }
 
-  sendTokenToServerOnSubmit(stripe, card) {
-    let form = this.formTarget
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault()
-      let {error, token} = await stripe.createToken(card)
-      if (error) {
-        this.displayError(error.message)
-      } else {
-        this.insertTokenIntoFormAndSubmit(token)
-      }
+  async confirmPayment(event) {
+    event.preventDefault()
+
+    const {error} = await this.stripe.confirmPayment({
+      elements: this.elements,
+      confirmParams: {
+        return_url: `${window.location.origin}/${this.returnUrlValue}`,
+      },
     })
+
+    if (error.type === "card_error" || error.type === "validation_error") {
+      this.displayError(error.message);
+    } else {
+      this.displayError("An unexpected error occurred.");
+    }
   }
 
   displayError(errorMessage) {
     this.cardErrorsTarget.textContent = errorMessage
-  }
-
-  insertTokenIntoFormAndSubmit(token) {
-    const form = this.formTarget
-    let hiddenInput = document.createElement('input')
-    hiddenInput.setAttribute('type', 'hidden')
-    hiddenInput.setAttribute('name', 'stripeToken')
-    hiddenInput.setAttribute('value', token.id)
-    form.appendChild(hiddenInput)
-    form.submit()
   }
 }

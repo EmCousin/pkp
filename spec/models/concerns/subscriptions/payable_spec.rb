@@ -10,8 +10,20 @@ describe Subscriptions::Payable, type: :model do
   let(:subscription) { create :subscription, courses: courses }
   let(:stripe_token) { 'stripe_token' }
   let(:stripe_charge_id) { SecureRandom.hex }
+  let(:stripe_payment_intent_id) { 'pi_test_123' }
   let(:striped_created_at) { Time.now }
   let(:stripe_amount) { subscription.fee_cents }
+  let(:stripe_payment_intent) do
+    OpenStruct.new(
+      id: stripe_payment_intent_id,
+      client_secret: 'pi_test_123_secret',
+      latest_charge: stripe_charge_id,
+      # Add charge-like properties for backward compatibility with pay_with_stripe!
+      paid: true,
+      created: striped_created_at.to_i,
+      amount: stripe_amount
+    )
+  end
   let(:stripe_charge) do
     OpenStruct.new(
       id: stripe_charge_id,
@@ -25,15 +37,15 @@ describe Subscriptions::Payable, type: :model do
 
   before do
     freeze_time do
-      allow(Stripe::Charge).to receive(:create).with(
+      allow(Stripe::PaymentIntent).to receive(:create).with(
         amount: subscription.fee_cents,
         currency: 'eur',
         source: stripe_token,
         description: subscription.description
-      ).and_return(stripe_charge)
+      ).and_return(stripe_payment_intent)
 
       allow(Stripe::Charge).to receive(:retrieve).with(
-        stripe_charge_id
+        stripe_payment_intent_id
       ).and_return(stripe_charge)
 
       subject.pay_with_stripe!(stripe_token)
@@ -42,7 +54,7 @@ describe Subscriptions::Payable, type: :model do
 
   describe '#pay_with_stripe!' do
     it 'creates a stripe charge id' do
-      expect(subject.stripe_charge_id).to eq stripe_charge_id
+      expect(subject.stripe_charge_id).to eq stripe_payment_intent_id
     end
   end
 

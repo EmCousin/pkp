@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_10_205306) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_12_123801) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -193,6 +193,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_10_205306) do
     t.datetime "paid_at"
     t.enum "payment_method", enum_type: "payment_method"
     t.bigint "parent_subscription_id"
+    t.string "stripe_payment_intent_id"
     t.index ["created_at"], name: "index_subscriptions_on_created_at", order: :desc
     t.index ["member_id"], name: "index_subscriptions_on_member_id"
     t.index ["parent_subscription_id"], name: "index_subscriptions_on_parent_subscription_id"

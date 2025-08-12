@@ -89,7 +89,7 @@ Rails.application.routes.draw do
       resource :term, as: :terms, only: [:edit, :update]
       resource :medical_certificate, only: [:edit, :update]
       resource :payment_proof, only: [:edit, :update]
-      resource :payment, only: [:new, :create]
+      resource :payment, only: [:show, :new, :create]
     end
     resources :camps, only: [:index, :show] do
       resources :subscriptions, only: [:create, :destroy], controller: 'camps/subscriptions' do

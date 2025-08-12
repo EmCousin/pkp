@@ -744,6 +744,34 @@ fr:
       update:
         success: Élève modifié·e
     payments:
+      show:
+        title: C'est tout bon !
+        success: Votre règlement de %{amount} a été traité avec succès.
+        payment_details: Détails du paiement
+        payment_date: Date du paiement
+        payment_method: Méthode
+        reference: Référence
+        payment_methods:
+          credit_card: Carte bancaire
+          cash: Espèces
+          check: Chèque
+          transfer: Virement
+        back_to_dashboard: Retour au tableau de bord
+        back_to_subscription: Voir les détails de mon inscription
+        next_steps: Prochaines étapes
+        next_steps_description: Vous recevrez les informations pratiques pour vos cours par email.
+        confirmed: Votre inscription est confirmée ! Un email de confirmation vous a été envoyé.
+        not_confirmed: Votre inscription sera confirmée une fois tous les documents validés.
+        error_title: Problème de paiement
+        error_description: Il y a eu un problème lors du traitement de votre paiement.
+        error_details: Que faire maintenant ?
+        error_details_description_1: Vérifiez que votre carte bancaire est valide et non expirée
+        error_details_description_2: Assurez-vous d'avoir des fonds suffisants
+        error_details_description_3: Contactez votre banque si le problème persiste
+        error_details_description_4: Vous pouvez également payer par virement bancaire
+        need_help: Besoin d'aide ?
+        need_help_description: Si vous continuez à rencontrer des difficultés, n'hésitez pas à nous contacter.
+        retry_payment: Réessayer le paiement
       new:
         title: Payer par carte bancaire
         payment_by_card: Paiement par carte bancaire
