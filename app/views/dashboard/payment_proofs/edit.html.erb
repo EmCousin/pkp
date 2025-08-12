@@ -9,6 +9,16 @@
         <%= t('.title') %>
       </h2>
 
+      <p class="text-gray-600">
+        <%= t('.description') %>
+      </p>
+
+      <p class="text-gray-600">
+        <%= t('.iban') %><br>
+        <%= t('.bic') %><br>
+        <%= t('.address') %><br>
+      </p>
+
       <%= render 'form', subscription: @subscription %>
     </div>
   </div>
