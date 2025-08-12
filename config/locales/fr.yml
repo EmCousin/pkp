@@ -803,7 +803,7 @@ fr:
         description: "Si vous ne pouvez pas payer par carte bancaire, vous pouvez le faire par virement aux coordonnées ci-dessous. Vous pourrez ensuite joindre la preuve de virement ici. Elle sera validée manuellement."
         iban: "IBAN : FR7616958000013400999375159"
         bic: "BIC : QNTOFRP1XXX"
-        address: "Adresse du titulaire : PKP CORP, 28 rue du colonel"
+        address: "Adresse du titulaire : PKP CORP, 28 rue du colonel Rozanoff, 75012, Paris, FR"
       form:
         accepted_formats: "Formats acceptés : PDF, JPG, JPEG, PNG"
       update:
