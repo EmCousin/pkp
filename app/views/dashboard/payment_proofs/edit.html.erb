@@ -19,6 +19,11 @@
         <%= t('.address') %><br>
       </p>
 
+      <p class="text-gray-600">
+        <%= t('.transfer_subject_instruction') %><br>
+        <strong><%= t('.transfer_subject', season: @subscription.year, member: @subscription.member.full_name) %></strong>
+      </p>
+
       <%= render 'form', subscription: @subscription %>
     </div>
   </div>

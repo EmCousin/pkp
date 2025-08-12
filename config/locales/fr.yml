@@ -804,6 +804,8 @@ fr:
         iban: "IBAN : FR7616958000013400999375159"
         bic: "BIC : QNTOFRP1XXX"
         address: "Adresse du titulaire : PKP CORP, 28 rue du colonel Rozanoff, 75012, Paris, FR"
+        transfer_subject_instruction: "Merci de préciser dans le libellé du virement :"
+        transfer_subject: "Règlement PKP %{season} %{member}"
       form:
         accepted_formats: "Formats acceptés : PDF, JPG, JPEG, PNG"
       update:
