@@ -19,7 +19,7 @@ module Dashboard
       if @subscription.save
         redirect_to next_completion_step_path(@subscription), status: :see_other
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 
@@ -30,10 +30,10 @@ module Dashboard
     end
 
     def subscription_params
-      params.require(:subscription).permit(
-        :member_id,
-        :category_id,
-        course_ids: []
+      params.expect(
+        subscription: [:member_id,
+                       :category_id,
+                       { course_ids: [] }]
       )
     end
 

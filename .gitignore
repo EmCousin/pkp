@@ -19,7 +19,10 @@
 .byebug_history
 .yalc
 yalc.lock
-storage
+
+# Ignore uploaded files in development.
+/storage/*
+!/storage/.keep
 
 /public/packs
 /public/packs-test
@@ -39,3 +42,12 @@ coverage
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+docker-compose.yml
+
+.env
+
+db/server.crt
+db/server.key
+db/certificates/*
+!db/certificates/.keep

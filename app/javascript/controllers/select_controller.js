@@ -6,8 +6,7 @@ export default class SelectController extends Controller {
     locale: String
   }
 
-  connect() {
-    console.log(this.element.id)
+  initialize() {
     tail.select('#' + this.element.id, {
       search: true,
       multiSelectAll: true,

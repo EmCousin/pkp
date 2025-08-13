@@ -2,6 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["input", "output"]
+  static classes = ["output"]
 
   preview() {
     if (this.uploadedFile) {
@@ -12,6 +13,7 @@ export default class extends Controller {
         } else {
           const img = document.createElement("img")
           img.src = reader.result
+          img.classList.add(...this.outputClasses)
           this.outputTarget.replaceWith(img)
         }
       }

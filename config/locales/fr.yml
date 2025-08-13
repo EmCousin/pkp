@@ -1,56 +1,59 @@
 fr:
   defaults:
-    na: "N/A"
+    action: Action
     added: "Ajouté"
-    attach: Joindre
-    dismiss: Fermer
-    close: Fermer
-    view: Voir
-    show: Voir
-    new: Nouveau %{resource}
-    edit: Modifier
-    update: Mettre à jour
-    destroy: Supprimer
-    back: Retour
-    send: Envoyer
-    from: de
-    to: à
-    login: Connexion
-    logout: Déconnexion
-    signup: Inscription
-    forgot_your_password: Mot de passe oublié ?
-    did_not_receive_confirmation_intructions: "Vous n'avez pas reçu les instructions pour confirmer votre compte ?"
-    did_not_receive_unlock_instructions: "Vous n'avez pas reçu les instructions pour débloquer votre compte ?"
-    signin_with: Connexion avec %{provider}
-    send_reset_password_instructions: "Réinitialiser mon mot de passe"
+    archive: Archiver
+    archived: Archivée
     are_you_sure: "Vous êtes sûr ?"
-    save: Sauvegarder
-    welcome: Bienvenue
-    select: Sélectionner
-    search: Rechercher
-    filter: Filtrer
+    attach: Joindre
+    back: Retour
+    close: Fermer
+    complete_your_profile: Veuillez compléter votre profil pour continuer.
     confirm: Confirmer
     confirmed: Confirmé
-    archived: Archivée
-    pending: En attente
-    mark_as_confirmed: Confirmer
-    mark_as_archived: Archiver
-    mark_as_pending: Mettre en attente
     continue: Continuer
-    archive: Archiver
-    action: Action
-    download: Télécharger
-    none: Aucun
-    replace: Remplacer
-    forbidden: Accès non-autorisé
     details: Détails
-    complete_your_profile: Veuillez compléter votre profil pour continuer.
-    paid_with_bank_check: "A payé par chèque"
-    paid_with_cash: "A payé en espèces"
-    paid_with_bank_transfer: "A payé par virement"
-    paid_with_credit_card: "A payé par carte bancaire"
+    destroy: Supprimer
+    did_not_receive_confirmation_intructions: "Vous n'avez pas reçu les instructions pour confirmer votre compte ?"
+    did_not_receive_unlock_instructions: "Vous n'avez pas reçu les instructions pour débloquer votre compte ?"
+    dismiss: Fermer
+    download: Télécharger
+    edit: Modifier
+    filter: Filtrer
+    forbidden: Accès non-autorisé
+    forgot_your_password: Mot de passe oublié ?
+    from: de
+    login: Connexion
+    logout: Déconnexion
+    mark_as_archived: Archiver
+    mark_as_confirmed: Confirmer
     mark_as_not_paid: "Marquer comme non payé"
+    mark_as_pending: Mettre en attente
+    na: "N/A"
+    no: Non
+    new: Nouveau %{resource}
+    none: Aucun
+    paid_with_bank_check: "A payé par chèque"
+    paid_with_bank_transfer: "A payé par virement"
+    paid_with_cash: "A payé en espèces"
+    paid_with_credit_card: "A payé par carte bancaire"
+    pay: Payer
+    pending: En attente
+    replace: Remplacer
+    save: Sauvegarder
+    search: Rechercher
+    select: Sélectionner
+    send: Envoyer
+    send_reset_password_instructions: "Réinitialiser mon mot de passe"
+    show: Voir
+    signup: Inscription
+    signin_with: Connexion avec %{provider}
+    to: à
+    update: Mettre à jour
     upload: Téléverser
+    view: Voir
+    welcome: Bienvenue
+    yes: Oui
   custom_error_messages:
     subscription:
       member_id:
@@ -78,6 +81,15 @@ fr:
         required: est requis
         taken: est dejà pris
       models:
+        camp:
+          attributes:
+            ends_at:
+              later_than_or_equal_to: doit être plus tard ou le même jour la date de début (%{date})
+            cover_picture:
+              content_type: doit être au format PNG, JPG, JPEG ou WEBP
+        camps_subscription:
+          attributes:
+            already_subscribed_to_this_camp: "L'élève est déjà inscrit à ce stage"
         user:
           attributes:
             email:
@@ -94,12 +106,15 @@ fr:
               inclusion: "%{value} n'est pas une date valide"
         subscription:
           attributes:
+            courses_count:
+              limit_exceeded: "Maximum %{count} cours"
             courses:
               must_exist: "Minimum un cours"
-              limit_exceeded: "Maximum %{count} cours"
               unique_category: "Les cours doivent être de la même catégorie"
               unique_weekday: "Les cours ne doivent pas être le même jour"
               unavailable: "L'un des cours est complet"
+            parent_subscription:
+              required_for_camp: "Une inscription parent est requise pour un stage"
             member:
               too_young: n'a pas l'âge minimum requis
               too_old: n'a pas l'âge maximum requis
@@ -117,7 +132,14 @@ fr:
             max_age:
               greater_than: doit être supérieur à l'âge minimum
               less_than_or_equal_to: doit être inférieur ou égal à 100
+        camps_subscription:
+          attributes:
+            subscription:
+              already_has_camp: "Cette inscription a déjà un stage"
     models:
+      camp:
+        one: Stage
+        other: Stages
       user:
         one: Compte utilisateur
         other: Comptes utilisateur
@@ -130,10 +152,23 @@ fr:
       category:
         one: Catégorie
         other: Catégories
+      pricing:
+        one: Tarif
+        other: Tarifs
       subscription:
         one: Inscription
         other: Inscriptions
     attributes:
+      camp:
+        title: Titre
+        description: Description
+        price: Prix
+        capacity: Capacité
+        starts_at: Date de début
+        ends_at: Date de fin
+        cover_picture: Image de couverture
+        active: Visible
+        open: Ouvert
       attendance_record:
         status: Statut
         statuses:
@@ -182,6 +217,7 @@ fr:
         min_age: Âge minimum
         max_age: Âge maximum
       subscription:
+        camp: Stage
         terms_accepted_at: Conditions d'inscription
         doctor_certified_at: Certificat médical
         category_id: Type de cours
@@ -209,6 +245,13 @@ fr:
         bank_check: Chèque
         bank_transfer: Virement
         credit_card: Carte bancaire
+
+  helpers:
+    submit:
+      camp:
+        create: Créer le stage
+        update: Mettre à jour le stage
+
   # Views
   contacts:
     confirmations:
@@ -273,16 +316,122 @@ fr:
         actions: "Actions"
       attendance_record:
         <<: *attendance_record
+
+    camps:
+      active_status:
+        active: "Visible"
+        inactive: "Non-visible"
+      open_status:
+        open: "Ouvert"
+        closed: "Fermé"
+      camp:
+        duration_days:
+          one: "%{count} jour"
+          other: "%{count} jours"
+        price: "%{price}"
+        capacity:
+          one: "%{current}/%{count} place"
+          other: "%{current}/%{count} places"
+        view: "Voir"
+        edit: "Modifier"
+        delete: "Supprimer"
+        confirm_delete: "Êtes-vous sûr de vouloir supprimer ce stage ?"
+      index:
+        title: "Stages"
+        new_camp: "Nouveau stage"
+      new:
+        title: "Nouveau stage"
+      edit:
+        title: "Modifier le stage %{camp}"
+      show:
+        edit: "Modifier"
+        back: "Retour"
+        starts_at: "Date de début"
+        ends_at: "Date de fin"
+        duration: "Durée"
+        price: "Prix"
+        capacity: "Capacité"
+        capacity_info:
+          one: "%{current}/%{count} place occupée"
+          other: "%{current}/%{count} places occupées"
+        status: "Statut"
+        active: "Actif"
+        inactive: "Inactif"
+        description: "Description"
+        subscriptions: "Inscriptions"
+        filter_by_status: "Filtrer par statut"
+        all_statuses: "Tous les statuts"
+        confirmed: "Confirmé"
+        pending: "En attente"
+        filter: "Filtrer"
+        no_subscriptions: "Aucune inscription"
+      form:
+        basic_information: "Informations de base"
+        cover_picture_headline: "Ajoutez une image représentative du stage"
+        description_headline: "Décrivez le contenu et les objectifs du stage"
+        active_headline: "Activez ou désactivez le stage"
+        upload_file: "Téléverser un fichier"
+        or_drag_drop: "ou glisser-déposer"
+        cancel: "Annuler"
+        visibility_title: "Visibilité"
+        visibility_headline: "Rendez le stage visible ou invisible par les élèves"
+        open_title: "Ouvert aux inscriptions"
+        open_headline: "Indiquez si le stage est ouvert aux inscriptions"
+      create:
+        success: Stage créé
+      update:
+        success: Stage modifié
+      destroy:
+        success: Stage supprimé
+      subscription:
+        unsubscribe: "Désinscrire"
+        confirm_unsubscribe: "Êtes-vous sûr de vouloir désinscrire ce membre ?"
+      subscriptions:
+        create:
+          success: "Membre inscrit au stage avec succès"
+        destroy:
+          success: "Membre désinscrit du stage avec succès"
+          error: "Erreur lors de la désinscription"
+
     categories:
+      index:
+        title: Catégories
+        description: Gérez les catégories et leurs grilles tarifaires
+        new_category: Nouvelle catégorie
+      show:
+        title: Catégorie
+        pricings_title: Tarifs
+        ages: Âges
+        year: Année
+        no_pricing: Aucun tarif pour l'année sélectionnée.
+        add_pricing: Ajouter un tarif
+        courses_title: Cours
+        no_courses: Aucun cours pour cette catégorie.
+        add_course: Ajouter un cours
       new:
         title: Créer une catégorie
+        description: Les catégories sont utilisées pour classer les cours. Elles définissent l'âge minimum et maximum des élèves.
+      edit:
+        title: Modifier la catégorie
+        description: Mettez à jour la catégorie et gérez ses grilles tarifaires.
+      form:
+        title: Informations de base
+        description: Renseignez le nom et les âges
+        pricings_title: Tarifs
+        pricings_description: Définissez des périodes et des tarifs par nombre de cours (séparés par des virgules).
+        add_pricing: Ajouter un tarif
+        remove_pricing: Supprimer
       create:
         success: Catégorie créée
+      update:
+        success: Les informations de la catégorie ont été mises à jour
+      destroy:
+        success: La catégorie a été supprimée
+
     courses:
       index:
-        title: Liste des cours
+        title: Cours
         inactive: Inactif
-        create_attendance_sheet: "Feuille de présence"
       show:
         new_subscription: Nouvelle inscription
         create_attendance_sheet: "Feuille de présence"
@@ -306,6 +455,8 @@ fr:
         success: Cours supprimé
       form:
         new_category: Ajouter une autre catégorie
+      course:
+        create_attendance_sheet: "Feuille de présence"
     credit_notes:
       create:
         success: Avoir généré
@@ -317,15 +468,17 @@ fr:
         success: Facture générée
       update:
         success: Facture générée
+
     members:
       index:
-        title: Liste des membres
+        title: Membres
         search_by_name: Nom
         all_categories: Toutes les catégories
         all_courses: Tous les cours
         no_paginate: Désactiver la pagination
         csv_export: Exporter au format CSV
         display_levels: Afficher les niveaux
+        new_member: Nouvel élève
       show:
         title: "%{member}"
         remove_from_course: Retirer du cours
@@ -345,6 +498,8 @@ fr:
         success: Membre modifié
       destroy:
         success: Membre supprimé
+      subscription:
+        view_camp: Voir le stage
     payments:
       create:
         success: Inscription mise à jour
@@ -381,6 +536,7 @@ fr:
         not_paid: Non payé
         payment_proof_awaiting_review: Justificatif à vérifier
         invoicing: Facturation
+        invalid_subscription: Inscription invalide
       new:
         title: Inscrire un membre
       create:
@@ -408,6 +564,22 @@ fr:
         select_courses_description: Sélectionnez les cours souhaités
         member_required: Membre requis
         courses_required: Cours requis
+        parent_subscription: "Inscription parent"
+        parent_subscription_description: "Sélectionnez optionnellement une inscription parent pour ce membre"
+        no_parent_subscription: "Aucune inscription parent"
+        subscription_type: "Type d'inscription"
+        subscription_type_description: "Choisissez entre cours ou stage"
+        camp: "Stage"
+        camp_required: "Un stage est requis"
+        select_a_camp: "Choisissez un stage"
+        no_courses_available: "Aucun cours disponible"
+        no_courses_available_description: "Il n'y a actuellement aucun cours disponible pour la sélection."
+        no_camps_available: "Aucun stage disponible"
+        no_camps_available_description: "Il n'y a actuellement aucun stage disponible pour la sélection."
+        current_year_subscriptions: "Inscriptions de l'année en cours"
+        courses_count:
+          one: "cours"
+          other: "cours"
       subscription:
         terms: Conditions d'inscription
         terms_accepted: Accepté
@@ -421,6 +593,73 @@ fr:
         uploaded_payment_proof: Justificatif
         payment_method: A payé avec %{payment_method}
   dashboard:
+    camps:
+      camp:
+        duration_days:
+          one: "%{count} jour"
+          other: "%{count} jours"
+        price: "%{price}"
+        capacity:
+          one: "%{current}/%{count} place"
+          other: "%{current}/%{count} places"
+        view: "Voir"
+        edit: "Modifier"
+        delete: "Supprimer"
+        confirm_delete: "Êtes-vous sûr de vouloir supprimer ce stage ?"
+        view_details: "Voir les détails"
+      index:
+        title: "Stages disponibles"
+        description: "Découvrez nos stages et inscrivez-vous !"
+        no_camps_title: "Aucun stage disponible"
+        no_camps_description: "Il n'y a actuellement aucun stage disponible."
+      payment_proofs:
+        edit:
+          title: "Joindre un justificatif de paiement"
+          upload_payment_proof: "Joindre un justificatif"
+          already_paid_for: "%{member} a déjà payé pour ce stage"
+        form:
+          accepted_formats: "Formats acceptés : PDF, JPG, JPEG, PNG"
+        update:
+          success: "Justificatif de paiement ajouté avec succès !"
+          already_paid_for: "%{member} a déjà payé pour ce stage"
+      show:
+        back_to_camps: "Retour aux stages"
+        details: "Détails"
+        starts_at: "Date de début"
+        ends_at: "Date de fin"
+        duration: "Durée"
+        price: "Prix"
+        capacity: "Capacité"
+        capacity_info:
+          one: "%{current}/%{count} place occupée"
+          other: "%{current}/%{count} places occupées"
+        fully_booked: "Complet"
+        subscription: "Inscription"
+        already_subscribed: "Déjà inscrit"
+        confirm_unsubscribe: "Êtes-vous sûr de vouloir vous désinscrire de ce stage ?"
+        available_for_subscription: "Disponible pour inscription"
+        choose_member: "Choisissez un membre pour vous inscrire :"
+        no_confirmed_subscriptions: "Aucune inscription confirmée"
+        need_confirmed_subscription: "Vous devez avoir une inscription confirmée pour vous inscrire aux stages."
+        description: "Description"
+        duration_days:
+          one: "%{count} jour"
+          other: "%{count} jours"
+        capacity: Nombre de places
+        closed: "Fermé aux inscriptions"
+        closed_description: "Ce stage n'est pas ouvert aux inscriptions pour le moment."
+      subscription:
+        unsubscribe: "Se désinscrire"
+        subscribe_with: "S'inscrire avec %{member}"
+        cannot_subscribe_with: "Impossible de s'inscrire avec %{member}"
+      subscriptions:
+        create:
+          success: "Inscription au stage confirmée"
+          closed: "Ce stage n'est pas ouvert aux inscriptions."
+        destroy:
+          success: "Désinscription du stage confirmée"
+          error: "Erreur lors de la désinscription"
+
     show:
       add_subscription: Ajouter une inscription
       choose_my_courses: Choisir mes cours
@@ -428,6 +667,10 @@ fr:
       not_yet_subscribed: "Vous n'êtes pas encore inscrit·e pour l'année %{year} ! Cliquez sur le bouton pour vous inscrire :"
       subscription_detailed_info: "Vos inscriptions pour l'année %{year} :"
       how_to_complete_my_subscription: Comment compléter mon dossier
+      camps_section_title: "Stages"
+      camps_section_description: "Découvrez nos stages et inscrivez-vous !"
+      browse_camps: "Parcourir les stages"
+
     subscription:
       subscription_form: Formulaire d'inscription
       download_subscription_form: Télécharger le formulaire d'inscription
@@ -447,9 +690,12 @@ fr:
       pay: Régler ma cotisation
       level: Niveau
       upload_payment_proof: Joindre un justificatif de paiement
+      change_payment_proof: Remplacer le justificatif
       payment_proof_in_review: Votre justificatif de paiement est en cours de vérification.
       download_payment_proof: Télécharger le justificatif
       pay_directly: Payer directement par carte bancaire
+      additional_subscriptions: "Inscriptions supplémentaires"
+      additional_courses: "Cours supplémentaires"
     edit:
       title: Mes informations personnelles
     alumni_accesses:
@@ -475,14 +721,57 @@ fr:
         payment_by_card: Payer par carte bancaire
         upload_payment_proof: Joindre un justificatif
     members:
+      new:
+        title: Ajouter un·e élève
+        description: "Vous pourrez ensuite l'inscrire aux cours et stages."
       form:
-        advertising_right_statement: J'autorise l'utilisation, l'affichage et la publication de mon image provenant des activités de Parkour Paris, à des fins de promotion (tous médias) et d'information des activités de l'association. (panneaux, plaquettes, site internet).
+        personal_information: Informations personnelles
+        personal_information_description: Les informations de base de l'élève
+        advertising_right_statement: J'autorise l'utilisation, l'affichage et la publication de mon image.
         contact_name: Nom complet du contact
+        contact_name_description: Personne à contacter en cas d'urgence
+        select_contact_relationship: Sélectionner un lien de parenté
+        avatar_description: Photo pour identifier l'élève
+        select_avatar: Sélectionner une photo
+        click_to_upload: Cliquez pour télécharger
+        or_drag_and_drop: ou glissez-déposez
+        allowed_formats: PNG, JPG, GIF jusqu'à 10MB
+        permissions: Autorisations
+        permissions_description: Consentement pour l'utilisation d'images
+        advertising_right_statement_description: J'autorise l'utilisation, l'affichage et la publication de mon image provenant des activités de Parkour Paris, à des fins de promotion (tous médias) et d'information des activités de l'association. (panneaux, plaquettes, site internet).
       create:
         success: Élève ajouté·e
       update:
         success: Élève modifié·e
     payments:
+      show:
+        title: C'est tout bon !
+        success: Votre règlement de %{amount} a été traité avec succès.
+        payment_details: Détails du paiement
+        payment_date: Date du paiement
+        payment_method: Méthode
+        reference: Référence
+        payment_methods:
+          credit_card: Carte bancaire
+          cash: Espèces
+          check: Chèque
+          transfer: Virement
+        back_to_dashboard: Retour au tableau de bord
+        back_to_subscription: Voir les détails de mon inscription
+        next_steps: Prochaines étapes
+        next_steps_description: Vous recevrez les informations pratiques pour vos cours par email.
+        confirmed: Votre inscription est confirmée ! Un email de confirmation vous a été envoyé.
+        not_confirmed: Votre inscription sera confirmée une fois tous les documents validés.
+        error_title: Problème de paiement
+        error_description: Il y a eu un problème lors du traitement de votre paiement.
+        error_details: Que faire maintenant ?
+        error_details_description_1: Vérifiez que votre carte bancaire est valide et non expirée
+        error_details_description_2: Assurez-vous d'avoir des fonds suffisants
+        error_details_description_3: Contactez votre banque si le problème persiste
+        error_details_description_4: Vous pouvez également payer par virement bancaire
+        need_help: Besoin d'aide ?
+        need_help_description: Si vous continuez à rencontrer des difficultés, n'hésitez pas à nous contacter.
+        retry_payment: Réessayer le paiement
       new:
         title: Payer par carte bancaire
         payment_by_card: Paiement par carte bancaire
@@ -511,14 +800,31 @@ fr:
       edit:
         title: Joindre un justificatif de paiement
         upload_payment_proof: Joindre un justificatif
+        description: "Si vous ne pouvez pas payer par carte bancaire, vous pouvez le faire par virement aux coordonnées ci-dessous. Vous pourrez ensuite joindre la preuve de virement ici. Elle sera validée manuellement."
+        iban: "IBAN : FR7616958000013400999375159"
+        bic: "BIC : QNTOFRP1XXX"
+        address: "Adresse du titulaire : PKP CORP, 28 rue du colonel Rozanoff, 75012, Paris, FR"
+        transfer_subject_instruction: "Merci de préciser dans le libellé du virement :"
+        transfer_subject: "Règlement PKP %{season} %{member}"
+      form:
+        accepted_formats: "Formats acceptés : PDF, JPG, JPEG, PNG"
       update:
         success: "Justificatif de paiement ajouté avec succès !"
     terms:
       edit:
         year: "Inscription %{year} / %{next_year}"
-        terms_accepted: En complétant cette inscription, je reconnais avoir pris connaissance des conditions d'inscription et je certifie que les informations de l'élève sont correctes.
-        yes: "Oui"
-        no: "Non"
+        responsibility_discharge_title: "Décharge de responsabilité et consentement éclairé"
+        responsibility_discharge_health_declaration: "Je certifie être en bonne santé et apte à la pratique du parkour."
+        responsibility_discharge_risks_declaration: "Je reconnais que cette activité comporte des risques physiques (blessures, chutes, etc.) et nécessite un engagement physique."
+        responsibility_discharge_commitment: "Je m'engage à respecter toutes les consignes données par les encadrants, à utiliser les installations et le matériel conformément aux règles, et à ne pas réaliser de figures dangereuses sans validation préalable."
+        responsibility_discharge_responsibility: "Je comprends que l'organisateur ne pourra être tenu responsable des blessures résultant du non-respect des règles ou d'un comportement imprudent, sauf en cas de faute prouvée de l'encadrant ou de défaut de sécurité."
+        terms_accepted: J'ai lu et j'accepte la décharge de responsabilité et le consentement éclairé ci-dessus.
+        responsibility_discharge_minor_representative: "En tant que représentant légal de l'enfant :"
+        responsibility_discharge_minor_health_declaration: "Je certifie que mon enfant est en bonne santé et apte à la pratique du parkour."
+        responsibility_discharge_minor_risks_declaration: "Je reconnais que cette activité comporte des risques physiques (blessures, chutes, etc.) et nécessite un engagement physique."
+        responsibility_discharge_minor_commitment: "Je m'engage à ce que mon enfant respecte toutes les consignes données par les encadrants, utilise les installations et le matériel conformément aux règles, et ne réalise pas de figures dangereuses sans validation préalable."
+        responsibility_discharge_minor_responsibility: "Je comprends que l'organisateur ne pourra être tenu responsable des blessures subies par mon enfant résultant du non-respect des règles ou d'un comportement imprudent, sauf en cas de faute prouvée de l'encadrant ou de défaut de sécurité."
+        terms_accepted_minor: En tant que représentant légal, j'ai lu et j'accepte la décharge de responsabilité et le consentement éclairé ci-dessus, et j'autorise mon enfant à participer aux cours de parkour.
         already_accepted: Les conditions d'inscription ont déjà été acceptées
       update:
         success: Inscription mise à jour
@@ -531,7 +837,9 @@ fr:
     navbar:
       admin: "Admin"
       members: "Membres"
+      categories: "Catégories"
       courses: "Cours"
+      camps: "Stages"
       subscriptions: "Inscriptions"
       my_account: "Mon compte"
       logout: "Déconnexion"

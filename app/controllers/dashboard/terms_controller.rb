@@ -9,17 +9,17 @@ module Dashboard
 
     def update
       if @subscription.update(subscription_params)
-        @subscription.confirmed! if @subscription.completed?
+        @subscription.confirm! if @subscription.completed?
         redirect_to next_completion_step_path(@subscription), status: :see_other
       else
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       end
     end
 
     private
 
     def subscription_params
-      params.require(:subscription).permit(:terms_accepted)
+      params.expect(subscription: [:terms_accepted])
     end
 
     def filter_already_accepted!

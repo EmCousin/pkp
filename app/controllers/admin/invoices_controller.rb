@@ -22,14 +22,14 @@ module Admin
       if @subscription.update(subscription_params)
         redirect_to admin_subscription_path(@subscription.id), notice: t('.success')
       else
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       end
     end
 
     private
 
     def subscription_params
-      params.require(:subscription).permit(:invoice)
+      params.expect(subscription: [:invoice])
     end
 
     def generate_invoice_pdf

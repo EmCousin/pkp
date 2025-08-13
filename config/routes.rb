@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
+  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  get "up" => "rails/health#show", as: :rails_health_check
+
   devise_for :users, controllers: {
     registrations: 'registrations'
   }
@@ -15,8 +19,10 @@ Rails.application.routes.draw do
     root to: "dashboard#show", as: :authenticated
   end
 
+
   authenticate :user, ->(user) { user.admin? } do
-    mount Sidekiq::Web => '/sidekiq'
+    mount MissionControl::Jobs::Engine, at: "/jobs"
+    mount PgHero::Engine, at: "/pghero"
   end
 
   resources :errors, only: [] do
@@ -49,9 +55,13 @@ Rails.application.routes.draw do
   namespace :admin do
     concerns :courses_manageable
 
-    resources :categories, only: [:new, :create, :edit, :update, :destroy]
+    resources :categories, only: [:index, :show, :new, :create, :edit, :update, :destroy]
     resources :members do
       resource :level, only: [:update]
+    end
+
+    resources :camps do
+      resources :subscriptions, only: [:create, :destroy], controller: 'camps/subscriptions'
     end
 
     resources :subscriptions do
@@ -79,7 +89,12 @@ Rails.application.routes.draw do
       resource :term, as: :terms, only: [:edit, :update]
       resource :medical_certificate, only: [:edit, :update]
       resource :payment_proof, only: [:edit, :update]
-      resource :payment, only: [:new, :create]
+      resource :payment, only: [:show, :new, :create]
+    end
+    resources :camps, only: [:index, :show] do
+      resources :subscriptions, only: [:create, :destroy], controller: 'camps/subscriptions' do
+        resource :payment_proof, only: [:edit, :update], module: :camps
+      end
     end
     resource :vacation, only: [:show]
     resource :capacity, only: [:show]

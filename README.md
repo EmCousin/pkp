@@ -14,7 +14,6 @@ Back-Office interface for [Parkour Paris](https://inscriptions.parkourparis.fr)
 * [Ruby](https://www.ruby-lang.org/en/documentation/installation/) 2.6.3 or later
 * [Node](https://nodejs.org/en/download/) 10 or later
 * [PostgreSQL](https://www.postgresql.org/download/) 9.4 or later
-* [Redis](https://redis.io/topics/quickstart)
 * [Yarn](https://classic.yarnpkg.com/en/docs/install/)
 * [Foreman](https://github.com/ddollar/foreman)
 

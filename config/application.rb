@@ -13,8 +13,6 @@ module Pkp
 
     config.add_autoload_paths_to_load_path = false
 
-    config.active_job.queue_adapter = :sidekiq
-
     config.autoload_paths << "#{root}/app/form_builders"
 
     # Settings in config/environments/* take precedence over those specified here.
@@ -30,8 +28,6 @@ module Pkp
       end
     end
 
-    config.action_dispatch.default_headers = {
-      "Permissions-Policy" => "interest-cohort=()"
-    }
+    config.action_dispatch.default_headers.merge!("Permissions-Policy" => "interest-cohort=()")
   end
 end

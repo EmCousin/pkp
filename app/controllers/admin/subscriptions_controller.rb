@@ -5,13 +5,11 @@ module Admin
     before_action :set_subscription!, only: %i[show edit update destroy unlink_course]
 
     def index
-      @subscriptions = Subscription.filter_by_status(params[:status])
-                                   .filter_by_level(params[:level])
-                                   .filter_by_year(params[:year])
+      @subscriptions = Subscription.search_and_filter(params.to_unsafe_h.slice(:status, :level, :year, :course_ids, :camp_id))
                                    .order(created_at: :desc)
                                    .page(params[:page])
                                    .per(25)
-                                   .includes(:courses, member: :avatar_attachment)
+                                   .includes(:camp, :courses, member: :avatar_attachment)
     end
 
     def show; end
@@ -28,25 +26,23 @@ module Admin
     def create
       @subscription = Subscription.new(subscription_params)
       if @subscription.save
-        @subscription.notify_confirmation!
         redirect_to %i[admin subscriptions], notice: t('.success'), status: :see_other
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 
     def update
       if @subscription.update(subscription_params)
-        process_after_save(@subscription)
         redirect_back_or_to [:admin, @subscription], notice: t('.success'), status: :see_other
       else
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       end
     end
 
     def destroy
       @subscription.destroy
-      redirect_to %i[admin subscriptions], notice: t('.success'), status: :see_other
+      redirect_to admin_subscriptions_path(destroyed: true), notice: t('.success'), status: :see_other
     end
 
     def unlink_course
@@ -62,7 +58,7 @@ module Admin
     end
 
     def subscription_params
-      params.require(:subscription).permit(:member_id, :status, course_ids: [])
+      params.expect(subscription: [:member_id, :status, :parent_subscription_id, { course_ids: [] }, { camps_subscription_attributes: [:camp_id] }])
     end
   end
 end

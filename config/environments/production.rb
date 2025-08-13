@@ -45,8 +45,14 @@ Rails.application.configure do
   # config.action_cable.url = 'wss://example.com/cable'
   # config.action_cable.allowed_request_origins = [ 'http://example.com', /http:\/\/example.*/ ]
 
+  # Assume all access to the app is happening through a SSL-terminating reverse proxy.
+  # Can be used together with config.force_ssl for Strict-Transport-Security and secure cookies.
+  config.assume_ssl = true
+
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = true
+  # Skip http-to-https redirect for the default health check endpoint.
+  config.ssl_options = { redirect: { exclude: ->(request) { request.path == config.silence_healthcheck_path || request.port == 9394 } } }
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
@@ -56,14 +62,15 @@ Rails.application.configure do
   config.log_tags = [ :request_id ]
 
   # Use a different cache store in production.
-  # config.cache_store = :mem_cache_store
+  config.cache_store = :solid_cache_store
 
   # Use a real queuing backend for Active Job (and separate queues per environment)
-  # config.active_job.queue_adapter     = :resque
+  config.active_job.queue_adapter = :solid_queue
+  config.solid_queue.connects_to = { database: { writing: :queue } }
   # config.active_job.queue_name_prefix = "pkp_#{Rails.env}"
   config.action_mailer.perform_caching = false
   config.action_mailer.default_url_options = {
-    host: Rails.application.credentials.url_options[:host],
+    host: Rails.application.credentials.dig(:url_options, :host) || 'localhost',
     protocol: 'https'
   }
 
@@ -76,11 +83,11 @@ Rails.application.configure do
   config.i18n.fallbacks = true
 
   config.action_mailer.smtp_settings = {
-      port:           Rails.application.credentials.mailgun[:smtp_port],
-      address:        Rails.application.credentials.mailgun[:smtp_server],
-      user_name:      Rails.application.credentials.mailgun[:smtp_login],
-      password:       Rails.application.credentials.mailgun[:smtp_password],
-      domain:         Rails.application.credentials.mailgun[:domain],
+      port:           Rails.application.credentials.dig(:mailgun, :smtp_port),
+      address:        Rails.application.credentials.dig(:mailgun, :smtp_server),
+      user_name:      Rails.application.credentials.dig(:mailgun, :smtp_login),
+      password:       Rails.application.credentials.dig(:mailgun, :smtp_password),
+      domain:         Rails.application.credentials.dig(:mailgun, :domain),
       authentication: :plain
   }
   config.action_mailer.delivery_method = :smtp
@@ -106,6 +113,9 @@ Rails.application.configure do
 
   # Store files remotely using Amazon Web Services.
   config.active_storage.service = :amazon
+
+  config.active_job.queue_adapter = :solid_queue
+  config.solid_queue.connects_to = { database: { writing: :queue } }
 
   config.time_zone = 'Europe/Paris'
 end

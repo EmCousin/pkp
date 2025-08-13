@@ -16,7 +16,7 @@ module AttendanceRecordsControllerConcern
   private
 
   def attendance_record_params
-    params.require(:attendance_record).permit(:status)
+    params.expect(attendance_record: [:status])
   end
 
   def namespace

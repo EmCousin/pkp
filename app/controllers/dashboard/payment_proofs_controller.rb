@@ -10,14 +10,14 @@ module Dashboard
       if @subscription.update(subscription_params)
         redirect_to next_completion_step_path(@subscription), status: :see_other
       else
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       end
     end
 
     private
 
     def subscription_params
-      params.require(:subscription).permit(:payment_proof)
+      params.expect(subscription: [:payment_proof])
     end
   end
 end

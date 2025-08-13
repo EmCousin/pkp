@@ -4,28 +4,40 @@
     <div class="border-b border-gray-200 mb-6"></div>
 
     <div class="w-full p-4 bg-slate-100 rounded-lg shadow-sm">
-      <%= form_with(url: %i[admin members], local: true, method: :get) do |f| %>
+      <%= form_with(url: %i[admin members], method: :get) do |f| %>
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <div>
             <%= f.text_field :q,
-                class: "mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm",
+                class: "appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm bg-white",
                 placeholder: t('.search_by_name') %>
           </div>
           <div>
-            <%= f.collection_select :category, Category.order(:created_at), :id, :title,
-                { selected: params[:category], include_blank: t('.all_categories') },
-                class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm bg-white' %>
+            <%= f.grouped_collection_select :course_ids,
+                                            Category.all,
+                                            :courses,
+                                            :title,
+                                            :id,
+                                            :title,
+                                            { include_blank: Course.human_attribute_name(:name), multiple: true, selected: params[:course_ids] },
+                                            data: { controller: 'select' },
+                                            id: 'course_ids' %>
           </div>
           <div>
-            <%= f.collection_select :course_id, Course.order(:created_at), :id, :title,
-                { selected: params[:course_id], include_blank: t('.all_courses') },
-                class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm bg-white' %>
+            <%= f.grouped_collection_select :camp_ids,
+                                            Camp.struct_by_year,
+                                            :camps,
+                                            :year,
+                                            :id,
+                                            :title,
+                                            { include_blank: Camp.human_attribute_name(:title), multiple: true, selected: params[:camp_ids] },
+                                            data: { controller: 'select' },
+                                            id: 'camp_ids' %>
           </div>
           <div>
             <%= f.select :subscription_year,
                 subscriptions_year_select_options(params[:subscription_year]),
                 { include_blank: 'Année' },
-                class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm bg-white' %>
+                class: 'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm bg-white' %>
           </div>
         </div>
 
@@ -36,7 +48,7 @@
           <%= link_to t('.csv_export'), admin_members_path(format: :csv, **request.query_parameters),
               class: "bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-md" %>
 
-          <%= link_to t('defaults.new', resource: Member.model_name.human.downcase), %i[new admin member],
+          <%= link_to t('.new_member'), %i[new admin member],
               class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md" %>
         </div>
       <% end %>
@@ -48,7 +60,7 @@
       <% if @members.empty? %>
         <div class="text-center py-12">
           <p class="text-gray-500 mb-4"><%= t('.no_members') %></p>
-          <%= link_to t('defaults.new', resource: Member.model_name.human.downcase), %i[new admin member],
+          <%= link_to t('.new_member'), %i[new admin member],
               class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md" %>
         </div>
       <% else %>

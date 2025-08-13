@@ -33,7 +33,7 @@ jobs:
 
     strategy:
       matrix:
-        ruby-version: ["3.2.0"]
+        ruby-version: ["3.4.5"]
 
     steps:
       - uses: actions/checkout@v2
@@ -48,10 +48,6 @@ jobs:
       - name: Install PostgreSQL client
         run: |
           sudo apt-get -yqq install libpq-dev
-
-      - name: Install Redis Server
-        run: |
-          sudo apt install redis-server
 
       - name: Build App
         env:

@@ -20,17 +20,35 @@
           <%= f.select :status,
               subscriptions_status_select_options(params[:status]),
               { include_blank: Subscription.human_attribute_name(:status) },
-              class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm' %>
+              class: 'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm' %>
 
           <%= f.select :year,
               subscriptions_year_select_options(params[:year]),
               { include_blank: Subscription.human_attribute_name(:year) },
-              class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm' %>
+              class: 'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm' %>
 
           <%= f.select :level,
               subscriptions_level_select_options(params[:level]),
               { include_blank: Member.human_attribute_name(:level) },
-              class: 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm' %>
+              class: 'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm' %>
+
+          <%= f.grouped_collection_select :course_ids,
+                                          Category.all,
+                                          :courses,
+                                          :title,
+                                          :id,
+                                          :title,
+                                          { include_blank: Course.human_attribute_name(:name), multiple: true, selected: params[:course_ids] },
+                                          class: 'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm',
+                                          data: { controller: 'select' },
+                                          id: 'course_ids' %>
+
+          <%= f.collection_select :camp_id,
+                                  Camp.all,
+                                  :id,
+                                  :title,
+                                  { include_blank: Camp.model_name.human, selected: params[:camp_id] },
+                                  class: 'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm' %>
 
           <div class="flex items-end">
             <%= f.submit t('defaults.filter'),

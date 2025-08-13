@@ -1,0 +1,16 @@
+<div class="border border-gray-200 rounded-md p-4">
+  <div class="flex flex-wrap items-center justify-between gap-2">
+    <div>
+      <p class="text-sm text-gray-500"><%= l(pricing.starts_at, format: :short) %> — <%= l(pricing.ends_at, format: :short) %></p>
+      <h3 class="text-base font-medium text-gray-900"><%= pricing.name %></h3>
+    </div>
+    <div class="text-sm text-gray-700">
+      <% pricing.prices.each_with_index do |price, idx| %>
+        <span class="inline-block bg-gray-100 rounded px-2 py-1 mr-2 mb-1">
+          <%= pluralize(idx + 1, Course.model_name.human.downcase) %>:
+          <%= number_to_currency(price, precision: 0, unit: '', locale: :fr) %> €
+        </span>
+      <% end %>
+    </div>
+  </div>
+</div>

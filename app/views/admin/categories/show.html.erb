@@ -1,0 +1,64 @@
+<% year = params[:year]&.to_i || Subscription.current_year %>
+
+<div class="min-h-screen bg-gray-50 py-8">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900"><%= @category.title %></h1>
+        <p class="text-gray-600 mt-1">
+          <span class="font-medium"><%= t('.ages') %>:</span>
+          <%= @category.min_age %> - <%= @category.max_age %>
+        </p>
+      </div>
+      <div class="flex gap-3">
+        <%= link_to t('defaults.edit'), edit_admin_category_path(@category), class: "inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50" %>
+        <%= link_to t('defaults.back'), %i[admin categories], class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-slate-800 hover:bg-slate-900" %>
+      </div>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-lg p-5">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+        <h2 class="text-lg font-semibold text-gray-900"><%= t('.pricings_title') %></h2>
+
+        <%= form_with url: [:admin, @category], method: :get, class: "flex items-center gap-2", data: { controller: 'form' } do |f| %>
+          <%= f.label :year, t('.year'), class: 'text-sm text-gray-700' %>
+          <%= f.collection_select :year,
+                (2024..Subscription.current_year+1),
+                :itself,
+                ->(year) { "#{year - 1} / #{year}" },
+                { selected: year },
+                class: "block w-28 bg-white border border-gray-300 rounded-md px-3 py-2 text-sm",
+                data: { action: 'change->form#submit' } %>
+          <noscript>
+            <%= f.submit t('defaults.change'), class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-slate-800 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800", data: { form_target: :submit } %>
+          </noscript>
+        <% end %>
+      </div>
+
+      <% if @category.pricings.covering_year(year).any? %>
+        <div class="space-y-3">
+          <%= render partial: 'admin/categories/pricing', collection: @category.pricings.covering_year(year) %>
+        </div>
+      <% else %>
+        <p class="text-sm text-gray-600"><%= t('.no_pricing') %></p>
+      <% end %>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-lg p-5 mt-4">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-semibold text-gray-900"><%= t('.courses_title') %></h2>
+        <%= link_to t('.add_course'), new_admin_course_path(category_id: @category.id), class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-slate-800 hover:bg-slate-900" %>
+      </div>
+
+      <div class="space-y-3">
+          <% if @category.courses.any? %>
+            <%= render partial: 'admin/courses/course', collection: @category.courses %>
+        <% else %>
+          <p class="text-sm text-gray-600"><%= t('.no_courses') %></p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+

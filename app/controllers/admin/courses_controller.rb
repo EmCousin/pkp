@@ -25,7 +25,7 @@ module Admin
       if @course.save
         redirect_to %i[admin courses], notice: t('.success'), status: :see_other
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 
@@ -33,7 +33,7 @@ module Admin
       if @course.update(course_params)
         redirect_to %i[admin courses], notice: t('.success'), status: :see_other
       else
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       end
     end
 
@@ -75,7 +75,7 @@ module Admin
     end
 
     def course_params
-      params.require(:course).permit(:title, :description, :capacity, :category_id, :weekday, :active, :features_attendance_sheet)
+      params.expect(course: %i[title description capacity category_id weekday active features_attendance_sheet])
     end
   end
 end

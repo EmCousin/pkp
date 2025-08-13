@@ -18,16 +18,15 @@ module Dashboard
       if @member.save
         redirect_to new_dashboard_subscription_path(member_id: @member.id), notice: t('.success')
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 
     def update
       if @member.update(member_params)
-        @member.current_subscription&.notify_confirmation!
         redirect_to :dashboard, notice: t('.success')
       else
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       end
     end
 
@@ -38,11 +37,11 @@ module Dashboard
     end
 
     def member_params
-      params.require(:member).permit(
-        :first_name, :last_name, :birthdate,
-        :contact_name, :contact_phone_number, :contact_relationship,
-        :agreed_to_advertising_right,
-        :avatar
+      params.expect(
+        member: %i[first_name last_name birthdate
+                   contact_name contact_phone_number contact_relationship
+                   agreed_to_advertising_right
+                   avatar]
       )
     end
   end

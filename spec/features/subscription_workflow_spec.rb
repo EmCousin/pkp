@@ -81,6 +81,8 @@ feature "Subscription Workflow", type: :feature do
     ]
   end
 
+  let!(:camp) { create(:camp, title: 'Stage Nature', starts_at: 1.month.from_now, ends_at: 1.month.from_now + 5.days, active: true) }
+
   before do
     travel_to Time.zone.local(Subscription.current_year, 9, 1, 9, 0, 0)
   end
@@ -157,7 +159,12 @@ feature "Subscription Workflow", type: :feature do
 
     # After creating subscription, user is redirected to terms page
     expect(page).to have_text("Inscription #{Subscription.current_year} / #{Subscription.next_year}")
-    expect(page).to have_text('En complétant cette inscription, je reconnais avoir pris connaissance des conditions d\'inscription et je certifie que les informations de l\'élève sont correctes.')
+    expect(page).to have_text('Décharge de responsabilité et consentement éclairé')
+    expect(page).to have_text('Je certifie être en bonne santé et apte à la pratique du parkour.')
+    expect(page).to have_text('Je reconnais que cette activité comporte des risques physiques (blessures, chutes, etc.) et nécessite un engagement physique.')
+    expect(page).to have_text('Je m\'engage à respecter toutes les consignes données par les encadrants, à utiliser les installations et le matériel conformément aux règles, et à ne pas réaliser de figures dangereuses sans validation préalable.')
+    expect(page).to have_text('Je comprends que l\'organisateur ne pourra être tenu responsable des blessures résultant du non-respect des règles ou d\'un comportement imprudent, sauf en cas de faute prouvée de l\'encadrant ou de défaut de sécurité.')
+    expect(page).to have_text('J\'ai lu et j\'accepte la décharge de responsabilité et le consentement éclairé ci-dessus.')
 
     # Accept terms
     check "subscription_terms_accepted"
@@ -173,14 +180,19 @@ feature "Subscription Workflow", type: :feature do
     # After medical certificate, user is redirected to payment page
     expect(page).to have_text('Payer par carte bancaire')
 
-                                        # Verify we're on the payment page
+    # Verify we're on the payment page
     expect(page).to have_text('Payer par carte bancaire')
-    expect(page).to have_text('Paiement par carte bancaire')
 
     # The payment form should be present
     expect(page).to have_selector('form[data-stripe-target="form"]')
 
-                # Mock Stripe payment for testing
+    # Mock Stripe payment intent and charge for testing
+    stripe_payment_intent = OpenStruct.new(
+      id: 'pi_test_123',
+      client_secret: 'pi_test_123_secret',
+      latest_charge: 'ch_test_123'
+    )
+
     stripe_charge = OpenStruct.new(
       id: 'ch_test_123',
       paid: true,
@@ -188,24 +200,58 @@ feature "Subscription Workflow", type: :feature do
       amount: 36000  # 360.00 EUR in cents
     )
 
-    allow(Stripe::Charge).to receive(:create).with(
+    # Mock the payment intent creation and retrieval
+    allow(Stripe::PaymentIntent).to receive(:create).with(
       amount: 36000,
       currency: 'eur',
-      source: 'tok_test_123',
       description: anything
-    ).and_return(stripe_charge)
+    ).and_return(stripe_payment_intent)
 
-            # Submit the form with the stripe token parameter
-    # This simulates what happens when Stripe creates a token and submits the form
-    form = find('form[data-stripe-target="form"]')
-    page.driver.submit form[:method], form[:action], { stripeToken: 'tok_test_123' }
+    allow(Stripe::PaymentIntent).to receive(:retrieve).and_return(stripe_payment_intent)
+    allow(Stripe::Charge).to receive(:retrieve).with('ch_test_123').and_return(stripe_charge)
 
-    # After successful payment, should redirect to dashboard with success message
-    expect(page).to have_text('Inscription payée avec succès !')
+    # Get the current subscription for payment testing
+    subscription = Subscription.last
+
+    # Visit the payment page to trigger payment intent creation
+    visit new_dashboard_subscription_payment_path(subscription)
+
+    # Simulate successful payment by visiting the success page with payment intent parameters
+    # This simulates what happens when Stripe redirects back after successful payment
+    visit dashboard_subscription_payment_path(
+      subscription,
+      payment_intent: 'pi_test_123',
+      payment_intent_client_secret: 'pi_test_123_secret',
+      redirect_status: 'succeeded'
+    )
+
+    # After successful payment, should be on the payment success page
+    expect(page).to have_text("C'est tout bon !")
+    expect(page).to have_text('Votre règlement de 360,00 € a été traité avec succès.')
+    expect(page).to have_text('Date du paiement')
+    expect(page).to have_text('Carte bancaire')
+
+    # Navigate back to dashboard to verify subscription is confirmed
+    click_link 'Retour au tableau de bord'
     expect(page).to have_text('Bienvenue !')
     expect(page).to have_text("Vos inscriptions pour l'année #{Subscription.current_year} :")
     expect(page).to have_text('Ajouter une inscription')
     expect(page).to have_text(available_courses.first.title)
     expect(page).to have_text(available_courses.last.title)
+
+    expect(page).to have_text('Parcourir les stages')
+    click_link 'Parcourir les stages'
+
+    expect(page).to have_text('Stage Nature')
+    click_link 'Voir les détails'
+
+    expect(page).to have_text('Choisissez un membre pour vous inscrire')
+    click_button "S'inscrire avec #{member.full_name}"
+
+    expect(page).to have_text('Joindre un justificatif de paiement')
+    attach_file('subscription[payment_proof]', avatar.path) # dummy file
+    click_button 'Sauvegarder'
+
+    expect(page).to have_text('Justificatif de paiement ajouté avec succès')
   end
 end

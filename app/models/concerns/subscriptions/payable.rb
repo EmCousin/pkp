@@ -15,6 +15,35 @@ module Subscriptions
       has_one_attached :payment_proof
 
       enum :payment_method, PAYMENT_METHODS, prefix: :paid_via
+
+      before_save :delete_stripe_payment_intent, if: :fee_changed?
+
+      attr_accessor :payment_intent_client_secret
+    end
+
+    def stripe_payment_intent
+      @stripe_payment_intent ||= if stripe_payment_intent_id?
+                                   Stripe::PaymentIntent.retrieve(stripe_payment_intent_id)
+                                 else
+                                   intent = Stripe::PaymentIntent.create(amount: fee_cents, currency: 'eur', description:)
+                                   update!(stripe_payment_intent_id: intent.id)
+                                   intent
+                                 end
+    end
+
+    def verify_stripe_payment!(payment_intent_id:, payment_intent_client_secret:, redirect_status:)
+      return unless payment_intent_id == stripe_payment_intent.id
+      return unless payment_intent_client_secret == stripe_payment_intent.client_secret
+      return unless redirect_status == 'succeeded'
+
+      stripe_charge = Stripe::Charge.retrieve(stripe_payment_intent.latest_charge)
+      update!(
+        paid_at: Time.zone.at(stripe_charge.created),
+        payment_method: :credit_card,
+        stripe_charge_id: stripe_charge.id
+      )
+
+      confirm! if completed?
     end
 
     def pay_with_stripe!(stripe_token)
@@ -53,10 +82,14 @@ module Subscriptions
       fee - paid_amount
     end
 
+    def payable_by_credit_card?
+      subscription_camp.present?
+    end
+
     private
 
     def create_stripe_charge(stripe_token)
-      Stripe::Charge.create(
+      Stripe::PaymentIntent.create(
         amount: fee_cents,
         currency: 'eur',
         source: stripe_token,
@@ -66,6 +99,13 @@ module Subscriptions
 
     def stripe_charge
       @stripe_charge ||= stripe_charge_id && Stripe::Charge.retrieve(stripe_charge_id)
+    end
+
+    def delete_stripe_payment_intent
+      return unless stripe_payment_intent_id?
+
+      Stripe::PaymentIntent.delete(stripe_payment_intent_id)
+      update!(stripe_payment_intent_id: nil)
     end
   end
 end

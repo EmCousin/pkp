@@ -1,0 +1,124 @@
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="mb-6">
+    <div class="flex items-center justify-between">
+      <h1 class="text-2xl font-bold text-gray-900"><%= @camp.title %></h1>
+      <%= link_to t('.back_to_camps'), dashboard_camps_path, class: "text-blue-600 hover:text-blue-900" %>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    <% if @camp.cover_picture.attached? %>
+      <%= image_tag @camp.cover_picture, class: "w-full h-64 object-cover" %>
+    <% end %>
+
+    <div class="p-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div>
+          <h3 class="text-lg font-medium text-gray-900 mb-4"><%= t('.details') %></h3>
+          <dl class="space-y-3">
+            <div>
+              <dt class="text-sm font-medium text-gray-500"><%= t('.starts_at') %></dt>
+              <dd class="mt-1 text-sm text-gray-900"><%= l(@camp.starts_at, format: :long) %></dd>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-500"><%= t('.ends_at') %></dt>
+              <dd class="mt-1 text-sm text-gray-900"><%= l(@camp.ends_at, format: :long) %></dd>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-500"><%= t('.duration') %></dt>
+              <dd class="mt-1 text-sm text-gray-900"><%= t('.duration_days', count: @camp.duration_days) %></dd>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-500"><%= t('.price') %></dt>
+              <dd class="mt-1 text-lg font-semibold text-gray-900"><%= number_to_currency(@camp.price, unit: "€") %></dd>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-500"><%= t('.capacity') %></dt>
+              <dd class="mt-1 text-sm text-gray-900">
+                <%= t('.capacity_info', current: @camp.subscriptions.confirmed.size, count: @camp.capacity) %>
+                <% if @camp.fully_booked? %>
+                  <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                    <%= t('.fully_booked') %>
+                  </span>
+                <% end %>
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-medium text-gray-900 mb-4"><%= t('.subscription') %></h3>
+
+          <% if @camp.closed? %>
+            <div class="bg-red-50 border border-red-200 rounded-md p-4">
+              <div class="flex">
+                <div class="flex-shrink-0">
+                  <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+                <div class="ml-3">
+                  <h3 class="text-sm font-medium text-red-800">
+                    <%= t('.closed') %>
+                  </h3>
+                  <div class="mt-2 text-sm text-red-700">
+                    <p><%= t('.closed_description') %></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% elsif current_user.current_year_subscriptions.any? %>
+            <div class="bg-blue-50 border border-blue-200 rounded-md p-4">
+              <div class="flex">
+                <div class="flex-shrink-0">
+                  <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+                <div class="ml-3">
+                  <h3 class="text-sm font-medium text-blue-800">
+                    <%= t('.available_for_subscription') %>
+                  </h3>
+                  <div class="mt-2 text-sm text-blue-700">
+                    <p><%= t('.choose_member') %></p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-4 space-y-3">
+                <%= render partial: 'dashboard/camps/subscription', collection: current_user.current_year_subscriptions.includes(member: :camps) %>
+              </div>
+            </div>
+          <% else %>
+            <div class="bg-yellow-50 border border-yellow-200 rounded-md p-4">
+              <div class="flex">
+                <div class="flex-shrink-0">
+                  <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58 - 9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+                <div class="ml-3">
+                  <h3 class="text-sm font-medium text-yellow-800">
+                    <%= t('.no_confirmed_subscriptions') %>
+                  </h3>
+                  <div class="mt-2 text-sm text-yellow-700">
+                    <p><%= t('.need_confirmed_subscription') %></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <% if @camp.description? %>
+        <div class="border-t border-gray-200 pt-6">
+          <h3 class="text-lg font-medium text-gray-900 mb-4"><%= t('.description') %></h3>
+          <div class="prose prose-sm max-w-none text-gray-700">
+            <%= @camp.description %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

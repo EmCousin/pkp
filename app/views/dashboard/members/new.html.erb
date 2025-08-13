@@ -1,1 +1,24 @@
-<%= render 'form' %>
+<div class="min-h-screen relative">
+  <!-- Semi-transparent overlay to improve readability -->
+  <div class="absolute inset-0 bg-white/80"></div>
+
+  <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 min-w-0">
+    <!-- Header Section -->
+    <div class="text-center mb-12">
+      <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full mb-6 shadow-lg">
+        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+        </svg>
+      </div>
+      <h1 class="text-4xl font-bold text-gray-900 mb-4"><%= t('.title') %></h1>
+      <p class="text-xl text-gray-600 max-w-2xl mx-auto"><%= t('.description') %></p>
+    </div>
+
+    <!-- Form Card -->
+    <div class="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/50 overflow-hidden">
+      <div class="p-8 w-full min-w-0">
+        <%= render 'form', member: @member %>
+      </div>
+    </div>
+  </div>
+</div>

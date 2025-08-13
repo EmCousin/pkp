@@ -18,4 +18,8 @@ describe Course, type: :model do
   it { is_expected.to have_many(:members).through(:subscriptions) }
 
   it { is_expected.to define_enum_for(:weekday).with_values({ lundi: 1, mardi: 2, mercredi: 3, jeudi: 4, vendredi: 5, samedi: 6, dimanche: 7 }) }
+
+  it { is_expected.to validate_presence_of(:title) }
+  it { is_expected.to validate_presence_of(:capacity) }
+  it { is_expected.to validate_numericality_of(:capacity).is_greater_than_or_equal_to(1).only_integer }
 end

@@ -7,6 +7,11 @@
       </svg>
     </summary>
     <div class="absolute right-0 z-10 mt-2 w-56 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 divide-y divide-gray-100">
+      <%= link_to t('defaults.view'),
+          [:admin, subscription],
+          class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50",
+          data: { turbo_frame: '_top' } %>
+
       <%= link_to t('defaults.edit'),
           [:edit, :admin, subscription],
           class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50",
@@ -37,20 +42,23 @@
             ) %>
       <% end %>
 
-      <% Subscription.payment_methods.each_key do |payment_method| %>
-        <%= next if subscription.payment_method == payment_method %>
+      <% unless subscription.paid? %>
+        <% Subscription.payment_methods.each_key do |payment_method| %>
+          <%= next if subscription.payment_method == payment_method %>
+          <% next if payment_method == 'credit_card' && subscription.payable_by_credit_card? %>
 
-        <%= button_to t("defaults.paid_with_#{payment_method}"),
-            {
-              controller: 'admin/payments',
-              action: 'create',
-              subscription_id: subscription.id,
-              subscription: { payment_method: }
-            },
-            class: class_names(
-              "w-full text-left px-4 py-2 text-sm hover:bg-gray-50",
-              Subscription::PAYMENT_METHOD_COLORS[payment_method.to_sym]
-            ) %>
+          <%= button_to t("defaults.paid_with_#{payment_method}"),
+              {
+                controller: 'admin/payments',
+                action: 'create',
+                subscription_id: subscription.id,
+                subscription: { payment_method: }
+              },
+              class: class_names(
+                "w-full text-left px-4 py-2 text-sm hover:bg-gray-50",
+                Subscription::PAYMENT_METHOD_COLORS[payment_method.to_sym]
+              ) %>
+        <% end %>
       <% end %>
 
       <%= button_to t('defaults.mark_as_not_paid'),
@@ -61,7 +69,7 @@
       <%= button_to t('defaults.destroy'),
           [:admin, subscription],
           method: :delete,
-          data: { turbo_confirm: t('defaults.are_you_sure') },
+          data: { turbo_frame: '_top', turbo_confirm: t('defaults.are_you_sure') },
           class: "w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50" %>
     </div>
   </details>

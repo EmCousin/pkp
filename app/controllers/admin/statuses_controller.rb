@@ -5,8 +5,12 @@ module Admin
     before_action :set_subscription!
 
     def update
-      @subscription.update!(status: status_param)
-      redirect_back_or_to [:admin, @subscription], notice: t('.success'), status: :see_other
+      if @subscription.update(status: status_param)
+        @subscription.notify_confirmation! if @subscription.confirmed?
+        redirect_back_or_to [:admin, @subscription], notice: t('.success'), status: :see_other
+      else
+        redirect_back_or_to [:admin, @subscription], alert: @subscription.errors.full_messages.to_sentence, status: :see_other
+      end
     end
 
     private
@@ -20,7 +24,7 @@ module Admin
     end
 
     def subscription_params
-      params.require(:subscription).permit(:status)
+      params.expect(subscription: [:status])
     end
   end
 end

@@ -72,10 +72,16 @@
 
     <div class="flex flex-col gap-8 mt-6">
       <!-- Generate Invoice Section -->
-      <div class="bg-green-50 rounded-lg p-6 flex flex-col items-center shadow-sm">
+      <div class="bg-green-50 rounded-lg p-6 shadow-sm">
         <h3 class="text-lg font-bold text-green-800 mb-2">Générer automatiquement la facture</h3>
-        <p class="text-gray-600 mb-4 text-center">Cliquez ci-dessous pour générer une facture à partir des informations de l'inscription.</p>
-        <%= button_to t('.generate_invoice'), admin_subscription_invoice_path(@subscription.id), method: :post, class: "w-full md:w-auto btn btn-success text-white font-semibold py-2 px-4 rounded shadow hover:bg-green-700 transition", data: { turbo_submits_with: t('.generating') } %>
+        <p class="text-gray-600 mb-4">Cliquez ci-dessous pour générer une facture à partir des informations de l'inscription.</p>
+        <div class="flex justify-center">
+          <%= button_to t('.generate_invoice') || 'Générer la facture',
+                admin_subscription_invoice_path(@subscription.id),
+                method: :post,
+                class: "inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200 shadow-sm",
+                data: { turbo_submits_with: t('.generating') || 'Génération...' } %>
+        </div>
       </div>
 
       <div class="flex items-center justify-center">
@@ -88,12 +94,20 @@
       <div class="bg-blue-50 rounded-lg p-6 shadow-sm">
         <h3 class="text-lg font-bold text-blue-800 mb-2">Téléverser une facture manuelle</h3>
         <p class="text-gray-600 mb-4">Si vous avez déjà une facture, vous pouvez la téléverser ici.</p>
-        <%= form_with(model: @subscription, local: true, url: admin_subscription_invoice_path(@subscription.id), html: { class: 'flex flex-col md:flex-row w-full gap-2 items-center' }) do |form| %>
-          <div class="flex flex-col md:flex-row w-full gap-2 items-center">
-            <label class="font-medium md:sr-only"><%= t('defaults.upload_invoice') || 'Upload Invoice' %></label>
-            <%= form.file_field :invoice, required: true, class: "form-control-file w-full md:w-auto" %>
-            <%= form.submit t('defaults.upload'), class: "w-full md:w-auto btn btn-dark bg-gray-800 text-white font-semibold py-2 px-4 rounded shadow hover:bg-gray-900 transition" %>
-            <%= link_to t('defaults.back'), admin_subscription_path(@subscription.id), class: "w-full md:w-auto btn btn-link text-blue-600 font-semibold py-2 px-4 rounded hover:underline text-center" %>
+        <%= form_with(model: @subscription, local: true, url: admin_subscription_invoice_path(@subscription.id), html: { class: 'space-y-4' }) do |form| %>
+          <div class="flex flex-col gap-4">
+            <%= form.file_field :invoice,
+                  required: true,
+                  class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-l-md file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 file:cursor-pointer cursor-pointer border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
+                  accept: ".pdf,.jpg,.jpeg,.png" %>
+
+            <div class="flex flex-col sm:flex-row gap-3 sm:justify-start">
+              <%= form.submit t('defaults.upload'),
+                    class: "inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 shadow-sm" %>
+              <%= link_to t('defaults.back'),
+                    admin_subscription_path(@subscription.id),
+                    class: "inline-flex justify-center items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 shadow-sm" %>
+            </div>
           </div>
         <% end %>
       </div>

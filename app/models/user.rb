@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  INVALID_EMAIL_PROVIDERS = %w[@wanadoo.fr @orange.fr].freeze
+
   devise :database_authenticatable,
          :registerable,
          :recoverable,
@@ -9,7 +11,6 @@ class User < ApplicationRecord
          :lockable,
          :timeoutable
 
-  include Users::Validatable
   include Users::AdminNotifiable
   include Users::Chargeable
 
@@ -18,7 +19,21 @@ class User < ApplicationRecord
 
   has_many :members, dependent: :destroy
   has_many :subscriptions, through: :members
+  has_many :current_year_subscriptions, lambda {
+    confirmed.where(year: Subscription.current_year, parent_subscription: nil)
+  }, through: :members, source: :subscriptions
   has_many :courses, through: :subscriptions
+
+  attr_accessor :email_confirmation
+
+  validates :email, confirmation: true, if: :email_confirmation_required?
+  validate :valid_email_provider, if: :email?, on: :create
+  validates :terms_of_service, acceptance: true
+
+  with_options on: :account_setup do
+    validates :phone_number, :address, :zip_code, :city, :country, presence: true
+    validates :phone_number, phone: true
+  end
 
   def full_address
     [
@@ -26,5 +41,19 @@ class User < ApplicationRecord
       "#{zip_code} #{city}",
       country
     ].join("\n")
+  end
+
+  def invalid_email_provider?
+    INVALID_EMAIL_PROVIDERS.any? { |provider| email.ends_with?(provider) }
+  end
+
+  private
+
+  def email_confirmation_required?
+    new_record? && email.present? && email_confirmation.present?
+  end
+
+  def valid_email_provider
+    errors.add(:email, :invalid_provider) if invalid_email_provider?
   end
 end
