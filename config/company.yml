@@ -1,0 +1,9 @@
+shared:
+  name: PKP CORP (PARKOUR PARIS)
+  address: 28 rue du colonel Rozanoff 75012 PARIS
+  siret: 98980945400014
+  vat_number: FR75083860900014
+  email: contact@parkourparis.fr
+  website: https://parkourparis.fr
+  logo: Logo_PKP.webp
+  logo_path: app/assets/images/Logo_PKP.webp
