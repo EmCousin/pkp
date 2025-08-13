@@ -28,6 +28,8 @@ module Pkp
       end
     end
 
+    config.company = config_for(:company)
+
     config.action_dispatch.default_headers.merge!("Permissions-Policy" => "interest-cohort=()")
   end
 end

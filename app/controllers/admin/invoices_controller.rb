@@ -42,12 +42,14 @@ module Admin
       end
     end
 
-    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def add_header_section(pdf)
       # Company info (left side)
-      pdf.text 'Parkour Paris', size: 16, style: :bold
-      pdf.text 'ID société : 750 838 609 00014'
-      pdf.text 'parkour.paris@gmail.com'
+      pdf.text Rails.configuration.company[:name], size: 16, style: :bold
+      pdf.text "SIRET : #{Rails.configuration.company[:siret]}"
+      pdf.text Rails.configuration.company[:address]
+      pdf.text Rails.configuration.company[:email]
+      pdf.text "N° TVA intracommunautaire : #{Rails.configuration.company[:vat_number]}"
       pdf.move_down 20
 
       # Client info
@@ -58,7 +60,7 @@ module Admin
       pdf.text @subscription.member.email
       pdf.text @subscription.member.phone_number
     end
-    # rubocop:enable Metrics/AbcSize
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
     def add_invoice_details(pdf)
       pdf.move_down 20
