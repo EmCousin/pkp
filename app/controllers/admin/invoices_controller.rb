@@ -42,7 +42,7 @@ module Admin
       end
     end
 
-    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def add_header_section(pdf)
       # Company info (left side)
       pdf.text Rails.configuration.company[:name], size: 16, style: :bold
@@ -60,7 +60,7 @@ module Admin
       pdf.text @subscription.member.email
       pdf.text @subscription.member.phone_number
     end
-    # rubocop:enable Metrics/AbcSize
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
     def add_invoice_details(pdf)
       pdf.move_down 20
