@@ -28,8 +28,6 @@ module Pkp
       end
     end
 
-    config.action_dispatch.default_headers = {
-      "Permissions-Policy" => "interest-cohort=()"
-    }
+    config.action_dispatch.default_headers.merge!("Permissions-Policy" => "interest-cohort=()")
   end
 end
