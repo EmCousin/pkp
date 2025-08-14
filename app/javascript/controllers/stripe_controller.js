@@ -40,10 +40,8 @@ export default class StripeController extends Controller {
       },
     })
 
-    if (error.type === "card_error" || error.type === "validation_error") {
+    if (error) {
       this.displayError(error.message);
-    } else {
-      this.displayError("An unexpected error occurred.");
     }
   }
 
