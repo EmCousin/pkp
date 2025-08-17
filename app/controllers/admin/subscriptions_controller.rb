@@ -34,7 +34,7 @@ module Admin
 
     def update
       if @subscription.update(subscription_params)
-        redirect_back_or_to [:admin, @subscription], notice: t('.success'), status: :see_other
+        redirect_to admin_subscription_path(@subscription, updated: true), notice: t('.success'), status: :see_other
       else
         render :edit, status: :unprocessable_content
       end

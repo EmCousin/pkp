@@ -16,7 +16,7 @@ module Subscriptions
 
       enum :payment_method, PAYMENT_METHODS, prefix: :paid_via
 
-      before_save :delete_stripe_payment_intent, if: :fee_changed?
+      before_save :update_stripe_payment_intent, if: %i[fee_changed? stripe_payment_intent_id?], unless: :paid?
 
       attr_accessor :payment_intent_client_secret
     end
@@ -36,24 +36,14 @@ module Subscriptions
       return unless payment_intent_client_secret == stripe_payment_intent.client_secret
       return unless redirect_status == 'succeeded'
 
-      stripe_charge = Stripe::Charge.retrieve(stripe_payment_intent.latest_charge)
+      stripe_payment_intent_charge = Stripe::Charge.retrieve(stripe_payment_intent.latest_charge)
       update!(
-        paid_at: Time.zone.at(stripe_charge.created),
+        paid_at: Time.zone.at(stripe_payment_intent_charge.created),
         payment_method: :credit_card,
-        stripe_charge_id: stripe_charge.id
+        stripe_charge_id: stripe_payment_intent_charge.id
       )
 
       confirm! if completed?
-    end
-
-    def pay_with_stripe!(stripe_token)
-      charge = create_stripe_charge(stripe_token)
-      self.stripe_charge_id = charge.id
-      self.paid_at = Time.zone.at(charge.created) if charge.paid && charge.amount == fee_cents
-      self.payment_method = :credit_card
-      save!
-    rescue Stripe::InvalidRequestError
-      false
     end
 
     def mark_as_paid!(payment_method:, at: Time.current)
@@ -88,24 +78,12 @@ module Subscriptions
 
     private
 
-    def create_stripe_charge(stripe_token)
-      Stripe::PaymentIntent.create(
-        amount: fee_cents,
-        currency: 'eur',
-        source: stripe_token,
-        description:
-      )
-    end
-
     def stripe_charge
       @stripe_charge ||= stripe_charge_id && Stripe::Charge.retrieve(stripe_charge_id)
     end
 
-    def delete_stripe_payment_intent
-      return unless stripe_payment_intent_id?
-
-      Stripe::PaymentIntent.delete(stripe_payment_intent_id)
-      update!(stripe_payment_intent_id: nil)
+    def update_stripe_payment_intent
+      Stripe::PaymentIntent.update(stripe_payment_intent_id, amount: fee_cents)
     end
   end
 end

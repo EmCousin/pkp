@@ -38,84 +38,68 @@
         </div>
       </div>
 
-      <% if (f.object.errors[:member_id].any? || f.object.errors[:member].any?) && (f.object.courses.any? || f.object.camps_subscription.present?) %>
-        <div class="rounded-lg bg-red-50 border border-red-200 p-4">
-          <div class="flex items-center space-x-2">
-            <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            <h4 class="text-sm font-medium text-red-800"><%= t('.member_required') %></h4>
-          </div>
-          <ul class="mt-2 list-disc pl-5 text-sm text-red-700">
-            <% f.object.errors.full_messages_for(:member_id).each do |message| %>
-              <li><%= message %></li>
-            <% end %>
-            <% f.object.errors.full_messages_for(:member).each do |message| %>
-              <li><%= message %></li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
+      <%= f.error_for :member_id %>
+      <%= f.error_for :member %>
     </div>
 
-          <% if @subscription.member&.valid? %>
-        <!-- Member's Current Year Subscriptions Info -->
-        <% current_year_subscriptions = @subscription.member.subscriptions.where(year: Subscription.current_year) %>
-        <% if current_year_subscriptions.any? %>
-          <div class="rounded-lg bg-blue-50 border border-blue-200 p-4 mb-6">
-            <div class="flex items-center space-x-2 mb-2">
-              <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+    <% if @subscription.member&.valid? %>
+      <!-- Member's Current Year Subscriptions Info -->
+      <% current_year_subscriptions = @subscription.member.subscriptions.where(year: Subscription.current_year) %>
+      <% if current_year_subscriptions.any? %>
+        <div class="rounded-lg bg-blue-50 border border-blue-200 p-4 mb-6">
+          <div class="flex items-center space-x-2 mb-2">
+            <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <h4 class="text-sm font-medium text-blue-800"><%= t('.current_year_subscriptions') %></h4>
+          </div>
+          <div class="text-sm text-blue-700">
+            <% current_year_subscriptions.each do |subscription| %>
+              <div class="mb-1">
+                • <%= subscription.description %>
+                <% if subscription.courses.any? %>
+                  <span class="text-blue-600">(<%= subscription.courses.count %> <%= t('.courses_count', count: subscription.courses.count) %>)</span>
+                <% elsif subscription.camp.present? %>
+                  <span class="text-blue-600">(<%= t('.camp') %>)</span>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Parent Subscription Selection Section -->
+      <% confirmed_subscriptions = @subscription.member&.subscriptions&.where(year: Subscription.current_year)&.confirmed&.where.not(id: @subscription.id) %>
+      <% if confirmed_subscriptions&.any? %>
+        <%= tag.div class: class_names("space-y-4", "animate-fade-in-up" => @subscription.parent_subscription.blank?) do %>
+          <div class="flex items-center space-x-3 mb-4">
+            <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center shadow-md">
+              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
               </svg>
-              <h4 class="text-sm font-medium text-blue-800"><%= t('.current_year_subscriptions') %></h4>
             </div>
-            <div class="text-sm text-blue-700">
-              <% current_year_subscriptions.each do |subscription| %>
-                <div class="mb-1">
-                  • <%= subscription.description %>
-                  <% if subscription.courses.any? %>
-                    <span class="text-blue-600">(<%= subscription.courses.count %> <%= t('.courses_count', count: subscription.courses.count) %>)</span>
-                  <% elsif subscription.camp.present? %>
-                    <span class="text-blue-600">(<%= t('.camp') %>)</span>
-                  <% end %>
-                </div>
-              <% end %>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900"><%= t('.parent_subscription') %></h3>
+              <p class="text-sm text-gray-500"><%= t('.parent_subscription_description') %></p>
+            </div>
+          </div>
+
+          <div class="relative">
+            <%= f.collection_select :parent_subscription_id,
+                confirmed_subscriptions,
+                :id,
+                :description,
+                { include_blank: t('.no_parent_subscription') },
+                class: "w-full bg-gray-50 border-2 border-gray-200 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-purple-600 transition-all duration-200 hover:border-gray-300 focus:-translate-y-1 focus:shadow-lg appearance-none cursor-pointer",
+                data: { action: "change->form#submit" } %>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3">
+              <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
             </div>
           </div>
         <% end %>
-
-        <!-- Parent Subscription Selection Section -->
-        <% confirmed_subscriptions = @subscription.member&.subscriptions&.where(year: Subscription.current_year)&.confirmed&.where.not(id: @subscription.id) %>
-        <% if confirmed_subscriptions&.any? %>
-          <%= tag.div class: class_names("space-y-4", "animate-fade-in-up" => @subscription.parent_subscription.blank?) do %>
-            <div class="flex items-center space-x-3 mb-4">
-              <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center shadow-md">
-                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                </svg>
-              </div>
-              <div>
-                <h3 class="text-lg font-semibold text-gray-900"><%= t('.parent_subscription') %></h3>
-                <p class="text-sm text-gray-500"><%= t('.parent_subscription_description') %></p>
-              </div>
-            </div>
-
-            <div class="relative">
-              <%= f.collection_select :parent_subscription_id,
-                  confirmed_subscriptions,
-                  :id,
-                  :description,
-                  { include_blank: t('.no_parent_subscription') },
-                  class: "w-full bg-gray-50 border-2 border-gray-200 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-purple-600 transition-all duration-200 hover:border-gray-300 focus:-translate-y-1 focus:shadow-lg appearance-none cursor-pointer",
-                  data: { action: "change->form#submit" } %>
-              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3">
-                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
-            </div>
-          <% end %>
-        <% end %>
+      <% end %>
 
       <!-- Tab Menu for Courses vs Camps -->
       <div class="space-y-4">
@@ -158,30 +142,16 @@
             <!-- Courses Tab -->
             <div class="space-y-4 hidden peer-checked/courses:block">
               <div class="bg-gray-50 rounded-lg p-4 sm:p-6 space-y-3 border border-gray-100">
-                <% if f.object.errors[:course_ids].any? || f.object.errors[:courses].any? %>
-                  <div class="rounded-lg bg-red-50 border border-red-200 p-4 mb-4">
-                    <div class="flex items-center space-x-2">
-                      <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                      </svg>
-                      <h4 class="text-sm font-medium text-red-800"><%= t('.courses_required') %></h4>
-                    </div>
-                    <ul class="mt-2 list-disc pl-5 text-sm text-red-700">
-                      <% f.object.errors.full_messages_for(:course_ids).each do |message| %>
-                        <li><%= message %></li>
-                      <% end %>
-                      <% f.object.errors.full_messages_for(:courses).each do |message| %>
-                        <li><%= message %></li>
-                      <% end %>
-                    </ul>
-                  </div>
-                <% end %>
+                <%= f.error_for :course_ids %>
+                <%= f.error_for :courses %>
+                <%= f.error_for :courses_count %>
 
                 <%
                   # Filter courses based on member's existing subscriptions
                   available_courses = if @subscription.member
                     existing_course_ids = @subscription.member.subscriptions
                       .where(year: Subscription.current_year)
+                      .where.not(id: @subscription.id)
                       .joins(:courses)
                       .pluck(:course_id)
                     Course.active.where.not(id: existing_course_ids).order(:created_at)
@@ -190,7 +160,7 @@
                   end
                 %>
                 <% if available_courses.any? %>
-                  <%= f.collection_check_boxes :course_ids, available_courses, :id, :title do |b| %>
+                  <%= f.collection_check_boxes :course_ids, Course.active.order(:created_at), :id, :title do |b| %>
                     <div class="flex items-start space-x-3 group hover:bg-gray-100 rounded-lg p-2 transition-colors duration-200">
                       <div class="flex-shrink-0 mt-0.5">
                         <%= b.check_box(class: "h-5 w-5 text-slate-600 border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-slate-600 focus:ring-offset-2 transition-all duration-200 appearance-none relative cursor-pointer checked:bg-gradient-to-r checked:from-slate-600 checked:to-slate-700 checked:border-transparent") %>
@@ -225,66 +195,51 @@
             <!-- Camp Tab -->
             <div class="space-y-4 hidden peer-checked/camp:block">
               <div class="bg-gray-50 rounded-lg p-4 sm:p-6 space-y-3 border border-gray-100">
-              <% if f.object.errors[:camps_subscription].any? %>
-                <div class="rounded-lg bg-red-50 border border-red-200 p-4 mb-4">
-                  <div class="flex items-center space-x-2">
-                    <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <h4 class="text-sm font-medium text-red-800"><%= t('.camp_required') %></h4>
-                  </div>
-                  <ul class="mt-2 list-disc pl-5 text-sm text-red-700">
-                    <% f.object.errors.full_messages_for(:camps_subscription).each do |message| %>
-                      <li><%= message %></li>
-                    <% end %>
-                  </ul>
-                </div>
-              <% end %>
-
-              <%= f.fields_for :camps_subscription, @subscription.build_camps_subscription do |cs| %>
-                <%
-                  # Filter camps based on member's existing subscriptions
-                  available_camps = if @subscription.member
-                    existing_camp_ids = @subscription.member.subscriptions
-                      .where(year: Subscription.current_year)
-                      .joins(:camp)
-                      .pluck(:camp_id)
-                    Camp.available.where.not(id: existing_camp_ids)
-                  else
-                    Camp.available
-                  end
-                %>
-                <% if available_camps.any? %>
-                  <div class="relative">
-                    <%= cs.collection_select :camp_id,
-                        available_camps,
-                        :id,
-                        :title,
-                        { include_blank: t('.select_a_camp') },
-                        class: "w-full bg-gray-50 border-2 border-gray-200 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all duration-200 hover:border-gray-300 focus:-translate-y-1 focus:shadow-lg appearance-none cursor-pointer" %>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3">
-                      <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </div>
-                  </div>
-                <% else %>
-                  <div class="rounded-lg bg-yellow-50 border border-yellow-200 p-4 sm:p-6">
-                    <div class="flex items-center space-x-3">
-                      <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-                      </svg>
-                      <div>
-                        <h4 class="text-sm font-medium text-yellow-800"><%= t('.no_camps_available') %></h4>
-                        <p class="text-sm text-yellow-700 mt-1"><%= t('.no_camps_available_description') %></p>
+                <%= f.error_for :camps_subscription %>
+                <%= f.fields_for :camps_subscription, @subscription.build_camps_subscription do |cs| %>
+                  <%
+                    # Filter camps based on member's existing subscriptions
+                    available_camps = if @subscription.member
+                      existing_camp_ids = @subscription.member.subscriptions
+                        .where(year: Subscription.current_year)
+                        .joins(:camp)
+                        .pluck(:camp_id)
+                      Camp.available.where.not(id: existing_camp_ids)
+                    else
+                      Camp.available
+                    end
+                  %>
+                  <% if available_camps.any? %>
+                    <div class="relative">
+                      <%= cs.collection_select :camp_id,
+                          available_camps,
+                          :id,
+                          :title,
+                          { include_blank: t('.select_a_camp') },
+                          class: "w-full bg-gray-50 border-2 border-gray-200 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all duration-200 hover:border-gray-300 focus:-translate-y-1 focus:shadow-lg appearance-none cursor-pointer" %>
+                      <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
                       </div>
                     </div>
-                  </div>
+                  <% else %>
+                    <div class="rounded-lg bg-yellow-50 border border-yellow-200 p-4 sm:p-6">
+                      <div class="flex items-center space-x-3">
+                        <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                        </svg>
+                        <div>
+                          <h4 class="text-sm font-medium text-yellow-800"><%= t('.no_camps_available') %></h4>
+                          <p class="text-sm text-yellow-700 mt-1"><%= t('.no_camps_available_description') %></p>
+                        </div>
+                      </div>
+                    </div>
+                  <% end %>
                 <% end %>
-              <% end %>
+              </div>
             </div>
-          </div>
-        <% end %>
+          <% end %>
         </div>
       </div>
     <% end %>
