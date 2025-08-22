@@ -3,8 +3,7 @@
 module Stripe
   class CreateCustomerJob < ApplicationJob
     def perform(user)
-      stripe_customer = Customer.create
-      user.update!(stripe_customer_id: stripe_customer.id)
+      user.create_stripe_customer_id
     end
   end
 end

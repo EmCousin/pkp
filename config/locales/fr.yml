@@ -592,6 +592,7 @@ fr:
         not_paid: Non payé
         uploaded_payment_proof: Justificatif
         payment_method: A payé avec %{payment_method}
+        stripe_payment_intent_url: "Voir le paiement sur Stripe"
   dashboard:
     camps:
       camp:

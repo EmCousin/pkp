@@ -25,10 +25,15 @@ module Subscriptions
       @stripe_payment_intent ||= if stripe_payment_intent_id?
                                    Stripe::PaymentIntent.retrieve(stripe_payment_intent_id)
                                  else
-                                   intent = Stripe::PaymentIntent.create(amount: fee_cents, currency: 'eur', description:)
+                                   intent = Stripe::PaymentIntent.create(amount: fee_cents, currency: 'eur', description:,
+                                                                         customer: member.user.stripe_customer_id)
                                    update!(stripe_payment_intent_id: intent.id)
                                    intent
                                  end
+    end
+
+    def stripe_payment_intent_url
+      "https://dashboard.stripe.com/payments/#{stripe_payment_intent_id}"
     end
 
     def verify_stripe_payment!(payment_intent_id:, payment_intent_client_secret:, redirect_status:)
