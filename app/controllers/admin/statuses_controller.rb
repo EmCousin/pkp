@@ -5,7 +5,7 @@ module Admin
     before_action :set_subscription!
 
     def update
-      if @subscription.update_columns(status: status_param) # rubocop:disable Rails/SkipsModelValidations
+      if @subscription.update(status: status_param)
         @subscription.notify_confirmation! if @subscription.confirmed?
         redirect_back_or_to [:admin, @subscription], notice: t('.success'), status: :see_other
       else

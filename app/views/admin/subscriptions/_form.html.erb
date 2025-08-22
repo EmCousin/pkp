@@ -196,7 +196,7 @@
             <div class="space-y-4 hidden peer-checked/camp:block">
               <div class="bg-gray-50 rounded-lg p-4 sm:p-6 space-y-3 border border-gray-100">
                 <%= f.error_for :camps_subscription %>
-                <%= f.fields_for :camps_subscription, @subscription.build_camps_subscription do |cs| %>
+                <%= f.fields_for :camps_subscription, @subscription.camps_subscription || @subscription.build_camps_subscription do |cs| %>
                   <%
                     # Filter camps based on member's existing subscriptions
                     available_camps = if @subscription.member
