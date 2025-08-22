@@ -57,6 +57,14 @@ class Subscription < ApplicationRecord
     parent_subscription&.root_subscription || self
   end
 
+  def courses?
+    CoursesSubscription.where(subscription: self).any?
+  end
+
+  def camp?
+    CampsSubscription.where(subscription: self).any?
+  end
+
   def build_child_subscription(child_attributes)
     child_subscriptions.new(
       member:,

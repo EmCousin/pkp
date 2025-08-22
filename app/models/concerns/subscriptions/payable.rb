@@ -47,11 +47,11 @@ module Subscriptions
     end
 
     def mark_as_paid!(payment_method:, at: Time.current)
-      update!(paid_at: at, payment_method:)
+      update_columns(paid_at: at, payment_method:) # rubocop:disable Rails/SkipsModelValidations
     end
 
     def mark_as_not_paid!
-      update!(paid_at: nil, payment_method: nil)
+      update_columns(paid_at: nil, payment_method: nil) # rubocop:disable Rails/SkipsModelValidations
     end
 
     def paid?

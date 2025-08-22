@@ -10,7 +10,7 @@ module Subscriptions
     end
 
     def notify_confirmation!
-      if subscription_camp.present?
+      if camp?
         SubscriptionMailer.confirm_camp_subscription(self).deliver_later
       else
         SubscriptionMailer.confirm_subscription(self).deliver_later
