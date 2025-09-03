@@ -6,8 +6,10 @@ describe Subscriptions::Payable, type: :model do
   subject { subscription }
 
   let(:category) { create :category, title: 'Adulte' }
-  let(:courses) { create_list :course, 1, category: category }
-  let(:subscription) { create :subscription, courses: courses }
+  let(:courses) { create_list :course, 1, category: }
+  let(:user) { create :user }
+  let(:member) { create :member, user: }
+  let(:subscription) { create :subscription, member:, courses: }
   let(:stripe_charge_id) { SecureRandom.hex }
   let(:stripe_payment_intent_id) { 'pi_test_123' }
   let(:stripe_created_at) { Time.now }
@@ -38,7 +40,8 @@ describe Subscriptions::Payable, type: :model do
       allow(Stripe::PaymentIntent).to receive(:create).with(
         amount: subscription.fee_cents,
         currency: 'eur',
-        description: subscription.description
+        description: subscription.description,
+        customer: user.stripe_customer_id
       ).and_return(stripe_payment_intent)
 
       allow(Stripe::Charge).to receive(:retrieve).with(stripe_charge_id).and_return(stripe_charge)

@@ -8,6 +8,7 @@ FactoryBot.define do
     city { Faker::Address.city }
     country { Faker::Address.country }
     terms_of_service { true }
+    stripe_customer_id { Faker::Internet.uuid }
 
     trait :admin do
       admin { true }
