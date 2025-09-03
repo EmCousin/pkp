@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Member < ApplicationRecord
+  include ConditionalPagination
   include Members::Available
   include Members::Searchable
 

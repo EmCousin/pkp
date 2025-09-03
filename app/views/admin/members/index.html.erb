@@ -39,6 +39,13 @@
                 { include_blank: 'Année' },
                 class: 'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm bg-white' %>
           </div>
+
+          <div class="flex items-center">
+            <%= f.switch :no_paginate,
+                class: 'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm bg-white',
+                checked: params[:no_paginate] == '1' %>
+            <%= f.label :no_paginate, t('.no_paginate'), class: 'ml-2 block text-sm text-gray-700' %>
+          </div>
         </div>
 
         <div class="flex flex-wrap gap-4 items-center">

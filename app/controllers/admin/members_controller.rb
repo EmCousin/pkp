@@ -7,7 +7,7 @@ module Admin
     def index
       @members = Member.search_and_filter(params.to_unsafe_h.slice(:q, :level, :subscription_year, :course_ids, :camp_ids))
                        .includes(:user, :contacts).with_attached_avatar
-                       .page(params[:page]).per(25)
+                       .paginate_if_active(params[:page], active: params[:no_paginate] != '1')
 
       respond_to do |format|
         format.html
