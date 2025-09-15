@@ -6,7 +6,7 @@ module Dashboard
       protected
 
       def set_subscription!
-        @subscription = current_user.subscriptions.find_by!(
+        @subscription = current_user.subscriptions.not_archived.find_by!(
           id: params[:subscription_id],
           year: Subscription.current_year
         )

@@ -26,7 +26,7 @@ module Dashboard
     private
 
     def set_subscription
-      @subscription = current_user.subscriptions.find_by(id: params[:id])
+      @subscription = current_user.subscriptions.not_archived.find_by(id: params[:id])
     end
 
     def subscription_params

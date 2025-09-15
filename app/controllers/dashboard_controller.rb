@@ -5,6 +5,7 @@ class DashboardController < ApplicationController
 
   def show
     @subscriptions = current_user.subscriptions
+                                 .not_archived
                                  .where(year: Subscription.current_year)
                                  .where(parent_subscription_id: nil)
                                  .includes(:member, :child_subscriptions)
