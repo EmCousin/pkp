@@ -170,6 +170,7 @@
                 <div class="flex items-center gap-2">
                   <%= link_to subscription.medical_certificate,
                       target: "_blank",
+                      rel: "noopener noreferrer",
                       class: "text-gray-700 rounded-lg transition-colors duration-200 group-hover:scale-110 transform",
                       title: t('dashboard.subscription.download_medical_certificate', default: "Télécharger le certificat médical"),
                       aria: { label: t('dashboard.subscription.download_medical_certificate', default: "Télécharger le certificat médical") } do %>

@@ -70,47 +70,13 @@
       "note": ""
     },
     {
-      "warning_type": "Cross-Site Scripting",
-      "warning_code": 2,
-      "fingerprint": "4096eeb0d6ea92e5f38070e75b3de27dec9aa15bedd6180d7a737722f3d44d33",
-      "check_name": "CrossSiteScripting",
-      "message": "Unescaped model attribute",
-      "file": "app/views/dashboard/subscriptions/show.html.erb",
-      "line": 5,
-      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "current_user.subscriptions.find_by(:id => params[:id]).qr_code_svg",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "Dashboard::SubscriptionsController",
-          "method": "show",
-          "line": 12,
-          "file": "app/controllers/dashboard/subscriptions_controller.rb",
-          "rendered": {
-            "name": "dashboard/subscriptions/show",
-            "file": "app/views/dashboard/subscriptions/show.html.erb"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "dashboard/subscriptions/show"
-      },
-      "user_input": "current_user.subscriptions.find_by(:id => params[:id])",
-      "confidence": "Weak",
-      "cwe_id": [
-        79
-      ],
-      "note": ""
-    },
-    {
       "warning_type": "Unscoped Find",
       "warning_code": 82,
       "fingerprint": "5845e02b1070fe61ff0fae7cab044b2c5707b1ee6f2599ff2c3a2b47fe75ed31",
       "check_name": "UnscopedFind",
       "message": "Unscoped call to `Member#find`",
       "file": "app/controllers/admin/members_controller.rb",
-      "line": 55,
+      "line": 57,
       "link": "https://brakemanscanner.org/docs/warning_types/unscoped_find/",
       "code": "Member.find(params[:id])",
       "render_path": null,
@@ -146,6 +112,84 @@
       "confidence": "Weak",
       "cwe_id": [
         285
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "b0a8da1f2b30130a66974a508281d6dbd55336d914a849c5d76397c65830e5df",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/dashboard/subscriptions/show.html.erb",
+      "line": 5,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "current_user.subscriptions.not_archived.find_by(:id => params[:id]).qr_code_svg",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Dashboard::SubscriptionsController",
+          "method": "show",
+          "line": 12,
+          "file": "app/controllers/dashboard/subscriptions_controller.rb",
+          "rendered": {
+            "name": "dashboard/subscriptions/show",
+            "file": "app/views/dashboard/subscriptions/show.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "dashboard/subscriptions/show"
+      },
+      "user_input": "current_user.subscriptions.not_archived",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 4,
+      "fingerprint": "d5c18ec948b2cb3dcd044457f1f90fc1e8ff71b0582b1e3913551fcc9270cfc8",
+      "check_name": "LinkToHref",
+      "message": "Potentially unsafe model attribute in `link_to` href",
+      "file": "app/views/admin/subscriptions/_subscription.html.erb",
+      "line": 162,
+      "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
+      "code": "link_to(Subscription.new.stripe_payment_intent_url, :class => \"group flex items-center space-x-1\")",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Admin::SubscriptionsController",
+          "method": "index",
+          "line": 9,
+          "file": "app/controllers/admin/subscriptions_controller.rb",
+          "rendered": {
+            "name": "admin/subscriptions/index",
+            "file": "app/views/admin/subscriptions/index.html.erb"
+          }
+        },
+        {
+          "type": "template",
+          "name": "admin/subscriptions/index",
+          "line": 76,
+          "file": "app/views/admin/subscriptions/index.html.erb",
+          "rendered": {
+            "name": "admin/subscriptions/_subscription",
+            "file": "app/views/admin/subscriptions/_subscription.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "admin/subscriptions/_subscription"
+      },
+      "user_input": "Subscription.new.stripe_payment_intent_url",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
       ],
       "note": ""
     }
