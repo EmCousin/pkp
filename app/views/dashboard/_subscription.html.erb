@@ -110,104 +110,151 @@
         </tbody>
       </table>
 
-      <!-- New Documents and Certification section -->
-      <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Documents and Certification section -->
+      <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
         <!-- Terms Accepted Card -->
-        <div>
+        <div class="group">
           <%= tag.div class: class_names(
-                "relative p-6 rounded-lg flex flex-col items-start border transition-colors duration-300",
-                'bg-white border-green-200 ring-1 ring-gray-200' => subscription.terms_accepted_at?,
-                'bg-rose-50 border-rose-200' => !subscription.terms_accepted_at?
+                "relative p-4 sm:p-6 rounded-xl flex flex-col items-start border-2 transition-all duration-300 hover:shadow-md",
+                'bg-gradient-to-br from-green-50 to-emerald-50 border-green-200 shadow-sm' => subscription.terms_accepted_at?,
+                'bg-gradient-to-br from-red-50 to-rose-50 border-red-200 hover:border-red-300' => !subscription.terms_accepted_at?
               ) do %>
-            <span class="block text-xs font-medium uppercase mb-3 <%= subscription.terms_accepted_at? ? 'text-gray-500' : 'text-rose-700' %>">
-              <%= Subscription.human_attribute_name(:terms_accepted_at) %>
-            </span>
+            <div class="flex items-center justify-between w-full mb-4">
+              <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wide">
+                <%= t('.conditions_inscription') %>
+              </h3>
+              <% if subscription.terms_accepted_at? %>
+                <div class="flex-shrink-0 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                  <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                  </svg>
+                </div>
+              <% end %>
+            </div>
             <% if subscription.terms_accepted_at? %>
-              <div class="flex items-center gap-2 text-sm mb-2">
-                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span class="text-gray-700 font-semibold"><%= t('.terms_accepted') %></span>
-              </div>
+              <p class="text-green-700 font-medium text-sm">
+                <%= t('.terms_accepted') %>
+              </p>
             <% else %>
               <%= link_to t('.accept_terms'),
                   edit_dashboard_subscription_terms_path(subscription.id),
-                  class: "text-rose-700 text-sm font-medium hover:underline mt-2" %>
+                  class: "inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200" %>
             <% end %>
           <% end %>
         </div>
 
-        <!-- Doctor Certification Card -->
-        <div>
+        <!-- Medical Certificate Card -->
+        <div class="group">
           <%= tag.div class: class_names(
-                "relative p-6 rounded-lg flex flex-col items-start border transition-colors duration-300",
-                'bg-white border-green-200 ring-1 ring-gray-200' => subscription.doctor_certified_at?,
-                'bg-rose-50 border-rose-200' => !subscription.doctor_certified_at?
+                "relative p-4 sm:p-6 rounded-xl flex flex-col items-start border-2 transition-all duration-300 hover:shadow-md",
+                'bg-gradient-to-br from-green-50 to-emerald-50 border-green-200 shadow-sm' => subscription.doctor_certified_at?,
+                'bg-gradient-to-br from-red-50 to-rose-50 border-red-200 hover:border-red-300' => !subscription.doctor_certified_at?
               ) do %>
-            <span class="block text-xs font-medium uppercase mb-3 <%= subscription.doctor_certified_at? ? 'text-gray-500' : 'text-rose-700' %>">
-              <%= Subscription.human_attribute_name(:doctor_certified_at) %>
-            </span>
-            <% if subscription.doctor_certified_at? %>
-              <div class="flex items-center gap-2 text-sm mb-2">
-                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span class="text-gray-700 font-semibold"><%= t('.doctor_certified') %></span>
+            <div class="flex items-center justify-between w-full mb-4">
+              <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wide">
+                <%= t('.certificat_medical') %>
+              </h3>
+              <% if subscription.doctor_certified_at? %>
+                <div class="flex-shrink-0 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                  <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                  </svg>
+                </div>
+              <% end %>
+            </div>
+            <% if subscription.doctor_certified_at? && subscription.medical_certificate.attached? %>
+              <div class="flex items-center justify-between w-full">
+                <p class="text-green-700 font-medium text-sm">
+                  <%= t('.doctor_certified') %>
+                </p>
+                <div class="flex items-center gap-2">
+                  <%= link_to subscription.medical_certificate,
+                      target: "_blank",
+                      class: "text-gray-700 rounded-lg transition-colors duration-200 group-hover:scale-110 transform",
+                      title: t('dashboard.subscription.download_medical_certificate', default: "Télécharger le certificat médical"),
+                      aria: { label: t('dashboard.subscription.download_medical_certificate', default: "Télécharger le certificat médical") } do %>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/>
+                    </svg>
+                  <% end %>
+                  <%= link_to edit_dashboard_subscription_medical_certificate_path(subscription),
+                      class: "text-gray-600 rounded-lg transition-colors duration-200",
+                      title: t('dashboard.subscription.change_medical_certificate', default: "Remplacer le certificat médical") do %>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                    </svg>
+                  <% end %>
+                </div>
               </div>
             <% else %>
               <%= link_to t('.certify_doctor'),
                   edit_dashboard_subscription_medical_certificate_path(subscription.id),
-                  class: "text-rose-700 text-sm font-medium hover:underline mt-2" %>
+                  class: "inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200" %>
             <% end %>
           <% end %>
         </div>
 
-        <div>
+        <!-- Payment Card -->
+        <div class="group">
           <%= tag.div class: class_names(
-                "relative p-6 rounded-lg flex flex-col items-start border transition-colors duration-300",
-                'bg-white border-green-200 ring-1 ring-gray-200' => subscription.paid?,
-                'bg-rose-50 border-rose-200' => !subscription.paid?
+                "relative p-4 sm:p-6 rounded-xl flex flex-col items-start border-2 transition-all duration-300 hover:shadow-md",
+                'bg-gradient-to-br from-green-50 to-emerald-50 border-green-200 shadow-sm' => subscription.paid?,
+                'bg-gradient-to-br from-yellow-50 to-amber-50 border-yellow-200 hover:border-yellow-300' => !subscription.paid? && subscription.payment_proof.attached?,
+                'bg-gradient-to-br from-red-50 to-rose-50 border-red-200 hover:border-red-300' => !subscription.paid? && !subscription.payment_proof.attached?
               ),
               data: { turbo_frame: '_top' } do %>
-            <%= tag.span class: class_names(
-                  "block text-xs font-medium uppercase mb-3",
-                  'text-gray-500' => subscription.paid?,
-                  'text-yellow-500' => !subscription.paid? && subscription.payment_proof.attached?,
-                  'text-rose-700' => !subscription.paid? && !subscription.payment_proof.attached?
-                ) do %>
-              <%= t('.payment') %>
-            <% end %>
+            <div class="flex items-center justify-between w-full mb-4">
+              <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wide">
+                <%= t('.cotisation') %>
+              </h3>
+              <% if subscription.paid? %>
+                <div class="flex-shrink-0 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                  <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                  </svg>
+                </div>
+              <% elsif subscription.payment_proof.attached? %>
+                <div class="flex-shrink-0 w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
+                  <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 8V6a1 1 0 10-2 0v5a1 1 0 00.293.707l3 3a1 1 0 001.414-1.414l-2.707-2.707z" clip-rule="evenodd"/>
+                  </svg>
+                </div>
+              <% end %>
+            </div>
 
             <% if subscription.paid? %>
-              <div class="flex items-center gap-2 text-sm mb-2">
-                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span class="text-gray-700 font-semibold"><%= t('.payment_confirmed') %></span>
+              <div class="flex items-center justify-between w-full">
+                <p class="text-green-700 font-medium text-sm">
+                  <%= t('.payment_confirmed') %>
+                </p>
+                <% if subscription.invoice.attached? %>
+                  <%= link_to rails_blob_path(subscription.invoice, disposition: "attachment"),
+                      class: "p-2 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg transition-colors duration-200 group-hover:scale-110 transform",
+                      title: t('defaults.download', default: "Télécharger") do %>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/>
+                    </svg>
+                  <% end %>
+                <% end %>
               </div>
-              <% if subscription.invoice.attached? %>
-                <%= link_to t('defaults.download'),
-                            rails_blob_path(subscription.invoice, disposition: "attachment"),
-                            class: "text-sm text-gray-600 hover:text-gray-900" %>
-              <% end %>
             <% elsif subscription.payment_proof.attached? %>
-              <div class="flex items-center gap-2 text-sm mb-2">
-                <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 8V6a1 1 0 10-2 0v5a1 1 0 00.293.707l3 3a1 1 0 001.414-1.414l-2.707-2.707z" clip-rule="evenodd"/>
-                </svg>
-                <span class="text-yellow-700 font-semibold"><%= t('.payment_proof_in_review') %></span>
+              <div class="space-y-3">
+                <p class="text-yellow-700 font-medium text-sm">
+                  <%= t('.payment_proof_in_review') %>
+                </p>
+                <div class="flex flex-wrap gap-2">
+                  <%= link_to t('.download_payment_proof'),
+                              rails_blob_path(subscription.payment_proof, disposition: "attachment"),
+                              class: "inline-flex items-center px-3 py-1.5 bg-yellow-600 hover:bg-yellow-700 text-white text-xs font-medium rounded-lg transition-colors duration-200" %>
+                  <%= link_to t('.pay_directly'),
+                              new_dashboard_subscription_payment_path(subscription.id),
+                              class: "inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-colors duration-200" %>
+                </div>
               </div>
-              <%= link_to t('.download_payment_proof'),
-                          rails_blob_path(subscription.payment_proof, disposition: "attachment"),
-                          class: "text-yellow-700 text-sm font-medium hover:underline mt-2" %>
-
-              <%= link_to t('.pay_directly'),
-                          new_dashboard_subscription_payment_path(subscription.id),
-                          class: "text-yellow-700 text-sm font-medium hover:underline mt-2" %>
             <% else %>
               <%= link_to t('.pay'),
                           new_dashboard_subscription_payment_path(subscription.id),
-                          class: "text-rose-700 text-sm font-medium hover:underline mt-2" %>
+                          class: "inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200" %>
             <% end %>
           <% end %>
         </div>

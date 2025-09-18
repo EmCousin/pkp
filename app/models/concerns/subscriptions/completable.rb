@@ -6,13 +6,14 @@ module Subscriptions
 
     included do
       attribute :terms_accepted, :boolean, default: false
-      attribute :medical_certificate, :boolean, default: false
+      attribute :doctor_certified, :boolean, default: false
 
       has_one_attached :form
+      has_one_attached :medical_certificate
     end
 
     def completed?
-      paid? && terms_accepted_at? && doctor_certified_at?
+      paid? && terms_accepted_at? && doctor_certified_at? && medical_certificate.attached?
     end
 
     def pending_confirmation?
@@ -24,7 +25,7 @@ module Subscriptions
       self.terms_accepted_at = accepted ? Time.current : nil
     end
 
-    def medical_certificate=(value)
+    def doctor_certified=(value)
       certified = super
       self.doctor_certified_at = certified ? Time.current : nil
     end

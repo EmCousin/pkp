@@ -42,6 +42,14 @@
             ) %>
       <% end %>
 
+      <% if subscription.medical_certificate.attached? %>
+        <%= link_to t('admin.subscriptions.show.download_medical_certificate'),
+            rails_blob_path(subscription.medical_certificate, disposition: "attachment"),
+            class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50",
+            data: { turbo_frame: '_top' },
+            target: '_blank' %>
+      <% end %>
+
       <% unless subscription.paid? %>
         <% Subscription.payment_methods.each_key do |payment_method| %>
           <%= next if subscription.payment_method == payment_method %>

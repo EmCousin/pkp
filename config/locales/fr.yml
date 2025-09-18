@@ -233,6 +233,7 @@ fr:
         archived: Archivé
         form: Formulaire
         signed_form: Formulaire signé
+        doctor_certified: Certifié par un médecin
         medical_certificate: Certificat médical
         payment_proof: Justificatif de paiement
         invoice: Facture
@@ -521,6 +522,7 @@ fr:
         generating: "Génération en cours..."
         select_action: "Sélectionner une action..."
         download_subscription_form: Télécharger le formulaire
+        download_medical_certificate: Télécharger le certificat médical
         mark_as_confirmed_by_check: "Marquer comme confirmé par chèque"
         mark_as_confirmed_by_cash: "Marquer comme confirmé en espèces"
         mark_as_confirmed_by_transfer: "Marquer comme confirmé par virement"
@@ -532,6 +534,8 @@ fr:
         terms_not_accepted: Non accepté
         doctor_certified: Confirmé
         doctor_not_certified: Non confirmé
+        medical_certificate_missing: Manquant
+        medical_certificate_missing_explanation: L'élève a indiqué avoir un certificat médical, mais il ne l'a pas encore joint.
         paid: Payé
         not_paid: Non payé
         payment_proof_awaiting_review: Justificatif à vérifier
@@ -584,8 +588,12 @@ fr:
         terms: Conditions d'inscription
         terms_accepted: Accepté
         terms_not_accepted: Non accepté
-        medical_certificate: Certificat médical
+        doctor_certified: Certificat médical
         medical_certified: Oui
+        medical_certificate: Certificat médical
+        medical_certificate_missing: Manquant
+        medical_certificate_missing_explanation: L'élève a indiqué avoir un certificat médical, mais il ne l'a pas encore joint.
+        download_medical_certificate: Télécharger le certificat médical
         medical_not_certified: Non
         payment: Paiement
         paid: Payé
@@ -681,6 +689,9 @@ fr:
       change_medical_certificate: Remplacer le certificat médical
       edit_member: Modifier le profil de l'élève
       accept_terms: Accepter les conditions
+      conditions_inscription: Conditions d'inscription
+      certificat_medical: Certificat médical
+      cotisation: Cotisation
       terms_accepted: J'ai accepté les conditions d'inscription
       doctor_certified: J'ai un certificat médical
       certify_doctor: Certifier par un médecin
@@ -787,10 +798,11 @@ fr:
         error: Une erreur est survenue. Votre carte n'a pas été débitée. Si le problème persiste, contactez-nous.
         already_paid: Votre commande est déjà payée. Votre carte n'a donc pas été débitée.
     medical_certificates:
-      edit:
+      form:
         explanation: Pour valider votre inscription, vous devez avoir un certificat médical autorisant la pratique du Parkour délivré par un médecin.
-        medical_certificate: Je certifie avoir un certificat médical pour cette inscription
+        doctor_certified: Je certifie avoir un certificat médical pour cette inscription
         already_certified: Vous avez déjà indiqué avoir un certificat médical pour cette inscription.
+        you_can_upload_it_later: Vous pouvez joindre le certificat médical plus tard, mais il est obligatoire pour valider votre inscription.
       update:
         success: Inscription mise à jour
         already_certified: Vous avez déjà indiqué avoir un certificat médical pour cette inscription.

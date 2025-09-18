@@ -4,10 +4,11 @@ module Admin
   class MembersController < BaseController
     before_action :set_member, only: %i[show edit update destroy]
 
+    # rubocop:disable Metrics/AbcSize
     def index
       @members = Member.search_and_filter(params.to_unsafe_h.slice(:q, :level, :subscription_year, :course_ids, :camp_ids))
                        .includes(:user, :contacts).with_attached_avatar
-                       .paginate_if_active(params[:page], active: params[:no_paginate] != '1')
+                       .paginate_if_active(params[:page], active: params[:no_paginate] != '1', per_page: params[:per_page] || 25)
 
       respond_to do |format|
         format.html
@@ -16,6 +17,7 @@ module Admin
         end
       end
     end
+    # rubocop:enable Metrics/AbcSize
 
     def show; end
 
