@@ -8,8 +8,9 @@ module Admin
       @subscriptions = Subscription.search_and_filter(params.to_unsafe_h.slice(:status, :level, :year, :course_ids, :camp_id))
                                    .order(created_at: :desc)
                                    .page(params[:page])
-                                   .per(25)
+                                   .per(params[:per_page] || 25)
                                    .includes(:camp, :courses, member: :avatar_attachment)
+                                   .with_attached_medical_certificate
     end
 
     def show; end

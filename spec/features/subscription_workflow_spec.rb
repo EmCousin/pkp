@@ -5,6 +5,7 @@ feature "Subscription Workflow", type: :feature do
   let(:user) { build :user }
   let(:member) { build :member, user: user }
   let(:avatar) { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'file_examples', 'avatar.jpg')) }
+  let(:medical_certificate_dummy_file) { avatar }
 
   let(:password) { SecureRandom.hex }
 
@@ -174,7 +175,8 @@ feature "Subscription Workflow", type: :feature do
     expect(page).to have_text('Pour valider votre inscription, vous devez avoir un certificat médical autorisant la pratique du Parkour délivré par un médecin.')
 
     # Accept medical certificate
-    check "subscription_medical_certificate"
+    check "subscription_doctor_certified"
+    attach_file('subscription[medical_certificate]', medical_certificate_dummy_file.path)
     click_button 'Sauvegarder'
 
     # After medical certificate, user is redirected to payment page

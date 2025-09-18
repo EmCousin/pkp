@@ -3,7 +3,6 @@
 module Dashboard
   class MedicalCertificatesController < Dashboard::Abstract::SubscriptionsController
     before_action :set_subscription!
-    before_action :filter_already_certified!
 
     def edit; end
 
@@ -19,11 +18,7 @@ module Dashboard
     private
 
     def subscription_params
-      params.expect(subscription: [:medical_certificate])
-    end
-
-    def filter_already_certified!
-      redirect_to :dashboard, alert: t('.already_certified') if @subscription.doctor_certified_at?
+      params.expect(subscription: %i[doctor_certified medical_certificate])
     end
   end
 end

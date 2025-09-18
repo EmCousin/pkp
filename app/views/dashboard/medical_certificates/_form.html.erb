@@ -1,0 +1,40 @@
+<%= form_for subscription,
+             url: dashboard_subscription_medical_certificate_path(subscription),
+             html: { class: "mt-6 animate-slide-in-from-left animation-duration-500" } do |form| %>
+  <div class="bg-white rounded-xl shadow p-6 flex flex-col justify-center">
+    <p class="mt-2 mb-6">
+      <%= t('.explanation') %>
+    </p>
+
+    <div class="flex items-center space-x-3 mb-6">
+      <%= form.switch :doctor_certified, required: true %>
+      <%= form.label :doctor_certified, t('.doctor_certified'), class: "block font-medium text-gray-700" %>
+    </div>
+
+    <div class="w-full mb-6">
+      <label class="block text-gray-700 font-medium mb-2" for="medical_certificate">
+        <%= t('dashboard.subscription.upload_medical_certificate') %>
+      </label>
+      <div class="flex items-center space-x-4">
+        <%= form.file_field :medical_certificate, accept: ".pdf,.jpg,.jpeg,.png", class: "block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition" %>
+        <% if subscription.medical_certificate.attached? %>
+          <%= link_to t('dashboard.subscription.download_subscription_form'), url_for(subscription.medical_certificate), target: "_blank", class: "text-indigo-600 hover:underline text-sm" %>
+        <% end %>
+      </div>
+      <p class="text-xs text-gray-500 mt-1">
+        <%= t('dashboard.payment_proofs.form.accepted_formats', default: "Formats acceptés : PDF, JPG, JPEG, PNG") %>
+      </p>
+      <p class="text-xs text-gray-500 mt-1">
+        <%= t('.you_can_upload_it_later') %>
+      </p>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-3 w-full justify-center">
+      <%= link_to t('defaults.back'),
+                  :dashboard,
+                  class: "inline-flex justify-center items-center px-6 py-2 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800" %>
+      <%= form.submit t('defaults.save'),
+                      class: "inline-flex justify-center items-center px-6 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-700 hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700" %>
+    </div>
+  </div>
+<% end %>
