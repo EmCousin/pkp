@@ -40,7 +40,7 @@ class Pricing < ApplicationRecord
     errors.add(:prices, :blank) if values.blank?
     return if values.blank?
 
-    return if values.all? { |v| v.is_a?(Numeric) || v.to_s.match?(/\A-?\d+(?:[\.,]\d+)?\z/) }
+    return if values.all? { |v| v.is_a?(Numeric) || v.to_s.match?(/\A-?\d+(?:[.,]\d+)?\z/) }
 
     errors.add(:prices, :not_a_number)
   end

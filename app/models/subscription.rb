@@ -100,7 +100,9 @@ class Subscription < ApplicationRecord
   end
 
   def category
-    @category ||= Category.find_by(id: category_id)
+    return @category if defined?(@category)
+
+    @category = Category.find_by(id: category_id)
   end
 
   def status_color

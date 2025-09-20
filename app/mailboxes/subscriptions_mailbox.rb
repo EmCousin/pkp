@@ -15,6 +15,8 @@ class SubscriptionsMailbox < ApplicationMailbox
   end
 
   def user
-    @user ||= User.find_by(email: mail.from)
+    return @user if defined?(@user)
+
+    @user = User.find_by(email: mail.from)
   end
 end
