@@ -82,15 +82,15 @@ Rails.application.configure do
   # the I18n.default_locale when a translation cannot be found).
   config.i18n.fallbacks = true
 
+  config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-      port:           Rails.application.credentials.dig(:mailgun, :smtp_port),
-      address:        Rails.application.credentials.dig(:mailgun, :smtp_server),
-      user_name:      Rails.application.credentials.dig(:mailgun, :smtp_login),
-      password:       Rails.application.credentials.dig(:mailgun, :smtp_password),
-      domain:         Rails.application.credentials.dig(:mailgun, :domain),
+      port:           Rails.application.credentials.dig(:brevo, :smtp_port),
+      address:        Rails.application.credentials.dig(:brevo, :smtp_server),
+      user_name:      Rails.application.credentials.dig(:brevo, :smtp_login),
+      password:       Rails.application.credentials.dig(:brevo, :smtp_password),
+      domain:         Rails.application.credentials.dig(:brevo, :domain),
       authentication: :plain
   }
-  config.action_mailer.delivery_method = :smtp
 
   # Send deprecation notices to registered listeners.
   config.active_support.deprecation = :notify
