@@ -679,6 +679,7 @@ fr:
       camps_section_title: "Stages"
       camps_section_description: "Découvrez nos stages et inscrivez-vous !"
       browse_camps: "Parcourir les stages"
+      hint_open_card: "Astuce: utilisez le bouton 'Voir les détails' pour développer une inscription."
 
     subscription:
       subscription_form: Formulaire d'inscription
@@ -708,6 +709,8 @@ fr:
       pay_directly: Payer directement par carte bancaire
       additional_subscriptions: "Inscriptions supplémentaires"
       additional_courses: "Cours supplémentaires"
+      see_details: "Voir les détails"
+      hide_details: "Masquer"
     edit:
       title: Mes informations personnelles
     alumni_accesses:

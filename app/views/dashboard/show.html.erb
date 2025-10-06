@@ -12,6 +12,9 @@
         <%= t('.come_to_your_slots_only') %>
       </div>
 
+      <p class="text-sm text-gray-500 text-center -mt-2 mb-2">
+        <%= t('.hint_open_card') %>
+      </p>
       <div class="space-y-4">
         <%= render partial: 'subscription', collection: @subscriptions, as: :subscription, locals: { show: !@subscriptions.many? } %>
       </div>
