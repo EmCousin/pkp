@@ -1,8 +1,11 @@
-Rails.application.routes.draw do
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
 
-  get '/wp-content/*path', to: ->(_env) { [429, {}, ['
+class PissOffConstraint
+  def matches?(request)
+    request.path.starts_with?('/wp')
+  end
+
+  def self.responder
+    ->(_env) { [429, {}, ['
          / \
         |\_/|
         |---|
@@ -20,6 +23,14 @@ Rails.application.routes.draw do
    \             /
     \           /
   ']] }
+  end
+end
+
+Rails.application.routes.draw do
+  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
+  # Can be used by load balancers and uptime monitors to verify that the app is live.
+
+  match "*path", to: PissOffConstraint.responder, constraints: PissOffConstraint.new, via: :all
 
   get "up" => "rails/health#show", as: :rails_health_check
 
