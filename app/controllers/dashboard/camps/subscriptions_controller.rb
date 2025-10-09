@@ -16,7 +16,7 @@ module Dashboard
         if @subscription.save
           redirect_to [:edit, :dashboard, @camp, @subscription, :payment_proof], status: :see_other
         else
-          redirect_back_to [:dashboard, @camp], alert: @subscription.errors.full_messages.to_sentence
+          redirect_back_or_to [:dashboard, @camp], alert: @subscription.errors.full_messages.to_sentence
         end
       end
 
