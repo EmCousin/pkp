@@ -1,7 +1,10 @@
 
 class PissOffConstraint
   def matches?(request)
-    request.path.starts_with?('/wp')
+    return true if request.path.starts_with?('/wp')
+    return true if request.path.starts_with?('/login')
+
+    File.extname(request.url) == '.php'
   end
 
   def self.responder
