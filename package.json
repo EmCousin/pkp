@@ -3,7 +3,7 @@
   "private": true,
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
-    "@hotwired/turbo-rails": "^8.0.18",
+    "@hotwired/turbo-rails": "^8.0.20",
     "@rails/actioncable": "^6.1.4",
     "@rails/actiontext": "^8.0.200",
     "@rails/activestorage": "^6.1.4",
