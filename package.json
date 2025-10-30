@@ -5,7 +5,7 @@
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.20",
     "@rails/actioncable": "^6.1.4",
-    "@rails/actiontext": "^8.0.200",
+    "@rails/actiontext": "^8.1.100",
     "@rails/activestorage": "^6.1.4",
     "@stripe/stripe-js": "^1.54.1",
     "esbuild": "^0.14.1",
