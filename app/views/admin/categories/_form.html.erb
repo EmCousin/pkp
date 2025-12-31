@@ -9,7 +9,7 @@
         </div>
         <div class="ml-3">
           <h3 class="text-sm font-semibold text-red-800">
-            <%= t('errors.template.header', count: form.object.errors.count) %>
+            <%= t('errors.template.header', count: form.object.errors.count, model: form.object.model_name.human) %>
           </h3>
           <div class="mt-2 text-sm text-red-700">
             <ul class="list-disc pl-5 space-y-1">
