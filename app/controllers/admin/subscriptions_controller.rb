@@ -49,7 +49,7 @@ module Admin
     def unlink_course
       @course = @subscription.courses.find(params[:course_id])
       @subscription.courses_subscriptions.destroy_by(course_id: @course.id)
-      redirect_back fallback_location: :root, notice: t('.success')
+      redirect_back_or_to(:root, notice: t('.success'))
     end
 
     private

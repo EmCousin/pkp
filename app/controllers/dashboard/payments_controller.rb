@@ -20,7 +20,7 @@ module Dashboard
     private
 
     def filter_already_paid!
-      redirect_back fallback_location: root_path, alert: t('.already_paid') if @subscription.paid?
+      redirect_back_or_to(root_path, alert: t('.already_paid')) if @subscription.paid?
     end
   end
 end
