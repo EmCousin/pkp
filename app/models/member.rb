@@ -48,6 +48,8 @@ class Member < ApplicationRecord
   delegate :email, :phone_number, :address, :zip_code, :city, :country, :full_address,
            to: :user
 
+  after_update :clear_subscription_forms
+
   normalizes :first_name, with: ->(first_name) { first_name.strip.downcase.titleize }
   normalizes :last_name, with: ->(last_name) { last_name.strip.downcase.titleize }
 
@@ -77,5 +79,20 @@ class Member < ApplicationRecord
     return false if camps.include?(camp)
 
     true
+  end
+
+  private
+
+  def clear_subscription_forms
+    return unless saved_change_to_first_name? ||
+                  saved_change_to_last_name? ||
+                  saved_change_to_birthdate? ||
+                  saved_change_to_contact_name? ||
+                  saved_change_to_contact_phone_number? ||
+                  saved_change_to_contact_relationship?
+
+    subscriptions.where.not(form: nil).find_each do |subscription|
+      subscription.form.purge if subscription.form.attached?
+    end
   end
 end
