@@ -18,44 +18,50 @@ describe Member, type: :model do
 
     context 'when member first_name is updated' do
       it 'clears the subscription form' do
-        expect { member.update!(first_name: 'NewName') }.to change { subscription.form.attached? }.from(true).to(false)
+        member.update!(first_name: 'NewName')
+        expect(subscription.reload.form.attached?).to be false
       end
     end
 
     context 'when member last_name is updated' do
       it 'clears the subscription form' do
-        expect { member.update!(last_name: 'NewLastName') }.to change { subscription.form.attached? }.from(true).to(false)
+        member.update!(last_name: 'NewLastName')
+        expect(subscription.reload.form.attached?).to be false
       end
     end
 
     context 'when member birthdate is updated' do
       it 'clears the subscription form' do
-        expect { member.update!(birthdate: 10.years.ago) }.to change { subscription.form.attached? }.from(true).to(false)
+        member.update!(birthdate: 10.years.ago)
+        expect(subscription.reload.form.attached?).to be false
       end
     end
 
     context 'when member contact_name is updated' do
       it 'clears the subscription form' do
-        expect { member.update!(contact_name: 'New Contact') }.to change { subscription.form.attached? }.from(true).to(false)
+        member.update!(contact_name: 'New Contact')
+        expect(subscription.reload.form.attached?).to be false
       end
     end
 
     context 'when member contact_phone_number is updated' do
       it 'clears the subscription form' do
-        expect { member.update!(contact_phone_number: '+33600000000') }.to change { subscription.form.attached? }.from(true).to(false)
+        member.update!(contact_phone_number: '+33600000000')
+        expect(subscription.reload.form.attached?).to be false
       end
     end
 
     context 'when member contact_relationship is updated' do
       it 'clears the subscription form' do
-        expect { member.update!(contact_relationship: 'Autre') }.to change { subscription.form.attached? }.from(true).to(false)
+        member.update!(contact_relationship: 'Autre')
+        expect(subscription.reload.form.attached?).to be false
       end
     end
 
     context 'when member attributes not affecting form are updated' do
       it 'does not clear the subscription form' do
-        expect { member.update!(agreed_to_advertising_right: !member.agreed_to_advertising_right) }
-          .not_to(change { subscription.form.attached? })
+        member.update!(agreed_to_advertising_right: !member.agreed_to_advertising_right)
+        expect(subscription.reload.form.attached?).to be true
       end
     end
 
@@ -72,8 +78,8 @@ describe Member, type: :model do
 
       it 'clears all subscription forms' do
         member.update!(first_name: 'NewName')
-        expect(subscription.form.attached?).to be false
-        expect(subscription2.form.attached?).to be false
+        expect(subscription.reload.form.attached?).to be false
+        expect(subscription2.reload.form.attached?).to be false
       end
     end
   end

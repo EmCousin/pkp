@@ -91,8 +91,8 @@ class Member < ApplicationRecord
                   saved_change_to_contact_phone_number? ||
                   saved_change_to_contact_relationship?
 
-    subscriptions.where.not(form: nil).find_each do |subscription|
-      subscription.form.purge if subscription.form.attached?
+    subscriptions.with_attached_form.find_each do |subscription|
+      subscription.form.purge
     end
   end
 end
