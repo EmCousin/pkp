@@ -14,6 +14,7 @@ describe Member, type: :model do
         filename: 'form.pdf',
         content_type: 'application/pdf'
       )
+      subscription.reload
     end
 
     context 'when member first_name is updated' do
