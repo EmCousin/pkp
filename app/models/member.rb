@@ -92,7 +92,7 @@ class Member < ApplicationRecord
                   saved_change_to_contact_relationship?
 
     subscriptions.with_attached_form.find_each do |subscription|
-      subscription.form.purge
+      subscription.form.purge if subscription.form.attached?
     end
   end
 end
