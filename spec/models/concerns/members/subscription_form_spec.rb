@@ -71,7 +71,7 @@ describe Member, type: :model do
 
     context 'when member has multiple subscriptions' do
       let(:course2) { create(:course, category: category, weekday: Course.weekdays.keys.last) }
-      let(:subscription2) { create(:subscription, member: member, status: :confirmed, courses: [course2]) }
+      let(:subscription2) { create(:subscription, member: member, status: :confirmed, courses: [course2], year: Subscription.current_year - 1) }
 
       before do
         subscription2.form.attach(
