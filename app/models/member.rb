@@ -83,6 +83,15 @@ class Member < ApplicationRecord
 
   private
 
+  RELEVANT_ATTRIBUTES = %w[
+    first_name
+    last_name
+    birthdate
+    contact_name
+    contact_phone_number
+    contact_relationship
+  ].freeze
+
   def clear_subscription_forms
     return unless relevant_attributes_changed?
 
@@ -92,11 +101,6 @@ class Member < ApplicationRecord
   end
 
   def relevant_attributes_changed?
-    saved_change_to_first_name? ||
-      saved_change_to_last_name? ||
-      saved_change_to_birthdate? ||
-      saved_change_to_contact_name? ||
-      saved_change_to_contact_phone_number? ||
-      saved_change_to_contact_relationship?
+    RELEVANT_ATTRIBUTES.any? { |attr| send("saved_change_to_#{attr}?") }
   end
 end
