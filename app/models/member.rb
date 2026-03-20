@@ -81,8 +81,6 @@ class Member < ApplicationRecord
     true
   end
 
-  private
-
   RELEVANT_ATTRIBUTES = %w[
     first_name
     last_name
@@ -91,6 +89,8 @@ class Member < ApplicationRecord
     contact_phone_number
     contact_relationship
   ].freeze
+
+  private
 
   def clear_subscription_forms
     return unless relevant_attributes_changed?
