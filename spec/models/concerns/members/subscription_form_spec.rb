@@ -6,7 +6,9 @@ describe Member, type: :model do
   describe '#clear_subscription_forms' do
     let(:user) { create(:user) }
     let(:member) { create(:member, user: user) }
-    let(:subscription) { create(:subscription, member: member, status: :confirmed) }
+    let(:category) { create(:category) }
+    let(:course) { create(:course, category: category) }
+    let(:subscription) { create(:subscription, member: member, status: :confirmed, courses: [course]) }
 
     before do
       subscription.form.attach(
@@ -67,7 +69,8 @@ describe Member, type: :model do
     end
 
     context 'when member has multiple subscriptions' do
-      let(:subscription2) { create(:subscription, member: member, status: :confirmed) }
+      let(:course2) { create(:course, category: category, weekday: Course.weekdays.keys.last) }
+      let(:subscription2) { create(:subscription, member: member, status: :confirmed, courses: [course2]) }
 
       before do
         subscription2.form.attach(
@@ -75,6 +78,7 @@ describe Member, type: :model do
           filename: 'form2.pdf',
           content_type: 'application/pdf'
         )
+        subscription2.reload
       end
 
       it 'clears all subscription forms' do
