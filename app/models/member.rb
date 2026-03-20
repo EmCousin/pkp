@@ -84,15 +84,19 @@ class Member < ApplicationRecord
   private
 
   def clear_subscription_forms
-    return unless saved_change_to_first_name? ||
-                  saved_change_to_last_name? ||
-                  saved_change_to_birthdate? ||
-                  saved_change_to_contact_name? ||
-                  saved_change_to_contact_phone_number? ||
-                  saved_change_to_contact_relationship?
+    return unless relevant_attributes_changed?
 
     subscriptions.with_attached_form.find_each do |subscription|
       subscription.form.purge if subscription.form.attached?
     end
+  end
+
+  def relevant_attributes_changed?
+    saved_change_to_first_name? ||
+      saved_change_to_last_name? ||
+      saved_change_to_birthdate? ||
+      saved_change_to_contact_name? ||
+      saved_change_to_contact_phone_number? ||
+      saved_change_to_contact_relationship?
   end
 end
