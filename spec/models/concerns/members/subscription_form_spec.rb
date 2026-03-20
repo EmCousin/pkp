@@ -7,6 +7,7 @@ describe Member, type: :model do
     let(:user) { create(:user) }
     let(:member) { create(:member, user: user) }
     let(:category) { create(:category) }
+    let!(:pricing) { create(:pricing, category: category) }
     let(:course) { create(:course, category: category) }
     let(:subscription) { create(:subscription, member: member, status: :confirmed, courses: [course]) }
 
