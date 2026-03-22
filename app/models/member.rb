@@ -4,6 +4,7 @@ class Member < ApplicationRecord
   include ConditionalPagination
   include Members::Available
   include Members::Searchable
+  include Members::SubscriptionForm
 
   MAJORITY_AGE = 18
 
@@ -48,7 +49,7 @@ class Member < ApplicationRecord
   delegate :email, :phone_number, :address, :zip_code, :city, :country, :full_address,
            to: :user
 
-  after_update :clear_subscription_forms
+  after_update :clear_subscription_forms, if: :relevant_attributes_changed?
 
   normalizes :first_name, with: ->(first_name) { first_name.strip.downcase.titleize }
   normalizes :last_name, with: ->(last_name) { last_name.strip.downcase.titleize }
@@ -81,20 +82,9 @@ class Member < ApplicationRecord
     true
   end
 
-  RELEVANT_ATTRIBUTES = %w[
-    first_name
-    last_name
-    birthdate
-    contact_name
-    contact_phone_number
-    contact_relationship
-  ].freeze
-
   private
 
   def clear_subscription_forms
-    return unless relevant_attributes_changed?
-
     subscriptions.with_attached_form.find_each do |subscription|
       subscription.form.purge if subscription.form.attached?
     end

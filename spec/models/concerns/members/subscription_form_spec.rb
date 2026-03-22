@@ -2,15 +2,11 @@
 
 require 'rails_helper'
 
-describe Member, type: :model do
-  describe '#clear_subscription_forms' do
-    let(:user) { create(:user) }
-    let(:member) { create(:member, user: user) }
-    let(:category) { create(:category) }
-    let!(:pricing) { create(:pricing, category: category) }
-    let(:course) { create(:course, category: category) }
-    let(:subscription) { create(:subscription, member: member, status: :confirmed, courses: [course]) }
+RSpec.describe Members::SubscriptionForm do
+  let(:member) { create(:member) }
+  let(:subscription) { create(:subscription, member:) }
 
+  describe '#clear_subscription_forms' do
     before do
       subscription.form.attach(
         io: StringIO.new('dummy pdf content'),
@@ -20,58 +16,53 @@ describe Member, type: :model do
       subscription.reload
     end
 
-    context 'when member first_name is updated' do
-      it 'clears the subscription form' do
-        member.update!(first_name: 'NewName')
-        expect(subscription.reload.form.attached?).to be false
+    context 'when relevant attributes change' do
+      it 'clears attached form when first_name changes' do
+        expect { member.update!(first_name: 'NewName') }
+          .to change { subscription.reload.form.attached? }.from(true).to(false)
+      end
+
+      it 'clears attached form when last_name changes' do
+        expect { member.update!(last_name: 'NewName') }
+          .to change { subscription.reload.form.attached? }.from(true).to(false)
+      end
+
+      it 'clears attached form when birthdate changes' do
+        expect { member.update!(birthdate: 5.years.ago.to_date) }
+          .to change { subscription.reload.form.attached? }.from(true).to(false)
+      end
+
+      it 'clears attached form when contact_name changes' do
+        expect { member.update!(contact_name: 'New Contact') }
+          .to change { subscription.reload.form.attached? }.from(true).to(false)
+      end
+
+      it 'clears attached form when contact_phone_number changes' do
+        expect { member.update!(contact_phone_number: '06 12 34 56 78') }
+          .to change { subscription.reload.form.attached? }.from(true).to(false)
+      end
+
+      it 'clears attached form when contact_relationship changes' do
+        expect { member.update!(contact_relationship: 'Mère') }
+          .to change { subscription.reload.form.attached? }.from(true).to(false)
       end
     end
 
-    context 'when member last_name is updated' do
-      it 'clears the subscription form' do
-        member.update!(last_name: 'NewLastName')
-        expect(subscription.reload.form.attached?).to be false
+    context 'when irrelevant attributes change' do
+      it 'does not clear form when level changes' do
+        expect { member.update!(level: :yellow) }
+          .not_to change { subscription.reload.form.attached? }
+      end
+
+      it 'does not clear form when avatar changes' do
+        new_avatar = fixture_file_upload('avatar.jpg', 'image/jpeg')
+        expect { member.update!(avatar: new_avatar) }
+          .not_to change { subscription.reload.form.attached? }
       end
     end
 
-    context 'when member birthdate is updated' do
-      it 'clears the subscription form' do
-        member.update!(birthdate: 10.years.ago)
-        expect(subscription.reload.form.attached?).to be false
-      end
-    end
-
-    context 'when member contact_name is updated' do
-      it 'clears the subscription form' do
-        member.update!(contact_name: 'New Contact')
-        expect(subscription.reload.form.attached?).to be false
-      end
-    end
-
-    context 'when member contact_phone_number is updated' do
-      it 'clears the subscription form' do
-        member.update!(contact_phone_number: '+33600000000')
-        expect(subscription.reload.form.attached?).to be false
-      end
-    end
-
-    context 'when member contact_relationship is updated' do
-      it 'clears the subscription form' do
-        member.update!(contact_relationship: 'Autre')
-        expect(subscription.reload.form.attached?).to be false
-      end
-    end
-
-    context 'when member attributes not affecting form are updated' do
-      it 'does not clear the subscription form' do
-        member.update!(agreed_to_advertising_right: !member.agreed_to_advertising_right)
-        expect(subscription.reload.form.attached?).to be true
-      end
-    end
-
-    context 'when member has multiple subscriptions' do
-      let(:course2) { create(:course, category: category, weekday: Course.weekdays.keys.last) }
-      let(:subscription2) { create(:subscription, member: member, status: :confirmed, courses: [course2], year: Subscription.current_year - 1) }
+    context 'when multiple subscriptions have forms' do
+      let(:subscription2) { create(:subscription, member:) }
 
       before do
         subscription2.form.attach(
@@ -82,11 +73,25 @@ describe Member, type: :model do
         subscription2.reload
       end
 
-      it 'clears all subscription forms' do
+      it 'clears all attached forms' do
         member.update!(first_name: 'NewName')
+
         expect(subscription.reload.form.attached?).to be false
         expect(subscription2.reload.form.attached?).to be false
       end
+    end
+  end
+
+  describe 'RELEVANT_ATTRIBUTES constant' do
+    it 'contains the expected attributes' do
+      expect(described_class::RELEVANT_ATTRIBUTES).to eq(%w[
+        first_name
+        last_name
+        birthdate
+        contact_name
+        contact_phone_number
+        contact_relationship
+      ])
     end
   end
 end
