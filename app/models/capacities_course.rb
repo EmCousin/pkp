@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CourseCapacity < ApplicationRecord
+class CapacitiesCourse < ApplicationRecord
   belongs_to :course
 
   enum :level, Member.levels, prefix: true

@@ -102,7 +102,7 @@
         <p class="text-sm text-gray-500 mb-4"><%= t('.level_capacities_hint') %></p>
         
         <div class="space-y-4">
-          <%= f.fields_for :course_capacities do |cc| %>
+          <%= f.fields_for :capacities_courses do |cc| %>
             <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-md">
               <%= cc.hidden_field :id %>
               <%= cc.hidden_field :level %>

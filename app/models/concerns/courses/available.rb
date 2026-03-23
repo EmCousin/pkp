@@ -6,6 +6,7 @@ module Courses
 
     included do
       scope :active, -> { where(active: true) }
+      validates :capacity, presence: true, numericality: { greater_than_or_equal_to: 1, only_integer: true }
     end
 
     class_methods do
@@ -16,7 +17,7 @@ module Courses
       end
 
       def with_courses_available(year)
-        includes(:subscriptions, :course_capacities).select do |course|
+        includes(:subscriptions, :capacities_courses, subscriptions: :member).select do |course|
           course.available?(year)
         end
       end
@@ -27,34 +28,19 @@ module Courses
     end
 
     def availability(year = Subscription.current_year)
-      return capacity - active_subscriptions(year).size unless level_capacities?
+      return capacity - active_subscriptions(year).size if capacities_courses.empty?
 
-      total_capacity = course_capacities.sum(:capacity)
-      total_capacity - active_subscriptions(year).size
-    end
-
-    def available_for_level?(level, year = Subscription.current_year)
-      return availability(year).positive? unless level_capacities?
-
-      level_capacity = course_capacities.find_by(level:)&.capacity || 0
-      return availability(year).positive? if level_capacity.zero?
-
-      level_subscriptions = active_subscriptions(year).count { |s| s.member.level == level }
-      (level_capacity - level_subscriptions).positive?
+      capacities_courses.sum(:capacity) - active_subscriptions(year).size
     end
 
     def availability_for_level(level, year = Subscription.current_year)
-      return availability(year) unless level_capacities?
+      return availability(year) if capacities_courses.empty?
 
-      level_capacity = course_capacities.find_by(level:)&.capacity || 0
+      level_capacity = capacities_courses.find_by(level:)&.capacity || 0
       return availability(year) if level_capacity.zero?
 
       level_subscriptions = active_subscriptions(year).count { |s| s.member.level == level }
       level_capacity - level_subscriptions
-    end
-
-    def level_capacities?
-      course_capacities.any?
     end
 
     private

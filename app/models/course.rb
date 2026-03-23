@@ -6,18 +6,15 @@ class Course < ApplicationRecord
 
   include Courses::Available
 
-  validates :title, :capacity, presence: true
-  validates :capacity, numericality: { greater_than_or_equal_to: 1, only_integer: true }
-
   belongs_to :category
   has_many :courses_subscriptions, dependent: :destroy
   has_many :subscriptions, through: :courses_subscriptions
   has_many :members, through: :subscriptions
   has_many :attendance_sheets, dependent: :destroy
   has_many :attendance_records, through: :attendance_sheets
-  has_many :course_capacities, dependent: :destroy
+  has_many :capacities_courses, dependent: :destroy
 
-  accepts_nested_attributes_for :course_capacities, allow_destroy: true
+  accepts_nested_attributes_for :capacities_courses, allow_destroy: true
 
   enum :weekday, lundi: 1, mardi: 2, mercredi: 3, jeudi: 4, vendredi: 5, samedi: 6, dimanche: 7
 
