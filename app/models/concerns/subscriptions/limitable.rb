@@ -109,11 +109,15 @@ module Subscriptions
     def check_level_availability
       return unless member
 
-      courses.each do |course|
-        next if course.capacities_courses.empty?
-        next if course.availability_for_level(member.level, year).positive?
-
+      unavailable_courses.each do |course|
         errors.add(:courses, :level_unavailable, course: course.title, level: member.level.to_s.titleize)
+      end
+    end
+
+    def unavailable_courses
+      courses.select do |course|
+        course.capacities_courses.any? &&
+          course.availability_for_level(member.level, year) <= 0
       end
     end
   end
