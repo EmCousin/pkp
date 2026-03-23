@@ -31,7 +31,12 @@ describe Courses::Available, type: :model do
     let(:year) { Subscription.current_year }
     let(:capacity) { 60 }
     let(:active) { true }
-    let(:course) { create :course, capacity:, active:, category: }
+    let(:course) do
+      c = create(:course, active:, category:)
+      # Set total capacity via capacities_courses
+      c.capacities_courses.update_all(capacity: capacity / 4) # Split among 4 levels
+      c
+    end
     let(:status) { :pending }
     let!(:subscription) { create :subscription, courses: [course], status:, year: }
 
@@ -58,6 +63,11 @@ describe Courses::Available, type: :model do
 
       context 'when course is full' do
         let(:capacity) { 1 }
+
+        before do
+          # Make sure all capacities are set to 0 to make course unavailable
+          course.capacities_courses.update_all(capacity: 0)
+        end
 
         it 'does not include the course' do
           expect(Course.available(year)).not_to include course
