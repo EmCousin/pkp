@@ -4,7 +4,10 @@ require 'rails_helper'
 
 RSpec.describe Members::SubscriptionForm do
   let(:member) { create(:member) }
-  let(:subscription) { create(:subscription, member:) }
+  let(:category) { create(:category) }
+  let!(:pricing) { create(:pricing, category:) }
+  let(:course) { create(:course, category:) }
+  let(:subscription) { create(:subscription, member:, courses: [course], status: :confirmed) }
 
   describe '#clear_subscription_forms' do
     before do
@@ -62,7 +65,8 @@ RSpec.describe Members::SubscriptionForm do
     end
 
     context 'when multiple subscriptions have forms' do
-      let(:subscription2) { create(:subscription, member:) }
+      let(:course2) { create(:course, category:, weekday: :tuesday) }
+      let(:subscription2) { create(:subscription, member:, courses: [course2], status: :confirmed, year: subscription.year - 1) }
 
       before do
         subscription2.form.attach(
