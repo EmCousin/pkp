@@ -26,7 +26,9 @@ class Course < ApplicationRecord
   # Sets all level capacities to the same value
   def capacity=(value)
     capacities_courses.each do |cap|
+      # rubocop:disable Rails/SkipsModelValidations
       cap.update_column(:capacity, value / capacities_courses.count)
+      # rubocop:enable Rails/SkipsModelValidations
     end
   end
 
