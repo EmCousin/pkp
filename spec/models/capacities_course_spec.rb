@@ -15,23 +15,31 @@ describe CapacitiesCourse, type: :model do
   end
 
   describe 'uniqueness validation' do
-    let(:course) { create(:course) }
-
     it 'prevents duplicate levels for the same course' do
-      create(:capacities_course, course: course, level: 'white')
-      duplicate = build(:capacities_course, course: course, level: 'white')
+      # Create a course which auto-creates capacities via the concern
+      course = create(:course)
+      
+      # Try to create another capacity with the same level (white is already created)
+      duplicate = build(:capacities_course, course: course, level: 'white', capacity: 10)
 
       expect(duplicate).not_to be_valid
-      expect(duplicate.errors[:level]).to include('has already been taken')
+      expect(duplicate.errors[:level]).to include(I18n.t('errors.messages.taken'))
     end
 
     it 'allows same level for different courses' do
       course1 = create(:course)
       course2 = create(:course)
-      create(:capacities_course, course: course1, level: 'white')
-      capacity2 = build(:capacities_course, course: course2, level: 'white')
 
-      expect(capacity2).to be_valid
+      # course1 already has 'white' from after_create callback
+      # course2 should also have 'white' from after_create callback
+      # This test verifies both courses can have their own 'white' capacity
+      expect(course1.capacities_courses.find_by(level: 'white')).to be_present
+      expect(course2.capacities_courses.find_by(level: 'white')).to be_present
+      
+      # These should be different records
+      expect(course1.capacities_courses.find_by(level: 'white').id).not_to eq(
+        course2.capacities_courses.find_by(level: 'white').id
+      )
     end
   end
 end
