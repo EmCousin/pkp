@@ -58,14 +58,14 @@ RSpec.describe Members::SubscriptionForm do
       end
 
       it 'does not clear form when avatar changes' do
-        new_avatar = fixture_file_upload('avatar.jpg', 'image/jpeg')
+        new_avatar = Rack::Test::UploadedFile.new(Rails.root.join('spec/support/file_examples/avatar.jpg'))
         expect { member.update!(avatar: new_avatar) }
           .not_to change { subscription.reload.form.attached? }
       end
     end
 
     context 'when multiple subscriptions have forms' do
-      let(:course2) { create(:course, category:, weekday: :tuesday) }
+      let(:course2) { create(:course, category:, weekday: :mardi) }
       let(:subscription2) { create(:subscription, member:, courses: [course2], status: :confirmed, year: subscription.year - 1) }
 
       before do
