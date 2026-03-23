@@ -16,7 +16,7 @@ module Courses
       end
 
       def with_courses_available(year)
-        includes(:subscriptions).select do |course|
+        includes(:subscriptions, :course_capacities).select do |course|
           course.available?(year)
         end
       end
@@ -27,7 +27,32 @@ module Courses
     end
 
     def availability(year = Subscription.current_year)
-      capacity - active_subscriptions(year).size
+      return capacity - active_subscriptions(year).size unless has_level_capacities?
+
+      total_capacity = course_capacities.sum(:capacity)
+      total_capacity - active_subscriptions(year).size
+    end
+
+    def available_for_level?(level, year = Subscription.current_year)
+      return availability(year).positive? unless has_level_capacities?
+
+      level_capacity = course_capacities.find_by(level:)&.capacity || 0
+      level_subscriptions = active_subscriptions(year).count { |s| s.member.level == level }
+      
+      level_capacity - level_subscriptions > 0
+    end
+
+    def availability_for_level(level, year = Subscription.current_year)
+      return availability(year) unless has_level_capacities?
+
+      level_capacity = course_capacities.find_by(level:)&.capacity || 0
+      level_subscriptions = active_subscriptions(year).count { |s| s.member.level == level }
+      
+      level_capacity - level_subscriptions
+    end
+
+    def has_level_capacities?
+      course_capacities.any?
     end
 
     private

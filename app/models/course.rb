@@ -15,8 +15,21 @@ class Course < ApplicationRecord
   has_many :members, through: :subscriptions
   has_many :attendance_sheets, dependent: :destroy
   has_many :attendance_records, through: :attendance_sheets
+  has_many :course_capacities, dependent: :destroy
+
+  accepts_nested_attributes_for :course_capacities, allow_destroy: true
 
   enum :weekday, lundi: 1, mardi: 2, mercredi: 3, jeudi: 4, vendredi: 5, samedi: 6, dimanche: 7
 
   scope :featuring_attendance_sheet, -> { where(features_attendance_sheet: true) }
+
+  after_create :initialize_course_capacities
+
+  private
+
+  def initialize_course_capacities
+    Member.levels.each_key do |level|
+      course_capacities.create!(level:, capacity: 0)
+    end
+  end
 end

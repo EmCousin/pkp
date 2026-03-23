@@ -99,6 +99,12 @@ module Subscriptions
       return if courses.empty? # Skip if no courses
 
       errors.add(:courses, :unavailable) if courses.any? { |c| !c.available? }
+      
+      courses.each do |course|
+        unless course.available_for_level?(member.level, year)
+          errors.add(:courses, :level_unavailable, course: course.title, level: member.level.titleize)
+        end
+      end
     end
   end
 end
