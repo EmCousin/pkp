@@ -158,6 +158,9 @@ fr:
       subscription:
         one: Inscription
         other: Inscriptions
+      course_level_capacity:
+        one: Capacité par niveau
+        other: Capacités par niveau
     attributes:
       camp:
         title: Titre
@@ -212,6 +215,9 @@ fr:
         weekday: Jour de la semaine
         active: Actif
         features_attendance_sheet: Feuille de présence
+      course_level_capacity:
+        level: Niveau
+        capacity: Capacité
       category:
         title: Titre
         min_age: Âge minimum
@@ -436,6 +442,7 @@ fr:
       show:
         new_subscription: Nouvelle inscription
         create_attendance_sheet: "Feuille de présence"
+        level_capacities: "Capacités par niveau"
       subscription:
         remove_from_course: Retirer du cours
         remove_from_course_are_you_sure: Êtes-vous sûr·e de vouloir retirer %{member_full_name} du cours %{course_title} ?
@@ -456,6 +463,9 @@ fr:
         success: Cours supprimé
       form:
         new_category: Ajouter une autre catégorie
+        capacity_note: "Définissez ici la capacité totale du cours."
+        level_capacities_title: "Capacités par niveau"
+        level_capacities_description: "Définissez la capacité maximale par niveau. Laissez à 0 pour utiliser la capacité globale du cours."
       course:
         create_attendance_sheet: "Feuille de présence"
     credit_notes:

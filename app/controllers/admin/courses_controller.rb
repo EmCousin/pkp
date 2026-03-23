@@ -16,9 +16,12 @@ module Admin
 
     def new
       @course = Course.new(category_id: params[:category_id])
+      build_course_level_capacities
     end
 
-    def edit; end
+    def edit
+      build_course_level_capacities
+    end
 
     def create
       @course = Course.new(course_params)
@@ -74,8 +77,22 @@ module Admin
       params[:level].presence || Member.levels.keys
     end
 
+    def build_course_level_capacities
+      existing_levels = @course.course_level_capacities.map(&:level)
+      Member.levels.keys.each do |level|
+        next if existing_levels.include?(level)
+
+        @course.course_level_capacities.build(level: level, capacity: 0)
+      end
+    end
+
     def course_params
-      params.expect(course: %i[title description capacity category_id weekday active features_attendance_sheet])
+      params.expect(
+        course: [
+          :title, :description, :capacity, :category_id, :weekday, :active, :features_attendance_sheet,
+          course_level_capacities_attributes: [:id, :level, :capacity, :_destroy]
+        ]
+      )
     end
   end
 end

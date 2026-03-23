@@ -56,6 +56,21 @@
           <span class="ml-1"><%= @course.weekday %></span>
         </div>
       </div>
+
+      <% if @course.level_capacities_configured? %>
+        <div class="border-t pt-4 mt-4">
+          <h3 class="font-medium text-gray-700 mb-2"><%= t('.level_capacities') %></h3>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <% @course.course_level_capacities.order(:level).each do |clc| %>
+              <% next if clc.capacity.zero? %>
+              <div>
+                <span class="text-gray-600"><%= Member.human_attribute_name("level.#{clc.level}") %> :</span>
+                <span class="ml-1"><%= @course.level_availability(clc.level) %> / <%= clc.capacity %></span>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
     </div>
 
     <div class="flex flex-col sm:flex-row justify-end items-center gap-4 mt-8 pt-6 border-t">

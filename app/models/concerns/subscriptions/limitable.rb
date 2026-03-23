@@ -98,7 +98,15 @@ module Subscriptions
     def courses_must_be_available
       return if courses.empty? # Skip if no courses
 
-      errors.add(:courses, :unavailable) if courses.any? { |c| !c.available? }
+      unavailable_courses = courses.reject do |course|
+        if member.present?
+          course.available_for_level?(member.level)
+        else
+          course.available?
+        end
+      end
+
+      errors.add(:courses, :unavailable) if unavailable_courses.any?
     end
   end
 end
