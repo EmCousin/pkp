@@ -16,6 +16,8 @@ class Course < ApplicationRecord
 
   accepts_nested_attributes_for :capacities_courses, allow_destroy: true
 
+  validates :title, presence: true
+
   enum :weekday, lundi: 1, mardi: 2, mercredi: 3, jeudi: 4, vendredi: 5, samedi: 6, dimanche: 7
 
   scope :featuring_attendance_sheet, -> { where(features_attendance_sheet: true) }
