@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :course do
     association :category
-    title { Faker::Lorem.word.presence || 'Default Course Title' }
+    sequence(:title) { |n| "Course #{n} #{Faker::Lorem.word}" }
     description { Faker::Lorem.paragraph }
     weekday { Course.weekdays.keys.sample }
 
