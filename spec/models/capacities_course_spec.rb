@@ -23,7 +23,7 @@ describe CapacitiesCourse, type: :model do
       duplicate = build(:capacities_course, course: course, level: 'white', capacity: 10)
 
       expect(duplicate).not_to be_valid
-      expect(duplicate.errors[:level].first).to match(/deja|déjà/i)
+      expect(duplicate.errors[:level].first).to match(/dejà|déjà/i)
     end
 
     it 'allows same level for different courses' do
