@@ -21,4 +21,17 @@ class Course < ApplicationRecord
   enum :weekday, lundi: 1, mardi: 2, mercredi: 3, jeudi: 4, vendredi: 5, samedi: 6, dimanche: 7
 
   scope :featuring_attendance_sheet, -> { where(features_attendance_sheet: true) }
+
+  # Virtual attribute for backward compatibility with existing tests
+  # Sets all level capacities to the same value
+  def capacity=(value)
+    capacities_courses.each do |cap|
+      cap.update_column(:capacity, value / capacities_courses.count)
+    end
+  end
+
+  # Returns total capacity across all levels
+  def capacity
+    capacities_courses.sum(:capacity)
+  end
 end

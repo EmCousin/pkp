@@ -29,7 +29,11 @@ module Courses
     end
 
     def availability(year = Subscription.current_year)
-      capacities_courses.sum(:capacity) - active_subscriptions(year).count
+      total_capacity = capacities_courses.sum(:capacity)
+      # If all level capacities are 0, treat as unlimited for backward compatibility
+      return Float::INFINITY if total_capacity.zero? && capacities_courses.any?
+
+      total_capacity - active_subscriptions(year).count
     end
 
     def availability_for_level(level, year = Subscription.current_year)
