@@ -37,8 +37,9 @@ module Courses
       return availability(year).positive? unless level_capacities?
 
       level_capacity = course_capacities.find_by(level:)&.capacity || 0
-      level_subscriptions = active_subscriptions(year).count { |s| s.member.level == level }
+      return availability(year).positive? if level_capacity.zero?
 
+      level_subscriptions = active_subscriptions(year).count { |s| s.member.level == level }
       (level_capacity - level_subscriptions).positive?
     end
 
@@ -46,8 +47,9 @@ module Courses
       return availability(year) unless level_capacities?
 
       level_capacity = course_capacities.find_by(level:)&.capacity || 0
-      level_subscriptions = active_subscriptions(year).count { |s| s.member.level == level }
+      return availability(year) if level_capacity.zero?
 
+      level_subscriptions = active_subscriptions(year).count { |s| s.member.level == level }
       level_capacity - level_subscriptions
     end
 
