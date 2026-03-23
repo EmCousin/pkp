@@ -78,7 +78,7 @@ module Admin
       params.expect(
         course: [
           :title, :description, :capacity, :category_id, :weekday, :active, :features_attendance_sheet,
-          { course_capacities_attributes: [:id, :level, :capacity, :_destroy] }
+          { course_capacities_attributes: %i[id level capacity _destroy] }
         ]
       )
     end
