@@ -1,7 +1,40 @@
 #!/usr/bin/env bash
 
+set -e
+
 # Default to test environment
 export RAILS_ENV="${RAILS_ENV:-test}"
-export DATABASE_HOST="${DATABASE_HOST:-127.0.0.1}"
 
-exec bundle exec rspec "$@"
+# Check if --docker flag is passed
+USE_DOCKER=false
+RSPEC_ARGS=()
+
+for arg in "$@"; do
+  if [ "$arg" = "--docker" ]; then
+    USE_DOCKER=true
+  else
+    RSPEC_ARGS+=("$arg")
+  fi
+done
+
+if [ "$USE_DOCKER" = true ]; then
+  echo "Running tests in Docker..."
+  
+  # Build the test image if needed
+  docker compose -f docker-compose.test.yml build test
+  
+  # Run tests in Docker
+  docker compose -f docker-compose.test.yml run --rm test bundle exec rspec "${RSPEC_ARGS[@]}"
+  
+  # Capture exit code
+  EXIT_CODE=$?
+  
+  # Clean up containers but keep volumes for caching
+  docker compose -f docker-compose.test.yml down
+  
+  exit $EXIT_CODE
+else
+  # Run tests locally
+  export DATABASE_HOST="${DATABASE_HOST:-127.0.0.1}"
+  exec bundle exec rspec "${RSPEC_ARGS[@]}"
+fi

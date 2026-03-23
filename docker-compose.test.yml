@@ -1,0 +1,44 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: rails
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+    networks:
+      - test_network
+    ports:
+      - "5433:5432"  # Use different port to avoid conflicts with dev db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rails"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    environment:
+      RAILS_ENV: test
+      DOCKER: "true"
+    volumes:
+      - .:/rails
+      - bundle_cache:/usr/local/bundle
+    networks:
+      - test_network
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["bundle", "exec", "rspec"]
+    stdin_open: true
+    tty: true
+
+networks:
+  test_network:
+    driver: bridge
+
+volumes:
+  postgres_test_data:
+  bundle_cache:
