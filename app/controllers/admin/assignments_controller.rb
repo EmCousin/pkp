@@ -19,7 +19,7 @@ module Admin
     end
 
     def destroy
-      @assignment = Assignment.find(params[:id])
+      @assignment = Assignment.includes(:coach, :course).find(params[:id])
       @assignment.destroy
       redirect_to admin_assignments_path(year: @assignment.year), notice: t(".success")
     end
