@@ -4,6 +4,7 @@ class Member < ApplicationRecord
   include ConditionalPagination
   include Members::Available
   include Members::Searchable
+  include Members::SubscriptionForm
 
   MAJORITY_AGE = 18
 
