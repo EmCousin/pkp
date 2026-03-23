@@ -6,6 +6,8 @@ module Courses
 
     included do
       scope :active, -> { where(active: true) }
+
+      after_create :initialize_capacities_courses
     end
 
     class_methods do
@@ -27,7 +29,7 @@ module Courses
     end
 
     def availability(year = Subscription.current_year)
-      capacities_courses.sum(:capacity) - active_subscriptions(year).size
+      capacities_courses.sum(:capacity) - active_subscriptions(year).count
     end
 
     def availability_for_level(level, year = Subscription.current_year)
@@ -36,7 +38,7 @@ module Courses
       level_capacity = capacities_courses.find_by(level:)&.capacity || 0
       return availability(year) if level_capacity.zero?
 
-      level_subscriptions = active_subscriptions(year).count { |s| s.member&.level == level }
+      level_subscriptions = count_active_subscriptions_for_level(level, year)
       level_capacity - level_subscriptions
     end
 
@@ -53,6 +55,21 @@ module Courses
     def active_subscriptions(year)
       subscriptions.reject do |subscription|
         subscription.archived? || subscription.year != year
+      end
+    end
+
+    def count_active_subscriptions_for_level(level, year)
+      # Preload members to avoid N+1 query
+      subscriptions.includes(:member).count do |subscription|
+        !subscription.archived? &&
+          subscription.year == year &&
+          subscription.member&.level == level
+      end
+    end
+
+    def initialize_capacities_courses
+      Member.levels.keys.each do |level|
+        capacities_courses.create!(level: level, capacity: 0)
       end
     end
   end
