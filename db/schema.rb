@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_12_123801) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_23_000002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -150,6 +150,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_12_123801) do
     t.index ["subscription_id"], name: "index_courses_subscriptions_on_subscription_id"
   end
 
+  create_table "assignments", force: :cascade do |t|
+    t.bigint "coach_id", null: false
+    t.bigint "course_id", null: false
+    t.enum "level", null: false, enum_type: "member_level"
+    t.integer "year", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["coach_id", "course_id", "level", "year"], name: "index_assignments_on_coach_id_and_course_id_and_level_and_year", unique: true
+    t.index ["coach_id"], name: "index_assignments_on_coach_id"
+    t.index ["course_id"], name: "index_assignments_on_course_id"
+  end
+
   create_table "members", force: :cascade do |t|
     t.bigint "user_id"
     t.string "first_name", null: false
@@ -162,6 +174,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_12_123801) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.enum "level", default: "white", null: false, enum_type: "member_level"
+    t.boolean "coach", default: false, null: false
     t.index ["first_name", "last_name"], name: "index_members_on_first_name_and_last_name"
     t.index ["level"], name: "index_members_on_level"
     t.index ["user_id"], name: "index_members_on_user_id"
@@ -246,4 +259,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_12_123801) do
   add_foreign_key "pricings", "categories"
   add_foreign_key "subscriptions", "members"
   add_foreign_key "subscriptions", "subscriptions", column: "parent_subscription_id"
+  add_foreign_key "assignments", "courses"
+  add_foreign_key "assignments", "members", column: "coach_id"
 end
