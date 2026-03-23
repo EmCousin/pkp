@@ -6,7 +6,6 @@ module Courses
 
     included do
       scope :active, -> { where(active: true) }
-      validates :capacity, presence: true, numericality: { greater_than_or_equal_to: 1, only_integer: true }
     end
 
     class_methods do
@@ -28,8 +27,6 @@ module Courses
     end
 
     def availability(year = Subscription.current_year)
-      return capacity - active_subscriptions(year).size if capacities_courses.empty?
-
       capacities_courses.sum(:capacity) - active_subscriptions(year).size
     end
 

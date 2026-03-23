@@ -19,4 +19,12 @@ class Course < ApplicationRecord
   enum :weekday, lundi: 1, mardi: 2, mercredi: 3, jeudi: 4, vendredi: 5, samedi: 6, dimanche: 7
 
   scope :featuring_attendance_sheet, -> { where(features_attendance_sheet: true) }
+
+  private
+
+  def initialize_capacities_courses
+    Member.levels.keys.each do |level|
+      capacities_courses.create!(level: level, capacity: 0)
+    end
+  end
 end

@@ -3,7 +3,12 @@ FactoryBot.define do
     association :category
     title { Faker::Lorem.word }
     description { Faker::Lorem.paragraph }
-    capacity { 60 }
     weekday { Course.weekdays.keys.sample }
+
+    after(:create) do |course|
+      Member.levels.keys.each do |level|
+        create(:capacities_course, course: course, level: level, capacity: 15)
+      end
+    end
   end
 end
