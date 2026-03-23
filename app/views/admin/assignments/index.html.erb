@@ -1,0 +1,130 @@
+<%# frozen_string_literal: true %>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="mb-8">
+    <h1 class="text-2xl font-bold text-gray-900"><%= t('.title') %></h1>
+    
+    <div class="mt-4">
+      <%= form_with url: admin_assignments_path, method: :get, class: "flex items-center gap-4" do |form| %>
+        <%= form.select :year, 
+            (Time.current.year - 2..Time.current.year + 1).to_a.reverse,
+            { selected: @year },
+            { class: "block w-32 rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm",
+              onchange: "this.form.submit()" } %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="mb-6">
+    <h2 class="text-lg font-medium text-gray-900 mb-3"><%= t('.coaches') %></h2>
+    <div class="flex flex-wrap gap-2" id="coaches-list">
+      <% @coaches.each do |coach| %>
+        <div class="coach-pill inline-flex items-center gap-2 px-3 py-1.5 bg-blue-100 text-blue-800 rounded-full text-sm font-medium cursor-move"
+             draggable="true"
+             data-coach-id="<%= coach.id %>"
+             data-coach-name="<%= coach.full_name %>">
+          <%= coach.full_name %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <%= t('.course') %>
+          </th>
+          <% Member.levels.keys.each do |level| %>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <%= Member.human_attribute_name(level) %>
+            </th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <% @courses.each do |course| %>
+          <tr>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+              <%= course.title %>
+              <span class="text-gray-500">(<%= course.category.title %>)</span>
+            </td>
+            <% Member.levels.keys.each do |level| %>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <% assignment = @assignments.find { |a| a.course_id == course.id && a.level == level } %>
+                <div class="assignment-cell min-h-[40px] p-2 border-2 border-dashed border-gray-300 rounded-lg transition-colors"
+                     data-course-id="<%= course.id %>"
+                     data-level="<%= level %>">
+                  <% if assignment %>
+                    <div class="assignment-pill inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 rounded text-sm">
+                      <%= assignment.coach.full_name %>
+                      <%= button_to admin_assignment_path(assignment), 
+                          method: :delete,
+                          class: "ml-1 text-green-600 hover:text-green-900",
+                          form: { data: { turbo_confirm: t('.confirm_remove') } } do %>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                      <% end %>
+                    </div>
+                  <% end %>
+                </div>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<%= form_with url: admin_assignments_path, id: "assignment-form", class: "hidden" do |form| %>
+  <%= form.hidden_field :coach_id, id: "assignment_coach_id" %>
+  <%= form.hidden_field :course_id, id: "assignment_course_id" %>
+  <%= form.hidden_field :level, id: "assignment_level" %>
+  <%= form.hidden_field :year, value: @year %>
+<% end %>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const coaches = document.querySelectorAll('.coach-pill');
+  const cells = document.querySelectorAll('.assignment-cell');
+  let draggedCoachId = null;
+  let draggedCoachName = null;
+
+  coaches.forEach(coach => {
+    coach.addEventListener('dragstart', function(e) {
+      draggedCoachId = this.dataset.coachId;
+      draggedCoachName = this.dataset.coachName;
+      e.dataTransfer.effectAllowed = 'copy';
+    });
+  });
+
+  cells.forEach(cell => {
+    cell.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'copy';
+      this.classList.add('border-blue-400', 'bg-blue-50');
+    });
+
+    cell.addEventListener('dragleave', function(e) {
+      this.classList.remove('border-blue-400', 'bg-blue-50');
+    });
+
+    cell.addEventListener('drop', function(e) {
+      e.preventDefault();
+      this.classList.remove('border-blue-400', 'bg-blue-50');
+      
+      const courseId = this.dataset.courseId;
+      const level = this.dataset.level;
+      
+      document.getElementById('assignment_coach_id').value = draggedCoachId;
+      document.getElementById('assignment_course_id').value = courseId;
+      document.getElementById('assignment_level').value = level;
+      
+      document.getElementById('assignment-form').submit();
+    });
+  });
+});
+</script>
