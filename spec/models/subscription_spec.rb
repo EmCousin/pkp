@@ -44,54 +44,58 @@ describe Subscription, type: :model do
           end
         end
 
-        context 'when the subscription has more than three courses' do
-          let(:courses) { build_list :course, 4 }
-
-          it 'invalidates the subscription' do
-            error = subscription.errors.first
-            expect(error.type).to eq :less_than_or_equal_to
-            expect(error.attribute).to eq :courses_count
-            expect(error.options[:count]).to eq 3
-            expect(error.options[:value]).to eq 4
-            expect(error.options[:message]).to eq :limit_exceeded
-            expect(error.message).to eq "Maximum 3 cours"
-          end
-
-          context "when it is winter time" do
-            let(:courses) do
-              [
-                build(:course, category: category, weekday: 1),
-                build(:course, category: category, weekday: 2),
-                build(:course, category: category, weekday: 3)
-              ]
-            end
-            let(:winter_time) { 1.month.after(Subscription.winter_time_range.first) }
+        context 'when the subscription has more courses than allowed' do
+          context 'when the category has pricings' do
+            let(:pricings_count) { 5 }
+            let(:prices) { pricings_count.times.map { |i| (i + 1) * 100 } }
+            let!(:category) { create(:category) }
+            let!(:pricing) { create(:pricing, category: category, prices: prices) }
+            let(:courses) { build_list :course, pricings_count + 1, category: category }
+            let(:subscription) { build :subscription, courses: courses, category_id: category.id }
 
             before do
-              travel_to(winter_time)
-              subscription.validate
+              # Clear memoized courses_category and re-validate
+              subscription.instance_variable_set(:@courses_category, nil)
+              subscription.valid?
             end
 
             it 'invalidates the subscription' do
               error = subscription.errors.first
               expect(error.type).to eq :less_than_or_equal_to
               expect(error.attribute).to eq :courses_count
-              expect(error.options[:count]).to eq 2
-              expect(error.options[:value]).to eq 3
+              expect(error.options[:count]).to eq pricings_count
+              expect(error.options[:value]).to eq pricings_count + 1
               expect(error.options[:message]).to eq :limit_exceeded
-              expect(error.message).to eq "Maximum 2 cours"
+              expect(error.message).to eq "Maximum #{pricings_count} cours"
+            end
+          end
+
+          context 'when the category has no pricings' do
+            let(:category) { build(:category, pricings: []) }
+
+            context 'when the subscription has more than three courses' do
+              let(:courses) { build_list :course, 4, category: }
+
+              it 'invalidates the subscription' do
+                error = subscription.errors.first
+                expect(error.type).to eq :less_than_or_equal_to
+                expect(error.attribute).to eq :courses_count
+                expect(error.options[:count]).to eq 2
+                expect(error.options[:value]).to eq 4
+                expect(error.options[:message]).to eq :limit_exceeded
+                expect(error.message).to eq 'Maximum 2 cours'
+              end
             end
 
-            after { travel_back }
-
-            context "when the subscription is for Kidz" do
-              let(:category) { create :category, :kidz }
+            context 'when it is winter time' do
               let(:courses) do
                 [
-                  build(:course, category: category, weekday: 1),
-                  build(:course, category: category, weekday: 2)
+                  build(:course, category:, weekday: 1),
+                  build(:course, category:, weekday: 2),
+                  build(:course, category:, weekday: 3)
                 ]
               end
+              let(:winter_time) { 1.month.after(Subscription.winter_time_range.first) }
 
               before do
                 travel_to(winter_time)
@@ -102,13 +106,36 @@ describe Subscription, type: :model do
                 error = subscription.errors.first
                 expect(error.type).to eq :less_than_or_equal_to
                 expect(error.attribute).to eq :courses_count
-                expect(error.options[:count]).to eq 1
-                expect(error.options[:value]).to eq 2
+                expect(error.options[:count]).to eq 2
+                expect(error.options[:value]).to eq 3
                 expect(error.options[:message]).to eq :limit_exceeded
-                expect(error.message).to eq "Maximum 1 cours"
+                expect(error.message).to eq 'Maximum 2 cours'
               end
 
-              after { travel_back }
+              context 'when the subscription is for Kidz' do
+                let(:category) { create :category, :kidz }
+                let(:courses) do
+                  [
+                    build(:course, category: category, weekday: 1),
+                    build(:course, category: category, weekday: 2)
+                  ]
+                end
+
+                before do
+                  travel_to(winter_time)
+                  subscription.validate
+                end
+
+                it 'invalidates the subscription' do
+                  error = subscription.errors.first
+                  expect(error.type).to eq :less_than_or_equal_to
+                  expect(error.attribute).to eq :courses_count
+                  expect(error.options[:count]).to eq 1
+                  expect(error.options[:value]).to eq 2
+                  expect(error.options[:message]).to eq :limit_exceeded
+                  expect(error.message).to eq 'Maximum 1 cours'
+                end
+              end
             end
           end
         end
@@ -117,7 +144,7 @@ describe Subscription, type: :model do
           let(:courses) do
             [
               build(:course),
-              build(:course),
+              build(:course)
             ]
           end
 
@@ -147,11 +174,11 @@ describe Subscription, type: :model do
     let(:subscription) { build :subscription, courses: [course, another_course] }
 
     describe '#description' do
-      it { expect(subject.description).to eq "Lundi Adulte Mixte, Mardi Adulte Mixte" }
+      it { expect(subject.description).to eq 'Lundi Adulte Mixte, Mardi Adulte Mixte' }
     end
 
     describe '#available_courses' do
-      it "returns no courses since the category is not set" do
+      it 'returns no courses since the category is not set' do
         expect(subject.available_courses).to eq Course.none
       end
 
@@ -160,7 +187,7 @@ describe Subscription, type: :model do
         let(:subscription) { build :subscription, category_id: category.id }
         let!(:course) { create :course, category: category }
 
-        it "returns the course" do
+        it 'returns the course' do
           expect(subject.available_courses).to include course
         end
       end
