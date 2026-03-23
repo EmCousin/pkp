@@ -39,8 +39,16 @@ module Courses
       level_capacity = capacities_courses.find_by(level:)&.capacity || 0
       return availability(year) if level_capacity.zero?
 
-      level_subscriptions = active_subscriptions(year).count { |s| s.member.level == level }
+      level_subscriptions = active_subscriptions(year).count { |s| s.member&.level == level }
       level_capacity - level_subscriptions
+    end
+
+    def availabilities(year = Subscription.current_year)
+      return {} if capacities_courses.empty?
+
+      capacities_courses.to_h do |capacity|
+        [capacity.level.to_sym, availability_for_level(capacity.level, year)]
+      end
     end
 
     private
