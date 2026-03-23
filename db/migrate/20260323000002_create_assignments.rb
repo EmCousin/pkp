@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateAssignments < ActiveRecord::Migration[7.2]
+class CreateAssignments < ActiveRecord::Migration[8.0]
   def change
     create_table :assignments do |t|
       t.references :coach, null: false, foreign_key: { to_table: :members }
