@@ -68,7 +68,7 @@ module Courses
     end
 
     def initialize_capacities_courses
-      Member.levels.keys.each do |level|
+      Member.levels.each_key do |level|
         capacities_courses.create!(level: level, capacity: 0)
       end
     end
