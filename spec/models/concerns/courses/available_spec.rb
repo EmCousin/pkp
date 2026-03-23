@@ -65,8 +65,11 @@ describe Courses::Available, type: :model do
         let(:capacity) { 1 }
 
         before do
-          # Make sure all capacities are set to 0 to make course unavailable
-          course.capacities_courses.update_all(capacity: 0)
+          # Set all capacities to small value and then fill with subscriptions
+          course.capacities_courses.update_all(capacity: 1)
+          # Create a subscription to fill the capacity
+          member = create(:member)
+          create(:subscription, courses: [course], member: member, year: year, status: :confirmed)
         end
 
         it 'does not include the course' do

@@ -27,8 +27,9 @@ describe CapacitiesCourse, type: :model do
     end
 
     it 'allows same level for different courses' do
-      course1 = create(:course)
-      course2 = create(:course)
+      # Use explicit titles to avoid potential uniqueness issues
+      course1 = create(:course, title: 'Course One')
+      course2 = create(:course, title: 'Course Two')
 
       # course1 already has 'white' from after_create callback
       # course2 should also have 'white' from after_create callback
