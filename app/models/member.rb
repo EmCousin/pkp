@@ -34,7 +34,7 @@ class Member < ApplicationRecord
   has_many :camps, through: :subscriptions
   has_many :attendance_records, dependent: :destroy
   has_many :attendance_sheets, through: :attendance_records
-  has_many :assignments, foreign_key: :coach_id, dependent: :destroy
+  has_many :assignments, foreign_key: :coach_id, dependent: :destroy, inverse_of: :coach
   has_many :assigned_courses, through: :assignments, source: :course
 
   has_one_attached :avatar do |attachable|

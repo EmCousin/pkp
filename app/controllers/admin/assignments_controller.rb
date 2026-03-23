@@ -12,22 +12,22 @@ module Admin
     def create
       @assignment = Assignment.new(assignment_params)
       if @assignment.save
-        redirect_to admin_assignments_path(year: @assignment.year), notice: t(".success")
+        redirect_to admin_assignments_path(year: @assignment.year), notice: t('.success')
       else
-        redirect_to admin_assignments_path(year: @assignment.year), alert: t(".failure")
+        redirect_to admin_assignments_path(year: @assignment.year), alert: t('.failure')
       end
     end
 
     def destroy
       @assignment = Assignment.includes(:coach, :course).find(params[:id])
       @assignment.destroy
-      redirect_to admin_assignments_path(year: @assignment.year), notice: t(".success")
+      redirect_to admin_assignments_path(year: @assignment.year), notice: t('.success')
     end
 
     private
 
     def assignment_params
-      params.expect(assignment: [:coach_id, :course_id, :level, :year])
+      params.expect(assignment: %i[coach_id course_id level year])
     end
   end
 end
