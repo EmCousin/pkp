@@ -113,6 +113,7 @@ fr:
               unique_category: "Les cours doivent être de la même catégorie"
               unique_weekday: "Les cours ne doivent pas être le même jour"
               unavailable: "L'un des cours est complet"
+              level_unavailable: "Le cours %{course} n'a plus de place disponible pour le niveau %{level}"
             parent_subscription:
               required_for_camp: "Une inscription parent est requise pour un stage"
             member:
@@ -456,6 +457,9 @@ fr:
         success: Cours supprimé
       form:
         new_category: Ajouter une autre catégorie
+        capacity_hint: "Capacité globale du cours. Les capacités par niveau peuvent être configurées ci-dessous."
+        level_capacities: "Capacités par niveau"
+        level_capacities_hint: "Définissez le nombre de places disponibles pour chaque niveau. Laissez à 0 si vous ne souhaitez pas restreindre par niveau."
       course:
         create_attendance_sheet: "Feuille de présence"
     credit_notes:

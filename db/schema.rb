@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_12_123801) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_23_113500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -119,6 +119,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_12_123801) do
     t.index ["title"], name: "index_categories_on_title", unique: true
   end
 
+  create_table "capacities_courses", force: :cascade do |t|
+    t.bigint "course_id", null: false
+    t.enum "level", null: false, enum_type: "member_level"
+    t.integer "capacity", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id", "level"], name: "index_capacities_courses_on_course_id_and_level", unique: true
+    t.index ["course_id"], name: "index_capacities_courses_on_course_id"
+  end
+
   create_table "contacts", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "email", null: false
@@ -131,7 +141,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_12_123801) do
   create_table "courses", force: :cascade do |t|
     t.string "title", null: false
     t.string "description"
-    t.integer "capacity", null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.integer "weekday", null: false
@@ -239,6 +248,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_12_123801) do
   add_foreign_key "camps_subscriptions", "camps"
   add_foreign_key "camps_subscriptions", "subscriptions"
   add_foreign_key "contacts", "users"
+  add_foreign_key "capacities_courses", "courses"
   add_foreign_key "courses", "categories"
   add_foreign_key "courses_subscriptions", "courses"
   add_foreign_key "courses_subscriptions", "subscriptions"

@@ -26,7 +26,14 @@ describe Subscription, type: :model do
         build(:course, category: category, weekday: Course.weekdays.keys.last)
       ]
     end
-    let(:subscription) { build :subscription, courses: courses, category_id: category.id }
+    let(:subscription) do
+      sub = build :subscription, courses: courses, category_id: category.id
+      # Ensure courses have capacity for the member's level
+      courses.each do |course|
+        course.capacities_courses.where(level: sub.member.level).update_all(capacity: 10)
+      end
+      sub
+    end
 
     it { is_expected.to validate_numericality_of(:fee).is_greater_than_or_equal_to(0) }
 
