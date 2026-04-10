@@ -34,6 +34,8 @@ class Member < ApplicationRecord
   has_many :camps, through: :subscriptions
   has_many :attendance_records, dependent: :destroy
   has_many :attendance_sheets, through: :attendance_records
+  has_many :assignments, foreign_key: :coach_id, dependent: :destroy, inverse_of: :coach
+  has_many :assigned_courses, through: :assignments, source: :course
 
   has_one_attached :avatar do |attachable|
     attachable.variant :mini, resize: '80x80'
@@ -52,6 +54,12 @@ class Member < ApplicationRecord
 
   normalizes :first_name, with: ->(first_name) { first_name.strip.downcase.titleize }
   normalizes :last_name, with: ->(last_name) { last_name.strip.downcase.titleize }
+
+  scope :coaches, -> { where(coach: true) }
+
+  def coach?
+    coach
+  end
 
   def full_name
     "#{first_name.strip.downcase.titleize} #{last_name.strip.downcase.titleize}"

@@ -90,6 +90,7 @@ Rails.application.routes.draw do
     get '/', to: redirect('/admin/members')
     concerns :courses_manageable
 
+    resources :assignments, only: [:index, :create, :destroy]
     resources :categories, only: [:index, :show, :new, :create, :edit, :update, :destroy]
     resources :members do
       resource :level, only: [:update]
@@ -119,6 +120,7 @@ Rails.application.routes.draw do
   end
 
   namespace :dashboard do
+    resource :assignments, only: [:show]
     resources :members, only: [:new, :create, :edit, :update]
     resources :subscriptions, only: [:show, :new, :create] do
       resource :term, as: :terms, only: [:edit, :update]

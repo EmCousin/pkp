@@ -61,9 +61,9 @@ module Admin
       params.expect(
         member: [:level, :first_name, :last_name, :birthdate,
                  :contact_name, :contact_phone_number, :contact_relationship,
-                 :avatar,
+                 :avatar, :coach,
                  :agreed_to_advertising_right,
-                 { user_attributes: %i[id email password address zip_code city country phone_number admin coach] }]
+                 { user_attributes: %i[id email password address zip_code city country phone_number admin] }]
       )
     end
 

@@ -14,4 +14,8 @@ FactoryBot.define do
   trait :minor do
     birthdate { 10.years.ago }
   end
+
+  trait :coach do
+    coach { true }
+  end
 end
