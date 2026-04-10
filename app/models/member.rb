@@ -42,7 +42,7 @@ class Member < ApplicationRecord
   enum :level, white: 'white', yellow: 'yellow', green: 'green', red: 'red'
 
   validates :first_name, :last_name, :contact_name, :avatar, presence: true
-  validates :birthdate, presence: true, inclusion: { in: (99.years.ago)..(6.years.ago), on: :create }
+  validates :birthdate, presence: true, inclusion: { in: ->(_) { 99.years.ago.to_date..6.years.ago.to_date } }, on: :create
   validates :contact_phone_number, presence: true, phone: true
   validates :contact_relationship, presence: true, inclusion: { in: CONTACTS }
 
