@@ -133,6 +133,7 @@ en:
               unique_category: "courses must be from the same category"
               unique_weekday: "courses must not be on the same day"
               unavailable: "one of the courses is full"
+              level_unavailable: "Course %{course} has no more spots available for level %{level}"
             member:
               too_young: "does not meet the minimum age requirement"
               too_old: "exceeds the maximum age requirement"
@@ -162,6 +163,10 @@ en:
         active: "Active"
       course:
         features_attendance_sheet: "Attendance Sheet"
+        capacity: "Capacity"
+      course_capacity:
+        level: "Level"
+        capacity: "Capacity"
       subscription:
         statuses:
           confirmed_bank_transfer: "Paid by bank transfer"
@@ -285,6 +290,9 @@ en:
         success: "Course deleted"
       form:
         new_category: "Add another category"
+        capacity_hint: "Overall course capacity. Level-specific capacities can be configured below."
+        level_capacities: "Level Capacities"
+        level_capacities_hint: "Set the number of available spots for each level. Leave at 0 if you don't want to restrict by level."
     categories:
       new:
         title: "Create a Category"

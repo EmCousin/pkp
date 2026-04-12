@@ -98,7 +98,27 @@ module Subscriptions
     def courses_must_be_available
       return if courses.empty? # Skip if no courses
 
+      check_course_availability
+      check_level_availability
+    end
+
+    def check_course_availability
       errors.add(:courses, :unavailable) if courses.any? { |c| !c.available? }
+    end
+
+    def check_level_availability
+      return unless member
+
+      unavailable_courses.each do |course|
+        errors.add(:courses, :level_unavailable, course: course.title, level: member.level.to_s.titleize)
+      end
+    end
+
+    def unavailable_courses
+      courses.select do |course|
+        course.capacities_courses.any? &&
+          course.availability_for_level(member.level, year) <= 0
+      end
     end
   end
 end
