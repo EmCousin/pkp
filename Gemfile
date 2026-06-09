@@ -19,7 +19,7 @@ gem 'sqlite3'
 
 # Use Puma as the app server
 # Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]
-gem 'puma', '~> 6'
+gem 'puma', '~> 7'
 gem 'thruster', require: false
 
 # Assets
