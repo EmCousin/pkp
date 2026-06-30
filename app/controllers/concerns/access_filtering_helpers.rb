@@ -12,7 +12,7 @@ module AccessFilteringHelpers
   private
 
   def vacation_time?
-    Time.current.month.in?(Course::VACATION_MONTHS)
+    Time.current.month.in?(Course::VACATION_MONTHS) && Time.current >= Course.vacation_start
   end
 
   def alumni_time?

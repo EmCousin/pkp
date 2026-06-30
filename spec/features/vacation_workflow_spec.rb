@@ -82,7 +82,7 @@ feature "Vacation Workflow", type: :feature do
   end
 
   before do
-    travel_to Time.zone.local(Subscription.current_year, 7, 1, 9, 0, 0)
+    travel_to Time.zone.local(Subscription.next_year, 7, 12, 9, 0, 0)
   end
 
   after do

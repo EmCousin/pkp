@@ -2,6 +2,7 @@
 
 class Course < ApplicationRecord
   VACATION_MONTHS = (7..8).to_a.freeze
+  VACATION_START_DAY = 12
   ALUMNI_MONTHS = VACATION_MONTHS[-1..].freeze
 
   include Courses::Available
@@ -19,4 +20,8 @@ class Course < ApplicationRecord
   enum :weekday, lundi: 1, mardi: 2, mercredi: 3, jeudi: 4, vendredi: 5, samedi: 6, dimanche: 7
 
   scope :featuring_attendance_sheet, -> { where(features_attendance_sheet: true) }
+
+  def self.vacation_start(year = Time.current.year)
+    Time.zone.local(year, VACATION_MONTHS.first, VACATION_START_DAY).beginning_of_day
+  end
 end

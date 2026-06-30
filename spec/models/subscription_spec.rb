@@ -16,6 +16,16 @@ describe Subscription, type: :model do
   it { is_expected.to delegate_method(:teen?).to(:category).with_prefix(true).allow_nil }
   it { is_expected.to delegate_method(:adult?).to(:category).with_prefix(true).allow_nil }
 
+  describe '.current_year' do
+    it 'keeps the previous season until July 11' do
+      expect(described_class.current_year(Date.new(2026, 7, 11))).to eq(2025)
+    end
+
+    it 'starts the new season on July 12' do
+      expect(described_class.current_year(Date.new(2026, 7, 12))).to eq(2026)
+    end
+  end
+
   describe 'validatable' do
     subject { subscription }
 
