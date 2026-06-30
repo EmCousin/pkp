@@ -16,7 +16,9 @@ module Subscriptions
       end
 
       def current_year(datetime = Time.current)
-        datetime.month < Course::VACATION_MONTHS.first ? datetime.year - 1 : datetime.year
+        date = datetime.to_date
+
+        date < Course.vacation_start(date.year).to_date ? date.year - 1 : date.year
       end
 
       def next_year

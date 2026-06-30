@@ -16,14 +16,14 @@ module Subscriptions
       def spring_time_range
         Range.new(
           DateTime.new(Subscription.next_year, 4, 1).beginning_of_day,
-          DateTime.new(Subscription.next_year, Course::VACATION_MONTHS.first, 1).beginning_of_day
+          Course.vacation_start(Subscription.next_year)
         )
       end
 
       def winter_time_range
         Range.new(
           DateTime.new(Subscription.current_year, 12, 20).beginning_of_day,
-          DateTime.new(Subscription.next_year, Course::VACATION_MONTHS.first, 1).beginning_of_day
+          Course.vacation_start(Subscription.next_year)
         )
       end
     end

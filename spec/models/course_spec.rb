@@ -6,6 +6,10 @@ describe Course, type: :model do
       expect(described_class::VACATION_MONTHS).to eq([7, 8].freeze)
     end
 
+    it 'has a constant VACATION_START_DAY' do
+      expect(described_class::VACATION_START_DAY).to eq(12)
+    end
+
     it 'has a constant ALUMNI_MONTHS' do
       expect(described_class::ALUMNI_MONTHS).to eq([8].freeze)
     end
