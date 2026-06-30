@@ -46,7 +46,9 @@ RSpec.describe Members::SubscriptionForm do
       end
 
       it 'clears attached form when contact_relationship changes' do
-        expect { member.update!(contact_relationship: 'Mère') }
+        new_contact_relationship = (Member::CONTACTS - [member.contact_relationship]).first
+
+        expect { member.update!(contact_relationship: new_contact_relationship) }
           .to change { subscription.reload.form.attached? }.from(true).to(false)
       end
     end
