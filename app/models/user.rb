@@ -20,9 +20,11 @@ class User < ApplicationRecord
   has_many :members, dependent: :destroy
   has_many :subscriptions, through: :members
   has_many :current_year_subscriptions, lambda {
-    confirmed.where(year: Subscription.current_year, parent_subscription: nil)
+    confirmed.registration_type_annual.where(year: Subscription.current_year, parent_subscription: nil)
   }, through: :members, source: :subscriptions
   has_many :courses, through: :subscriptions
+
+  before_destroy :prevent_destroying_finalized_event_registrations, prepend: true
 
   attr_accessor :email_confirmation
 
@@ -47,6 +49,10 @@ class User < ApplicationRecord
     INVALID_EMAIL_PROVIDERS.any? { |provider| email.ends_with?(provider) }
   end
 
+  def destroyable?
+    !subscriptions.finalized_events.exists?
+  end
+
   private
 
   def email_confirmation_required?
@@ -55,5 +61,12 @@ class User < ApplicationRecord
 
   def valid_email_provider
     errors.add(:email, :invalid_provider) if invalid_email_provider?
+  end
+
+  def prevent_destroying_finalized_event_registrations
+    return if destroyable?
+
+    errors.add(:base, :finalized_event_registration)
+    throw :abort
   end
 end

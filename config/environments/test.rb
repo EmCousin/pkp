@@ -17,6 +17,7 @@ Rails.application.configure do
 
   # Show full error reports and disable caching.
   config.consider_all_requests_local = true
+  config.action_controller.allow_forgery_protection = false
   config.cache_store = :solid_cache_store
 
   # Raise exceptions instead of rendering exception templates.

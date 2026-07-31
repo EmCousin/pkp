@@ -5,31 +5,40 @@ describe Subscriptions::Payable, type: :model do
 
   subject { subscription }
 
-  let(:category) { create :category, title: 'Adulte' }
-  let(:courses) { create_list :course, 1, category: }
   let(:user) { create :user }
   let(:member) { create :member, user: }
-  let(:subscription) { create :subscription, member:, courses: }
+  let(:discovery_session) { create :discovery_session }
+  let(:subscription) do
+    create :subscription, member:, registration_type: :discovery, discovery_session:, year: discovery_session.year
+  end
   let(:stripe_charge_id) { SecureRandom.hex }
   let(:stripe_payment_intent_id) { 'pi_test_123' }
   let(:stripe_created_at) { Time.now }
-  let(:stripe_amount) { subscription.fee_cents }
+  let(:stripe_payment_intent_amount) { subscription.fee_cents }
+  let(:stripe_charge_amount) { subscription.fee_cents }
+  let(:stripe_status) { 'succeeded' }
+  let(:stripe_payment_intent_currency) { 'eur' }
+  let(:stripe_charge_currency) { 'eur' }
+  let(:stripe_charge_paid) { true }
   let(:stripe_payment_intent) do
     OpenStruct.new(
       id: stripe_payment_intent_id,
       client_secret: 'pi_test_123_secret',
       latest_charge: stripe_charge_id,
-      paid: true,
+      status: stripe_status,
+      currency: stripe_payment_intent_currency,
+      amount_received: stripe_payment_intent_amount,
       created: stripe_created_at.to_i,
-      amount: stripe_amount
+      amount: stripe_payment_intent_amount
     )
   end
   let(:stripe_charge) do
     OpenStruct.new(
       id: stripe_charge_id,
-      paid: true,
+      paid: stripe_charge_paid,
+      currency: stripe_charge_currency,
       created: stripe_created_at.to_i,
-      amount: stripe_amount
+      amount: stripe_charge_amount
     )
   end
 
@@ -63,10 +72,46 @@ describe Subscriptions::Payable, type: :model do
   end
 
   describe '#paid_amount' do
-    it { expect(subject.paid_amount).to eq (stripe_amount / 100.0) }
+    it { expect(subject.paid_amount).to eq (stripe_charge_amount / 100.0) }
   end
 
   describe '#balance' do
     it { expect(subject.balance).to eq 0 }
+  end
+
+  context 'when Stripe has not confirmed the payment' do
+    let(:stripe_status) { 'requires_payment_method' }
+
+    it { expect(subject).not_to be_paid }
+  end
+
+  context 'when the payment intent amount differs from the registration fee' do
+    let(:stripe_payment_intent_amount) { subscription.fee_cents + 100 }
+
+    it { expect(subject).not_to be_paid }
+  end
+
+  context 'when the payment intent currency is not euros' do
+    let(:stripe_payment_intent_currency) { 'usd' }
+
+    it { expect(subject).not_to be_paid }
+  end
+
+  context 'when the charge amount differs from the registration fee' do
+    let(:stripe_charge_amount) { subscription.fee_cents + 100 }
+
+    it { expect(subject).not_to be_paid }
+  end
+
+  context 'when the charge currency is not euros' do
+    let(:stripe_charge_currency) { 'usd' }
+
+    it { expect(subject).not_to be_paid }
+  end
+
+  context 'when Stripe reports an unpaid charge' do
+    let(:stripe_charge_paid) { false }
+
+    it { expect(subject).not_to be_paid }
   end
 end

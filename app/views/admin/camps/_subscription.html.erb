@@ -8,6 +8,9 @@
       <p class="text-xs text-gray-500 truncate">
         <%= mail_to subscription.member.user.email, subscription.member.user.email %>
       </p>
+      <p class="text-xs text-gray-500">
+        <%= subscription.parent_subscription_id? ? t('.internal') : t('.external') %> - <%= number_to_currency(subscription.fee, unit: '€') %>
+      </p>
     </div>
   </div>
   <div class="flex items-center justify-between sm:justify-end space-x-2 sm:space-x-3">
@@ -46,11 +49,13 @@
                 ) %>
           <% end %>
 
-          <%= button_to t('.unsubscribe'),
-                        [:admin, @camp, subscription],
-                        method: :delete,
-                        data: { turbo_confirm: t('.confirm_unsubscribe') },
-                        class: "w-full text-left px-3 py-2 text-xs text-red-600 hover:bg-red-50" %>
+          <% if subscription.cancellable? %>
+            <%= button_to t('.unsubscribe'),
+                          [:admin, @camp, subscription],
+                          method: :delete,
+                          data: { turbo_confirm: t('.confirm_unsubscribe') },
+                          class: "w-full text-left px-3 py-2 text-xs text-red-600 hover:bg-red-50" %>
+          <% end %>
         </div>
       </details>
     </div>

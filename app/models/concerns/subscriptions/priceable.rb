@@ -9,6 +9,7 @@ module Subscriptions
 
       before_save :set_category_id, if: -> { courses.any? }
       before_save :set_fee
+      validate :event_year_must_match, if: :event?
     end
 
     def fee_cents
@@ -22,11 +23,28 @@ module Subscriptions
     end
 
     def set_fee
-      self.fee = if parent_subscription.present? && subscription_camp.present?
-                   subscription_camp.price
-                 else
-                   dynamic_price_for_courses_count || legacy_price_for_courses_count
-                 end
+      return if event_fee_locked?
+
+      self.fee = calculated_fee
+    end
+
+    def event_fee_locked?
+      event? && persisted?
+    end
+
+    def calculated_fee
+      return subscription_camp&.price_for(member) if camp?
+      return discovery_session&.price if discovery?
+
+      dynamic_price_for_courses_count || legacy_price_for_courses_count
+    end
+
+    def event_year_must_match
+      event = camp? ? subscription_camp : discovery_session
+      return unless event && year
+      return if year == event.year
+
+      errors.add(:year, :event_mismatch)
     end
 
     def dynamic_price_for_courses_count

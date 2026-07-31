@@ -38,8 +38,11 @@ module Admin
     end
 
     def destroy
-      @course.destroy
-      redirect_to %i[admin courses], notice: t('.success'), status: :see_other
+      if @course.destroy
+        redirect_to %i[admin courses], notice: t('.success'), status: :see_other
+      else
+        redirect_to %i[admin courses], alert: t('.error'), status: :see_other
+      end
     end
 
     private

@@ -97,7 +97,7 @@ feature "Subscription Workflow", type: :feature do
   scenario "User signs up" do
     visit '/users/sign_up'
     expect(page).to have_text("S'inscrire")
-    expect(page).to have_text("Si vous souhaitez faire un cours d'essai, veuillez envoyer votre demande directement sur notre formulaire de contact.")
+    expect(page).to have_text("Vous pouvez utiliser ce compte pour vous inscrire aux cours découverte et aux stages ouverts aux externes.")
 
     within("#new_user") do
       fill_in "user_email", with: user.email

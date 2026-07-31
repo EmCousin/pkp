@@ -37,15 +37,16 @@ module Subscriptions
     end
 
     def verify_stripe_payment!(payment_intent_id:, payment_intent_client_secret:, redirect_status:)
-      return unless payment_intent_id == stripe_payment_intent.id
-      return unless payment_intent_client_secret == stripe_payment_intent.client_secret
-      return unless redirect_status == 'succeeded'
+      intent = stripe_payment_intent
+      return unless valid_payment_intent?(intent, payment_intent_id, payment_intent_client_secret, redirect_status)
 
-      stripe_payment_intent_charge = Stripe::Charge.retrieve(stripe_payment_intent.latest_charge)
+      charge = Stripe::Charge.retrieve(intent.latest_charge)
+      return unless valid_charge?(charge)
+
       update!(
-        paid_at: Time.zone.at(stripe_payment_intent_charge.created),
+        paid_at: Time.zone.at(charge.created),
         payment_method: :credit_card,
-        stripe_charge_id: stripe_payment_intent_charge.id
+        stripe_charge_id: charge.id
       )
 
       confirm! if completed?
@@ -78,10 +79,23 @@ module Subscriptions
     end
 
     def payable_by_credit_card?
-      subscription_camp.present?
+      event?
     end
 
     private
+
+    def valid_payment_intent?(intent, payment_intent_id, client_secret, redirect_status)
+      payment_intent_id == intent.id &&
+        client_secret == intent.client_secret &&
+        redirect_status == 'succeeded' &&
+        intent.status == 'succeeded' &&
+        intent.currency == 'eur' &&
+        intent.amount_received == fee_cents
+    end
+
+    def valid_charge?(charge)
+      charge.paid && charge.currency == 'eur' && charge.amount == fee_cents
+    end
 
     def stripe_charge
       @stripe_charge ||= stripe_charge_id && Stripe::Charge.retrieve(stripe_charge_id)

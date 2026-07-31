@@ -1,0 +1,32 @@
+<div class="max-w-6xl mx-auto px-4 py-8">
+  <div class="bg-white shadow sm:rounded-lg overflow-hidden">
+    <div class="px-5 py-6 border-b border-gray-200">
+      <h1 class="text-xl font-semibold text-gray-900"><%= discovery_session.course.title %></h1>
+      <p class="mt-1 text-sm text-gray-600"><%= l(discovery_session.starts_at, format: :event) %></p>
+      <p class="mt-1 text-sm text-gray-500"><%= subscriptions.size %>/<%= discovery_session.capacity %> participants confirmés</p>
+    </div>
+    <div class="divide-y divide-gray-200">
+      <% subscriptions.each do |subscription| %>
+        <div class="p-4 flex items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <%= image_tag subscription.member.avatar, class: "h-11 w-11 rounded-full object-cover" %>
+            <div>
+              <p class="font-medium text-gray-900"><%= subscription.member.full_name %></p>
+              <p class="text-sm text-gray-500"><%= subscription.member.email %></p>
+            </div>
+          </div>
+          <% attendance_path = namespace == :admin ? admin_discovery_session_attendance_path(discovery_session, subscription) : coach_discovery_session_attendance_path(discovery_session, subscription) %>
+          <%= form_with model: subscription, url: attendance_path, method: :patch, data: { controller: 'form' } do |form| %>
+            <label class="flex items-center gap-2 cursor-pointer font-medium text-sm text-gray-700">
+              <%= form.check_box :attendance_status, { data: { action: 'form#submit' }, class: 'h-5 w-5 rounded border-gray-300 text-green-600' }, 'present', 'absent' %>
+              <%= t('.present') %>
+            </label>
+          <% end %>
+        </div>
+      <% end %>
+      <% if subscriptions.empty? %>
+        <p class="p-8 text-center text-gray-500"><%= t('.empty') %></p>
+      <% end %>
+    </div>
+  </div>
+</div>

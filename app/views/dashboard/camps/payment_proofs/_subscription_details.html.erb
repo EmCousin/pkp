@@ -11,7 +11,7 @@
           <div class="text-sm text-gray-500 mt-1"><%= t('dashboard.terms.edit.year', year: subscription.year, next_year: subscription.year + 1) %></div>
         </div>
         <div class="text-xl font-semibold text-indigo-600">
-          <%= number_to_currency(camp.price, unit: "€", separator: ",", format: "%n %u") %>
+          <%= number_to_currency(subscription.fee, unit: "€", separator: ",", format: "%n %u") %>
         </div>
       </div>
     </div>
@@ -42,7 +42,7 @@
         </div>
         <div>
           <span class="font-medium"><%= Camp.human_attribute_name(:capacity) %> :</span>
-          <span><%= camp.subscriptions.confirmed.count %>/<%= camp.capacity %> <%= t('dashboard.camps.camp.participants') %></span>
+          <span><%= camp.occupied_slots %>/<%= camp.capacity %> <%= t('dashboard.camps.camp.participants') %></span>
         </div>
       </div>
     </div>

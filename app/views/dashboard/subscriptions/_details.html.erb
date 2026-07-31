@@ -8,7 +8,15 @@
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <div>
           <div class="text-2xl font-bold text-gray-900"><%= subscription.member.full_name %></div>
-          <div class="text-sm text-gray-500 mt-1"><%= t('dashboard.terms.edit.year', year: subscription.year, next_year: subscription.year + 1) %></div>
+          <div class="text-sm text-gray-500 mt-1">
+            <% if subscription.camp? %>
+              <%= subscription.camp.title %>
+            <% elsif subscription.discovery? %>
+              <%= l(subscription.discovery_session.starts_at, format: :event) %>
+            <% else %>
+              <%= t('dashboard.terms.edit.year', year: subscription.year, next_year: subscription.year + 1) %>
+            <% end %>
+          </div>
         </div>
         <div class="text-xl font-semibold text-indigo-600">
           <%= number_to_currency(subscription.fee, unit: "€", separator: ",", format: "%n %u") %>
@@ -16,8 +24,18 @@
       </div>
     </div>
   </div>
-  <!-- Courses Table -->
-  <div class="overflow-x-auto mt-4">
+  <% if subscription.event? %>
+    <div class="mt-4 rounded-lg bg-indigo-50 p-4 text-indigo-900">
+      <p class="font-semibold"><%= subscription.description %></p>
+      <% if subscription.camp? %>
+        <p class="mt-1 text-sm"><%= l(subscription.camp.starts_at, format: :long) %> - <%= l(subscription.camp.ends_at, format: :long) %></p>
+      <% else %>
+        <p class="mt-1 text-sm"><%= l(subscription.discovery_session.starts_at, format: :event) %></p>
+      <% end %>
+    </div>
+  <% else %>
+    <!-- Courses Table -->
+    <div class="overflow-x-auto mt-4">
     <table class="min-w-full divide-y divide-gray-200 rounded-lg overflow-hidden shadow-sm">
       <thead class="bg-indigo-50">
         <tr>
@@ -40,8 +58,9 @@
         <% end %>
       </tbody>
     </table>
-  </div>
-  <!-- End Courses Table -->
+    </div>
+    <!-- End Courses Table -->
+  <% end %>
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-700 mt-6">
     <div>
       <span class="font-medium text-gray-500"><%= Member.human_attribute_name(:birthdate) %> :</span>

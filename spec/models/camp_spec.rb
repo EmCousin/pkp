@@ -9,11 +9,13 @@ describe Camp, type: :model do
   it { is_expected.to validate_presence_of(:starts_at) }
   it { is_expected.to validate_presence_of(:ends_at) }
   it { is_expected.to validate_presence_of(:price) }
+  it { is_expected.to validate_presence_of(:external_price) }
 
   it { is_expected.to validate_numericality_of(:capacity).is_greater_than_or_equal_to(1).only_integer }
   it { is_expected.to validate_numericality_of(:price).is_greater_than(0) }
+  it { is_expected.to validate_numericality_of(:external_price).is_greater_than(0) }
 
-  it { is_expected.to have_many(:camps_subscriptions).dependent(:destroy) }
+  it { is_expected.to have_many(:camps_subscriptions).dependent(:restrict_with_error) }
   it { is_expected.to have_many(:subscriptions).through(:camps_subscriptions) }
   it { is_expected.to have_many(:members).through(:subscriptions) }
 
@@ -83,18 +85,18 @@ describe Camp, type: :model do
       member = create(:member)
       course = create(:course)
       parent_subscription = create(:subscription, status: :confirmed, courses: [course], member:)
-      subscription = build(:subscription, status: :confirmed, parent_subscription:, member:)
+      subscription = build(:subscription, registration_type: :camp, status: :confirmed, parent_subscription:, member:)
       create(:camps_subscription, camp:, subscription:)
       expect(camp.available_slots).to eq(9)
     end
 
-    it 'does not count pending subscriptions' do
+    it 'reserves capacity for pending subscriptions' do
       member = create(:member)
       course = create(:course)
       parent_subscription = create(:subscription, status: :confirmed, courses: [course], member:)
-      subscription = build(:subscription, status: :pending, parent_subscription:, member:)
+      subscription = build(:subscription, registration_type: :camp, status: :pending, parent_subscription:, member:)
       create(:camps_subscription, camp:, subscription:)
-      expect(camp.available_slots).to eq(10)
+      expect(camp.available_slots).to eq(9)
     end
   end
 
@@ -109,9 +111,51 @@ describe Camp, type: :model do
       member = create(:member)
       course = create(:course)
       parent_subscription = create(:subscription, status: :confirmed, courses: [course], member:)
-      subscription = build(:subscription, status: :confirmed, parent_subscription:, member:)
+      subscription = build(:subscription, registration_type: :camp, status: :confirmed, parent_subscription:, member:)
       create(:camps_subscription, camp:, subscription:)
       expect(camp.fully_booked?).to be_truthy
     end
+  end
+
+  describe '#price_for' do
+    let(:camp) { create(:camp, price: 100, external_price: 140, open_to_externals: true) }
+    let(:member) { create(:member) }
+
+    it 'returns the external price without an annual subscription' do
+      expect(camp.price_for(member)).to eq(140)
+    end
+
+    it 'returns the internal price with a confirmed annual subscription' do
+      create(:subscription, member:, courses: [create(:course)], status: :confirmed, year: camp.year)
+
+      expect(camp.price_for(member)).to eq(100)
+    end
+  end
+
+  it 'cannot be destroyed while registrations exist' do
+    camp = create(:camp, open_to_externals: true)
+    create(
+      :subscription,
+      registration_type: :camp,
+      year: camp.year,
+      camps_subscription_attributes: { camp_id: camp.id }
+    )
+
+    expect(camp.destroy).to be false
+    expect(camp).to be_persisted
+  end
+
+  it 'cannot move registrations to another season' do
+    boundary = Course.vacation_start(1.year.from_now.year)
+    camp = create(:camp, starts_at: boundary - 1.day, ends_at: boundary - 1.day, open_to_externals: true)
+    create(
+      :subscription,
+      registration_type: :camp,
+      year: camp.year,
+      camps_subscription_attributes: { camp_id: camp.id }
+    )
+
+    expect(camp.update(starts_at: boundary, ends_at: boundary)).to be false
+    expect(camp.errors.of_kind?(:starts_at, :event_year_locked)).to be true
   end
 end

@@ -26,7 +26,7 @@ module Admin
 
     def create
       @subscription = Subscription.new(subscription_params)
-      if @subscription.save
+      if save_subscription
         redirect_to %i[admin subscriptions], notice: t('.success'), status: :see_other
       else
         render :new, status: :unprocessable_content
@@ -42,8 +42,11 @@ module Admin
     end
 
     def destroy
-      @subscription.destroy
-      redirect_to admin_subscriptions_path(destroyed: true), notice: t('.success'), status: :see_other
+      if @subscription.destroy
+        redirect_to admin_subscriptions_path(destroyed: true), notice: t('.success'), status: :see_other
+      else
+        redirect_to admin_subscriptions_path, alert: t('.error'), status: :see_other
+      end
     end
 
     def unlink_course
@@ -60,6 +63,11 @@ module Admin
 
     def subscription_params
       params.expect(subscription: [:member_id, :status, :parent_subscription_id, { course_ids: [] }, { camps_subscription_attributes: [:camp_id] }])
+    end
+
+    def save_subscription
+      camp = @subscription.subscription_camp
+      camp ? camp.with_lock { @subscription.save } : @subscription.save
     end
   end
 end

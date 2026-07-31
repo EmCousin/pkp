@@ -8,6 +8,7 @@ describe Subscription, type: :model do
   it { is_expected.to have_many(:courses).through(:courses_subscriptions) }
 
   it { is_expected.to define_enum_for(:status).with_values(%i[pending confirmed archived]) }
+  it { is_expected.to define_enum_for(:registration_type).with_values(annual: 0, camp: 1, discovery: 2).with_prefix }
 
   it { is_expected.to respond_to :category_id }
   it { is_expected.to respond_to 'category_id=' }
@@ -90,10 +91,10 @@ describe Subscription, type: :model do
                 error = subscription.errors.first
                 expect(error.type).to eq :less_than_or_equal_to
                 expect(error.attribute).to eq :courses_count
-                expect(error.options[:count]).to eq 2
+              expect(error.options[:count]).to eq 3
                 expect(error.options[:value]).to eq 4
                 expect(error.options[:message]).to eq :limit_exceeded
-                expect(error.message).to eq 'Maximum 2 cours'
+              expect(error.message).to eq 'Maximum 3 cours'
               end
             end
 
@@ -224,6 +225,129 @@ describe Subscription, type: :model do
 
         it { expect(subject.status_color).to eq 'text-red-600' }
       end
+    end
+  end
+
+  describe 'event registrations' do
+    let(:member) { create(:member) }
+
+    it 'uses the external camp price without an annual subscription' do
+      camp = create(:camp, external_price: 180, open_to_externals: true)
+      subscription = build(
+        :subscription,
+        member:,
+        registration_type: :camp,
+        year: camp.year,
+        camps_subscription_attributes: { camp_id: camp.id }
+      )
+
+      expect(subscription.save).to be true
+      expect(subscription.fee).to eq(180)
+    end
+
+    it 'uses the internal camp price for an annual student' do
+      camp = create(:camp, price: 120, external_price: 180)
+      annual_subscription = create(:subscription, member:, courses: [create(:course)], status: :confirmed, year: camp.year)
+      subscription = annual_subscription.build_child_subscription(camps_subscription_attributes: { camp_id: camp.id })
+
+      expect(subscription.save).to be true
+      expect(subscription.fee).to eq(120)
+    end
+
+    it 'uses the discovery session price' do
+      discovery_session = create(:discovery_session, price: 30)
+      subscription = build(:subscription, member:, registration_type: :discovery, discovery_session:)
+
+      expect(subscription.save).to be true
+      expect(subscription.fee).to eq(30)
+    end
+
+    it 'does not require a medical certificate for an event' do
+      discovery_session = create(:discovery_session)
+      subscription = build(
+        :subscription,
+        member:,
+        registration_type: :discovery,
+        discovery_session:,
+        terms_accepted_at: Time.current,
+        paid_at: Time.current
+      )
+
+      expect(subscription).to be_completed
+    end
+
+    it 'allows annual enrollment after an external event in the same year' do
+      discovery_session = create(:discovery_session)
+      create(:subscription, member:, registration_type: :discovery, discovery_session:, year: discovery_session.year)
+
+      annual_subscription = build(:subscription, member:, courses: [discovery_session.course], year: discovery_session.year)
+
+      expect(annual_subscription).to be_valid
+    end
+
+    it 'keeps the event price as a registration snapshot' do
+      discovery_session = create(:discovery_session, price: 30)
+      subscription = create(:subscription, member:, registration_type: :discovery, discovery_session:)
+
+      discovery_session.update!(price: 45)
+      subscription.update!(attendance_status: :present)
+
+      expect(subscription.reload.fee).to eq(30)
+    end
+
+    it 'rejects an event registration as an annual parent' do
+      discovery_session = create(:discovery_session)
+      event_subscription = create(:subscription, member:, registration_type: :discovery, discovery_session:)
+      annual_subscription = build(:subscription, member:, parent_subscription: event_subscription, courses: [discovery_session.course])
+
+      expect(annual_subscription).not_to be_valid
+      expect(annual_subscription.errors.of_kind?(:parent_subscription, :invalid)).to be true
+    end
+
+    it 'rejects an event registration for a different season' do
+      discovery_session = create(:discovery_session)
+      subscription = build(
+        :subscription,
+        member:,
+        registration_type: :discovery,
+        discovery_session:,
+        year: discovery_session.year - 1
+      )
+
+      expect(subscription).not_to be_valid
+      expect(subscription.errors.of_kind?(:year, :event_mismatch)).to be true
+    end
+
+    it 'does not destroy paid or confirmed event registrations' do
+      discovery_session = create(:discovery_session)
+      paid = create(:subscription, member:, registration_type: :discovery, discovery_session:, paid_at: Time.current)
+      confirmed = create(:subscription, member: create(:member), registration_type: :discovery,
+                                          discovery_session:, status: :confirmed)
+
+      expect(paid.destroy).to be false
+      expect(confirmed.destroy).to be false
+      expect(paid).to be_persisted
+      expect(confirmed).to be_persisted
+    end
+
+    it 'destroys a pending unpaid event registration' do
+      discovery_session = create(:discovery_session)
+      subscription = create(:subscription, member:, registration_type: :discovery, discovery_session:)
+
+      expect(subscription.destroy).to be subscription
+      expect(subscription).not_to be_persisted
+    end
+
+    it 'does not destroy an annual registration with a finalized event child' do
+      annual = create(:subscription, member:, courses: [create(:course)], status: :confirmed)
+      camp = create(:camp)
+      child = annual.build_child_subscription(camps_subscription_attributes: { camp_id: camp.id })
+      child.paid_at = Time.current
+      child.save!
+
+      expect(annual.destroy).to be false
+      expect(annual).to be_persisted
+      expect(child.reload).to be_persisted
     end
   end
 end

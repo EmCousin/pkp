@@ -54,9 +54,9 @@
           <span class="hidden sm:inline">•</span>
           <span class="whitespace-nowrap"><%= t('.duration_days', count: camp.duration_days) %></span>
           <span class="hidden sm:inline">•</span>
-          <span class="whitespace-nowrap"><%= t('.price', price: number_to_currency(camp.price, unit: "€")) %></span>
+          <span class="whitespace-nowrap"><%= t('.price', price: "#{number_to_currency(camp.price, unit: '€')} / #{number_to_currency(camp.external_price, unit: '€')}") %></span>
           <span class="hidden sm:inline">•</span>
-          <span class="whitespace-nowrap"><%= t('.capacity', current: camp.subscriptions.confirmed.count, count: camp.capacity) %></span>
+          <span class="whitespace-nowrap"><%= t('.capacity', current: camp.occupied_slots, count: camp.capacity) %></span>
         </div>
       </div>
     </div>

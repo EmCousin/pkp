@@ -62,7 +62,7 @@
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <div>
             <div class="text-2xl font-bold text-gray-900"><%= @subscription.member.full_name %></div>
-            <div class="text-sm text-gray-500 mt-1"><%= t('dashboard.terms.edit.year', year: @subscription.year, next_year: @subscription.year + 1) %></div>
+            <div class="text-sm text-gray-500 mt-1"><%= @subscription.event? ? @subscription.description : t('dashboard.terms.edit.year', year: @subscription.year, next_year: @subscription.year + 1) %></div>
           </div>
           <div class="text-xl font-semibold text-indigo-600">
             <%= number_to_currency(@subscription.fee, unit: "€", separator: ",", format: "%n %u") %>
@@ -108,13 +108,13 @@
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zm0 0V4m0 8v8"/>
                     </svg>
-                    <%= number_to_currency(camp.price, unit: "€") %>
+                    <%= number_to_currency(@subscription.fee, unit: "€") %>
                   </span>
                   <span class="flex items-center gap-1">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m9-4.13a4 4 0 10-8 0 4 4 0 008 0z"/>
                     </svg>
-                    <%= t('admin.camps.camp.capacity', current: camp.subscriptions.confirmed.count, count: camp.capacity) %>
+                    <%= t('admin.camps.camp.capacity', current: camp.occupied_slots, count: camp.capacity) %>
                   </span>
                 </div>
               </div>
@@ -147,13 +147,13 @@
                   <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zm0 0V4m0 8v8"/>
                   </svg>
-                  <%= number_to_currency(camp.price, unit: "€") %>
+                  <%= number_to_currency(@subscription.fee, unit: "€") %>
                 </span>
                 <span class="flex items-center gap-1">
                   <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m9-4.13a4 4 0 10-8 0 4 4 0 008 0z"/>
                   </svg>
-                  <%= t('admin.camps.camp.capacity', current: camp.subscriptions.confirmed.count, count: camp.capacity) %>
+                  <%= t('admin.camps.camp.capacity', current: camp.occupied_slots, count: camp.capacity) %>
                 </span>
               </div>
             </div>
@@ -170,6 +170,12 @@
             </div>
           </div>
         </div>
+      </div>
+    <% elsif @subscription.discovery? %>
+      <div class="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-6">
+        <h3 class="text-lg font-semibold text-amber-900"><%= @subscription.discovery_session.course.title %></h3>
+        <p class="mt-2 text-sm text-amber-800"><%= l(@subscription.discovery_session.starts_at, format: :event) %></p>
+        <%= link_to t('defaults.view'), [:admin, @subscription.discovery_session], class: "mt-4 inline-flex text-sm font-medium text-amber-900 underline" %>
       </div>
     <% elsif @subscription.courses.any? %>
       <!-- Courses Table -->
@@ -333,8 +339,9 @@
         <% end %>
       </div>
     </div>
-    <!-- Doctor Certification Card -->
-    <div class="relative group">
+    <% if @subscription.medical_certificate_required? %>
+      <!-- Doctor Certification Card -->
+      <div class="relative group">
       <div class="absolute -inset-0.5 bg-gradient-to-r from-green-400 to-blue-500 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
       <div class="relative p-6 bg-white ring-1 ring-gray-200 rounded-lg flex flex-col items-start">
         <span class="block text-xs font-medium text-gray-500 uppercase mb-3">
@@ -348,7 +355,8 @@
           <span class="text-red-600 font-semibold"><%= t('.doctor_not_certified') %></span>
         <% end %>
       </div>
-    </div>
+      </div>
+    <% end %>
     <!-- Payment Card -->
     <div class="relative group">
       <div class="absolute -inset-0.5 bg-gradient-to-r from-pink-400 to-pink-600 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
@@ -378,13 +386,15 @@
     <%= link_to t('defaults.edit'),
         [:edit, :admin, @subscription],
         class: "inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800" %>
-    <%= button_to t('defaults.destroy'),
-        [:admin, @subscription],
-        method: :delete,
-        data: {
-          controller: :confirm,
-          confirm_message_value: t('defaults.are_you_sure')
-        },
-        class: "inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" %>
+    <% if @subscription.cancellable? %>
+      <%= button_to t('defaults.destroy'),
+          [:admin, @subscription],
+          method: :delete,
+          data: {
+            controller: :confirm,
+            confirm_message_value: t('defaults.are_you_sure')
+          },
+          class: "inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" %>
+    <% end %>
   </div>
 </div>

@@ -1,0 +1,24 @@
+<div class="max-w-6xl mx-auto px-4 py-8">
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold text-gray-900"><%= t('.title') %></h1>
+    <p class="mt-2 text-gray-600"><%= t('.description') %></p>
+  </div>
+  <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    <% @discovery_sessions.each do |discovery_session| %>
+      <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+        <p class="text-xs font-semibold uppercase tracking-wide text-amber-600"><%= l(discovery_session.starts_at, format: :event) %></p>
+        <h2 class="mt-2 text-lg font-semibold text-gray-900"><%= discovery_session.course.title %></h2>
+        <div class="mt-5 flex items-end justify-between">
+          <div>
+            <p class="font-semibold text-gray-900"><%= number_to_currency(discovery_session.price, unit: '€') %></p>
+            <p class="text-xs text-gray-500"><%= discovery_session.available_slots %> places restantes</p>
+          </div>
+          <%= link_to t('.view'), [:dashboard, discovery_session], class: "px-3 py-2 rounded-md bg-amber-500 text-white text-sm font-medium hover:bg-amber-600" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <% if @discovery_sessions.empty? %>
+    <p class="bg-white rounded-lg p-8 text-center text-gray-500"><%= t('.empty') %></p>
+  <% end %>
+</div>

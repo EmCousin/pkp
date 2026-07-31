@@ -30,12 +30,17 @@
             </div>
             <div>
               <dt class="text-sm font-medium text-gray-500"><%= t('.price') %></dt>
-              <dd class="mt-1 text-lg font-semibold text-gray-900"><%= number_to_currency(@camp.price, unit: "€") %></dd>
+              <dd class="mt-1 text-sm text-gray-900">
+                <span class="block"><%= t('.internal_price') %> : <strong><%= number_to_currency(@camp.price, unit: "€") %></strong></span>
+                <% if @camp.open_to_externals? %>
+                  <span class="block"><%= t('.external_price') %> : <strong><%= number_to_currency(@camp.external_price, unit: "€") %></strong></span>
+                <% end %>
+              </dd>
             </div>
             <div>
               <dt class="text-sm font-medium text-gray-500"><%= t('.capacity') %></dt>
               <dd class="mt-1 text-sm text-gray-900">
-                <%= t('.capacity_info', current: @camp.subscriptions.confirmed.size, count: @camp.capacity) %>
+                <%= t('.capacity_info', current: @camp.occupied_slots, count: @camp.capacity) %>
                 <% if @camp.fully_booked? %>
                   <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                     <%= t('.fully_booked') %>
@@ -50,46 +55,18 @@
           <h3 class="text-lg font-medium text-gray-900 mb-4"><%= t('.subscription') %></h3>
 
           <% if @camp.closed? %>
-            <div class="bg-red-50 border border-red-200 rounded-md p-4">
-              <div class="flex">
-                <div class="flex-shrink-0">
-                  <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-                  </svg>
-                </div>
-                <div class="ml-3">
-                  <h3 class="text-sm font-medium text-red-800">
-                    <%= t('.closed') %>
-                  </h3>
-                  <div class="mt-2 text-sm text-red-700">
-                    <p><%= t('.closed_description') %></p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          <% elsif current_user.current_year_subscriptions.any? %>
-            <div class="bg-blue-50 border border-blue-200 rounded-md p-4">
-              <div class="flex">
-                <div class="flex-shrink-0">
-                  <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-                  </svg>
-                </div>
-                <div class="ml-3">
-                  <h3 class="text-sm font-medium text-blue-800">
-                    <%= t('.available_for_subscription') %>
-                  </h3>
-                  <div class="mt-2 text-sm text-blue-700">
-                    <p><%= t('.choose_member') %></p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="mt-4 space-y-3">
-                <%= render partial: 'dashboard/camps/subscription', collection: current_user.current_year_subscriptions.includes(member: :camps) %>
-              </div>
-            </div>
+            <p class="rounded-md bg-red-50 border border-red-200 p-4 text-sm text-red-700"><%= t('.closed_description') %></p>
+          <% elsif @camp.fully_booked? %>
+            <p class="rounded-md bg-red-50 border border-red-200 p-4 text-sm text-red-700"><%= t('.fully_booked') %></p>
           <% else %>
+            <p class="rounded-md bg-blue-50 border border-blue-200 p-4 text-sm text-blue-700"><%= t('.choose_member') %></p>
+          <% end %>
+
+          <% if @members.any? %>
+            <div class="mt-4 space-y-3">
+              <%= render partial: 'dashboard/camps/subscription', collection: @members, as: :member %>
+            </div>
+          <% elsif !@camp.closed? && !@camp.fully_booked? %>
             <div class="bg-yellow-50 border border-yellow-200 rounded-md p-4">
               <div class="flex">
                 <div class="flex-shrink-0">
@@ -102,7 +79,9 @@
                     <%= t('.no_confirmed_subscriptions') %>
                   </h3>
                   <div class="mt-2 text-sm text-yellow-700">
-                    <p><%= t('.need_confirmed_subscription') %></p>
+                    <p><%= t('.add_member_description') %></p>
+                    <%= link_to t('.add_member'), new_dashboard_member_path(return_to: dashboard_camp_path(@camp)),
+                        class: "mt-3 inline-flex rounded-md bg-yellow-600 px-3 py-2 text-white font-medium" %>
                   </div>
                 </div>
               </div>

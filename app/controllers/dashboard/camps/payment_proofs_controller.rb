@@ -25,7 +25,7 @@ module Dashboard
       end
 
       def set_subscription
-        @subscription = current_user.subscriptions.find(params[:subscription_id])
+        @subscription = @camp.subscriptions.merge(current_user.subscriptions).find(params[:subscription_id])
       end
 
       def payment_proof_params

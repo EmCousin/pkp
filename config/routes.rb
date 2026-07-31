@@ -43,7 +43,9 @@ Rails.application.routes.draw do
 
   direct :next_completion_step do |subscription|
     next edit_dashboard_subscription_terms_path(subscription) unless subscription.terms_accepted_at?
-    next edit_dashboard_subscription_medical_certificate_path(subscription) unless subscription.doctor_certified_at?
+    if subscription.medical_certificate_required?
+      next edit_dashboard_subscription_medical_certificate_path(subscription) unless subscription.doctor_certified_at? && subscription.medical_certificate.attached?
+    end
     next new_dashboard_subscription_payment_path(subscription) unless subscription.paid? || subscription.payment_proof.attached?
 
     dashboard_path
@@ -98,6 +100,9 @@ Rails.application.routes.draw do
     resources :camps do
       resources :subscriptions, only: [:create, :destroy], controller: 'camps/subscriptions'
     end
+    resources :discovery_sessions do
+      resources :attendances, only: :update, controller: 'discovery_attendances'
+    end
 
     resources :subscriptions do
       resource :payment, only: [:create, :destroy]
@@ -131,6 +136,9 @@ Rails.application.routes.draw do
         resource :payment_proof, only: [:edit, :update], module: :camps
       end
     end
+    resources :discovery_sessions, only: %i[index show] do
+      resources :subscriptions, only: %i[create destroy], controller: 'discovery_sessions/subscriptions'
+    end
     resource :vacation, only: [:show]
     resource :capacity, only: [:show]
     resource :alumni_access, only: %i[new create]
@@ -146,5 +154,8 @@ Rails.application.routes.draw do
 
   namespace :coach do
     concerns :courses_manageable
+    resources :discovery_sessions, only: %i[index show] do
+      resources :attendances, only: :update, controller: 'discovery_attendances'
+    end
   end
 end

@@ -17,6 +17,14 @@ class SubscriptionMailer < ApplicationMailer
          subject: "Inscription Stage Parkour Paris - #{subscription.camp.title}"
   end
 
+  def confirm_discovery_subscription(subscription)
+    @subscription = subscription
+
+    mail to: subscription.member.email,
+         cc: cc_emails(subscription),
+         subject: "Inscription Cours découverte Parkour Paris - #{subscription.discovery_session.course.title}"
+  end
+
   private
 
   def cc_emails(subscription)

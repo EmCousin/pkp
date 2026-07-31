@@ -29,11 +29,13 @@ class Member < ApplicationRecord
 
   has_many :contacts, through: :user
   has_many :subscriptions, dependent: :destroy
-  has_one :current_subscription, -> { where(year: Subscription.current_year) }, class_name: 'Subscription', inverse_of: :member, dependent: :destroy
   has_many :courses, through: :subscriptions
   has_many :camps, through: :subscriptions
+  has_many :discovery_sessions, through: :subscriptions
   has_many :attendance_records, dependent: :destroy
   has_many :attendance_sheets, through: :attendance_records
+
+  before_destroy :prevent_destroying_finalized_event_registrations, prepend: true
 
   has_one_attached :avatar do |attachable|
     attachable.variant :mini, resize: '80x80'
@@ -73,11 +75,39 @@ class Member < ApplicationRecord
     end
   end
 
+  def annual_subscription_for(year = Subscription.current_year)
+    subscriptions.registration_type_annual
+                 .confirmed
+                 .find_by(year:, parent_subscription_id: nil)
+  end
+
+  def current_subscription
+    annual_subscription_for
+  end
+
   def can_subscribe?(camp)
+    return false if camp.closed?
     return false if camp.fully_booked?
-    return false unless current_subscription&.confirmed?
-    return false if camps.include?(camp)
+    return false unless camp.accessible_to?(self)
+    return false if camps.exists?(camp.id)
 
     true
+  end
+
+  def can_subscribe_to_discovery?(discovery_session)
+    discovery_session.open? && !discovery_session.fully_booked? && !discovery_sessions.exists?(discovery_session.id)
+  end
+
+  def destroyable?
+    !subscriptions.finalized_events.exists?
+  end
+
+  private
+
+  def prevent_destroying_finalized_event_registrations
+    return if destroyable?
+
+    errors.add(:base, :finalized_event_registration)
+    throw :abort
   end
 end

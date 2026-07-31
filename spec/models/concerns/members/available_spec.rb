@@ -40,5 +40,16 @@ describe Members::Available, type: :model do
 
       it { expect(Member.available(year)).to eq Member.none }
     end
+
+    context 'when the member only has an external event registration' do
+      let(:member) { create(:member) }
+      let(:discovery_session) { create(:discovery_session) }
+
+      before do
+        create(:subscription, member:, registration_type: :discovery, discovery_session:, year:)
+      end
+
+      it { expect(Member.available(year)).to include member }
+    end
   end
 end

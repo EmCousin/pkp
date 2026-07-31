@@ -1,0 +1,48 @@
+<div class="max-w-3xl mx-auto px-4 py-8">
+  <div class="bg-white shadow-sm border border-gray-200 rounded-xl p-6">
+    <p class="text-sm font-semibold text-amber-600"><%= l(@discovery_session.starts_at, format: :event) %></p>
+    <h1 class="mt-2 text-2xl font-bold text-gray-900"><%= @discovery_session.course.title %></h1>
+    <div class="mt-5 flex gap-6 text-sm text-gray-600">
+      <span><%= number_to_currency(@discovery_session.price, unit: '€') %></span>
+      <span><%= @discovery_session.available_slots %> places restantes</span>
+    </div>
+
+    <div class="mt-8 border-t border-gray-200 pt-6">
+      <% if @discovery_session.closed? %>
+        <p class="rounded-md bg-red-50 p-4 text-red-700"><%= t('.closed') %></p>
+      <% elsif @discovery_session.fully_booked? %>
+        <p class="rounded-md bg-red-50 p-4 text-red-700"><%= t('.full') %></p>
+      <% end %>
+
+      <% if @members.any? %>
+        <h2 class="font-semibold text-gray-900 mb-4"><%= t('.choose_member') %></h2>
+        <div class="space-y-3">
+          <% @members.each do |member| %>
+            <% subscription = member.subscriptions.find { |item| item.discovery_session_id == @discovery_session.id } %>
+            <% if subscription %>
+              <% completion_path = next_completion_step_path(subscription) %>
+              <div class="flex items-center justify-between rounded-lg bg-green-50 p-4">
+                <span><%= member.full_name %> - <%= Subscription.human_attribute_name(subscription.status) %></span>
+                <div class="flex gap-3">
+                  <% if completion_path != dashboard_path %>
+                    <%= link_to t('dashboard.event_subscription.resume'), completion_path, class: "text-sm font-medium text-blue-700" %>
+                  <% end %>
+                  <% if subscription.cancellable? %>
+                    <%= button_to t('.unsubscribe'), dashboard_discovery_session_subscription_path(@discovery_session, subscription), method: :delete,
+                        data: { turbo_confirm: t('.confirm_unsubscribe') }, class: "text-sm font-medium text-red-600" %>
+                  <% end %>
+                </div>
+              </div>
+            <% elsif member.can_subscribe_to_discovery?(@discovery_session) %>
+              <%= button_to t('.subscribe_with', member: member.full_name), dashboard_discovery_session_subscriptions_path(@discovery_session),
+                  params: { member_id: member.id }, class: "w-full rounded-lg bg-amber-500 px-4 py-3 text-left font-medium text-white hover:bg-amber-600" %>
+            <% end %>
+          <% end %>
+        </div>
+      <% elsif !@discovery_session.closed? && !@discovery_session.fully_booked? %>
+        <%= link_to t('.add_member'), new_dashboard_member_path(return_to: dashboard_discovery_session_path(@discovery_session)),
+            class: "inline-flex rounded-md bg-blue-600 px-4 py-2 text-white font-medium" %>
+      <% end %>
+    </div>
+  </div>
+</div>
