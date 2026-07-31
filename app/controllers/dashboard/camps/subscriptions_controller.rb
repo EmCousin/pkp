@@ -3,7 +3,7 @@
 module Dashboard
   module Camps
     class SubscriptionsController < DashboardController
-      before_action :set_camp
+      before_action :set_available_camp, only: :create
       before_action :set_member, only: [:create]
       before_action :set_subscription, only: [:destroy]
       before_action :check_cancellable, only: [:destroy]
@@ -43,12 +43,14 @@ module Dashboard
         @member = current_user.members.find(params.require(:member_id))
       end
 
-      def set_camp
+      def set_available_camp
         @camp = Camp.available.find(params[:camp_id])
       end
 
       def set_subscription
-        @subscription = @camp.subscriptions.merge(current_user.subscriptions).find(params[:id])
+        @subscription = current_user.subscriptions.find(params[:id])
+        @camp = @subscription.camp
+        raise ActiveRecord::RecordNotFound unless @camp&.id == params[:camp_id].to_i
       end
 
       def check_open_status

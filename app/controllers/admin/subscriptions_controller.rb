@@ -3,6 +3,7 @@
 module Admin
   class SubscriptionsController < BaseController
     before_action :set_subscription!, only: %i[show edit update destroy unlink_course]
+    before_action :reject_event_edit!, only: %i[edit update]
 
     def index
       @subscriptions = Subscription.search_and_filter(params.to_unsafe_h.slice(:status, :level, :year, :course_ids, :camp_id))
@@ -68,6 +69,12 @@ module Admin
     def save_subscription
       camp = @subscription.subscription_camp
       camp ? camp.with_lock { @subscription.save } : @subscription.save
+    end
+
+    def reject_event_edit!
+      return unless @subscription.event?
+
+      redirect_to [:admin, @subscription], alert: t('.event_not_editable'), status: :see_other
     end
   end
 end

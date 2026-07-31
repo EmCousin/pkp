@@ -3,7 +3,7 @@
 module Dashboard
   module DiscoverySessions
     class SubscriptionsController < DashboardController
-      before_action :set_discovery_session
+      before_action :set_available_discovery_session, only: :create
       before_action :set_member, only: :create
       before_action :set_subscription, only: :destroy
       before_action :check_cancellable, only: :destroy
@@ -33,7 +33,7 @@ module Dashboard
 
       private
 
-      def set_discovery_session
+      def set_available_discovery_session
         @discovery_session = DiscoverySession.available.find(params[:discovery_session_id])
       end
 
@@ -42,7 +42,9 @@ module Dashboard
       end
 
       def set_subscription
-        @subscription = @discovery_session.subscriptions.merge(current_user.subscriptions).find(params[:id])
+        @subscription = current_user.subscriptions.find(params[:id])
+        @discovery_session = @subscription.discovery_session
+        raise ActiveRecord::RecordNotFound unless @discovery_session&.id == params[:discovery_session_id].to_i
       end
 
       def check_open_status

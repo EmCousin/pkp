@@ -102,6 +102,14 @@ describe Member, type: :model do
 
       expect(member.can_subscribe?(camp)).to be true
     end
+
+    it 'rejects a discovery session outside the member age range' do
+      category = create(:category, title: 'Adultes découverte', min_age: 18, max_age: 100)
+      discovery_session = create(:discovery_session, course: create(:course, category:))
+      minor = create(:member, :minor)
+
+      expect(minor.can_subscribe_to_discovery?(discovery_session)).to be false
+    end
   end
 
   it 'does not destroy finalized event registrations' do

@@ -98,9 +98,10 @@
         <% end %>
       </div>
 
-      <div class="flex items-center space-x-2">
-        <span class="text-sm text-gray-500"><%= t('.medical_certificate') %>:</span>
-        <% if subscription.doctor_certified_at? && subscription.medical_certificate.attached? %>
+      <% if subscription.medical_certificate_required? %>
+        <div class="flex items-center space-x-2">
+          <span class="text-sm text-gray-500"><%= t('.medical_certificate') %>:</span>
+          <% if subscription.doctor_certified_at? && subscription.medical_certificate.attached? %>
           <span class="flex items-center">
             <svg class="w-4 h-4 mr-1 text-green-500" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L10 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
@@ -113,22 +114,23 @@
               </svg>
             <% end %>
           </span>
-        <% elsif subscription.doctor_certified_at? %>
+          <% elsif subscription.doctor_certified_at? %>
           <span class="flex items-center" title="<%= t('.medical_certificate_missing_explanation') %>">
             <svg class="w-4 h-4 mr-1 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3-9a1 1 0 00-1.414-1.414L10 8.586 8.414 7.586A1 1 0 007 9l1.586 1.586L7 12.172A1 1 0 108.414 13.586L10 12l1.586 1.586A1 1 0 1013 12.172l-1.586-1.586L13 9a1 1 0 000-1.414z" clip-rule="evenodd"/>
             </svg>
             <%= t('.medical_certificate_missing') %>
           </span>
-        <% else %>
+          <% else %>
           <span class="flex items-center">
             <svg class="w-4 h-4 mr-1 text-red-500" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3-9a1 1 0 00-1.414-1.414L10 8.586 8.414 7.586A1 1 0 007 9l1.586 1.586L7 12.172A1 1 0 108.414 13.586L10 12l1.586 1.586A1 1 0 1013 12.172l-1.586-1.586L13 9a1 1 0 000-1.414z" clip-rule="evenodd"/>
             </svg>
             <%= t('.medical_not_certified') %>
           </span>
-        <% end %>
-      </div>
+          <% end %>
+        </div>
+      <% end %>
 
       <div class="flex items-center space-x-2">
         <span class="text-sm text-gray-500"><%= t('.payment') %>:</span>

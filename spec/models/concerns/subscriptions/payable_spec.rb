@@ -53,7 +53,9 @@ describe Subscriptions::Payable, type: :model do
         customer: user.stripe_customer_id
       ).and_return(stripe_payment_intent)
 
+      allow(Stripe::PaymentIntent).to receive(:retrieve).with(stripe_payment_intent_id).and_return(stripe_payment_intent)
       allow(Stripe::Charge).to receive(:retrieve).with(stripe_charge_id).and_return(stripe_charge)
+      subscription.update_column(:stripe_payment_intent_id, stripe_payment_intent_id)
 
       subject.verify_stripe_payment!(
         payment_intent_id: stripe_payment_intent_id,
@@ -113,5 +115,24 @@ describe Subscriptions::Payable, type: :model do
     let(:stripe_charge_paid) { false }
 
     it { expect(subject).not_to be_paid }
+  end
+
+  context 'without a stored payment intent' do
+    let(:unstarted_subscription) do
+      create :subscription, member: create(:member), registration_type: :discovery, discovery_session:,
+                            year: discovery_session.year
+    end
+
+    it 'ignores the payment return' do
+      expect(Stripe::PaymentIntent).not_to receive(:retrieve)
+
+      unstarted_subscription.verify_stripe_payment!(
+        payment_intent_id: stripe_payment_intent_id,
+        payment_intent_client_secret: stripe_payment_intent.client_secret,
+        redirect_status: 'succeeded'
+      )
+
+      expect(unstarted_subscription).not_to be_paid
+    end
   end
 end

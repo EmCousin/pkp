@@ -17,10 +17,11 @@
           </div>
           <% attendance_path = namespace == :admin ? admin_discovery_session_attendance_path(discovery_session, subscription) : coach_discovery_session_attendance_path(discovery_session, subscription) %>
           <%= form_with model: subscription, url: attendance_path, method: :patch, data: { controller: 'form' } do |form| %>
-            <label class="flex items-center gap-2 cursor-pointer font-medium text-sm text-gray-700">
-              <%= form.check_box :attendance_status, { data: { action: 'form#submit' }, class: 'h-5 w-5 rounded border-gray-300 text-green-600' }, 'present', 'absent' %>
-              <%= t('.present') %>
-            </label>
+            <%= form.select :attendance_status,
+                            Subscription.attendance_statuses.keys.map { |status| [t("activerecord.attributes.attendance_record.statuses.#{status}"), status] },
+                            { include_blank: t('.not_recorded') },
+                            data: { action: 'form#submit' },
+                            class: 'rounded-md border-gray-300 text-sm' %>
           <% end %>
         </div>
       <% end %>

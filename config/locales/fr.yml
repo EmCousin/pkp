@@ -108,7 +108,8 @@ fr:
         subscription:
           attributes:
             base:
-              finalized_event_registration: Une inscription confirmée ou payée ne peut pas être supprimée.
+              finalized_event_registration: Une inscription avec un paiement initié, confirmée ou payée ne peut pas être supprimée.
+              stripe_payment_in_progress: Le paiement Stripe ne peut pas être annulé. Veuillez réessayer dans quelques instants.
             courses_count:
               limit_exceeded: "Maximum %{count} cours"
             courses:
@@ -310,9 +311,9 @@ fr:
         current_password_needed: nécessaire pour confirmer vos modifications
         minimum_characters: "%{length} caractères min"
         are_you_sure: Cette action est irréversible. Cliquez sur OK pour supprimer définivement votre compte.
-        finalized_event_registration: Votre compte ne peut pas être supprimé tant qu'il contient une inscription à un événement confirmée ou payée.
+        finalized_event_registration: Votre compte ne peut pas être supprimé tant qu'il contient une inscription avec un paiement initié, confirmée ou payée.
       destroy:
-        finalized_event_registration: Votre compte ne peut pas être supprimé tant qu'il contient une inscription à un événement confirmée ou payée.
+        finalized_event_registration: Votre compte ne peut pas être supprimé tant qu'il contient une inscription avec un paiement initié, confirmée ou payée.
 
   shared:
     attendance_record: &attendance_record
@@ -322,6 +323,7 @@ fr:
       mark_absent: "Marquer absent"
     discovery_session_attendance:
       present: Présent
+      not_recorded: Non renseigné
       empty: Aucun participant confirmé.
 
   coach:
@@ -554,7 +556,7 @@ fr:
         success: Membre modifié
       destroy:
         success: Membre supprimé
-        error: Impossible de supprimer un membre ayant une inscription à un événement confirmée ou payée
+        error: Impossible de supprimer un membre ayant une inscription avec un paiement initié, confirmée ou payée
       subscription:
         view_camp: Voir le stage
     payments:
@@ -605,9 +607,10 @@ fr:
         title: Modifier l'inscription
       update:
         success: Inscription modifiée
+        event_not_editable: Les inscriptions aux événements ne sont pas modifiables depuis ce formulaire.
       destroy:
         success: Inscription supprimée
-        error: Une inscription confirmée ou payée ne peut pas être supprimée
+        error: Une inscription avec un paiement initié, confirmée ou payée ne peut pas être supprimée
       confirm:
         success: Inscription confirmée
         failure: "L'inscription est déjà confirmée"
@@ -776,6 +779,8 @@ fr:
 
     event_subscription:
       resume: Finaliser l'inscription
+      cancel: Annuler
+      cancel_confirm: Êtes-vous sûr de vouloir annuler cette inscription ?
 
     subscription:
       subscription_form: Formulaire d'inscription
@@ -892,6 +897,7 @@ fr:
         already_paid_title: Vous avez déjà réglé votre cotisation par virement?
         already_paid_description: Vous pouvez joindre le justificatif de paiement ci-dessous.
         upload_payment_proof: Joindre un justificatif de paiement
+        payment_already_submitted: Un paiement ou un justificatif a déjà été enregistré pour cette inscription.
       create:
         success: Inscription payée avec succès !
         error: Une erreur est survenue. Votre carte n'a pas été débitée. Si le problème persiste, contactez-nous.

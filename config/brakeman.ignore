@@ -3,6 +3,52 @@
     {
       "warning_type": "Unscoped Find",
       "warning_code": 82,
+      "fingerprint": "ad1d161649954bf954ad4ba8ed78e3bd48aae103058cb9c5b60e47e79d4d7a94",
+      "check_name": "UnscopedFind",
+      "message": "Unscoped call to `DiscoverySession#find`",
+      "file": "app/controllers/admin/discovery_attendances_controller.rb",
+      "line": 6,
+      "link": "https://brakemanscanner.org/docs/warning_types/unscoped_find/",
+      "code": "DiscoverySession.find(params[:discovery_session_id])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Admin::DiscoveryAttendancesController",
+        "method": "update"
+      },
+      "user_input": "params[:discovery_session_id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        285
+      ],
+      "note": "Administrators are authorized to manage every discovery session."
+    },
+    {
+      "warning_type": "Unscoped Find",
+      "warning_code": 82,
+      "fingerprint": "b96fd8a32099943fccfd4d00151ea2b1ec149c5d87c615a02d9d745a57dcdb6f",
+      "check_name": "UnscopedFind",
+      "message": "Unscoped call to `DiscoverySession#find`",
+      "file": "app/controllers/admin/discovery_sessions_controller.rb",
+      "line": 53,
+      "link": "https://brakemanscanner.org/docs/warning_types/unscoped_find/",
+      "code": "DiscoverySession.find(params[:id])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Admin::DiscoverySessionsController",
+        "method": "set_discovery_session"
+      },
+      "user_input": "params[:id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        285
+      ],
+      "note": "Administrators are authorized to manage every discovery session."
+    },
+    {
+      "warning_type": "Unscoped Find",
+      "warning_code": 82,
       "fingerprint": "0aa94d3ded5b8bcd86a1dfd46b744080ea74527507c8ca16cc6738aa404fd588",
       "check_name": "UnscopedFind",
       "message": "Unscoped call to `Course#find`",

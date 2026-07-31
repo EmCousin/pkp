@@ -50,7 +50,7 @@ class User < ApplicationRecord
   end
 
   def destroyable?
-    !subscriptions.finalized_events.exists?
+    !subscriptions.destruction_protected.exists?
   end
 
   private

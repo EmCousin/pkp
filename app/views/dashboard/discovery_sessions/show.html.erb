@@ -18,7 +18,7 @@
         <h2 class="font-semibold text-gray-900 mb-4"><%= t('.choose_member') %></h2>
         <div class="space-y-3">
           <% @members.each do |member| %>
-            <% subscription = member.subscriptions.find { |item| item.discovery_session_id == @discovery_session.id } %>
+            <% subscription = member.subscriptions.find { |item| !item.archived? && item.discovery_session_id == @discovery_session.id } %>
             <% if subscription %>
               <% completion_path = next_completion_step_path(subscription) %>
               <div class="flex items-center justify-between rounded-lg bg-green-50 p-4">

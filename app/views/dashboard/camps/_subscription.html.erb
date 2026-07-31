@@ -1,4 +1,4 @@
-<% camp_subscription = member.subscriptions.joins(:camps_subscription).find_by(camps_subscriptions: { camp_id: @camp.id }) %>
+<% camp_subscription = member.subscriptions.not_archived.joins(:camps_subscription).find_by(camps_subscriptions: { camp_id: @camp.id }) %>
 
 <% if camp_subscription %>
   <% completion_path = next_completion_step_path(camp_subscription) %>

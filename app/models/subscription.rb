@@ -28,9 +28,13 @@ class Subscription < ApplicationRecord
        { present: 'present', absent: 'absent', excused: 'excused' },
        prefix: :attendance
 
-  scope :finalized_events, lambda {
-    where(registration_type: %i[camp discovery])
-      .where('paid_at IS NOT NULL OR status = ?', statuses[:confirmed])
+  scope :destruction_protected, lambda {
+    event_types = registration_types.values_at('camp', 'discovery')
+    where(
+      'stripe_payment_intent_id IS NOT NULL OR (registration_type IN (?) AND (paid_at IS NOT NULL OR status = ?))',
+      event_types,
+      statuses[:confirmed]
+    )
   }
 
   before_validation :infer_registration_type

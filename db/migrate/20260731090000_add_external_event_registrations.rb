@@ -8,6 +8,21 @@ class AddExternalEventRegistrations < ActiveRecord::Migration[8.0]
     add_column :camps, :open_to_externals, :boolean, default: false, null: false
 
     execute "UPDATE camps SET external_price = price"
+    execute <<~SQL
+      CREATE FUNCTION populate_camp_external_price() RETURNS trigger AS $$
+      BEGIN
+        IF NEW.external_price IS NULL THEN
+          NEW.external_price := NEW.price;
+        END IF;
+        RETURN NEW;
+      END;
+      $$ LANGUAGE plpgsql;
+    SQL
+    execute <<~SQL
+      CREATE TRIGGER populate_camp_external_price_before_write
+      BEFORE INSERT OR UPDATE ON camps
+      FOR EACH ROW EXECUTE FUNCTION populate_camp_external_price();
+    SQL
     change_column_null :camps, :external_price, false
 
     create_table :discovery_sessions do |t|
@@ -30,6 +45,19 @@ class AddExternalEventRegistrations < ActiveRecord::Migration[8.0]
       UPDATE subscriptions
       SET registration_type = 1
       WHERE id IN (SELECT subscription_id FROM camps_subscriptions)
+    SQL
+    execute <<~SQL
+      CREATE FUNCTION mark_camp_registration() RETURNS trigger AS $$
+      BEGIN
+        UPDATE subscriptions SET registration_type = 1 WHERE id = NEW.subscription_id;
+        RETURN NEW;
+      END;
+      $$ LANGUAGE plpgsql;
+    SQL
+    execute <<~SQL
+      CREATE TRIGGER mark_camp_registration_after_write
+      AFTER INSERT OR UPDATE OF subscription_id ON camps_subscriptions
+      FOR EACH ROW EXECUTE FUNCTION mark_camp_registration();
     SQL
 
     add_index :subscriptions,

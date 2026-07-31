@@ -95,11 +95,14 @@ class Member < ApplicationRecord
   end
 
   def can_subscribe_to_discovery?(discovery_session)
-    discovery_session.open? && !discovery_session.fully_booked? && !discovery_sessions.exists?(discovery_session.id)
+    discovery_session.open? &&
+      !discovery_session.fully_booked? &&
+      discovery_session.course.category.suitable_for_age?(age(discovery_session.year)) &&
+      !discovery_sessions.exists?(discovery_session.id)
   end
 
   def destroyable?
-    !subscriptions.finalized_events.exists?
+    !subscriptions.destruction_protected.exists?
   end
 
   private

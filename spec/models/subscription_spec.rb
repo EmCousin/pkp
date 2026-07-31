@@ -330,6 +330,39 @@ describe Subscription, type: :model do
       expect(confirmed).to be_persisted
     end
 
+    it 'cancels an open Stripe payment before destroying a registration' do
+      discovery_session = create(:discovery_session)
+      subscription = create(:subscription, member:, registration_type: :discovery, discovery_session:)
+      subscription.update_column(:stripe_payment_intent_id, 'pi_test_123')
+      allow(Stripe::PaymentIntent).to receive(:retrieve).with('pi_test_123').and_return(OpenStruct.new(status: 'requires_payment_method'))
+      allow(Stripe::PaymentIntent).to receive(:cancel).with('pi_test_123')
+
+      expect(subscription.destroy).to be subscription
+      expect(subscription).not_to be_persisted
+      expect(Stripe::PaymentIntent).to have_received(:cancel).with('pi_test_123')
+    end
+
+    it 'does not destroy a registration when Stripe cannot cancel its payment' do
+      discovery_session = create(:discovery_session)
+      subscription = create(:subscription, member:, registration_type: :discovery, discovery_session:)
+      subscription.update_column(:stripe_payment_intent_id, 'pi_test_123')
+      allow(Stripe::PaymentIntent).to receive(:retrieve).with('pi_test_123').and_return(OpenStruct.new(status: 'processing'))
+      allow(Stripe::PaymentIntent).to receive(:cancel).with('pi_test_123').and_raise(Stripe::StripeError, 'Payment is processing')
+
+      expect(subscription.destroy).to be false
+      expect(subscription).to be_persisted
+    end
+
+    it 'does not cancel Stripe when a finalized registration rejects deletion' do
+      discovery_session = create(:discovery_session)
+      subscription = create(:subscription, member:, registration_type: :discovery, discovery_session:, status: :confirmed)
+      subscription.update_column(:stripe_payment_intent_id, 'pi_test_123')
+      allow(Stripe::PaymentIntent).to receive(:cancel)
+
+      expect(subscription.destroy).to be false
+      expect(Stripe::PaymentIntent).not_to have_received(:cancel)
+    end
+
     it 'destroys a pending unpaid event registration' do
       discovery_session = create(:discovery_session)
       subscription = create(:subscription, member:, registration_type: :discovery, discovery_session:)

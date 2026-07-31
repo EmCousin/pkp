@@ -29,9 +29,11 @@ describe 'Discovery attendance', type: :request do
 
   it 'lets an admin manage sessions and attendance' do
     sign_in create(:user, :admin, phone_number: '+33612345678')
+    subscription
 
     get admin_discovery_session_path(discovery_session)
     expect(response).to have_http_status(:ok)
+    expect(response.body).to include('Non renseigné', 'Excusé·e')
 
     patch admin_discovery_session_attendance_path(discovery_session, subscription),
           params: { subscription: { attendance_status: 'absent' } }
@@ -64,5 +66,15 @@ describe 'Discovery attendance', type: :request do
     end.not_to change(Course, :count)
 
     expect(response).to redirect_to(admin_courses_path)
+  end
+
+  it 'prevents an admin from editing an event registration through the generic form' do
+    sign_in create(:user, :admin, phone_number: '+33612345678')
+    other_member = create(:member)
+
+    patch admin_subscription_path(subscription), params: { subscription: { member_id: other_member.id } }
+
+    expect(response).to redirect_to(admin_subscription_path(subscription))
+    expect(subscription.reload.member).not_to eq(other_member)
   end
 end

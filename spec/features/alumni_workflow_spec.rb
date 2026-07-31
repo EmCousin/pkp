@@ -90,6 +90,8 @@ feature "Alumni Workflow", type: :feature do
   end
 
   scenario "User signs up" do
+    allow(Rails.application.credentials).to receive(:basic_auth).and_return(username: 'alumni', password: 'secret')
+
     visit '/users/sign_up'
     expect(page).to have_text("S'inscrire")
     expect(page).to have_text("C'est les vacances !")

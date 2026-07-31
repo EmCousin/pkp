@@ -20,7 +20,7 @@
                       stripe_target: 'form',
                       stripe_key_value: Rails.application.credentials.stripe[:public_key],
                       stripe_locale_value: I18n.locale,
-                      stripe_payment_intent_client_secret_value: @subscription.stripe_payment_intent.client_secret,
+                      stripe_payment_intent_client_secret_value: @payment_intent.client_secret,
                       stripe_return_url_value: dashboard_subscription_payment_path(@subscription.id),
                       action: 'submit->stripe#confirmPayment'
                     } do |f| %>

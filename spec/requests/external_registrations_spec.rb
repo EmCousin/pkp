@@ -53,6 +53,38 @@ describe 'External event registrations', type: :request do
 
       expect(response).to redirect_to(dashboard_camp_path(camp))
     end
+
+    it 'cancels an abandoned Stripe checkout when deleting a registration' do
+      post dashboard_camp_subscriptions_path(camp), params: { member_id: member.id }
+      subscription = Subscription.registration_type_camp.last
+      subscription.update_column(:stripe_payment_intent_id, 'pi_test_123')
+      camp.update_columns(active: false, starts_at: 1.day.ago, ends_at: 1.day.ago)
+      allow(Stripe::PaymentIntent).to receive(:retrieve).with('pi_test_123').and_return(OpenStruct.new(status: 'requires_payment_method'))
+      allow(Stripe::PaymentIntent).to receive(:cancel).with('pi_test_123')
+
+      expect do
+        delete dashboard_camp_subscription_path(camp, subscription)
+      end.to change(Subscription, :count).by(-1)
+
+      expect(Stripe::PaymentIntent).to have_received(:cancel).with('pi_test_123')
+    end
+
+    it 'keeps cancellation available for an internal registration after the camp closes' do
+      annual_subscription = create(
+        :subscription,
+        member:,
+        courses: [create(:course)],
+        status: :confirmed,
+        year: camp.year
+      )
+      subscription = annual_subscription.build_child_subscription(camps_subscription_attributes: { camp_id: camp.id })
+      subscription.save!
+      camp.update_columns(active: false, starts_at: 1.day.ago, ends_at: 1.day.ago)
+
+      get dashboard_path
+
+      expect(response.body).to include(dashboard_camp_subscription_path(camp, subscription))
+    end
   end
 
   describe 'discovery registration' do
@@ -81,6 +113,85 @@ describe 'External event registrations', type: :request do
         expect(annual_subscription.member).to eq(member)
         expect(response).to redirect_to(edit_dashboard_subscription_terms_path(annual_subscription))
       end
+    end
+
+    it 'records a Stripe payment that returns after the session starts' do
+      subscription = create(
+        :subscription,
+        member:,
+        registration_type: :discovery,
+        discovery_session:,
+        terms_accepted_at: Time.current
+      )
+      subscription.update_column(:stripe_payment_intent_id, 'pi_test_123')
+      discovery_session.update_column(:starts_at, 1.minute.ago)
+      intent = OpenStruct.new(
+        id: 'pi_test_123',
+        client_secret: 'pi_test_123_secret',
+        latest_charge: 'ch_test_123',
+        status: 'succeeded',
+        currency: 'eur',
+        amount_received: subscription.fee_cents
+      )
+      charge = OpenStruct.new(
+        id: 'ch_test_123',
+        paid: true,
+        currency: 'eur',
+        amount: subscription.fee_cents,
+        created: Time.current.to_i
+      )
+      allow(Stripe::PaymentIntent).to receive(:retrieve).with('pi_test_123').and_return(intent)
+      allow(Stripe::Charge).to receive(:retrieve).with('ch_test_123').and_return(charge)
+
+      get dashboard_subscription_payment_path(
+        subscription,
+        payment_intent: 'pi_test_123',
+        payment_intent_client_secret: 'pi_test_123_secret',
+        redirect_status: 'succeeded'
+      )
+
+      expect(response).to have_http_status(:ok)
+      expect(subscription.reload).to be_paid
+      expect(subscription).to be_confirmed
+    end
+
+    it 'records a late Stripe payment without reopening an archived registration' do
+      subscription = create(
+        :subscription,
+        member:,
+        registration_type: :discovery,
+        discovery_session:,
+        terms_accepted_at: Time.current,
+        status: :archived
+      )
+      subscription.update_column(:stripe_payment_intent_id, 'pi_test_123')
+      intent = OpenStruct.new(
+        id: 'pi_test_123',
+        client_secret: 'pi_test_123_secret',
+        latest_charge: 'ch_test_123',
+        status: 'succeeded',
+        currency: 'eur',
+        amount_received: subscription.fee_cents
+      )
+      charge = OpenStruct.new(
+        id: 'ch_test_123',
+        paid: true,
+        currency: 'eur',
+        amount: subscription.fee_cents,
+        created: Time.current.to_i
+      )
+      allow(Stripe::PaymentIntent).to receive(:retrieve).with('pi_test_123').and_return(intent)
+      allow(Stripe::Charge).to receive(:retrieve).with('ch_test_123').and_return(charge)
+
+      get dashboard_subscription_payment_path(
+        subscription,
+        payment_intent: 'pi_test_123',
+        payment_intent_client_secret: 'pi_test_123_secret',
+        redirect_status: 'succeeded'
+      )
+
+      expect(subscription.reload).to be_paid
+      expect(subscription).to be_archived
     end
   end
 
@@ -119,6 +230,15 @@ describe 'External event registrations', type: :request do
       expect(response).to have_http_status(:ok)
       expect(response.body).to include(discovery_session.course.title)
       expect(response.body).to include('Finaliser l&#39;inscription')
+    end
+
+    it 'does not render a resume link for an archived registration' do
+      discovery_session = create(:discovery_session)
+      subscription = create(:subscription, member:, registration_type: :discovery, discovery_session:, status: :archived)
+
+      get dashboard_discovery_session_path(discovery_session)
+
+      expect(response.body).not_to include(edit_dashboard_subscription_terms_path(subscription))
     end
   end
 

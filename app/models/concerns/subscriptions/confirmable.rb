@@ -5,13 +5,14 @@ module Subscriptions
     extend ActiveSupport::Concern
 
     included do
-      before_destroy :prevent_destroying_finalized_event_registration
+      before_destroy :prevent_destroying_finalized_event_registration, prepend: true
+      around_destroy :with_destroy_lock, prepend: true
     end
 
     def cancellable?
       return false if event? && (paid? || confirmed?)
 
-      !child_subscriptions.finalized_events.exists?
+      !child_subscriptions.destruction_protected.exists?
     end
 
     def confirm!
@@ -30,6 +31,10 @@ module Subscriptions
     end
 
     private
+
+    def with_destroy_lock(&)
+      with_lock(&)
+    end
 
     def prevent_destroying_finalized_event_registration
       return if cancellable?
