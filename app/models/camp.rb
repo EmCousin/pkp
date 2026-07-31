@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Camp < ApplicationRecord
+  include Events::CapacityLimited
+
   has_rich_text :description
   has_one_attached :cover_picture
 
@@ -33,18 +35,6 @@ class Camp < ApplicationRecord
 
   def duration_days
     (ends_at - starts_at).to_i + 1
-  end
-
-  def available_slots
-    capacity - occupied_slots
-  end
-
-  def occupied_slots
-    subscriptions.not_archived.count
-  end
-
-  def fully_booked?
-    available_slots <= 0
   end
 
   def internal_for?(member)

@@ -3,18 +3,18 @@
     {
       "warning_type": "Unscoped Find",
       "warning_code": 82,
-      "fingerprint": "ad1d161649954bf954ad4ba8ed78e3bd48aae103058cb9c5b60e47e79d4d7a94",
+      "fingerprint": "b798b8efa094b3fdf00ca910d813603f5acff56c63190aa2a2027033db5b2f02",
       "check_name": "UnscopedFind",
       "message": "Unscoped call to `DiscoverySession#find`",
-      "file": "app/controllers/admin/discovery_attendances_controller.rb",
-      "line": 6,
+      "file": "app/controllers/admin/discovery_sessions/subscriptions_controller.rb",
+      "line": 17,
       "link": "https://brakemanscanner.org/docs/warning_types/unscoped_find/",
       "code": "DiscoverySession.find(params[:discovery_session_id])",
       "render_path": null,
       "location": {
         "type": "method",
-        "class": "Admin::DiscoveryAttendancesController",
-        "method": "update"
+        "class": "Admin::DiscoverySessions::SubscriptionsController",
+        "method": "set_discovery_session"
       },
       "user_input": "params[:discovery_session_id]",
       "confidence": "Weak",

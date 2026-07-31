@@ -8,7 +8,6 @@ module Dashboard
 
     def show
       @camp = Camp.available.find(params[:id])
-      @members = current_user.members.includes(:subscriptions)
     end
   end
 end

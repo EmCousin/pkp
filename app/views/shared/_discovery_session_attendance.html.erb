@@ -15,7 +15,7 @@
               <p class="text-sm text-gray-500"><%= subscription.member.email %></p>
             </div>
           </div>
-          <% attendance_path = namespace == :admin ? admin_discovery_session_attendance_path(discovery_session, subscription) : coach_discovery_session_attendance_path(discovery_session, subscription) %>
+          <% attendance_path = namespace == :admin ? admin_discovery_session_subscription_path(discovery_session, subscription) : coach_discovery_session_subscription_path(discovery_session, subscription) %>
           <%= form_with model: subscription, url: attendance_path, method: :patch, data: { controller: 'form' } do |form| %>
             <%= form.select :attendance_status,
                             Subscription.attendance_statuses.keys.map { |status| [t("activerecord.attributes.attendance_record.statuses.#{status}"), status] },

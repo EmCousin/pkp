@@ -9,9 +9,9 @@
         <div>
           <div class="text-2xl font-bold text-gray-900"><%= subscription.member.full_name %></div>
           <div class="text-sm text-gray-500 mt-1">
-            <% if subscription.camp? %>
+            <% if subscription.is_a?(CampRegistration) %>
               <%= subscription.camp.title %>
-            <% elsif subscription.discovery? %>
+            <% elsif subscription.is_a?(DiscoveryRegistration) %>
               <%= l(subscription.discovery_session.starts_at, format: :event) %>
             <% else %>
               <%= t('dashboard.terms.edit.year', year: subscription.year, next_year: subscription.year + 1) %>
@@ -27,7 +27,7 @@
   <% if subscription.event? %>
     <div class="mt-4 rounded-lg bg-indigo-50 p-4 text-indigo-900">
       <p class="font-semibold"><%= subscription.description %></p>
-      <% if subscription.camp? %>
+      <% if subscription.is_a?(CampRegistration) %>
         <p class="mt-1 text-sm"><%= l(subscription.camp.starts_at, format: :long) %> - <%= l(subscription.camp.ends_at, format: :long) %></p>
       <% else %>
         <p class="mt-1 text-sm"><%= l(subscription.discovery_session.starts_at, format: :event) %></p>

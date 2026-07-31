@@ -37,19 +37,19 @@ class AddExternalEventRegistrations < ActiveRecord::Migration[8.0]
     end
     add_index :discovery_sessions, :starts_at
 
-    add_column :subscriptions, :registration_type, :integer, default: 0, null: false
+    add_column :subscriptions, :registration_kind, :string, default: "AnnualSubscription", null: false
     add_reference :subscriptions, :discovery_session, foreign_key: true
     add_column :subscriptions, :attendance_status, :enum, enum_type: "attendance_record_status"
 
     execute <<~SQL.squish
       UPDATE subscriptions
-      SET registration_type = 1
+      SET registration_kind = 'CampRegistration'
       WHERE id IN (SELECT subscription_id FROM camps_subscriptions)
     SQL
     execute <<~SQL
       CREATE FUNCTION mark_camp_registration() RETURNS trigger AS $$
       BEGIN
-        UPDATE subscriptions SET registration_type = 1 WHERE id = NEW.subscription_id;
+        UPDATE subscriptions SET registration_kind = 'CampRegistration' WHERE id = NEW.subscription_id;
         RETURN NEW;
       END;
       $$ LANGUAGE plpgsql;
@@ -63,8 +63,9 @@ class AddExternalEventRegistrations < ActiveRecord::Migration[8.0]
     add_index :subscriptions,
               %i[member_id year],
               unique: true,
-              where: "registration_type = 0 AND parent_subscription_id IS NULL",
+              where: "registration_kind = 'AnnualSubscription' AND parent_subscription_id IS NULL",
               name: "index_one_annual_subscription_per_member_and_year"
+    add_index :subscriptions, :registration_kind
     add_index :subscriptions,
               %i[discovery_session_id member_id],
               unique: true,

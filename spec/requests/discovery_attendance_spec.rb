@@ -6,8 +6,7 @@ describe 'Discovery attendance', type: :request do
   let(:discovery_session) { create(:discovery_session) }
   let(:subscription) do
     create(
-      :subscription,
-      registration_type: :discovery,
+      :discovery_registration,
       discovery_session:,
       member: create(:member),
       status: :confirmed
@@ -20,7 +19,7 @@ describe 'Discovery attendance', type: :request do
     get coach_discovery_session_path(discovery_session)
     expect(response).to have_http_status(:ok)
 
-    patch coach_discovery_session_attendance_path(discovery_session, subscription),
+    patch coach_discovery_session_subscription_path(discovery_session, subscription),
           params: { subscription: { attendance_status: 'present' } }
 
     expect(response).to redirect_to(coach_discovery_session_path(discovery_session))
@@ -35,7 +34,7 @@ describe 'Discovery attendance', type: :request do
     expect(response).to have_http_status(:ok)
     expect(response.body).to include('Non renseigné', 'Excusé·e')
 
-    patch admin_discovery_session_attendance_path(discovery_session, subscription),
+    patch admin_discovery_session_subscription_path(discovery_session, subscription),
           params: { subscription: { attendance_status: 'absent' } }
 
     expect(response).to redirect_to(admin_discovery_session_path(discovery_session))
@@ -44,6 +43,17 @@ describe 'Discovery attendance', type: :request do
     get admin_subscription_path(subscription)
     expect(response).to have_http_status(:ok)
     expect(response.body).to include(discovery_session.course.title)
+  end
+
+  it 'does not update a registration through another discovery session' do
+    sign_in create(:user, :admin, phone_number: '+33612345678')
+    other_session = create(:discovery_session, course: discovery_session.course, starts_at: 2.weeks.from_now)
+
+    patch admin_discovery_session_subscription_path(other_session, subscription),
+          params: { subscription: { attendance_status: 'present' } }
+
+    expect(response).to have_http_status(:not_found)
+    expect(subscription.reload.attendance_status).to be_nil
   end
 
   it 'prevents an admin from deleting a finalized registration' do
@@ -76,5 +86,18 @@ describe 'Discovery attendance', type: :request do
 
     expect(response).to redirect_to(admin_subscription_path(subscription))
     expect(subscription.reload.member).not_to eq(other_member)
+  end
+
+  it 'does not turn an existing annual subscription into a camp registration' do
+    sign_in create(:user, :admin, phone_number: '+33612345678')
+    annual_subscription = create(:subscription, courses: [create(:course)])
+    camp = create(:camp, open_to_externals: true)
+
+    expect do
+      patch admin_subscription_path(annual_subscription),
+            params: { subscription: { camps_subscription_attributes: { camp_id: camp.id } } }
+    end.not_to change(CampsSubscription, :count)
+
+    expect(annual_subscription.reload).to be_a(AnnualSubscription)
   end
 end

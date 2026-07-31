@@ -3,7 +3,7 @@
 module Admin
   class SubscriptionsController < BaseController
     before_action :set_subscription!, only: %i[show edit update destroy unlink_course]
-    before_action :reject_event_edit!, only: %i[edit update]
+    before_action :reject_event_edit!, only: %i[edit update], if: -> { @subscription.event? }
 
     def index
       @subscriptions = Subscription.search_and_filter(params.to_unsafe_h.slice(:status, :level, :year, :course_ids, :camp_id))
@@ -17,7 +17,7 @@ module Admin
     def show; end
 
     def new
-      @subscription = Subscription.new(
+      @subscription = AnnualSubscription.new(
         member_id: params[:member_id],
         course_ids: params[:course_ids]
       )
@@ -26,7 +26,7 @@ module Admin
     def edit; end
 
     def create
-      @subscription = Subscription.new(subscription_params)
+      @subscription = subscription_class.new(subscription_params)
       if save_subscription
         redirect_to %i[admin subscriptions], notice: t('.success'), status: :see_other
       else
@@ -63,7 +63,11 @@ module Admin
     end
 
     def subscription_params
-      params.expect(subscription: [:member_id, :status, :parent_subscription_id, { course_ids: [] }, { camps_subscription_attributes: [:camp_id] }])
+      attributes = params.expect(
+        subscription: [:member_id, :status, :parent_subscription_id, { course_ids: [] }, { camps_subscription_attributes: [:camp_id] }]
+      )
+      attributes.delete(:camps_subscription_attributes) if @subscription&.persisted?
+      attributes
     end
 
     def save_subscription
@@ -71,9 +75,11 @@ module Admin
       camp ? camp.with_lock { @subscription.save } : @subscription.save
     end
 
-    def reject_event_edit!
-      return unless @subscription.event?
+    def subscription_class
+      subscription_params.dig(:camps_subscription_attributes, :camp_id).present? ? CampRegistration : AnnualSubscription
+    end
 
+    def reject_event_edit!
       redirect_to [:admin, @subscription], alert: t('.event_not_editable'), status: :see_other
     end
   end

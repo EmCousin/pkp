@@ -9,7 +9,7 @@ describe Subscriptions::Payable, type: :model do
   let(:member) { create :member, user: }
   let(:discovery_session) { create :discovery_session }
   let(:subscription) do
-    create :subscription, member:, registration_type: :discovery, discovery_session:, year: discovery_session.year
+    create :discovery_registration, member:, discovery_session:, year: discovery_session.year
   end
   let(:stripe_charge_id) { SecureRandom.hex }
   let(:stripe_payment_intent_id) { 'pi_test_123' }
@@ -119,7 +119,7 @@ describe Subscriptions::Payable, type: :model do
 
   context 'without a stored payment intent' do
     let(:unstarted_subscription) do
-      create :subscription, member: create(:member), registration_type: :discovery, discovery_session:,
+      create :discovery_registration, member: create(:member), discovery_session:,
                             year: discovery_session.year
     end
 

@@ -8,13 +8,7 @@ module Coach
       @discovery_sessions = DiscoverySession.active.recent.includes(:course, :subscriptions).order(:starts_at)
     end
 
-    def show
-      @subscriptions = @discovery_session.subscriptions
-                                         .confirmed
-                                         .includes(member: :avatar_attachment)
-                                         .joins(:member)
-                                         .order('members.first_name', 'members.last_name')
-    end
+    def show; end
 
     private
 

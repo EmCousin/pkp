@@ -14,11 +14,11 @@ describe 'External event registrations', type: :request do
 
     it 'creates a standalone registration at the external rate' do
       expect do
-        post dashboard_camp_subscriptions_path(camp), params: { member_id: member.id }
+        post dashboard_camp_registrations_path(camp), params: { member_id: member.id }
         expect(response).to have_http_status(:see_other)
-      end.to change(Subscription.registration_type_camp, :count).by(1)
+      end.to change(CampRegistration, :count).by(1)
 
-      subscription = Subscription.registration_type_camp.last
+      subscription = CampRegistration.last
       expect(subscription.parent_subscription).to be_nil
       expect(subscription.fee).to eq(140)
       expect(response).to redirect_to(edit_dashboard_subscription_terms_path(subscription))
@@ -34,36 +34,54 @@ describe 'External event registrations', type: :request do
         terms_accepted_at: Time.current
       )
 
-      post dashboard_camp_subscriptions_path(camp), params: { member_id: member.id }
+      post dashboard_camp_subscriptions_path(camp), params: { subscription_id: annual_subscription.id }
 
-      subscription = Subscription.registration_type_camp.last
+      subscription = CampRegistration.last
       expect(subscription.parent_subscription).to eq(annual_subscription)
       expect(subscription.fee).to eq(90)
       expect(response).to redirect_to(new_dashboard_subscription_payment_path(subscription))
     end
 
+    it 'keeps standalone registration unavailable to an annual student' do
+      create(:subscription, member:, courses: [create(:course)], status: :confirmed, year: camp.year)
+
+      expect do
+        post dashboard_camp_registrations_path(camp), params: { member_id: member.id }
+      end.not_to change(CampRegistration, :count)
+
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it 'requires an annual subscription on the internal endpoint' do
+      expect do
+        post dashboard_camp_subscriptions_path(camp), params: { subscription_id: 0 }
+      end.not_to change(CampRegistration, :count)
+
+      expect(response).to have_http_status(:not_found)
+    end
+
     it 'does not allow a paid registration to be deleted' do
-      post dashboard_camp_subscriptions_path(camp), params: { member_id: member.id }
-      subscription = Subscription.registration_type_camp.last
+      post dashboard_camp_registrations_path(camp), params: { member_id: member.id }
+      subscription = CampRegistration.last
       subscription.update!(paid_at: Time.current)
 
       expect do
-        delete dashboard_camp_subscription_path(camp, subscription)
+        delete dashboard_camp_registration_path(camp, subscription)
       end.not_to change(Subscription, :count)
 
       expect(response).to redirect_to(dashboard_camp_path(camp))
     end
 
     it 'cancels an abandoned Stripe checkout when deleting a registration' do
-      post dashboard_camp_subscriptions_path(camp), params: { member_id: member.id }
-      subscription = Subscription.registration_type_camp.last
+      post dashboard_camp_registrations_path(camp), params: { member_id: member.id }
+      subscription = CampRegistration.last
       subscription.update_column(:stripe_payment_intent_id, 'pi_test_123')
       camp.update_columns(active: false, starts_at: 1.day.ago, ends_at: 1.day.ago)
       allow(Stripe::PaymentIntent).to receive(:retrieve).with('pi_test_123').and_return(OpenStruct.new(status: 'requires_payment_method'))
       allow(Stripe::PaymentIntent).to receive(:cancel).with('pi_test_123')
 
       expect do
-        delete dashboard_camp_subscription_path(camp, subscription)
+        delete dashboard_camp_registration_path(camp, subscription)
       end.to change(Subscription, :count).by(-1)
 
       expect(Stripe::PaymentIntent).to have_received(:cancel).with('pi_test_123')
@@ -93,7 +111,7 @@ describe 'External event registrations', type: :request do
     it 'creates a payable registration without blocking annual enrollment' do
       post dashboard_discovery_session_subscriptions_path(discovery_session), params: { member_id: member.id }
 
-      subscription = Subscription.registration_type_discovery.last
+      subscription = DiscoveryRegistration.last
       expect(subscription.fee).to eq(25)
       expect(response).to redirect_to(edit_dashboard_subscription_terms_path(subscription))
       expect(member).to be_in(Member.available(discovery_session.year))
@@ -107,9 +125,9 @@ describe 'External event registrations', type: :request do
         expect do
           post dashboard_subscriptions_path,
                params: { subscription: { member_id: member.id, category_id: course.category_id, course_ids: [course.id] } }
-        end.to change(Subscription.registration_type_annual, :count).by(1)
+        end.to change(AnnualSubscription, :count).by(1)
 
-        annual_subscription = Subscription.registration_type_annual.last
+        annual_subscription = AnnualSubscription.last
         expect(annual_subscription.member).to eq(member)
         expect(response).to redirect_to(edit_dashboard_subscription_terms_path(annual_subscription))
       end
@@ -117,9 +135,8 @@ describe 'External event registrations', type: :request do
 
     it 'records a Stripe payment that returns after the session starts' do
       subscription = create(
-        :subscription,
+        :discovery_registration,
         member:,
-        registration_type: :discovery,
         discovery_session:,
         terms_accepted_at: Time.current
       )
@@ -157,9 +174,8 @@ describe 'External event registrations', type: :request do
 
     it 'records a late Stripe payment without reopening an archived registration' do
       subscription = create(
-        :subscription,
+        :discovery_registration,
         member:,
-        registration_type: :discovery,
         discovery_session:,
         terms_accepted_at: Time.current,
         status: :archived
@@ -211,7 +227,7 @@ describe 'External event registrations', type: :request do
 
     it 'keeps an existing registration visible when the event is full or closed' do
       discovery_session = create(:discovery_session, capacity: 1)
-      subscription = create(:subscription, member:, registration_type: :discovery, discovery_session:)
+      subscription = create(:discovery_registration, member:, discovery_session:)
       discovery_session.update!(open: false)
 
       get dashboard_discovery_session_path(discovery_session)
@@ -223,7 +239,7 @@ describe 'External event registrations', type: :request do
 
     it 'lists standalone event registrations on the dashboard' do
       discovery_session = create(:discovery_session)
-      create(:subscription, member:, registration_type: :discovery, discovery_session:)
+      create(:discovery_registration, member:, discovery_session:)
 
       get dashboard_path
 
@@ -234,7 +250,7 @@ describe 'External event registrations', type: :request do
 
     it 'does not render a resume link for an archived registration' do
       discovery_session = create(:discovery_session)
-      subscription = create(:subscription, member:, registration_type: :discovery, discovery_session:, status: :archived)
+      subscription = create(:discovery_registration, member:, discovery_session:, status: :archived)
 
       get dashboard_discovery_session_path(discovery_session)
 
@@ -244,7 +260,7 @@ describe 'External event registrations', type: :request do
 
   it 'does not delete an account containing a finalized event registration' do
     discovery_session = create(:discovery_session)
-    create(:subscription, member:, registration_type: :discovery, discovery_session:, status: :confirmed)
+    create(:discovery_registration, member:, discovery_session:, status: :confirmed)
 
     expect do
       delete user_registration_path

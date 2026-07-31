@@ -80,7 +80,7 @@ describe Member, type: :model do
       camp.update!(capacity: 1)
       other_member = create(:member)
       parent = create(:subscription, member: other_member, status: :confirmed, courses: [course])
-      camp_subscription = build(:subscription, registration_type: :camp, member: other_member, parent_subscription: parent)
+      camp_subscription = build(:camp_registration, member: other_member, parent_subscription: parent)
       create(:camps_subscription, camp:, subscription: camp_subscription)
       expect(member.can_subscribe?(camp)).to be false
     end
@@ -91,7 +91,7 @@ describe Member, type: :model do
     end
 
     it 'returns false when member is already subscribed to this camp' do
-      camp_subscription = build(:subscription, registration_type: :camp, member:, parent_subscription: annual_subscription)
+      camp_subscription = build(:camp_registration, member:, parent_subscription: annual_subscription)
       create(:camps_subscription, camp:, subscription: camp_subscription)
       expect(member.can_subscribe?(camp)).to be false
     end
@@ -114,7 +114,7 @@ describe Member, type: :model do
 
   it 'does not destroy finalized event registrations' do
     discovery_session = create(:discovery_session)
-    subscription = create(:subscription, member:, registration_type: :discovery, discovery_session:, status: :confirmed)
+    subscription = create(:discovery_registration, member:, discovery_session:, status: :confirmed)
 
     expect(member.destroy).to be false
     expect(member).to be_persisted

@@ -10,8 +10,8 @@ module Dashboard
       before_action :check_open_status, only: :create
 
       def create
-        @subscription = @member.subscriptions.new(
-          registration_type: :discovery,
+        @subscription = DiscoveryRegistration.new(
+          member: @member,
           discovery_session: @discovery_session,
           year: @discovery_session.year
         )
@@ -42,9 +42,11 @@ module Dashboard
       end
 
       def set_subscription
-        @subscription = current_user.subscriptions.find(params[:id])
+        @subscription = current_user.subscriptions
+                                    .where(registration_kind: DiscoveryRegistration.sti_name)
+                                    .joins(:discovery_session)
+                                    .find_by!(id: params[:id], discovery_sessions: { id: params[:discovery_session_id] })
         @discovery_session = @subscription.discovery_session
-        raise ActiveRecord::RecordNotFound unless @discovery_session&.id == params[:discovery_session_id].to_i
       end
 
       def check_open_status

@@ -5,6 +5,7 @@ class Member < ApplicationRecord
   include Members::Available
   include Members::Searchable
   include Members::SubscriptionForm
+  include Subscriptions::ProtectsFinalizedRegistrations
 
   MAJORITY_AGE = 18
 
@@ -34,8 +35,6 @@ class Member < ApplicationRecord
   has_many :discovery_sessions, through: :subscriptions
   has_many :attendance_records, dependent: :destroy
   has_many :attendance_sheets, through: :attendance_records
-
-  before_destroy :prevent_destroying_finalized_event_registrations, prepend: true
 
   has_one_attached :avatar do |attachable|
     attachable.variant :mini, resize: '80x80'
@@ -76,14 +75,12 @@ class Member < ApplicationRecord
   end
 
   def annual_subscription_for(year = Subscription.current_year)
-    subscriptions.registration_type_annual
+    subscriptions.where(registration_kind: AnnualSubscription.sti_name)
                  .confirmed
                  .find_by(year:, parent_subscription_id: nil)
   end
 
-  def current_subscription
-    annual_subscription_for
-  end
+  alias current_subscription annual_subscription_for
 
   def can_subscribe?(camp)
     return false if camp.closed?
@@ -99,18 +96,5 @@ class Member < ApplicationRecord
       !discovery_session.fully_booked? &&
       discovery_session.course.category.suitable_for_age?(age(discovery_session.year)) &&
       !discovery_sessions.exists?(discovery_session.id)
-  end
-
-  def destroyable?
-    !subscriptions.destruction_protected.exists?
-  end
-
-  private
-
-  def prevent_destroying_finalized_event_registrations
-    return if destroyable?
-
-    errors.add(:base, :finalized_event_registration)
-    throw :abort
   end
 end

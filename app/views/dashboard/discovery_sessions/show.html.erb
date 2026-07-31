@@ -14,10 +14,11 @@
         <p class="rounded-md bg-red-50 p-4 text-red-700"><%= t('.full') %></p>
       <% end %>
 
-      <% if @members.any? %>
+      <% members = current_user.members.includes(:subscriptions) %>
+      <% if members.any? %>
         <h2 class="font-semibold text-gray-900 mb-4"><%= t('.choose_member') %></h2>
         <div class="space-y-3">
-          <% @members.each do |member| %>
+          <% members.each do |member| %>
             <% subscription = member.subscriptions.find { |item| !item.archived? && item.discovery_session_id == @discovery_session.id } %>
             <% if subscription %>
               <% completion_path = next_completion_step_path(subscription) %>

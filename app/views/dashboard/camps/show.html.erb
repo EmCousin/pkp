@@ -40,7 +40,7 @@
             <div>
               <dt class="text-sm font-medium text-gray-500"><%= t('.capacity') %></dt>
               <dd class="mt-1 text-sm text-gray-900">
-                <%= t('.capacity_info', current: @camp.occupied_slots, count: @camp.capacity) %>
+                <%= t('.capacity_info', current: @camp.occupied_slots_count, count: @camp.capacity) %>
                 <% if @camp.fully_booked? %>
                   <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                     <%= t('.fully_booked') %>
@@ -62,9 +62,10 @@
             <p class="rounded-md bg-blue-50 border border-blue-200 p-4 text-sm text-blue-700"><%= t('.choose_member') %></p>
           <% end %>
 
-          <% if @members.any? %>
+          <% members = current_user.members.includes(subscriptions: :camps_subscription) %>
+          <% if members.any? %>
             <div class="mt-4 space-y-3">
-              <%= render partial: 'dashboard/camps/subscription', collection: @members, as: :member %>
+              <%= render partial: 'dashboard/camps/subscription', collection: members, as: :member %>
             </div>
           <% elsif !@camp.closed? && !@camp.fully_booked? %>
             <div class="bg-yellow-50 border border-yellow-200 rounded-md p-4">

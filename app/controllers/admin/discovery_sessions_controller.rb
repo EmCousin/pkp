@@ -8,13 +8,7 @@ module Admin
       @discovery_sessions = DiscoverySession.includes(:course, :subscriptions).order(starts_at: :desc)
     end
 
-    def show
-      @subscriptions = @discovery_session.subscriptions
-                                         .confirmed
-                                         .includes(member: %i[user avatar_attachment])
-                                         .joins(:member)
-                                         .order('members.first_name', 'members.last_name')
-    end
+    def show; end
 
     def new
       @discovery_session = DiscoverySession.new

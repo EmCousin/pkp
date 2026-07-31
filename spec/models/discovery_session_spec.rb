@@ -15,14 +15,14 @@ describe DiscoverySession, type: :model do
     let(:discovery_session) { create(:discovery_session, capacity: 1) }
 
     it 'is shared by pending and confirmed registrations' do
-      create(:subscription, registration_type: :discovery, discovery_session:, member: create(:member))
+      create(:discovery_registration, discovery_session:, member: create(:member))
 
       expect(discovery_session).to be_fully_booked
       expect(discovery_session.available_slots).to eq(0)
     end
 
     it 'is released when a registration is archived' do
-      create(:subscription, registration_type: :discovery, discovery_session:, member: create(:member), status: :archived)
+      create(:discovery_registration, discovery_session:, member: create(:member), status: :archived)
 
       expect(discovery_session.available_slots).to eq(1)
     end
@@ -30,7 +30,7 @@ describe DiscoverySession, type: :model do
 
   it 'cannot be destroyed while registrations exist' do
     discovery_session = create(:discovery_session)
-    create(:subscription, registration_type: :discovery, discovery_session:)
+    create(:discovery_registration, discovery_session:)
 
     expect(discovery_session.destroy).to be false
     expect(discovery_session).to be_persisted
@@ -39,7 +39,7 @@ describe DiscoverySession, type: :model do
   it 'cannot move registrations to another season' do
     boundary = Course.vacation_start(1.year.from_now.year)
     discovery_session = create(:discovery_session, starts_at: boundary - 1.day)
-    create(:subscription, registration_type: :discovery, discovery_session:)
+    create(:discovery_registration, discovery_session:)
 
     expect(discovery_session.update(starts_at: boundary)).to be false
     expect(discovery_session.errors.of_kind?(:starts_at, :event_year_locked)).to be true

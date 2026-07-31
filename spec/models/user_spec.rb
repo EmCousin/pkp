@@ -45,7 +45,7 @@ describe User, type: :model do
   it 'does not destroy finalized event registrations' do
     member = create(:member, user:)
     discovery_session = create(:discovery_session)
-    subscription = create(:subscription, member:, registration_type: :discovery, discovery_session:, paid_at: Time.current)
+    subscription = create(:discovery_registration, member:, discovery_session:, paid_at: Time.current)
 
     expect(user.destroy).to be false
     expect(user).to be_persisted

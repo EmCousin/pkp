@@ -35,7 +35,7 @@
       </div>
 
       <div class="flex items-center space-x-2">
-        <% if subscription.discovery? %>
+        <% if subscription.is_a?(DiscoveryRegistration) %>
           <span class="text-sm text-gray-500"><%= DiscoverySession.model_name.human %>:</span>
           <%= link_to subscription.discovery_session.course.title, [:admin, subscription.discovery_session], class: "text-blue-600 hover:text-blue-800", data: { turbo_frame: '_top' } %>
         <% elsif subscription.camp.present? %>

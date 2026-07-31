@@ -46,7 +46,7 @@ describe Members::Available, type: :model do
       let(:discovery_session) { create(:discovery_session) }
 
       before do
-        create(:subscription, member:, registration_type: :discovery, discovery_session:, year:)
+        create(:discovery_registration, member:, discovery_session:, year:)
       end
 
       it { expect(Member.available(year)).to include member }

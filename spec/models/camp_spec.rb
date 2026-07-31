@@ -85,7 +85,7 @@ describe Camp, type: :model do
       member = create(:member)
       course = create(:course)
       parent_subscription = create(:subscription, status: :confirmed, courses: [course], member:)
-      subscription = build(:subscription, registration_type: :camp, status: :confirmed, parent_subscription:, member:)
+      subscription = build(:camp_registration, status: :confirmed, parent_subscription:, member:)
       create(:camps_subscription, camp:, subscription:)
       expect(camp.available_slots).to eq(9)
     end
@@ -94,7 +94,7 @@ describe Camp, type: :model do
       member = create(:member)
       course = create(:course)
       parent_subscription = create(:subscription, status: :confirmed, courses: [course], member:)
-      subscription = build(:subscription, registration_type: :camp, status: :pending, parent_subscription:, member:)
+      subscription = build(:camp_registration, status: :pending, parent_subscription:, member:)
       create(:camps_subscription, camp:, subscription:)
       expect(camp.available_slots).to eq(9)
     end
@@ -111,7 +111,7 @@ describe Camp, type: :model do
       member = create(:member)
       course = create(:course)
       parent_subscription = create(:subscription, status: :confirmed, courses: [course], member:)
-      subscription = build(:subscription, registration_type: :camp, status: :confirmed, parent_subscription:, member:)
+      subscription = build(:camp_registration, status: :confirmed, parent_subscription:, member:)
       create(:camps_subscription, camp:, subscription:)
       expect(camp.fully_booked?).to be_truthy
     end
@@ -135,8 +135,7 @@ describe Camp, type: :model do
   it 'cannot be destroyed while registrations exist' do
     camp = create(:camp, open_to_externals: true)
     create(
-      :subscription,
-      registration_type: :camp,
+      :camp_registration,
       year: camp.year,
       camps_subscription_attributes: { camp_id: camp.id }
     )
@@ -149,8 +148,7 @@ describe Camp, type: :model do
     boundary = Course.vacation_start(1.year.from_now.year)
     camp = create(:camp, starts_at: boundary - 1.day, ends_at: boundary - 1.day, open_to_externals: true)
     create(
-      :subscription,
-      registration_type: :camp,
+      :camp_registration,
       year: camp.year,
       camps_subscription_attributes: { camp_id: camp.id }
     )

@@ -44,8 +44,13 @@ module Dashboard
     end
 
     def return_path
-      path = params[:return_to].presence
-      path if path&.start_with?('/dashboard/') && !path.start_with?('//')
+      path = url_from(params[:return_to])
+      return unless path
+
+      route = Rails.application.routes.recognize_path(path)
+      path if route[:controller].start_with?('dashboard/')
+    rescue ActionController::RoutingError
+      nil
     end
   end
 end

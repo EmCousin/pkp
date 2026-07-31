@@ -114,7 +114,7 @@
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m9-4.13a4 4 0 10-8 0 4 4 0 008 0z"/>
                     </svg>
-                    <%= t('admin.camps.camp.capacity', current: camp.occupied_slots, count: camp.capacity) %>
+                     <%= t('admin.camps.camp.capacity', current: camp.occupied_slots_count, count: camp.capacity) %>
                   </span>
                 </div>
               </div>
@@ -153,7 +153,7 @@
                   <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m9-4.13a4 4 0 10-8 0 4 4 0 008 0z"/>
                   </svg>
-                  <%= t('admin.camps.camp.capacity', current: camp.occupied_slots, count: camp.capacity) %>
+                  <%= t('admin.camps.camp.capacity', current: camp.occupied_slots_count, count: camp.capacity) %>
                 </span>
               </div>
             </div>
@@ -171,7 +171,7 @@
           </div>
         </div>
       </div>
-    <% elsif @subscription.discovery? %>
+    <% elsif @subscription.is_a?(DiscoveryRegistration) %>
       <div class="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-6">
         <h3 class="text-lg font-semibold text-amber-900"><%= @subscription.discovery_session.course.title %></h3>
         <p class="mt-2 text-sm text-amber-800"><%= l(@subscription.discovery_session.starts_at, format: :event) %></p>

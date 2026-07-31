@@ -1,4 +1,5 @@
 <% camp_subscription = member.subscriptions.not_archived.joins(:camps_subscription).find_by(camps_subscriptions: { camp_id: @camp.id }) %>
+<% annual_subscription = member.annual_subscription_for(@camp.year) %>
 
 <% if camp_subscription %>
   <% completion_path = next_completion_step_path(camp_subscription) %>
@@ -14,7 +15,8 @@
             <%= link_to t('dashboard.event_subscription.resume'), completion_path, class: "text-sm font-medium text-blue-700" %>
           <% end %>
           <% if camp_subscription.cancellable? %>
-            <%= button_to t('.unsubscribe'), [:dashboard, @camp, camp_subscription], method: :delete,
+            <% cancellation_path = camp_subscription.parent_subscription_id? ? dashboard_camp_subscription_path(@camp, camp_subscription) : dashboard_camp_registration_path(@camp, camp_subscription) %>
+            <%= button_to t('.unsubscribe'), cancellation_path, method: :delete,
                 class: "text-sm font-medium text-red-600",
                 data: { turbo_confirm: t('.unsubscribe_confirm', member: member.full_name) } %>
           <% end %>
@@ -23,7 +25,9 @@
     </div>
   </div>
 <% elsif member.can_subscribe?(@camp) %>
-  <%= button_to dashboard_camp_subscriptions_path(@camp), params: { member_id: member.id },
+  <% registration_path = annual_subscription ? dashboard_camp_subscriptions_path(@camp) : dashboard_camp_registrations_path(@camp) %>
+  <% registration_params = annual_subscription ? { subscription_id: annual_subscription.id } : { member_id: member.id } %>
+  <%= button_to registration_path, params: registration_params,
       class: "w-full rounded-lg px-4 py-3 text-left text-sm font-medium text-white bg-blue-600 hover:bg-blue-700" do %>
     <span class="block"><%= t('.subscribe_with', member: member.full_name) %></span>
     <span class="block text-xs text-blue-100"><%= @camp.internal_for?(member) ? t('.internal_rate') : t('.external_rate') %> - <%= number_to_currency(@camp.price_for(member), unit: '€') %></span>

@@ -11,11 +11,11 @@ module Dashboard
     def show; end
 
     def new
-      @subscription = current_user.subscriptions.new(member: @member)
+      @subscription = AnnualSubscription.new(member: @member)
     end
 
     def create
-      @subscription = current_user.subscriptions.new(subscription_params)
+      @subscription = AnnualSubscription.new(subscription_params.merge(member: current_user.members.find(subscription_params[:member_id])))
       if @subscription.save
         redirect_to next_completion_step_path(@subscription), status: :see_other
       else

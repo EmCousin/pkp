@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class DiscoverySession < ApplicationRecord
+  include Events::CapacityLimited
+
   belongs_to :course
   has_many :subscriptions, dependent: :restrict_with_error
   has_many :members, through: :subscriptions
@@ -14,18 +16,6 @@ class DiscoverySession < ApplicationRecord
   scope :upcoming, -> { where(starts_at: Time.current..) }
   scope :recent, -> { where(starts_at: 1.day.ago..) }
   scope :available, -> { active.upcoming }
-
-  def available_slots
-    capacity - occupied_slots
-  end
-
-  def occupied_slots
-    subscriptions.not_archived.count
-  end
-
-  def fully_booked?
-    available_slots <= 0
-  end
 
   def closed?
     !open?

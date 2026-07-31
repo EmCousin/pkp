@@ -8,8 +8,6 @@ describe Subscription, type: :model do
   it { is_expected.to have_many(:courses).through(:courses_subscriptions) }
 
   it { is_expected.to define_enum_for(:status).with_values(%i[pending confirmed archived]) }
-  it { is_expected.to define_enum_for(:registration_type).with_values(annual: 0, camp: 1, discovery: 2).with_prefix }
-
   it { is_expected.to respond_to :category_id }
   it { is_expected.to respond_to 'category_id=' }
 
@@ -234,9 +232,8 @@ describe Subscription, type: :model do
     it 'uses the external camp price without an annual subscription' do
       camp = create(:camp, external_price: 180, open_to_externals: true)
       subscription = build(
-        :subscription,
+        :camp_registration,
         member:,
-        registration_type: :camp,
         year: camp.year,
         camps_subscription_attributes: { camp_id: camp.id }
       )
@@ -256,7 +253,7 @@ describe Subscription, type: :model do
 
     it 'uses the discovery session price' do
       discovery_session = create(:discovery_session, price: 30)
-      subscription = build(:subscription, member:, registration_type: :discovery, discovery_session:)
+      subscription = build(:discovery_registration, member:, discovery_session:)
 
       expect(subscription.save).to be true
       expect(subscription.fee).to eq(30)
@@ -265,9 +262,8 @@ describe Subscription, type: :model do
     it 'does not require a medical certificate for an event' do
       discovery_session = create(:discovery_session)
       subscription = build(
-        :subscription,
+        :discovery_registration,
         member:,
-        registration_type: :discovery,
         discovery_session:,
         terms_accepted_at: Time.current,
         paid_at: Time.current
@@ -278,7 +274,7 @@ describe Subscription, type: :model do
 
     it 'allows annual enrollment after an external event in the same year' do
       discovery_session = create(:discovery_session)
-      create(:subscription, member:, registration_type: :discovery, discovery_session:, year: discovery_session.year)
+      create(:discovery_registration, member:, discovery_session:, year: discovery_session.year)
 
       annual_subscription = build(:subscription, member:, courses: [discovery_session.course], year: discovery_session.year)
 
@@ -287,7 +283,7 @@ describe Subscription, type: :model do
 
     it 'keeps the event price as a registration snapshot' do
       discovery_session = create(:discovery_session, price: 30)
-      subscription = create(:subscription, member:, registration_type: :discovery, discovery_session:)
+      subscription = create(:discovery_registration, member:, discovery_session:)
 
       discovery_session.update!(price: 45)
       subscription.update!(attendance_status: :present)
@@ -297,7 +293,7 @@ describe Subscription, type: :model do
 
     it 'rejects an event registration as an annual parent' do
       discovery_session = create(:discovery_session)
-      event_subscription = create(:subscription, member:, registration_type: :discovery, discovery_session:)
+      event_subscription = create(:discovery_registration, member:, discovery_session:)
       annual_subscription = build(:subscription, member:, parent_subscription: event_subscription, courses: [discovery_session.course])
 
       expect(annual_subscription).not_to be_valid
@@ -307,9 +303,8 @@ describe Subscription, type: :model do
     it 'rejects an event registration for a different season' do
       discovery_session = create(:discovery_session)
       subscription = build(
-        :subscription,
+        :discovery_registration,
         member:,
-        registration_type: :discovery,
         discovery_session:,
         year: discovery_session.year - 1
       )
@@ -320,8 +315,8 @@ describe Subscription, type: :model do
 
     it 'does not destroy paid or confirmed event registrations' do
       discovery_session = create(:discovery_session)
-      paid = create(:subscription, member:, registration_type: :discovery, discovery_session:, paid_at: Time.current)
-      confirmed = create(:subscription, member: create(:member), registration_type: :discovery,
+      paid = create(:discovery_registration, member:, discovery_session:, paid_at: Time.current)
+      confirmed = create(:discovery_registration, member: create(:member),
                                           discovery_session:, status: :confirmed)
 
       expect(paid.destroy).to be false
@@ -332,7 +327,7 @@ describe Subscription, type: :model do
 
     it 'cancels an open Stripe payment before destroying a registration' do
       discovery_session = create(:discovery_session)
-      subscription = create(:subscription, member:, registration_type: :discovery, discovery_session:)
+      subscription = create(:discovery_registration, member:, discovery_session:)
       subscription.update_column(:stripe_payment_intent_id, 'pi_test_123')
       allow(Stripe::PaymentIntent).to receive(:retrieve).with('pi_test_123').and_return(OpenStruct.new(status: 'requires_payment_method'))
       allow(Stripe::PaymentIntent).to receive(:cancel).with('pi_test_123')
@@ -344,7 +339,7 @@ describe Subscription, type: :model do
 
     it 'does not destroy a registration when Stripe cannot cancel its payment' do
       discovery_session = create(:discovery_session)
-      subscription = create(:subscription, member:, registration_type: :discovery, discovery_session:)
+      subscription = create(:discovery_registration, member:, discovery_session:)
       subscription.update_column(:stripe_payment_intent_id, 'pi_test_123')
       allow(Stripe::PaymentIntent).to receive(:retrieve).with('pi_test_123').and_return(OpenStruct.new(status: 'processing'))
       allow(Stripe::PaymentIntent).to receive(:cancel).with('pi_test_123').and_raise(Stripe::StripeError, 'Payment is processing')
@@ -355,7 +350,7 @@ describe Subscription, type: :model do
 
     it 'does not cancel Stripe when a finalized registration rejects deletion' do
       discovery_session = create(:discovery_session)
-      subscription = create(:subscription, member:, registration_type: :discovery, discovery_session:, status: :confirmed)
+      subscription = create(:discovery_registration, member:, discovery_session:, status: :confirmed)
       subscription.update_column(:stripe_payment_intent_id, 'pi_test_123')
       allow(Stripe::PaymentIntent).to receive(:cancel)
 
@@ -365,7 +360,7 @@ describe Subscription, type: :model do
 
     it 'destroys a pending unpaid event registration' do
       discovery_session = create(:discovery_session)
-      subscription = create(:subscription, member:, registration_type: :discovery, discovery_session:)
+      subscription = create(:discovery_registration, member:, discovery_session:)
 
       expect(subscription.destroy).to be subscription
       expect(subscription).not_to be_persisted

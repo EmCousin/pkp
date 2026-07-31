@@ -8,7 +8,6 @@ module Dashboard
 
     def show
       @discovery_session = DiscoverySession.available.find(params[:id])
-      @members = current_user.members.includes(:subscriptions)
     end
   end
 end

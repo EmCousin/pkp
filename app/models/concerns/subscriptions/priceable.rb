@@ -33,18 +33,7 @@ module Subscriptions
     end
 
     def calculated_fee
-      return subscription_camp&.price_for(member) if camp?
-      return discovery_session&.price if discovery?
-
       dynamic_price_for_courses_count || legacy_price_for_courses_count
-    end
-
-    def event_year_must_match
-      event = camp? ? subscription_camp : discovery_session
-      return unless event && year
-      return if year == event.year
-
-      errors.add(:year, :event_mismatch)
     end
 
     def dynamic_price_for_courses_count

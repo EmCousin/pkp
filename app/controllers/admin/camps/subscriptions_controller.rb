@@ -34,10 +34,9 @@ module Admin
       end
 
       def set_parent_subscription
-        @parent_subscription = Subscription.confirmed
-                                           .registration_type_annual
-                                           .where(parent_subscription_id: nil, year: @camp.year)
-                                           .find(params.require(:subscription_id))
+        @parent_subscription = AnnualSubscription.confirmed
+                                                 .where(parent_subscription_id: nil, year: @camp.year)
+                                                 .find(params.require(:subscription_id))
       end
 
       def set_subscription

@@ -17,9 +17,10 @@ module Subscriptions
       enum :payment_method, PAYMENT_METHODS, prefix: :paid_via
 
       before_save :update_stripe_payment_intent, if: %i[fee_changed? stripe_payment_intent_id?], unless: :paid?
-      before_destroy :cancel_stripe_payment_intent
+      before_destroy { throw :abort unless cancel_open_stripe_payment_intent }
 
       attr_accessor :payment_intent_client_secret
+      attr_writer :stripe_payment_intent
     end
 
     def stripe_payment_intent
@@ -105,7 +106,7 @@ module Subscriptions
       intent = Stripe::PaymentIntent.retrieve(stripe_payment_intent_id)
       Stripe::PaymentIntent.cancel(stripe_payment_intent_id) unless intent.status == 'canceled'
       update!(stripe_payment_intent_id: nil)
-      remove_instance_variable(:@stripe_payment_intent) if defined?(@stripe_payment_intent)
+      self.stripe_payment_intent = nil
       true
     end
 
@@ -128,10 +129,6 @@ module Subscriptions
 
     def update_stripe_payment_intent
       Stripe::PaymentIntent.update(stripe_payment_intent_id, amount: fee_cents)
-    end
-
-    def cancel_stripe_payment_intent
-      throw :abort unless cancel_open_stripe_payment_intent
     end
   end
 end

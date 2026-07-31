@@ -101,7 +101,7 @@ Rails.application.routes.draw do
       resources :subscriptions, only: [:create, :destroy], controller: 'camps/subscriptions'
     end
     resources :discovery_sessions do
-      resources :attendances, only: :update, controller: 'discovery_attendances'
+      resources :subscriptions, only: :update, controller: 'discovery_sessions/subscriptions'
     end
 
     resources :subscriptions do
@@ -135,6 +135,7 @@ Rails.application.routes.draw do
       resources :subscriptions, only: [:create, :destroy], controller: 'camps/subscriptions' do
         resource :payment_proof, only: [:edit, :update], module: :camps
       end
+      resources :registrations, only: [:create, :destroy], controller: 'camps/registrations'
     end
     resources :discovery_sessions, only: %i[index show] do
       resources :subscriptions, only: %i[create destroy], controller: 'discovery_sessions/subscriptions'
@@ -155,7 +156,7 @@ Rails.application.routes.draw do
   namespace :coach do
     concerns :courses_manageable
     resources :discovery_sessions, only: %i[index show] do
-      resources :attendances, only: :update, controller: 'discovery_attendances'
+      resources :subscriptions, only: :update, controller: 'discovery_sessions/subscriptions'
     end
   end
 end

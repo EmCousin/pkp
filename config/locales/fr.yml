@@ -760,6 +760,13 @@ fr:
           success: "Désinscription du stage confirmée"
           error: "Erreur lors de la désinscription"
           already_confirmed: Une inscription confirmée ou payée ne peut pas être annulée en ligne.
+      registrations:
+        create:
+          closed: "Ce stage n'est pas ouvert aux inscriptions."
+        destroy:
+          success: "Désinscription du stage confirmée"
+          error: "Erreur lors de la désinscription"
+          already_confirmed: Une inscription confirmée ou payée ne peut pas être annulée en ligne.
 
     show:
       add_subscription: Ajouter une inscription
