@@ -16,11 +16,11 @@ module AccessFilteringHelpers
   end
 
   def alumni_time?
-    true || (Time.current.month.in?(Course::ALUMNI_MONTHS) && alumni_starting_date.past?)
+    Time.current.month.in?(Course::ALUMNI_MONTHS) && alumni_starting_date.past?
   end
 
   def alumni_starting_date
-    DateTime.new(Subscription.current_year, Course::ALUMNI_MONTHS.first, 1).beginning_of_day
+    DateTime.new(Subscription.current_year, Course::ALUMNI_MONTHS.first, 11).beginning_of_day
   end
 
   def full?
