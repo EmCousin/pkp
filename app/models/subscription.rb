@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Subscription < ApplicationRecord
-  self.inheritance_column = :registration_kind
-
   include Subscriptions::Priceable
   include Subscriptions::Payable
   include Subscriptions::Invoiceable
@@ -30,19 +28,19 @@ class Subscription < ApplicationRecord
 
   scope :destruction_protected, lambda {
     where(
-      'stripe_payment_intent_id IS NOT NULL OR (registration_kind IN (?) AND (paid_at IS NOT NULL OR status = ?))',
+      'stripe_payment_intent_id IS NOT NULL OR (type IN (?) AND (paid_at IS NOT NULL OR status = ?))',
       %w[CampRegistration DiscoveryRegistration],
       statuses[:confirmed]
     )
   }
   scope :annual_dashboard, lambda {
-    where(registration_kind: 'AnnualSubscription', year: current_year, parent_subscription_id: nil)
+    where(type: 'AnnualSubscription', year: current_year, parent_subscription_id: nil)
       .not_archived
       .includes(:member, :child_subscriptions)
       .with_attached_medical_certificate
   }
   scope :event_dashboard, lambda {
-    where(registration_kind: %w[CampRegistration DiscoveryRegistration], parent_subscription_id: nil)
+    where(type: %w[CampRegistration DiscoveryRegistration], parent_subscription_id: nil)
       .not_archived
       .includes(:camp, :discovery_session, :member)
       .order(created_at: :desc)

@@ -36,7 +36,7 @@ class AnnualSubscription < Subscription
   def build_child_subscription(child_attributes)
     child_subscriptions.new(
       child_attributes.merge(
-        registration_kind: CampRegistration.sti_name,
+        type: CampRegistration.sti_name,
         member:,
         year:,
         terms_accepted_at:,

@@ -75,7 +75,7 @@ class Member < ApplicationRecord
   end
 
   def annual_subscription_for(year = Subscription.current_year)
-    subscriptions.where(registration_kind: AnnualSubscription.sti_name)
+    subscriptions.where(type: AnnualSubscription.sti_name)
                  .confirmed
                  .find_by(year:, parent_subscription_id: nil)
   end

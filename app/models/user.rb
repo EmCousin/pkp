@@ -21,7 +21,7 @@ class User < ApplicationRecord
   has_many :members, dependent: :destroy
   has_many :subscriptions, through: :members
   has_many :current_year_subscriptions, lambda {
-    confirmed.where(registration_kind: AnnualSubscription.sti_name, year: Subscription.current_year, parent_subscription: nil)
+    confirmed.where(type: AnnualSubscription.sti_name, year: Subscription.current_year, parent_subscription: nil)
   }, through: :members, source: :subscriptions
   has_many :courses, through: :subscriptions
 

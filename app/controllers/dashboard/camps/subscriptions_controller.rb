@@ -33,7 +33,7 @@ module Dashboard
 
       def set_parent_subscription
         @parent_subscription = current_user.subscriptions
-                                           .where(registration_kind: AnnualSubscription.sti_name)
+                                           .where(type: AnnualSubscription.sti_name)
                                            .confirmed
                                            .where(year: @camp.year, parent_subscription_id: nil)
                                            .find(params.require(:subscription_id))
@@ -45,7 +45,7 @@ module Dashboard
 
       def set_subscription
         @subscription = current_user.subscriptions
-                                    .where(registration_kind: CampRegistration.sti_name)
+                                    .where(type: CampRegistration.sti_name)
                                     .where.not(parent_subscription_id: nil)
                                     .joins(:camp)
                                     .find_by!(id: params[:id], camps: { id: params[:camp_id] })

@@ -42,7 +42,7 @@ module Dashboard
 
       def set_registration
         @registration = current_user.subscriptions
-                                    .where(registration_kind: CampRegistration.sti_name, parent_subscription_id: nil)
+                                    .where(type: CampRegistration.sti_name, parent_subscription_id: nil)
                                     .joins(:camp)
                                     .find_by!(id: params[:id], camps: { id: params[:camp_id] })
         @camp = @registration.camp

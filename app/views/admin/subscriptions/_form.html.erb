@@ -69,7 +69,7 @@
       <% end %>
 
       <!-- Parent Subscription Selection Section -->
-      <% confirmed_subscriptions = @subscription.member&.subscriptions&.where(registration_kind: AnnualSubscription.sti_name, year: Subscription.current_year, parent_subscription_id: nil)&.confirmed&.where.not(id: @subscription.id) %>
+      <% confirmed_subscriptions = @subscription.member&.subscriptions&.where(type: AnnualSubscription.sti_name, year: Subscription.current_year, parent_subscription_id: nil)&.confirmed&.where.not(id: @subscription.id) %>
       <% if confirmed_subscriptions&.any? %>
         <%= tag.div class: class_names("space-y-4", "animate-fade-in-up" => @subscription.parent_subscription.blank?) do %>
           <div class="flex items-center space-x-3 mb-4">

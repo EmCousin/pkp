@@ -209,16 +209,16 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_31_090000) do
     t.enum "payment_method", enum_type: "payment_method"
     t.bigint "parent_subscription_id"
     t.string "stripe_payment_intent_id"
-    t.string "registration_kind", default: "AnnualSubscription", null: false
+    t.string "type", default: "AnnualSubscription", null: false
     t.bigint "discovery_session_id"
     t.enum "attendance_status", enum_type: "attendance_record_status"
     t.index ["created_at"], name: "index_subscriptions_on_created_at", order: :desc
     t.index ["discovery_session_id", "member_id"], name: "index_one_subscription_per_discovery_session_and_member", unique: true, where: "(discovery_session_id IS NOT NULL)"
     t.index ["discovery_session_id"], name: "index_subscriptions_on_discovery_session_id"
-    t.index ["member_id", "year"], name: "index_one_annual_subscription_per_member_and_year", unique: true, where: "(((registration_kind)::text = 'AnnualSubscription'::text) AND (parent_subscription_id IS NULL))"
+    t.index ["member_id", "year"], name: "index_one_annual_subscription_per_member_and_year", unique: true, where: "(((type)::text = 'AnnualSubscription'::text) AND (parent_subscription_id IS NULL))"
     t.index ["member_id"], name: "index_subscriptions_on_member_id"
     t.index ["parent_subscription_id"], name: "index_subscriptions_on_parent_subscription_id"
-    t.index ["registration_kind"], name: "index_subscriptions_on_registration_kind"
+    t.index ["type"], name: "index_subscriptions_on_type"
     t.index ["status"], name: "index_subscriptions_on_status"
     t.index ["year"], name: "index_subscriptions_on_year"
   end

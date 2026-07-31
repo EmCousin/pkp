@@ -43,7 +43,7 @@ module Dashboard
 
       def set_subscription
         @subscription = current_user.subscriptions
-                                    .where(registration_kind: DiscoveryRegistration.sti_name)
+                                    .where(type: DiscoveryRegistration.sti_name)
                                     .joins(:discovery_session)
                                     .find_by!(id: params[:id], discovery_sessions: { id: params[:discovery_session_id] })
         @discovery_session = @subscription.discovery_session
