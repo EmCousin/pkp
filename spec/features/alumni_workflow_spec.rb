@@ -82,7 +82,7 @@ feature "Alumni Workflow", type: :feature do
   end
 
   before do
-    travel_to Time.zone.local(Subscription.current_year, 8, 4, 9, 0, 0)
+    travel_to Time.zone.local(Subscription.current_year, 8, 11, 9, 0, 0)
   end
 
   after do
