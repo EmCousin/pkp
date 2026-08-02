@@ -59,7 +59,7 @@ class DiscoverySession < ApplicationRecord
   end
 
   def registration_open?
-    occurs_on.nil? ? !starts_at.past? : !occurs_on.past?
+    occurs_on? ? !occurs_on.past? : !starts_at.past?
   end
 
   def open_for_registration?
