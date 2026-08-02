@@ -15,14 +15,12 @@ class DiscoverySession < ApplicationRecord
   validate :course_date_must_be_unique, if: :course_or_date_changed?
 
   scope :active, -> { where(active: true) }
-  scope :upcoming, lambda {
-    where('(occurs_on IS NOT NULL AND occurs_on >= :date) OR (occurs_on IS NULL AND starts_at >= :time)',
-          date: Date.current, time: Time.current)
+  scope :starting_from, lambda { |time|
+    where.not(occurs_on: nil).where(occurs_on: time.to_date..)
+         .or(where(occurs_on: nil, starts_at: time..))
   }
-  scope :recent, lambda {
-    where('(occurs_on IS NOT NULL AND occurs_on >= :date) OR (occurs_on IS NULL AND starts_at >= :time)',
-          date: 1.day.ago.to_date, time: 1.day.ago)
-  }
+  scope :upcoming, -> { starting_from(Time.current) }
+  scope :recent, -> { starting_from(1.day.ago) }
   scope :available, -> { active.upcoming }
 
   class << self
@@ -61,7 +59,7 @@ class DiscoverySession < ApplicationRecord
   end
 
   def registration_open?
-    occurs_on? ? occurs_on >= Date.current : !starts_at.past?
+    occurs_on.nil? ? !starts_at.past? : !occurs_on.past?
   end
 
   def open_for_registration?

@@ -34,7 +34,7 @@ class Course < ApplicationRecord
 
   def discovery_season_end(reference_date = Date.current)
     season_year = reference_date < self.class.vacation_start(reference_date.year).to_date ? reference_date.year - 1 : reference_date.year
-    self.class.vacation_start(season_year + 1).to_date - 1.day
+    1.day.before(self.class.vacation_start(season_year + 1)).to_date
   end
 
   def next_discovery_date(from: Date.current)

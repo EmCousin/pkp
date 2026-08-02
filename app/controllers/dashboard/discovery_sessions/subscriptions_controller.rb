@@ -3,11 +3,8 @@
 module Dashboard
   module DiscoverySessions
     class SubscriptionsController < DashboardController
-      before_action :set_available_discovery_session, only: :create
-      before_action :set_member, only: :create
-      before_action :set_subscription, only: :destroy
-      before_action :check_cancellable, only: :destroy
-      before_action :check_open_status, only: :create
+      before_action :set_available_discovery_session, :set_member, :check_open_status, only: :create
+      before_action :set_subscription, :check_cancellable, only: :destroy
 
       def create
         @subscription = DiscoveryRegistration.new(
