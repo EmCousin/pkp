@@ -21,6 +21,15 @@ describe 'Recurring discovery sessions', type: :request do
     expect(response.body).not_to include(hidden_course.title)
   end
 
+  it 'only offers dates matching the selected course weekday' do
+    get dashboard_discovery_sessions_path(category_id: category.id, course_id: course.id)
+
+    options = Nokogiri::HTML(response.body).css('select[name="occurs_on"] option').pluck('value')
+    expected_dates = course.next_discovery_date.step(course.discovery_season_end, 7).map(&:iso8601)
+
+    expect(options).to eq(expected_dates)
+  end
+
   it 'creates an occurrence for a valid course date' do
     occurs_on = course.next_discovery_date
 

@@ -358,7 +358,8 @@ fr:
     discovery_sessions:
       index:
         title: Cours découverte
-        description: Configurez les cours récurrents depuis chaque cours, puis consultez ici les séances créées et leurs participants.
+        description: Configurez les cours récurrents depuis chaque cours, programmez des séances ponctuelles, puis consultez ici les séances créées et leurs participants.
+        new: Programmer une séance ponctuelle
         empty: Aucun cours découverte programmé.
         confirm_delete: Êtes-vous sûr de vouloir supprimer cette séance ?
       new:

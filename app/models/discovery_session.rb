@@ -15,6 +15,9 @@ class DiscoverySession < ApplicationRecord
   validate :course_date_must_be_unique, if: :course_or_date_changed?
 
   scope :active, -> { where(active: true) }
+  scope :on_date, lambda { |date|
+    date ? where(occurs_on: date).or(where(occurs_on: nil, starts_at: date.in_time_zone.all_day)) : all
+  }
   scope :starting_from, lambda { |time|
     where.not(occurs_on: nil).where(occurs_on: time.to_date..)
          .or(where(occurs_on: nil, starts_at: time..))

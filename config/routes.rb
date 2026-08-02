@@ -100,7 +100,7 @@ Rails.application.routes.draw do
     resources :camps do
       resources :subscriptions, only: [:create, :destroy], controller: 'camps/subscriptions'
     end
-    resources :discovery_sessions, except: %i[new create] do
+    resources :discovery_sessions do
       resources :subscriptions, only: :update, controller: 'discovery_sessions/subscriptions'
     end
 
