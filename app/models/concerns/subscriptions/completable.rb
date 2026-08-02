@@ -13,6 +13,8 @@ module Subscriptions
     end
 
     def completed?
+      return paid? && terms_accepted_at? unless medical_certificate_required?
+
       paid? && terms_accepted_at? && doctor_certified_at? && medical_certificate.attached?
     end
 

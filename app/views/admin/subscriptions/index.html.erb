@@ -1,6 +1,6 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
   <div class="mb-8">
-    <h1 class="text-2xl text-center font-bold mb-4 text-amber-500">
+    <h1 class="text-2xl text-center font-bold mb-4 text-slate-800">
       <%= Subscription.model_name.human.pluralize %>
       <% if params[:year].present? %>
         <%= params[:year] %> - <%= params[:year].to_i + 1 %>
@@ -11,56 +11,60 @@
 
     <div class="border-b border-gray-200 mb-6"></div>
 
-    <div class="w-full p-4 bg-slate-100 rounded-lg shadow-sm">
+    <div class="w-full p-4 sm:p-6 bg-slate-50 border border-slate-200 rounded-lg shadow-sm">
       <%= form_with url: %i[admin subscriptions],
                     local: true,
                     method: :get,
-                    class: "mb-6" do |f| %>
-        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
-          <%= f.select :status,
-              subscriptions_status_select_options(params[:status]),
-              { include_blank: Subscription.human_attribute_name(:status) },
-              class: 'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm' %>
+                    class: "space-y-5" do |f| %>
+        <div>
+          <h2 class="text-base font-semibold text-slate-900"><%= t('.filters.title') %></h2>
+          <p class="mt-1 text-sm text-slate-600"><%= t('.filters.description') %></p>
+        </div>
 
-          <%= f.select :year,
-              subscriptions_year_select_options(params[:year]),
-              { include_blank: Subscription.human_attribute_name(:year) },
-              class: 'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm' %>
-
-          <%= f.select :level,
-              subscriptions_level_select_options(params[:level]),
-              { include_blank: Member.human_attribute_name(:level) },
-              class: 'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm' %>
-
-          <%= f.grouped_collection_select :course_ids,
-                                          Category.all,
-                                          :courses,
-                                          :title,
-                                          :id,
-                                          :title,
-                                          { include_blank: Course.human_attribute_name(:name), multiple: true, selected: params[:course_ids] },
-                                          class: 'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm',
-                                          data: { controller: 'select' },
-                                          id: 'course_ids' %>
-
-          <%= f.collection_select :camp_id,
-                                  Camp.all,
-                                  :id,
-                                  :title,
-                                  { include_blank: Camp.model_name.human, selected: params[:camp_id] },
-                                  class: 'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm' %>
-
-          <div class="flex items-end">
-            <%= f.submit t('defaults.filter'),
-                class: "bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md w-full sm:w-auto" %>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div>
+            <%= f.label :status, Subscription.human_attribute_name(:status), class: 'block text-sm font-medium text-gray-700 mb-1' %>
+            <%= f.select :status, subscriptions_status_select_options(params[:status]), { include_blank: t('.filters.all') }, class: 'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm bg-white' %>
           </div>
+          <div>
+            <%= f.label :year, Subscription.human_attribute_name(:year), class: 'block text-sm font-medium text-gray-700 mb-1' %>
+            <%= f.select :year, subscriptions_year_select_options(params[:year]), { include_blank: t('.filters.all') }, class: 'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm bg-white' %>
+          </div>
+          <div>
+            <%= f.label :level, Member.human_attribute_name(:level), class: 'block text-sm font-medium text-gray-700 mb-1' %>
+            <%= f.select :level, subscriptions_level_select_options(params[:level]), { include_blank: t('.filters.all') }, class: 'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm bg-white' %>
+          </div>
+          <div>
+            <%= f.label :course_ids, t('.filters.courses'), class: 'block text-sm font-medium text-gray-700 mb-1' %>
+            <%= f.grouped_collection_select :course_ids, Category.order(:title), :courses, :title, :id, :title,
+                                            { include_blank: t('.filters.all'), multiple: true, selected: params[:course_ids] },
+                                            class: 'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm bg-white',
+                                            data: { controller: 'select' }, id: 'course_ids' %>
+          </div>
+          <div>
+            <%= f.label :camp_id, Camp.model_name.human, class: 'block text-sm font-medium text-gray-700 mb-1' %>
+            <%= f.collection_select :camp_id, Camp.order(starts_at: :desc), :id, :title,
+                                    { include_blank: t('.filters.all'), selected: params[:camp_id] },
+                                    class: 'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm bg-white' %>
+          </div>
+          <div>
+            <%= f.label :discovery_session_id, DiscoverySession.model_name.human, class: 'block text-sm font-medium text-gray-700 mb-1' %>
+            <%= f.collection_select :discovery_session_id, DiscoverySession.includes(:course).order(starts_at: :desc), :id,
+                                    ->(session) { "#{session.course.title} - #{l(session.starts_at, format: :event)}" },
+                                    { include_blank: t('.filters.all'), selected: params[:discovery_session_id] },
+                                    class: 'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm bg-white' %>
+          </div>
+        </div>
+
+        <div class="flex justify-end">
+          <%= f.submit t('defaults.filter'), class: "w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md font-medium" %>
         </div>
       <% end %>
     </div>
   </div>
 
   <div class="bg-white shadow-sm rounded-lg p-6">
-    <div class="flex justify-between items-center mb-6">
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
       <%= link_to t('.new'), %i[new admin subscription],
           class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md" %>
     </div>
@@ -84,4 +88,3 @@
     <% end %>
   </div>
 </div>
-

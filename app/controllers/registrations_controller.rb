@@ -15,6 +15,14 @@ class RegistrationsController < Devise::RegistrationsController
     end
   end
 
+  def destroy
+    return super if resource.destroyable?
+
+    redirect_to edit_user_registration_path,
+                alert: t('devise.registrations.destroy.finalized_event_registration'),
+                status: :see_other
+  end
+
   protected
 
   def after_inactive_sign_up_path_for(_resource)

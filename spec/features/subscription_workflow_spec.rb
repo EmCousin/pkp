@@ -82,10 +82,11 @@ feature "Subscription Workflow", type: :feature do
     ]
   end
 
-  let!(:camp) { create(:camp, title: 'Stage Nature', starts_at: 1.month.from_now, ends_at: 1.month.from_now + 5.days, active: true) }
+  let(:camp) { create(:camp, title: 'Stage Nature', starts_at: 1.month.from_now, ends_at: 1.month.from_now + 5.days, active: true) }
 
   before do
     travel_to Time.zone.local(Subscription.current_year, 9, 1, 9, 0, 0)
+    camp
   end
 
   after do
@@ -93,9 +94,47 @@ feature "Subscription Workflow", type: :feature do
   end
 
   scenario "User signs up" do
+    allow(Rails.application.credentials).to receive(:stripe).and_return(public_key: 'pk_test')
+    stripe_payment_intent = OpenStruct.new(
+      id: 'pi_test_123',
+      client_secret: 'pi_test_123_secret',
+      latest_charge: 'ch_test_123',
+      status: 'succeeded',
+      currency: 'eur',
+      amount_received: 36000
+    )
+    stripe_charge = OpenStruct.new(
+      id: 'ch_test_123',
+      paid: true,
+      currency: 'eur',
+      created: Time.current.to_i,
+      amount: 36000
+    )
+    camp_payment_intent = OpenStruct.new(
+      id: 'pi_camp_123',
+      client_secret: 'pi_camp_123_secret',
+      status: 'requires_payment_method'
+    )
+    allow(Stripe::PaymentIntent).to receive(:create).with(
+      amount: 36000,
+      currency: 'eur',
+      description: anything,
+      customer: anything
+    ).and_return(stripe_payment_intent)
+    allow(Stripe::PaymentIntent).to receive(:create).with(
+      amount: 15000,
+      currency: 'eur',
+      description: 'Stage Nature',
+      customer: anything
+    ).and_return(camp_payment_intent)
+    allow(Stripe::PaymentIntent).to receive(:retrieve).with('pi_test_123').and_return(stripe_payment_intent)
+    allow(Stripe::PaymentIntent).to receive(:retrieve).with('pi_camp_123').and_return(camp_payment_intent)
+    allow(Stripe::PaymentIntent).to receive(:cancel).with('pi_camp_123')
+    allow(Stripe::Charge).to receive(:retrieve).with('ch_test_123').and_return(stripe_charge)
+
     visit '/users/sign_up'
     expect(page).to have_text("S'inscrire")
-    expect(page).to have_text("Si vous souhaitez faire un cours d'essai, veuillez envoyer votre demande directement sur notre formulaire de contact.")
+    expect(page).to have_text("Vous pouvez utiliser ce compte pour vous inscrire aux cours découverte et aux stages ouverts aux externes.")
 
     within("#new_user") do
       fill_in "user_email", with: user.email
@@ -188,30 +227,6 @@ feature "Subscription Workflow", type: :feature do
     # The payment form should be present
     expect(page).to have_selector('form[data-stripe-target="form"]')
 
-    # Mock Stripe payment intent and charge for testing
-    stripe_payment_intent = OpenStruct.new(
-      id: 'pi_test_123',
-      client_secret: 'pi_test_123_secret',
-      latest_charge: 'ch_test_123'
-    )
-
-    stripe_charge = OpenStruct.new(
-      id: 'ch_test_123',
-      paid: true,
-      created: Time.current.to_i,
-      amount: 36000  # 360.00 EUR in cents
-    )
-
-    # Mock the payment intent creation and retrieval
-    allow(Stripe::PaymentIntent).to receive(:create).with(
-      amount: 36000,
-      currency: 'eur',
-      description: anything
-    ).and_return(stripe_payment_intent)
-
-    allow(Stripe::PaymentIntent).to receive(:retrieve).and_return(stripe_payment_intent)
-    allow(Stripe::Charge).to receive(:retrieve).with('ch_test_123').and_return(stripe_charge)
-
     # Get the current subscription for payment testing
     subscription = Subscription.last
 
@@ -250,6 +265,7 @@ feature "Subscription Workflow", type: :feature do
     expect(page).to have_text('Choisissez un membre pour vous inscrire')
     click_button "S'inscrire avec #{member.full_name}"
 
+    click_link 'Joindre un justificatif'
     expect(page).to have_text('Joindre un justificatif de paiement')
     attach_file('subscription[payment_proof]', avatar.path) # dummy file
     click_button 'Sauvegarder'

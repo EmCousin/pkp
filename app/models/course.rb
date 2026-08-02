@@ -16,6 +16,7 @@ class Course < ApplicationRecord
   has_many :members, through: :subscriptions
   has_many :attendance_sheets, dependent: :destroy
   has_many :attendance_records, through: :attendance_sheets
+  has_many :discovery_sessions, dependent: :restrict_with_error
 
   enum :weekday, lundi: 1, mardi: 2, mercredi: 3, jeudi: 4, vendredi: 5, samedi: 6, dimanche: 7
 

@@ -12,7 +12,7 @@ module Admin
           camps_subscription_attributes: { camp_id: @camp.id }
         )
 
-        if @subscription.save
+        if @camp.with_lock { @subscription.save }
           redirect_to [:admin, @camp], notice: t('.success'), status: :see_other
         else
           redirect_to [:admin, @camp], alert: @subscription.errors.full_messages.to_sentence, status: :unprocessable_content
@@ -34,11 +34,13 @@ module Admin
       end
 
       def set_parent_subscription
-        @parent_subscription = Subscription.find(params.require(:subscription_id))
+        @parent_subscription = AnnualSubscription.confirmed
+                                                 .where(parent_subscription_id: nil, year: @camp.year)
+                                                 .find(params.require(:subscription_id))
       end
 
       def set_subscription
-        @subscription = Subscription.find(params.require(:subscription_id))
+        @subscription = @camp.subscriptions.find(params.require(:id))
       end
     end
   end

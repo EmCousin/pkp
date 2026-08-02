@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_12_123801) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_31_090000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -94,10 +94,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_12_123801) do
     t.date "starts_at"
     t.date "ends_at"
     t.decimal "price"
+    t.decimal "external_price", null: false
     t.boolean "active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "open", default: false, null: false
+    t.boolean "open_to_externals", default: false, null: false
   end
 
   create_table "camps_subscriptions", force: :cascade do |t|
@@ -150,6 +152,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_12_123801) do
     t.index ["subscription_id"], name: "index_courses_subscriptions_on_subscription_id"
   end
 
+  create_table "discovery_sessions", force: :cascade do |t|
+    t.bigint "course_id", null: false
+    t.datetime "starts_at", null: false
+    t.integer "capacity", null: false
+    t.decimal "price", null: false
+    t.boolean "active", default: false, null: false
+    t.boolean "open", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_discovery_sessions_on_course_id"
+    t.index ["starts_at"], name: "index_discovery_sessions_on_starts_at"
+  end
+
   create_table "members", force: :cascade do |t|
     t.bigint "user_id"
     t.string "first_name", null: false
@@ -194,9 +209,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_12_123801) do
     t.enum "payment_method", enum_type: "payment_method"
     t.bigint "parent_subscription_id"
     t.string "stripe_payment_intent_id"
+    t.string "type", default: "AnnualSubscription", null: false
+    t.bigint "discovery_session_id"
+    t.enum "attendance_status", enum_type: "attendance_record_status"
     t.index ["created_at"], name: "index_subscriptions_on_created_at", order: :desc
+    t.index ["discovery_session_id", "member_id"], name: "index_one_subscription_per_discovery_session_and_member", unique: true, where: "(discovery_session_id IS NOT NULL)"
+    t.index ["discovery_session_id"], name: "index_subscriptions_on_discovery_session_id"
+    t.index ["member_id", "year"], name: "index_one_annual_subscription_per_member_and_year", unique: true, where: "(((type)::text = 'AnnualSubscription'::text) AND (parent_subscription_id IS NULL))"
     t.index ["member_id"], name: "index_subscriptions_on_member_id"
     t.index ["parent_subscription_id"], name: "index_subscriptions_on_parent_subscription_id"
+    t.index ["type"], name: "index_subscriptions_on_type"
     t.index ["status"], name: "index_subscriptions_on_status"
     t.index ["year"], name: "index_subscriptions_on_year"
   end
@@ -242,8 +264,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_12_123801) do
   add_foreign_key "courses", "categories"
   add_foreign_key "courses_subscriptions", "courses"
   add_foreign_key "courses_subscriptions", "subscriptions"
+  add_foreign_key "discovery_sessions", "courses"
   add_foreign_key "members", "users"
   add_foreign_key "pricings", "categories"
+  add_foreign_key "subscriptions", "discovery_sessions"
   add_foreign_key "subscriptions", "members"
   add_foreign_key "subscriptions", "subscriptions", column: "parent_subscription_id"
 end

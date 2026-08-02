@@ -6,8 +6,10 @@ FactoryBot.define do
     starts_at { 1.month.from_now }
     ends_at { 1.month.from_now + 5.days }
     price { 150.0 }
+    external_price { 200.0 }
     active { true }
     open { true }
+    open_to_externals { false }
 
     trait :inactive do
       active { false }
@@ -20,7 +22,7 @@ FactoryBot.define do
     trait :fully_booked do
       capacity { 1 }
       after(:create) do |camp|
-        create(:camps_subscription, camp: camp)
+        create(:camps_subscription, camp:)
       end
     end
 

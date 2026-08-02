@@ -37,8 +37,11 @@ module Admin
     end
 
     def destroy
-      @camp.destroy
-      redirect_back_or_to %i[admin camps], notice: t('.success'), status: :see_other
+      if @camp.destroy
+        redirect_back_or_to %i[admin camps], notice: t('.success'), status: :see_other
+      else
+        redirect_back_or_to %i[admin camps], alert: t('.error'), status: :see_other
+      end
     end
 
     private
@@ -56,7 +59,7 @@ module Admin
     end
 
     def camp_params
-      params.expect(camp: %i[title description capacity starts_at ends_at price active open cover_picture])
+      params.expect(camp: %i[title description capacity starts_at ends_at price external_price active open open_to_externals cover_picture])
     end
   end
 end

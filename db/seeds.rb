@@ -8,8 +8,11 @@
 
 ## Default user
 
+DiscoverySession.destroy_all
+Camp.destroy_all
 Subscription.destroy_all
 Course.destroy_all
+Category.destroy_all
 Member.destroy_all
 User.destroy_all
 
@@ -38,4 +41,161 @@ member.contact_relationship = Member::CONTACTS.sample
 user.save
 
 ## Default courses
-# Rake::Task["courses:seed"].invoke
+
+categories = {
+  adults: Category.create!(title: "Adultes (16 ans et +)", min_age: 16, max_age: 100),
+  teens: Category.create!(title: "Ados (10 - 15 ans)", min_age: 10, max_age: 15),
+  kids: Category.create!(title: "Kidz (6 - 9 ans)", min_age: 6, max_age: 9),
+  health: Category.create!(title: "Parkour Santé", min_age: 16, max_age: 100)
+}
+
+course_description = <<~DESCRIPTION
+  Cours extérieur de parkour à Paris, encadré par des coachs diplômés.
+  Les séances comprennent un échauffement, une préparation physique et mentale,
+  des ateliers techniques et la mise en pratique du parkour. Les lieux alternent
+  entre Bercy, Austerlitz et Olympiades selon l'agenda.
+DESCRIPTION
+
+courses = {}
+
+weekdays = {
+  monday: :lundi,
+  tuesday: :mardi,
+  wednesday: :mercredi,
+  thursday: :jeudi,
+  friday: :vendredi
+}
+
+weekdays.each do |weekday, enum_value|
+  courses["adult_#{weekday}".to_sym] = Course.create!(
+    title: "Parkour Adults - #{weekday.to_s.capitalize} (19h00 - 20h30)",
+    description: "#{course_description}\nCours mixte adultes, à partir de 16 ans. Tarif annuel indicatif : 280€ pour un cours hebdomadaire.",
+    capacity: 30,
+    weekday: enum_value,
+    category: categories[:adults],
+    features_attendance_sheet: true
+  )
+end
+
+courses[:adult_saturday] = Course.create!(
+  title: "Parkour Adultes - Samedi (9h30 - 10h45)",
+  description: "#{course_description}\nCours mixte adultes, à partir de 16 ans. Tarif annuel indicatif : 280€ pour un cours hebdomadaire.",
+  capacity: 30,
+  weekday: :samedi,
+  category: categories[:adults],
+  features_attendance_sheet: true
+)
+
+courses[:adult_women] = Course.create!(
+  title: "Parkour Féminin - Lundi (19h00 - 20h30)",
+  description: "#{course_description}\nCours féminin adultes, à partir de 16 ans. Tarif annuel indicatif : 280€ pour un cours hebdomadaire.",
+  capacity: 30,
+  weekday: :lundi,
+  category: categories[:adults],
+  features_attendance_sheet: true
+)
+
+courses[:teen_wednesday] = Course.create!(
+  title: "Parkour Ados - Mercredi (14h15 - 15h30)",
+  description: "#{course_description}\nCours pour les 10-15 ans. Tarif annuel indicatif : 280€ pour un cours hebdomadaire.",
+  capacity: 30,
+  weekday: :mercredi,
+  category: categories[:teens],
+  features_attendance_sheet: true
+)
+
+courses[:teen_saturday_early] = Course.create!(
+  title: "Parkour Ados - Samedi A (14h15 - 15h30)",
+  description: "#{course_description}\nCours pour les 10-15 ans. Tarif annuel indicatif : 280€ pour un cours hebdomadaire.",
+  capacity: 30,
+  weekday: :samedi,
+  category: categories[:teens],
+  features_attendance_sheet: true
+)
+
+courses[:teen_saturday_late] = Course.create!(
+  title: "Parkour Ados - Samedi B (16h00 - 17h15)",
+  description: "#{course_description}\nCours pour les 10-15 ans. Tarif annuel indicatif : 280€ pour un cours hebdomadaire.",
+  capacity: 30,
+  weekday: :samedi,
+  category: categories[:teens],
+  features_attendance_sheet: true
+)
+
+courses[:kidz] = Course.create!(
+  title: "Parkour Kidz - Samedi (11h00 - 12h00)",
+  description: "#{course_description}\nCours ludique pour les 6-9 ans, répartis en groupes 6/7 ans et 8/9 ans. Tarif annuel indicatif : 250€.",
+  capacity: 20,
+  weekday: :samedi,
+  category: categories[:kids],
+  features_attendance_sheet: true
+)
+
+courses[:health] = Course.create!(
+  title: "Parkour Santé - Samedi (9h30 - 10h45)",
+  description: "#{course_description}\nCours bienveillant pour reprendre confiance, mobilité et coordination, sans prérequis sportif.",
+  capacity: 20,
+  weekday: :samedi,
+  category: categories[:health],
+  features_attendance_sheet: true
+)
+
+## Discovery sessions
+
+[
+  {
+    course: courses[:adult_monday],
+    starts_at: Time.zone.local(2026, 8, 26, 19),
+    capacity: 30,
+    price: 35
+  },
+  {
+    course: courses[:teen_wednesday],
+    starts_at: Time.zone.local(2026, 8, 29, 14),
+    capacity: 30,
+    price: 35
+  },
+  {
+    course: courses[:kidz],
+    starts_at: Time.zone.local(2026, 8, 29, 11),
+    capacity: 20,
+    price: 35
+  }
+].each do |session|
+  DiscoverySession.create!(
+    course: session[:course],
+    starts_at: session[:starts_at],
+    capacity: session[:capacity],
+    price: session[:price],
+    active: true,
+    open: true
+  )
+end
+
+## Camps
+
+Camp.create!(
+  title: "Kidz Summer Camp (6 - 9 ans)",
+  description: "Immersion de deux heures à Austerlitz autour de jeux, murets, barres et structures variées. Le stage développe coordination, maîtrise des mouvements et confiance dans un cadre adapté aux enfants.",
+  capacity: 20,
+  starts_at: Date.new(2026, 7, 11),
+  ends_at: Date.new(2026, 7, 11),
+  price: 60,
+  external_price: 60,
+  active: false,
+  open: false,
+  open_to_externals: true
+)
+
+Camp.create!(
+  title: "Parkour Summer Camp (10 - 15 ans)",
+  description: "Immersion de quatre jours sur le Quai Saint-Bernard à Austerlitz pour travailler précision, fluidité, enchaînements et contrôle du mouvement avec des coachs diplômés.",
+  capacity: 30,
+  starts_at: Date.new(2026, 7, 6),
+  ends_at: Date.new(2026, 7, 10),
+  price: 240,
+  external_price: 240,
+  active: false,
+  open: false,
+  open_to_externals: true
+)

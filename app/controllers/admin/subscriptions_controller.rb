@@ -3,20 +3,23 @@
 module Admin
   class SubscriptionsController < BaseController
     before_action :set_subscription!, only: %i[show edit update destroy unlink_course]
+    before_action :reject_event_edit!, only: %i[edit update], if: -> { @subscription.event? }
 
     def index
-      @subscriptions = Subscription.search_and_filter(params.to_unsafe_h.slice(:status, :level, :year, :course_ids, :camp_id))
+      @subscriptions = Subscription.search_and_filter(
+        params.to_unsafe_h.slice(:status, :level, :year, :course_ids, :camp_id, :discovery_session_id)
+      )
                                    .order(created_at: :desc)
                                    .page(params[:page])
                                    .per(params[:per_page] || 25)
-                                   .includes(:camp, :courses, member: :avatar_attachment)
+                                   .includes(:camp, :courses, { discovery_session: :course }, member: :avatar_attachment)
                                    .with_attached_medical_certificate
     end
 
     def show; end
 
     def new
-      @subscription = Subscription.new(
+      @subscription = AnnualSubscription.new(
         member_id: params[:member_id],
         course_ids: params[:course_ids]
       )
@@ -25,8 +28,8 @@ module Admin
     def edit; end
 
     def create
-      @subscription = Subscription.new(subscription_params)
-      if @subscription.save
+      @subscription = subscription_class.new(subscription_params)
+      if save_subscription
         redirect_to %i[admin subscriptions], notice: t('.success'), status: :see_other
       else
         render :new, status: :unprocessable_content
@@ -42,8 +45,11 @@ module Admin
     end
 
     def destroy
-      @subscription.destroy
-      redirect_to admin_subscriptions_path(destroyed: true), notice: t('.success'), status: :see_other
+      if @subscription.destroy
+        redirect_to admin_subscriptions_path(destroyed: true), notice: t('.success'), status: :see_other
+      else
+        redirect_to admin_subscriptions_path, alert: t('.error'), status: :see_other
+      end
     end
 
     def unlink_course
@@ -59,7 +65,24 @@ module Admin
     end
 
     def subscription_params
-      params.expect(subscription: [:member_id, :status, :parent_subscription_id, { course_ids: [] }, { camps_subscription_attributes: [:camp_id] }])
+      attributes = params.expect(
+        subscription: [:member_id, :status, :parent_subscription_id, { course_ids: [] }, { camps_subscription_attributes: [:camp_id] }]
+      )
+      attributes.delete(:camps_subscription_attributes) if @subscription&.persisted?
+      attributes
+    end
+
+    def save_subscription
+      camp = @subscription.subscription_camp
+      camp ? camp.with_lock { @subscription.save } : @subscription.save
+    end
+
+    def subscription_class
+      subscription_params.dig(:camps_subscription_attributes, :camp_id).present? ? CampRegistration : AnnualSubscription
+    end
+
+    def reject_event_edit!
+      redirect_to [:admin, @subscription], alert: t('.event_not_editable'), status: :see_other
     end
   end
 end

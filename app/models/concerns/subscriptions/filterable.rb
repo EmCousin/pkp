@@ -10,6 +10,7 @@ module Subscriptions
           .filter_by_level(attributes[:level])
           .filter_by_year(attributes[:year])
           .filter_by_course_ids(attributes[:course_ids])
+          .filter_by_discovery_session_id(attributes[:discovery_session_id])
           .filter_by_camp_id(attributes[:camp_id])
       }
 
@@ -21,6 +22,9 @@ module Subscriptions
       }
       scope :filter_by_camp_id, lambda { |camp_id|
         camp_id.present? ? where(id: left_joins(camps_subscription: :camp).where(camps_subscription: { camp_id: })) : all
+      }
+      scope :filter_by_discovery_session_id, lambda { |discovery_session_id|
+        discovery_session_id.present? ? where(discovery_session_id:) : all
       }
     end
   end

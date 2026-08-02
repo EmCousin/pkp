@@ -2,8 +2,6 @@
 
 module Dashboard
   class MembersController < DashboardController
-    include AccessFilters
-
     before_action :set_member, only: %i[edit update]
 
     def new
@@ -16,7 +14,7 @@ module Dashboard
       @member = current_user.members.new(member_params)
 
       if @member.save
-        redirect_to new_dashboard_subscription_path(member_id: @member.id), notice: t('.success')
+        redirect_to(return_path || new_dashboard_subscription_path(member_id: @member.id), notice: t('.success'))
       else
         render :new, status: :unprocessable_content
       end
@@ -43,6 +41,16 @@ module Dashboard
                    agreed_to_advertising_right
                    avatar]
       )
+    end
+
+    def return_path
+      path = url_from(params[:return_to])
+      return unless path
+
+      route = Rails.application.routes.recognize_path(path)
+      path if route[:controller].start_with?('dashboard/')
+    rescue ActionController::RoutingError
+      nil
     end
   end
 end

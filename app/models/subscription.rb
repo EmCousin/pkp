@@ -4,7 +4,6 @@ class Subscription < ApplicationRecord
   include Subscriptions::Priceable
   include Subscriptions::Payable
   include Subscriptions::Invoiceable
-  include Subscriptions::Limitable
   include Subscriptions::Completable
   include Subscriptions::Confirmable
   include Subscriptions::Filterable
@@ -20,37 +19,42 @@ class Subscription < ApplicationRecord
   accepts_nested_attributes_for :camps_subscription, reject_if: :all_blank
   has_one :camp, through: :camps_subscription
   delegate :camp, to: :camps_subscription, prefix: :subscription, allow_nil: true
+  belongs_to :discovery_session, optional: true
 
   enum :status, pending: 0, confirmed: 1, archived: 2
+  enum :attendance_status,
+       { present: 'present', absent: 'absent', excused: 'excused' },
+       prefix: :attendance
+
+  scope :destruction_protected, lambda {
+    where(
+      'stripe_payment_intent_id IS NOT NULL OR (type IN (?) AND (paid_at IS NOT NULL OR status = ?))',
+      %w[CampRegistration DiscoveryRegistration],
+      statuses[:confirmed]
+    )
+  }
+  scope :annual_dashboard, lambda {
+    where(type: 'AnnualSubscription', year: current_year, parent_subscription_id: nil)
+      .not_archived
+      .includes(:member, :child_subscriptions)
+      .with_attached_medical_certificate
+  }
+  scope :event_dashboard, lambda {
+    where(type: %w[CampRegistration DiscoveryRegistration], parent_subscription_id: nil)
+      .not_archived
+      .includes(:camp, :discovery_session, :member)
+      .order(created_at: :desc)
+  }
+  scope :for_discovery_attendance, lambda {
+    confirmed
+      .includes(member: %i[user avatar_attachment])
+      .joins(:member)
+      .order('members.first_name', 'members.last_name')
+  }
 
   validates :fee, numericality: { greater_than_or_equal_to: 0, allow_blank: true }
-  validates :member_id, uniqueness: {
-                          scope: :year,
-                          message: lambda do |subscription, _data|
-                            I18n.t(
-                              'custom_error_messages.subscription.member_id.taken',
-                              full_name: subscription.member.full_name,
-                              year: subscription.year
-                            )
-                          end
-                        },
-                        unless: :parent_subscription_id?,
-                        on: :create
-
-  with_options if: :parent_subscription_id? do
-    validates :subscription_camp, presence: { if: -> { courses.empty? } }
-    validates :courses, presence: { unless: :subscription_camp }
-    validates :parent_subscription_member, comparison: { equal_to: :member }
-  end
-
-  with_options if: :subscription_camp do
-    validates :parent_subscription, presence: true
-    validates :courses, absence: true
-  end
-
-  attr_accessor :category_id
-
-  delegate :kidz?, :teen?, :adult?, to: :category, prefix: true, allow_nil: true
+  validates :parent_subscription_member, comparison: { equal_to: :member }, if: :parent_subscription_id?
+  validate :parent_subscription_must_be_annual_root, if: :parent_subscription_id?
   delegate :member, to: :parent_subscription, prefix: true, allow_nil: true
 
   def root_subscription
@@ -58,51 +62,15 @@ class Subscription < ApplicationRecord
   end
 
   def courses?
-    CoursesSubscription.where(subscription: self).any?
+    courses.any?
   end
 
-  def camp?
-    CampsSubscription.where(subscription: self).any?
+  def event?
+    false
   end
 
-  def build_child_subscription(child_attributes)
-    child_subscriptions.new(
-      member:,
-      year:,
-      terms_accepted_at:,
-      doctor_certified_at:,
-      **child_attributes
-    )
-  end
-
-  def description
-    @description ||= if parent_subscription.present? && camp.present?
-                       camp.title
-                     else
-                       courses.map(&:title).join(', ')
-                     end
-  end
-
-  def available_courses
-    @available_courses ||= category_id.present? ? Course.active.where(category_id:).order(:created_at) : Course.none
-  end
-
-  def suitable_categories
-    if member.nil?
-      Category.none
-    else
-      Category.suitable_for_age(member.age(year))
-    end
-  end
-
-  def courses_category
-    @courses_category ||= courses.first&.category
-  end
-
-  def category
-    return @category if defined?(@category)
-
-    @category = Category.find_by(id: category_id)
+  def medical_certificate_required?
+    false
   end
 
   def status_color
@@ -125,4 +93,12 @@ class Subscription < ApplicationRecord
     bank_transfer: 'text-purple-600',
     credit_card: 'text-amber-600'
   }.freeze
+
+  private
+
+  def parent_subscription_must_be_annual_root
+    return if parent_subscription.is_a?(AnnualSubscription) && parent_subscription.parent_subscription_id.nil? && parent_subscription.year == year
+
+    errors.add(:parent_subscription, :invalid)
+  end
 end

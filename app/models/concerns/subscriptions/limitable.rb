@@ -5,14 +5,12 @@ module Subscriptions
     extend ActiveSupport::Concern
 
     included do
-      with_options unless: :subscription_camp do
-        validates :courses, presence: { message: :must_exist }
-        validates :courses_count, numericality: { greater_than: 0, message: :must_exist }
-        validates :courses_count, numericality: { less_than_or_equal_to: :max_courses_count, message: :limit_exceeded }
-        validate :courses_are_of_the_same_category
-        validate :maximum_one_course_per_day
-        validate :courses_must_be_available, on: :create
-      end
+      validates :courses, presence: { message: :must_exist }
+      validates :courses_count, numericality: { greater_than: 0, message: :must_exist }
+      validates :courses_count, numericality: { less_than_or_equal_to: :max_courses_count, message: :limit_exceeded }
+      validate :courses_are_of_the_same_category
+      validate :maximum_one_course_per_day
+      validate :courses_must_be_available, on: :create
     end
 
     private

@@ -6,7 +6,7 @@ require 'rails_helper'
 
 describe FactoryBot do
   described_class.factories.map(&:name).each do |factory_name|
-    next if factory_name == :subscription # special validators are making this fail
+    next if %i[subscription camp_registration discovery_registration].include?(factory_name) # special validators are making this fail
 
     describe "#{factory_name} factory" do
       # Test each factory

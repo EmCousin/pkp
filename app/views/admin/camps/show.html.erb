@@ -35,11 +35,11 @@
             </div>
             <div>
               <dt class="text-sm font-medium text-gray-500"><%= t('.price') %></dt>
-              <dd class="mt-1 text-sm text-gray-900"><%= number_to_currency(@camp.price, unit: "€") %></dd>
+              <dd class="mt-1 text-sm text-gray-900"><%= number_to_currency(@camp.price, unit: "€") %> interne / <%= number_to_currency(@camp.external_price, unit: "€") %> externe</dd>
             </div>
             <div>
               <dt class="text-sm font-medium text-gray-500"><%= t('.capacity') %></dt>
-              <dd class="mt-1 text-sm text-gray-900"><%= t('.capacity', current: @camp.subscriptions.confirmed.count, count: @camp.capacity) %></dd>
+              <dd class="mt-1 text-sm text-gray-900"><%= t('.capacity', current: @camp.occupied_slots_count, count: @camp.capacity) %></dd>
             </div>
             <div>
               <dt class="text-sm font-medium text-gray-500"><%= t('.active') %></dt>

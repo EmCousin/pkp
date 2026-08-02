@@ -1,4 +1,5 @@
 <%= form_for member, url: [:dashboard, member], html: { class: "w-full max-w-none" } do |f| %>
+  <%= hidden_field_tag :return_to, params[:return_to] if params[:return_to].present? %>
   <!-- Personal Information Section -->
   <div class="mb-8">
     <div class="flex items-center mb-6">

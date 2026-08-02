@@ -206,6 +206,11 @@ en:
       absent: "Absent"
       mark_present: "Mark Present"
       mark_absent: "Mark Absent"
+    discovery_session_attendance:
+      <<: *attendance_record
+      attendance_status: "Attendance status"
+      not_recorded: "Not recorded"
+      empty: "No confirmed participants."
 
   coach:
     attendance_sheets:
@@ -436,6 +441,15 @@ en:
         title: "Attendance sheet for %{course_title} - %{date}"
 
   admin:
+    subscriptions:
+      index:
+        title: Subscriptions
+        new: New subscription
+        filters:
+          title: Filter subscriptions
+          description: Combine criteria to narrow the results.
+          all: All
+          courses: Annual courses
     subscriptions:
       show:
         select_action: "Select an action..."

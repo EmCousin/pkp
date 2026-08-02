@@ -1,0 +1,24 @@
+<% camp_registration = subscription.is_a?(CampRegistration) %>
+<% event = camp_registration ? subscription.camp : subscription.discovery_session %>
+<% completion_path = next_completion_step_path(subscription) %>
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-lg border border-gray-200 bg-gray-50 p-4">
+  <div>
+    <p class="font-medium text-gray-900"><%= subscription.description %></p>
+    <p class="text-sm text-gray-600"><%= subscription.member.full_name %> - <%= number_to_currency(subscription.fee, unit: '€') %></p>
+    <p class="text-xs text-gray-500">
+      <%= camp_registration ? l(event.starts_at, format: :long) : l(event.starts_at, format: :event) %>
+      - <%= Subscription.human_attribute_name(subscription.status) %>
+    </p>
+  </div>
+  <div class="flex gap-2">
+    <% if subscription.completion_open? && completion_path != dashboard_path %>
+      <%= link_to t('.resume'), completion_path, class: "inline-flex justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700" %>
+    <% end %>
+    <% if subscription.cancellable? %>
+      <% cancellation_path = camp_registration ? dashboard_camp_registration_path(event, subscription) : dashboard_discovery_session_subscription_path(event, subscription) %>
+      <%= button_to t('.cancel'), cancellation_path, method: :delete,
+          class: "inline-flex justify-center rounded-md border border-red-600 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50",
+          data: { turbo_confirm: t('.cancel_confirm') } %>
+    <% end %>
+  </div>
+</div>

@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
 class Camp < ApplicationRecord
+  include Events::CapacityLimited
+
   has_rich_text :description
   has_one_attached :cover_picture
 
-  validates :title, :capacity, :starts_at, :ends_at, :price, presence: true
+  validates :title, :capacity, :starts_at, :ends_at, :price, :external_price, presence: true
   validates :capacity, numericality: { greater_than_or_equal_to: 1, only_integer: true }
-  validates :price, numericality: { greater_than: 0 }
+  validates :price, :external_price, numericality: { greater_than: 0 }
   validates :ends_at, comparison: {
     greater_than_or_equal_to: :starts_at,
     message: lambda { |object, _options|
@@ -17,8 +19,9 @@ class Camp < ApplicationRecord
     },
     if: :ends_at?
   }
+  validate :registration_year_must_match
 
-  has_many :camps_subscriptions, dependent: :destroy
+  has_many :camps_subscriptions, dependent: :restrict_with_error
   has_many :subscriptions, through: :camps_subscriptions
   has_many :members, through: :subscriptions
 
@@ -34,16 +37,20 @@ class Camp < ApplicationRecord
     (ends_at - starts_at).to_i + 1
   end
 
-  def available_slots
-    capacity - subscriptions.confirmed.count
+  def internal_for?(member)
+    member.annual_subscription_for(year).present?
   end
 
-  def fully_booked?
-    available_slots <= 0
+  def accessible_to?(member)
+    internal_for?(member) || open_to_externals?
+  end
+
+  def price_for(member)
+    internal_for?(member) ? price : external_price
   end
 
   def year
-    Subscription.current_year(starts_at).to_s
+    Subscription.current_year(starts_at)
   end
 
   class << self
@@ -54,5 +61,13 @@ class Camp < ApplicationRecord
         struct.new(year, camps)
       end
     end
+  end
+
+  private
+
+  def registration_year_must_match
+    return unless starts_at && subscriptions.where.not(year: year).exists?
+
+    errors.add(:starts_at, :event_year_locked)
   end
 end

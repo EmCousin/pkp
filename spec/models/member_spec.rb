@@ -70,7 +70,7 @@ describe Member, type: :model do
     let(:camp) { create(:camp) }
     let(:member) { create(:member) }
     let(:course) { create(:course) }
-    let!(:subscription) { create(:subscription, member:, status: :confirmed, courses: [course]) }
+    let!(:annual_subscription) { create(:subscription, member:, status: :confirmed, courses: [course]) }
 
     it 'returns true when all conditions are met' do
       expect(member.can_subscribe?(camp)).to be true
@@ -78,18 +78,46 @@ describe Member, type: :model do
 
     it 'returns false when camp is fully booked' do
       camp.update!(capacity: 1)
-      create(:camps_subscription, camp: camp, subscription: subscription)
+      other_member = create(:member)
+      parent = create(:subscription, member: other_member, status: :confirmed, courses: [course])
+      camp_subscription = build(:camp_registration, member: other_member, parent_subscription: parent)
+      create(:camps_subscription, camp:, subscription: camp_subscription)
       expect(member.can_subscribe?(camp)).to be false
     end
 
     it 'returns false when member has no confirmed subscription' do
-      subscription.update!(status: :pending)
+      annual_subscription.update!(status: :pending)
       expect(member.can_subscribe?(camp)).to be false
     end
 
     it 'returns false when member is already subscribed to this camp' do
-      create(:camps_subscription, camp: camp, subscription: subscription)
+      camp_subscription = build(:camp_registration, member:, parent_subscription: annual_subscription)
+      create(:camps_subscription, camp:, subscription: camp_subscription)
       expect(member.can_subscribe?(camp)).to be false
     end
+
+    it 'allows an external member when the camp is open to externals' do
+      annual_subscription.destroy!
+      camp.update!(open_to_externals: true)
+
+      expect(member.can_subscribe?(camp)).to be true
+    end
+
+    it 'rejects a discovery session outside the member age range' do
+      category = create(:category, title: 'Adultes découverte', min_age: 18, max_age: 100)
+      discovery_session = create(:discovery_session, course: create(:course, category:))
+      minor = create(:member, :minor)
+
+      expect(minor.can_subscribe_to_discovery?(discovery_session)).to be false
+    end
+  end
+
+  it 'does not destroy finalized event registrations' do
+    discovery_session = create(:discovery_session)
+    subscription = create(:discovery_registration, member:, discovery_session:, status: :confirmed)
+
+    expect(member.destroy).to be false
+    expect(member).to be_persisted
+    expect(subscription.reload).to be_persisted
   end
 end

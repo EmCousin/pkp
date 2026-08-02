@@ -10,7 +10,11 @@ module Dashboard
       def edit; end
 
       def update
-        if @subscription.update(payment_proof_params)
+        updated = @subscription.with_lock do
+          @subscription.cancel_open_stripe_payment_intent && @subscription.update(payment_proof_params)
+        end
+
+        if updated
           redirect_to [:dashboard, @camp], notice: t('.success'), status: :see_other
         else
           redirect_back_or_to [:edit, :dashboard, @camp, @subscription, :payment_proof], alert: @subscription.errors.full_messages.to_sentence,
@@ -25,7 +29,7 @@ module Dashboard
       end
 
       def set_subscription
-        @subscription = current_user.subscriptions.find(params[:subscription_id])
+        @subscription = @camp.subscriptions.merge(current_user.subscriptions).find(params[:subscription_id])
       end
 
       def payment_proof_params

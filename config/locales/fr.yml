@@ -80,6 +80,7 @@ fr:
         invalid: "n'est pas valide"
         required: est requis
         taken: est dejà pris
+        event_year_locked: ne peut pas changer de saison lorsque des inscriptions existent
       models:
         camp:
           attributes:
@@ -106,6 +107,9 @@ fr:
               inclusion: "%{value} n'est pas une date valide"
         subscription:
           attributes:
+            base:
+              finalized_event_registration: Une inscription avec un paiement initié, confirmée ou payée ne peut pas être supprimée.
+              stripe_payment_in_progress: Le paiement Stripe ne peut pas être annulé. Veuillez réessayer dans quelques instants.
             courses_count:
               limit_exceeded: "Maximum %{count} cours"
             courses:
@@ -115,6 +119,11 @@ fr:
               unavailable: "L'un des cours est complet"
             parent_subscription:
               required_for_camp: "Une inscription parent est requise pour un stage"
+              invalid: "doit être une inscription annuelle confirmée de la même saison"
+            discovery_session:
+              unavailable: "n'est plus disponible pour ce participant"
+            year:
+              event_mismatch: ne correspond pas à la saison de l'événement
             member:
               too_young: n'a pas l'âge minimum requis
               too_old: n'a pas l'âge maximum requis
@@ -140,6 +149,9 @@ fr:
       camp:
         one: Stage
         other: Stages
+      discovery_session:
+        one: Cours découverte
+        other: Cours découverte
       user:
         one: Compte utilisateur
         other: Comptes utilisateur
@@ -163,12 +175,22 @@ fr:
         title: Titre
         description: Description
         price: Prix
+        external_price: Tarif externe
         capacity: Capacité
         starts_at: Date de début
         ends_at: Date de fin
         cover_picture: Image de couverture
         active: Visible
         open: Ouvert
+        open_to_externals: Ouvert aux externes
+      discovery_session:
+        course: Cours concerné
+        course_id: Cours concerné
+        starts_at: Date et heure
+        capacity: Capacité
+        price: Tarif
+        active: Visible
+        open: Ouvert aux inscriptions
       attendance_record:
         status: Statut
         statuses:
@@ -246,6 +268,10 @@ fr:
         bank_check: Chèque
         bank_transfer: Virement
         credit_card: Carte bancaire
+        registration_type: Type d'inscription
+        annual: Cours annuels
+        discovery: Cours découverte
+        attendance_status: Présence
 
   helpers:
     submit:
@@ -269,8 +295,7 @@ fr:
         i_have_read_and_accept: J'ai lu et accepte les
         terms_of_service: Conditions Générales d'Utilisation
         signup: S'inscrire
-        contact_to_essay: Si vous souhaitez faire un <b>cours d'essai</b>, veuillez envoyer votre demande directement sur notre
-        contact_form: formulaire de contact
+        external_registration_available: Vous pouvez utiliser ce compte pour vous inscrire aux cours découverte et aux stages ouverts aux externes.
         full: "C'est complet !"
         reopen_when_available: Si des places se libèrent, il sera à nouveau possible de vous inscrire.
         vacation_time: "C'est les vacances !"
@@ -286,6 +311,9 @@ fr:
         current_password_needed: nécessaire pour confirmer vos modifications
         minimum_characters: "%{length} caractères min"
         are_you_sure: Cette action est irréversible. Cliquez sur OK pour supprimer définivement votre compte.
+        finalized_event_registration: Votre compte ne peut pas être supprimé tant qu'il contient une inscription avec un paiement initié, confirmée ou payée.
+      destroy:
+        finalized_event_registration: Votre compte ne peut pas être supprimé tant qu'il contient une inscription avec un paiement initié, confirmée ou payée.
 
   shared:
     attendance_record: &attendance_record
@@ -293,8 +321,16 @@ fr:
       absent: "Absent"
       mark_present: "Marquer présent"
       mark_absent: "Marquer absent"
+    discovery_session_attendance:
+      <<: *attendance_record
+      attendance_status: Présence
+      not_recorded: Non renseigné
+      empty: Aucun participant confirmé.
 
   coach:
+    discovery_sessions:
+      index:
+        title: Cours découverte programmés
     attendance_sheets:
       show:
         title: "Feuille de présence pour %{course_title} - %{date}"
@@ -309,6 +345,24 @@ fr:
         create_attendance_sheet: "Feuille de présence"
 
   admin:
+    discovery_sessions:
+      index:
+        title: Cours découverte
+        description: Programmez les séances et consultez les participants.
+        new: Programmer une séance
+        empty: Aucun cours découverte programmé.
+        confirm_delete: Êtes-vous sûr de vouloir supprimer cette séance ?
+      new:
+        title: Programmer un cours découverte
+      edit:
+        title: Modifier le cours découverte
+      create:
+        success: Cours découverte programmé
+      update:
+        success: Cours découverte modifié
+      destroy:
+        success: Cours découverte supprimé
+        error: Impossible de supprimer un cours découverte comportant des inscriptions
     attendance_sheets:
       show:
         title: "Feuille de présence pour %{course_title} - %{date}"
@@ -384,9 +438,12 @@ fr:
         success: Stage modifié
       destroy:
         success: Stage supprimé
+        error: Impossible de supprimer un stage comportant des inscriptions
       subscription:
         unsubscribe: "Désinscrire"
         confirm_unsubscribe: "Êtes-vous sûr de vouloir désinscrire ce membre ?"
+        internal: Élève
+        external: Externe
       subscriptions:
         create:
           success: "Membre inscrit au stage avec succès"
@@ -454,6 +511,7 @@ fr:
         success: Cours modifié
       destroy:
         success: Cours supprimé
+        error: Impossible de supprimer un cours utilisé par un cours découverte
       form:
         new_category: Ajouter une autre catégorie
       course:
@@ -499,6 +557,7 @@ fr:
         success: Membre modifié
       destroy:
         success: Membre supprimé
+        error: Impossible de supprimer un membre ayant une inscription avec un paiement initié, confirmée ou payée
       subscription:
         view_camp: Voir le stage
     payments:
@@ -511,6 +570,11 @@ fr:
       index:
         title: Inscriptions
         new: Nouvelle inscription
+        filters:
+          title: Filtrer les inscriptions
+          description: Combinez les critères pour affiner les résultats.
+          all: Tous
+          courses: Cours annuels
       show:
         title: Inscription n°%{id}
         payment: Paiement
@@ -549,8 +613,10 @@ fr:
         title: Modifier l'inscription
       update:
         success: Inscription modifiée
+        event_not_editable: Les inscriptions aux événements ne sont pas modifiables depuis ce formulaire.
       destroy:
         success: Inscription supprimée
+        error: Une inscription avec un paiement initié, confirmée ou payée ne peut pas être supprimée
       confirm:
         success: Inscription confirmée
         failure: "L'inscription est déjà confirmée"
@@ -602,6 +668,28 @@ fr:
         payment_method: A payé avec %{payment_method}
         stripe_payment_intent_url: "Voir le paiement sur Stripe"
   dashboard:
+    discovery_sessions:
+      index:
+        title: Cours découverte
+        description: Choisissez une séance, inscrivez un participant et payez en ligne.
+        view: Voir la séance
+        empty: Aucun cours découverte n'est disponible actuellement.
+      show:
+        closed: Les inscriptions à cette séance sont fermées.
+        full: Cette séance est complète.
+        choose_member: Choisissez le participant à inscrire
+        pay: Payer
+        unsubscribe: Se désinscrire
+        confirm_unsubscribe: Êtes-vous sûr de vouloir annuler cette inscription ?
+        subscribe_with: S'inscrire avec %{member}
+        add_member: Ajouter un participant
+      subscriptions:
+        create:
+          closed: Les inscriptions à cette séance sont fermées.
+        destroy:
+          success: Inscription au cours découverte annulée
+          error: Impossible d'annuler l'inscription
+          already_confirmed: Une inscription confirmée ou payée ne peut pas être annulée en ligne.
     camps:
       camp:
         duration_days:
@@ -638,6 +726,8 @@ fr:
         ends_at: "Date de fin"
         duration: "Durée"
         price: "Prix"
+        internal_price: Tarif élève
+        external_price: Tarif externe
         capacity: "Capacité"
         capacity_info:
           one: "%{current}/%{count} place occupée"
@@ -650,6 +740,8 @@ fr:
         choose_member: "Choisissez un membre pour vous inscrire :"
         no_confirmed_subscriptions: "Aucune inscription confirmée"
         need_confirmed_subscription: "Vous devez avoir une inscription confirmée pour vous inscrire aux stages."
+        add_member: Ajouter un participant
+        add_member_description: Ajoutez d'abord la personne que vous souhaitez inscrire.
         description: "Description"
         duration_days:
           one: "%{count} jour"
@@ -661,6 +753,11 @@ fr:
         unsubscribe: "Se désinscrire"
         subscribe_with: "S'inscrire avec %{member}"
         cannot_subscribe_with: "Impossible de s'inscrire avec %{member}"
+        pay: Payer en ligne
+        upload_payment_proof: Justificatif
+        internal_rate: Tarif élève
+        external_rate: Tarif externe
+        external_registration_closed: "%{member} n'est pas inscrit aux cours annuels et ce stage n'est pas ouvert aux externes."
       subscriptions:
         create:
           success: "Inscription au stage confirmée"
@@ -668,6 +765,14 @@ fr:
         destroy:
           success: "Désinscription du stage confirmée"
           error: "Erreur lors de la désinscription"
+          already_confirmed: Une inscription confirmée ou payée ne peut pas être annulée en ligne.
+      registrations:
+        create:
+          closed: "Ce stage n'est pas ouvert aux inscriptions."
+        destroy:
+          success: "Désinscription du stage confirmée"
+          error: "Erreur lors de la désinscription"
+          already_confirmed: Une inscription confirmée ou payée ne peut pas être annulée en ligne.
 
     show:
       add_subscription: Ajouter une inscription
@@ -679,7 +784,16 @@ fr:
       camps_section_title: "Stages"
       camps_section_description: "Découvrez nos stages et inscrivez-vous !"
       browse_camps: "Parcourir les stages"
+      discovery_section_title: Cours découverte
+      discovery_section_description: Inscrivez-vous à une séance découverte, même sans inscription annuelle.
+      browse_discovery_sessions: Voir les cours découverte
+      event_registrations: Mes inscriptions aux stages et cours découverte
       hint_open_card: "Astuce: utilisez le bouton 'Voir les détails' pour développer une inscription."
+
+    event_subscription:
+      resume: Finaliser l'inscription
+      cancel: Annuler
+      cancel_confirm: Êtes-vous sûr de vouloir annuler cette inscription ?
 
     subscription:
       subscription_form: Formulaire d'inscription
@@ -796,6 +910,7 @@ fr:
         already_paid_title: Vous avez déjà réglé votre cotisation par virement?
         already_paid_description: Vous pouvez joindre le justificatif de paiement ci-dessous.
         upload_payment_proof: Joindre un justificatif de paiement
+        payment_already_submitted: Un paiement ou un justificatif a déjà été enregistré pour cette inscription.
       create:
         success: Inscription payée avec succès !
         error: Une erreur est survenue. Votre carte n'a pas été débitée. Si le problème persiste, contactez-nous.
@@ -856,6 +971,7 @@ fr:
       categories: "Catégories"
       courses: "Cours"
       camps: "Stages"
+      discovery_sessions: "Cours découverte"
       subscriptions: "Inscriptions"
       my_account: "Mon compte"
       logout: "Déconnexion"
@@ -918,3 +1034,4 @@ fr:
       default: "%d/%m/%Y %H:%M"
       short: "%d/%m/%Y"
       long: "%A, %d %B %Y"
+      event: "%A %d %B %Y à %H:%M"

@@ -47,8 +47,11 @@ module Admin
     end
 
     def destroy
-      @member.destroy
-      redirect_to %i[admin members], notice: t('.success')
+      if @member.destroy
+        redirect_to %i[admin members], notice: t('.success'), status: :see_other
+      else
+        redirect_to %i[admin members], alert: t('.error'), status: :see_other
+      end
     end
 
     private

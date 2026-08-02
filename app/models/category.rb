@@ -50,4 +50,8 @@ class Category < ApplicationRecord
   def adult?
     min_age > 15
   end
+
+  def suitable_for_age?(age)
+    age.in?(min_age..max_age)
+  end
 end

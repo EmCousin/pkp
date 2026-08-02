@@ -1,0 +1,4 @@
+<%= render 'shared/discovery_session_attendance', discovery_session: @discovery_session,
+                                                  attendance_records: @attendance_records,
+                                                  subscriptions: @discovery_session.subscriptions.for_discovery_attendance,
+                                                  namespace: :coach %>
