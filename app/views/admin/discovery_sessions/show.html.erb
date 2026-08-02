@@ -1,3 +1,26 @@
-<%= render 'shared/discovery_session_attendance', discovery_session: @discovery_session,
-                                                  subscriptions: @discovery_session.subscriptions.for_discovery_attendance,
-                                                  namespace: :admin %>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900"><%= @discovery_session.course.title %></h1>
+      <p class="mt-1 text-sm text-gray-600"><%= l(@discovery_session.starts_at, format: :event) %></p>
+      <p class="mt-1 text-sm text-gray-500"><%= @attendance_records.size + @discovery_session.subscriptions.confirmed.size %> participants</p>
+    </div>
+    <div class="flex gap-3">
+      <%= link_to t('defaults.edit'), [:edit, :admin, @discovery_session],
+          class: "inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50" %>
+      <%= button_to t('defaults.destroy'), [:admin, @discovery_session], method: :delete,
+          data: { turbo_confirm: t('defaults.are_you_sure') },
+          class: "inline-flex items-center px-4 py-2 border border-red-300 rounded-md text-sm font-medium text-red-700 bg-white hover:bg-red-50" %>
+    </div>
+  </div>
+
+  <%= render 'shared/discovery_session_attendance', discovery_session: @discovery_session,
+                                                    attendance_records: @attendance_records,
+                                                    subscriptions: @discovery_session.subscriptions.for_discovery_attendance,
+                                                    hide_header: true,
+                                                    namespace: :admin %>
+
+  <div class="mt-6">
+    <%= link_to t('defaults.back'), admin_discovery_sessions_path, class: "text-sm text-gray-600 hover:text-gray-900" %>
+  </div>
+</div>

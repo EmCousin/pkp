@@ -8,7 +8,10 @@ module Coach
       @discovery_sessions = DiscoverySession.active.recent.includes(:course, :subscriptions).order(:starts_at)
     end
 
-    def show; end
+    def show
+      @attendance_sheet = AttendanceSheet.find_or_create_for_course(@discovery_session.course, @discovery_session.starts_at.to_date)
+      @attendance_records = @attendance_sheet.attendance_records.includes(member: :avatar_attachment)
+    end
 
     private
 
