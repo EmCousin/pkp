@@ -2,15 +2,14 @@
 
 module Admin
   class DiscoverySessionsController < BaseController
-    include Pagy::Method
-
     before_action :set_discovery_session, only: %i[show edit update destroy]
 
     def index
-      sessions = DiscoverySession.on_date(search_date)
-                                 .includes(:course, :subscriptions)
-                                 .order(starts_at: :desc)
-      @pagy, @discovery_sessions = pagy(:offset, sessions, limit: 25)
+      @discovery_sessions = DiscoverySession.on_date(search_date)
+                                            .includes(:course, :subscriptions)
+                                            .order(starts_at: :desc)
+                                            .page(params[:page])
+                                            .per(25)
     end
 
     def show

@@ -40,7 +40,6 @@ gem 'devise-i18n'
 # gem 'capistrano-rails', group: :development
 gem 'image_processing', '~> 1.2'
 gem 'kaminari'
-gem 'pagy', '~> 43.6'
 gem 'phonelib'
 gem 'prawn'
 gem 'prawn-table'
