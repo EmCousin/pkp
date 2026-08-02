@@ -50,7 +50,7 @@ module Dashboard
       end
 
       def check_open_status
-        redirect_to [:dashboard, @discovery_session], alert: t('.closed') if @discovery_session.closed?
+        redirect_to [:dashboard, @discovery_session], alert: t('.closed') unless @discovery_session.open_for_registration?
       end
 
       def check_cancellable

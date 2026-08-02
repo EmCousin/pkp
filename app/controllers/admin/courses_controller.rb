@@ -78,7 +78,8 @@ module Admin
     end
 
     def course_params
-      params.expect(course: %i[title description capacity category_id weekday active features_attendance_sheet])
+      params.expect(course: %i[title description capacity category_id weekday active features_attendance_sheet
+                               discovery_enabled discovery_price discovery_capacity])
     end
   end
 end

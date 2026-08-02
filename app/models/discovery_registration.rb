@@ -11,7 +11,7 @@ class DiscoveryRegistration < EventRegistration
   end
 
   def completion_open?
-    !discovery_session.starts_at.past?
+    discovery_session.registration_open?
   end
 
   def description

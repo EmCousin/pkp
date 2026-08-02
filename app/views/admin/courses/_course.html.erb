@@ -10,6 +10,11 @@
       <div class="text-sm text-gray-500 mt-1">
         <%= course.category.title %> - <%= course.weekday %>
       </div>
+      <% if course.discovery_enabled? %>
+        <div class="mt-2 inline-flex items-center rounded-full bg-amber-100 px-2.5 py-1 text-xs font-medium text-amber-800">
+          <%= t('.discovery_enabled', price: number_to_currency(course.discovery_price, unit: '€'), capacity: course.discovery_capacity) %>
+        </div>
+      <% end %>
     </div>
 
     <div class="flex items-center gap-2 w-full sm:w-auto sm:ml-auto">

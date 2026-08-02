@@ -1,11 +1,9 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-  <div class="flex items-center justify-between mb-6">
+  <div class="mb-6">
     <div>
       <h1 class="text-2xl font-bold text-gray-900"><%= t('.title') %></h1>
       <p class="mt-1 text-sm text-gray-600"><%= t('.description') %></p>
     </div>
-    <%= link_to t('.new'), new_admin_discovery_session_path,
-        class: "inline-flex items-center px-4 py-2 rounded-md bg-slate-800 text-white text-sm font-medium hover:bg-slate-900" %>
   </div>
 
   <div class="bg-white shadow sm:rounded-lg divide-y divide-gray-200">
@@ -13,7 +11,7 @@
       <div class="p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <%= link_to discovery_session.course.title, [:admin, discovery_session], class: "font-semibold text-gray-900 hover:text-blue-700" %>
-          <p class="text-sm text-gray-600"><%= l(discovery_session.starts_at, format: :event) %></p>
+          <p class="text-sm text-gray-600"><%= discovery_session_date(discovery_session) %></p>
           <p class="text-sm text-gray-500"><%= discovery_session.subscriptions.confirmed.size %>/<%= discovery_session.capacity %> inscrits</p>
         </div>
         <div class="flex shrink-0 items-center justify-end gap-3">

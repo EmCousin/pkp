@@ -12,7 +12,7 @@
             <% if subscription.is_a?(CampRegistration) %>
               <%= subscription.camp.title %>
             <% elsif subscription.is_a?(DiscoveryRegistration) %>
-              <%= l(subscription.discovery_session.starts_at, format: :event) %>
+              <%= discovery_session_date(subscription.discovery_session) %>
             <% else %>
               <%= t('dashboard.terms.edit.year', year: subscription.year, next_year: subscription.year + 1) %>
             <% end %>
@@ -30,7 +30,7 @@
       <% if subscription.is_a?(CampRegistration) %>
         <p class="mt-1 text-sm"><%= l(subscription.camp.starts_at, format: :long) %> - <%= l(subscription.camp.ends_at, format: :long) %></p>
       <% else %>
-        <p class="mt-1 text-sm"><%= l(subscription.discovery_session.starts_at, format: :event) %></p>
+        <p class="mt-1 text-sm"><%= discovery_session_date(subscription.discovery_session) %></p>
       <% end %>
     </div>
   <% else %>

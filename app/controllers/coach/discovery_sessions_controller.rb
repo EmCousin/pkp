@@ -9,7 +9,7 @@ module Coach
     end
 
     def show
-      @attendance_sheet = AttendanceSheet.find_or_create_for_course(@discovery_session.course, @discovery_session.starts_at.to_date)
+      @attendance_sheet = AttendanceSheet.find_or_create_for_course(@discovery_session.course, @discovery_session.occurrence_date)
       @attendance_records = @attendance_sheet.attendance_records.includes(member: :avatar_attachment)
     end
 

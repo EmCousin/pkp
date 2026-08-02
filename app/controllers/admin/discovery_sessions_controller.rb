@@ -9,24 +9,11 @@ module Admin
     end
 
     def show
-      @attendance_sheet = AttendanceSheet.find_or_create_for_course(@discovery_session.course, @discovery_session.starts_at.to_date)
+      @attendance_sheet = AttendanceSheet.find_or_create_for_course(@discovery_session.course, @discovery_session.occurrence_date)
       @attendance_records = @attendance_sheet.attendance_records.includes(member: :avatar_attachment)
     end
 
-    def new
-      @discovery_session = DiscoverySession.new
-    end
-
     def edit; end
-
-    def create
-      @discovery_session = DiscoverySession.new(discovery_session_params)
-      if @discovery_session.save
-        redirect_to [:admin, @discovery_session], notice: t('.success'), status: :see_other
-      else
-        render :new, status: :unprocessable_content
-      end
-    end
 
     def update
       if @discovery_session.update(discovery_session_params)
@@ -51,7 +38,9 @@ module Admin
     end
 
     def discovery_session_params
-      params.expect(discovery_session: %i[course_id starts_at capacity price active open])
+      attributes = params.expect(discovery_session: %i[course_id starts_at capacity price active open])
+      attributes.except!(:course_id, :starts_at) if @discovery_session&.occurs_on?
+      attributes
     end
   end
 end
