@@ -2,14 +2,15 @@
 
 module Admin
   class DiscoverySessionsController < BaseController
+    include Pagy::Method
+
     before_action :set_discovery_session, only: %i[show edit update destroy]
 
     def index
-      @discovery_sessions = DiscoverySession.on_date(search_date)
-                                            .includes(:course, :subscriptions)
-                                            .order(starts_at: :desc)
-                                            .page(params[:page])
-                                            .per(25)
+      sessions = DiscoverySession.on_date(search_date)
+                                 .includes(:course, :subscriptions)
+                                 .order(starts_at: :desc)
+      @pagy, @discovery_sessions = pagy(:offset, sessions, limit: 25)
     end
 
     def show
@@ -24,8 +25,7 @@ module Admin
     def edit; end
 
     def create
-      @discovery_session = DiscoverySession.new
-      @discovery_session.assign_attributes(discovery_session_params)
+      @discovery_session = DiscoverySession.new(discovery_session_params)
 
       if @discovery_session.save
         redirect_to [:admin, @discovery_session], notice: t('.success'), status: :see_other
