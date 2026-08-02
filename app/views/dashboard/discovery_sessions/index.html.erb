@@ -11,14 +11,14 @@
       <span class="ml-2 text-sm font-medium text-gray-800"><%= t('.step_category') %></span>
     <% end %>
     <%= tag.div class: class_names('rounded-lg border p-4',
-                                   'border-amber-300 bg-amber-50' => @category,
-                                   'border-gray-200 bg-white' => !@category) do %>
+                                   'border-amber-300 bg-amber-50' => @presenter.category,
+                                   'border-gray-200 bg-white' => !@presenter.category) do %>
       <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-amber-500 text-sm font-bold text-white">2</span>
       <span class="ml-2 text-sm font-medium text-gray-800"><%= t('.step_course') %></span>
     <% end %>
     <%= tag.div class: class_names('rounded-lg border p-4',
-                                   'border-amber-300 bg-amber-50' => @course,
-                                   'border-gray-200 bg-white' => !@course) do %>
+                                   'border-amber-300 bg-amber-50' => @presenter.course,
+                                   'border-gray-200 bg-white' => !@presenter.course) do %>
       <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-amber-500 text-sm font-bold text-white">3</span>
       <span class="ml-2 text-sm font-medium text-gray-800"><%= t('.step_date') %></span>
     <% end %>
@@ -27,11 +27,11 @@
   <section class="mb-8">
     <h2 class="text-lg font-semibold text-gray-900 mb-4"><%= t('.choose_category') %></h2>
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      <% @categories.each do |category| %>
+      <% @presenter.categories.each do |category| %>
         <%= link_to dashboard_discovery_sessions_path(category_id: category.id),
             class: class_names('rounded-xl border p-5 transition hover:-translate-y-0.5 hover:shadow-md',
-                               'border-amber-500 bg-amber-50 ring-2 ring-amber-200' => category == @category,
-                               'border-gray-200 bg-white hover:border-amber-300' => category != @category) do %>
+                               'border-amber-500 bg-amber-50 ring-2 ring-amber-200' => category == @presenter.category,
+                               'border-gray-200 bg-white hover:border-amber-300' => category != @presenter.category) do %>
           <h3 class="font-semibold text-gray-900"><%= category.title %></h3>
           <p class="mt-1 text-sm text-gray-500"><%= t('.courses_count', count: category.courses.discoverable.count) %></p>
         <% end %>
@@ -39,15 +39,15 @@
     </div>
   </section>
 
-  <% if @category %>
+  <% if @presenter.category %>
     <section class="mb-8 border-t border-gray-200 pt-8">
       <h2 class="text-lg font-semibold text-gray-900 mb-4"><%= t('.choose_course') %></h2>
       <div class="grid gap-4 sm:grid-cols-2">
-        <% @courses.each do |course| %>
-          <%= link_to dashboard_discovery_sessions_path(category_id: @category.id, course_id: course.id),
+        <% @presenter.courses.each do |course| %>
+          <%= link_to dashboard_discovery_sessions_path(category_id: @presenter.category.id, course_id: course.id),
               class: class_names('rounded-xl border p-5 transition hover:shadow-md',
-                                 'border-amber-500 bg-amber-50 ring-2 ring-amber-200' => course == @course,
-                                 'border-gray-200 bg-white hover:border-amber-300' => course != @course) do %>
+                                 'border-amber-500 bg-amber-50 ring-2 ring-amber-200' => course == @presenter.course,
+                                 'border-gray-200 bg-white hover:border-amber-300' => course != @presenter.course) do %>
             <div class="flex items-start justify-between gap-4">
               <div>
                 <h3 class="font-semibold text-gray-900"><%= course.title %></h3>
@@ -64,16 +64,16 @@
     </section>
   <% end %>
 
-  <% if @course %>
+  <% if @presenter.course %>
     <section class="mb-10 rounded-2xl border border-amber-200 bg-gradient-to-br from-amber-50 to-white p-6 sm:p-8">
-      <h2 class="text-xl font-semibold text-gray-900"><%= t('.choose_date', course: @course.title) %></h2>
-      <p class="mt-2 text-sm text-gray-600"><%= t('.date_hint', weekday: @course.weekday) %></p>
-      <% if (first_date = @course.next_discovery_date) %>
+      <h2 class="text-xl font-semibold text-gray-900"><%= t('.choose_date', course: @presenter.course.title) %></h2>
+      <p class="mt-2 text-sm text-gray-600"><%= t('.date_hint', weekday: @presenter.course.weekday) %></p>
+      <% if (first_date = @presenter.course.next_discovery_date) %>
         <%= form_with url: dashboard_discovery_sessions_path, method: :post, class: 'mt-6 flex flex-col gap-4 sm:flex-row sm:items-end' do |form| %>
-          <%= form.hidden_field :course_id, value: @course.id %>
+          <%= form.hidden_field :course_id, value: @presenter.course.id %>
           <div class="flex-1">
             <%= form.label :occurs_on, t('.date_label'), class: 'block text-sm font-medium text-gray-700 mb-1' %>
-            <%= form.date_field :occurs_on, required: true, min: first_date, max: @course.discovery_season_end,
+            <%= form.date_field :occurs_on, required: true, min: first_date, max: @presenter.course.discovery_season_end,
                 step: 7, value: first_date,
                 class: 'block w-full rounded-lg border-gray-300 px-4 py-3 shadow-sm focus:border-amber-500 focus:ring-amber-500' %>
           </div>
@@ -85,11 +85,11 @@
     </section>
   <% end %>
 
-  <% if @discovery_sessions.any? %>
+  <% if @presenter.discovery_sessions.any? %>
     <section class="border-t border-gray-200 pt-8">
       <h2 class="text-lg font-semibold text-gray-900 mb-4"><%= t('.scheduled_sessions') %></h2>
       <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        <% @discovery_sessions.each do |discovery_session| %>
+        <% @presenter.discovery_sessions.each do |discovery_session| %>
           <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
             <p class="text-xs font-semibold uppercase tracking-wide text-amber-600"><%= discovery_session_date(discovery_session) %></p>
             <h3 class="mt-2 text-lg font-semibold text-gray-900"><%= discovery_session.course.title %></h3>
@@ -106,7 +106,7 @@
     </section>
   <% end %>
 
-  <% if @categories.empty? && @discovery_sessions.empty? %>
+  <% if @presenter.categories.empty? && @presenter.discovery_sessions.empty? %>
     <p class="bg-white rounded-lg p-8 text-center text-gray-500"><%= t('.empty') %></p>
   <% end %>
 </div>

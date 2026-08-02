@@ -3,9 +3,7 @@
 module Dashboard
   class DiscoverySessionsController < DashboardController
     def index
-      set_category_selection
-      set_course_selection
-      @discovery_sessions = DiscoverySession.available.where(occurs_on: nil).includes(:course, :subscriptions).order(:starts_at)
+      @presenter = DiscoverySessionsPresenter.new(category_id: params[:category_id], course_id: params[:course_id])
     end
 
     def show
@@ -26,16 +24,6 @@ module Dashboard
     end
 
     private
-
-    def set_category_selection
-      @categories = Category.joins(:courses).merge(Course.discoverable).distinct.order(:title)
-      @category = @categories.find_by(id: params[:category_id])
-    end
-
-    def set_course_selection
-      @courses = @category ? @category.courses.discoverable.order(:weekday, :title) : Course.none
-      @course = @courses.find_by(id: params[:course_id])
-    end
 
     def invalid_date_redirect(course)
       redirect_to dashboard_discovery_sessions_path(category_id: course.category_id, course_id: course.id),
