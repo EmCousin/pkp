@@ -26,4 +26,22 @@ describe Subscriptions::Filterable, type: :model do
       it { expect(subject.filter_by_status('')).to eq [confirmed_subscription, pending_subscription, archived_subscription] }
     end
   end
+
+  describe '#filter_by_discovery_session_id' do
+    let(:discovery_session) { create(:discovery_session, course:, starts_at: 1.month.from_now) }
+    let!(:discovery_registration) { create(:discovery_registration, discovery_session:) }
+
+    it 'returns registrations for the selected discovery session' do
+      expect(subject.filter_by_discovery_session_id(discovery_session.id)).to eq([discovery_registration])
+    end
+
+    it 'returns all subscriptions when no session is selected' do
+      expect(subject.filter_by_discovery_session_id(nil)).to include(
+        confirmed_subscription,
+        pending_subscription,
+        archived_subscription,
+        discovery_registration
+      )
+    end
+  end
 end

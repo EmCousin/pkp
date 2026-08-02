@@ -6,11 +6,13 @@ module Admin
     before_action :reject_event_edit!, only: %i[edit update], if: -> { @subscription.event? }
 
     def index
-      @subscriptions = Subscription.search_and_filter(params.to_unsafe_h.slice(:status, :level, :year, :course_ids, :camp_id))
+      @subscriptions = Subscription.search_and_filter(
+        params.to_unsafe_h.slice(:status, :level, :year, :course_ids, :camp_id, :discovery_session_id)
+      )
                                    .order(created_at: :desc)
                                    .page(params[:page])
                                    .per(params[:per_page] || 25)
-                                   .includes(:camp, :courses, member: :avatar_attachment)
+                                   .includes(:camp, :courses, { discovery_session: :course }, member: :avatar_attachment)
                                    .with_attached_medical_certificate
     end
 

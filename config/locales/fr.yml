@@ -322,7 +322,8 @@ fr:
       mark_present: "Marquer présent"
       mark_absent: "Marquer absent"
     discovery_session_attendance:
-      present: Présent
+      <<: *attendance_record
+      attendance_status: Présence
       not_recorded: Non renseigné
       empty: Aucun participant confirmé.
 
@@ -569,6 +570,11 @@ fr:
       index:
         title: Inscriptions
         new: Nouvelle inscription
+        filters:
+          title: Filtrer les inscriptions
+          description: Combinez les critères pour affiner les résultats.
+          all: Tous
+          courses: Cours annuels
       show:
         title: Inscription n°%{id}
         payment: Paiement

@@ -16,10 +16,12 @@
           <p class="text-sm text-gray-600"><%= l(discovery_session.starts_at, format: :event) %></p>
           <p class="text-sm text-gray-500"><%= discovery_session.subscriptions.confirmed.size %>/<%= discovery_session.capacity %> inscrits</p>
         </div>
-        <div class="flex gap-3">
-          <%= link_to t('defaults.edit'), [:edit, :admin, discovery_session], class: "text-sm text-blue-700" %>
-          <%= button_to t('defaults.delete'), [:admin, discovery_session], method: :delete,
-              data: { turbo_confirm: t('.confirm_delete') }, class: "text-sm text-red-600" %>
+        <div class="flex shrink-0 items-center justify-end gap-3">
+          <%= link_to t('defaults.edit'), [:edit, :admin, discovery_session],
+              class: "inline-flex items-center whitespace-nowrap text-sm text-blue-700" %>
+          <%= button_to t('defaults.destroy'), [:admin, discovery_session], method: :delete,
+              data: { turbo_confirm: t('.confirm_delete') },
+              class: "inline-flex items-center whitespace-nowrap text-sm text-red-600" %>
         </div>
       </div>
     <% end %>

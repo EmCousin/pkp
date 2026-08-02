@@ -1,28 +1,28 @@
 <%= turbo_frame_tag dom_id(subscription, :row), class: "block border bg-white rounded-lg shadow-sm p-4" do %>
   <div class="relative">
-    <div class="absolute top-0 right-0">
+    <div class="mb-4 flex justify-end sm:absolute sm:top-0 sm:right-0 sm:mb-0">
       <%= render 'admin/subscriptions/actions', subscription: %>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-      <div class="flex items-center space-x-2">
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-4 sm:pr-28">
+      <div class="flex min-w-0 items-start gap-2">
         <span class="text-sm text-gray-500">ID:</span>
         <%= link_to subscription.id, [:admin, subscription], class: "text-blue-600 hover:text-blue-800", data: { turbo_frame: '_top' } %>
       </div>
 
-      <div class="flex items-center space-x-2">
+      <div class="flex min-w-0 items-start gap-2">
         <span class="text-sm text-gray-500"><%= Member.human_attribute_name(:email) %>:</span>
         <%= mail_to subscription.member.email, subscription.member.email, class: "text-blue-600 hover:text-blue-800" %>
       </div>
 
-      <div class="flex items-center space-x-2">
+      <div class="flex min-w-0 items-start gap-2">
         <span class="text-sm text-gray-500"><%= Member.human_attribute_name(:level) %>:</span>
         <%= tag.div class: "w-4 h-4 border border-gray-400 rounded",
                     style: "background-color: #{subscription.member.level}",
                     title: Member.human_attribute_name(subscription.member.level) %>
       </div>
 
-      <div class="flex items-center space-x-2">
+      <div class="flex min-w-0 items-start gap-2">
         <span class="text-sm text-gray-500"><%= Subscription.human_attribute_name(:member_id) %>:</span>
         <%= link_to [:admin, subscription.member], class: "flex items-center gap-2", data: { turbo_frame: '_top' } do %>
           <% if subscription.member.avatar.variable? %>
@@ -34,7 +34,7 @@
         <% end %>
       </div>
 
-      <div class="flex items-center space-x-2">
+      <div class="flex min-w-0 items-start gap-2">
         <% if subscription.is_a?(DiscoveryRegistration) %>
           <span class="text-sm text-gray-500"><%= DiscoverySession.model_name.human %>:</span>
           <%= link_to subscription.discovery_session.course.title, [:admin, subscription.discovery_session], class: "text-blue-600 hover:text-blue-800", data: { turbo_frame: '_top' } %>
@@ -51,24 +51,24 @@
         <% end %>
       </div>
 
-      <div class="flex items-center space-x-2">
+      <div class="flex min-w-0 items-start gap-2">
         <span class="text-sm text-gray-500"><%= Subscription.human_attribute_name(:fee) %>:</span>
         <span><%= number_to_currency(subscription.fee, unit: "€", separator: ",", format: "%n %u") %></span>
       </div>
 
-      <div class="flex items-center space-x-2">
+      <div class="flex min-w-0 items-start gap-2">
         <span class="text-sm text-gray-500"><%= Subscription.human_attribute_name(:year) %>:</span>
         <span><%= subscription.year %></span>
       </div>
 
-      <div class="flex items-center space-x-2">
+      <div class="flex min-w-0 items-start gap-2">
         <span class="text-sm text-gray-500"><%= Subscription.human_attribute_name(:status) %>:</span>
         <%= tag.span class: subscription.status_color do %>
           <%= Subscription.human_attribute_name(subscription.status) %>
         <% end %>
       </div>
 
-      <div class="flex items-center space-x-2">
+      <div class="flex min-w-0 items-start gap-2">
         <span class="text-sm text-gray-500"><%= Subscription.human_attribute_name(:payment_method) %>:</span>
         <% if subscription.payment_method? %>
           <%= tag.span class: subscription.payment_method_color do %>
@@ -99,7 +99,7 @@
       </div>
 
       <% if subscription.medical_certificate_required? %>
-        <div class="flex items-center space-x-2">
+        <div class="flex min-w-0 items-start gap-2">
           <span class="text-sm text-gray-500"><%= t('.medical_certificate') %>:</span>
           <% if subscription.doctor_certified_at? && subscription.medical_certificate.attached? %>
           <span class="flex items-center">
@@ -132,7 +132,7 @@
         </div>
       <% end %>
 
-      <div class="flex items-center space-x-2">
+      <div class="flex min-w-0 items-start gap-2">
         <span class="text-sm text-gray-500"><%= t('.payment') %>:</span>
         <% if subscription.paid? %>
           <span class="flex items-center">

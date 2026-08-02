@@ -4,6 +4,8 @@ module Dashboard
   class SubscriptionsController < DashboardController
     include AccessFilters
 
+    skip_before_action :filter_vacation_time!, only: :show
+
     before_action :filter_available_members!, only: %i[new], unless: :available_members?
     before_action :set_member, only: %i[new]
     before_action :set_subscription, only: %i[show]
