@@ -63,9 +63,7 @@ module Admin
     end
 
     def discovery_session_params
-      attributes = params.expect(discovery_session: %i[course_id starts_at capacity price active open])
-      attributes.except!(:course_id, :starts_at) if @discovery_session.occurs_on?
-      attributes
+      params.expect(discovery_session: %i[course_id starts_at capacity price active open])
     end
   end
 end
