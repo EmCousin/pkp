@@ -50,7 +50,7 @@
           <div>
             <%= f.label :discovery_session_id, DiscoverySession.model_name.human, class: 'block text-sm font-medium text-gray-700 mb-1' %>
             <%= f.collection_select :discovery_session_id, DiscoverySession.includes(:course).order(starts_at: :desc), :id,
-                                    ->(session) { "#{session.course.title} - #{l(session.starts_at, format: :event)}" },
+                                    ->(session) { "#{session.course.title} - #{discovery_session_date(session)}" },
                                     { include_blank: t('.filters.all'), selected: params[:discovery_session_id] },
                                     class: 'block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm bg-white' %>
           </div>

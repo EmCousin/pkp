@@ -140,6 +140,10 @@ courses[:health] = Course.create!(
   features_attendance_sheet: true
 )
 
+courses.except(:health).each_value do |course|
+  course.update!(discovery_enabled: true, discovery_price: 35, discovery_capacity: course.capacity)
+end
+
 ## Discovery sessions
 
 [

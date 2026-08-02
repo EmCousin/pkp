@@ -127,6 +127,12 @@ fr:
             member:
               too_young: n'a pas l'âge minimum requis
               too_old: n'a pas l'âge maximum requis
+        discovery_session:
+          attributes:
+            occurs_on:
+              unavailable: ne correspond pas à une date disponible pour ce cours
+            starts_at:
+              taken: a déjà une séance programmée pour ce cours à cette date
         invoice:
           attributes:
             subscription:
@@ -191,6 +197,7 @@ fr:
         price: Tarif
         active: Visible
         open: Ouvert aux inscriptions
+        occurs_on: Date
       attendance_record:
         status: Statut
         statuses:
@@ -234,6 +241,9 @@ fr:
         weekday: Jour de la semaine
         active: Actif
         features_attendance_sheet: Feuille de présence
+        discovery_enabled: Proposer ce cours en découverte
+        discovery_price: Tarif découverte
+        discovery_capacity: Places par séance découverte
       category:
         title: Titre
         min_age: Âge minimum
@@ -348,14 +358,16 @@ fr:
     discovery_sessions:
       index:
         title: Cours découverte
-        description: Programmez les séances et consultez les participants.
-        new: Programmer une séance
+        description: Configurez les cours récurrents depuis chaque cours, programmez des séances ponctuelles, puis consultez ici les séances créées et leurs participants.
+        new: Programmer une séance ponctuelle
         empty: Aucun cours découverte programmé.
         confirm_delete: Êtes-vous sûr de vouloir supprimer cette séance ?
       new:
         title: Programmer un cours découverte
       edit:
         title: Modifier le cours découverte
+      form:
+        automatic_occurrence: Le cours et la date proviennent du calendrier automatique et ne peuvent pas être modifiés ici.
       create:
         success: Cours découverte programmé
       update:
@@ -514,8 +526,11 @@ fr:
         error: Impossible de supprimer un cours utilisé par un cours découverte
       form:
         new_category: Ajouter une autre catégorie
+        discovery_settings: Cours découverte
+        discovery_settings_description: Les participants pourront choisir automatiquement une date correspondant au jour de ce cours jusqu'à la fin de la saison.
       course:
         create_attendance_sheet: "Feuille de présence"
+        discovery_enabled: "Découverte : %{price} · %{capacity} places"
     credit_notes:
       create:
         success: Avoir généré
@@ -671,9 +686,32 @@ fr:
     discovery_sessions:
       index:
         title: Cours découverte
-        description: Choisissez une séance, inscrivez un participant et payez en ligne.
+        eyebrow: Première séance
+        description: Choisissez une catégorie, un créneau puis la date qui vous convient.
+        step_category: Catégorie
+        step_course: Créneau
+        step_date: Date
+        choose_category: 1. Choisissez une catégorie
+        choose_course: 2. Choisissez un créneau
+        choose_date: "3. Choisissez une date pour %{course}"
+        date_hint: "Le calendrier propose les prochains %{weekday}s jusqu'à la fin de la saison."
+        date_label: Date du cours découverte
+        continue: Continuer
+        no_dates: Aucune autre date n'est disponible cette saison pour ce créneau.
+        scheduled_sessions: Séances déjà programmées
+        courses_count:
+          one: 1 créneau disponible
+          other: "%{count} créneaux disponibles"
+        places:
+          one: 1 place
+          other: "%{count} places"
+        remaining_places:
+          one: 1 place restante
+          other: "%{count} places restantes"
         view: Voir la séance
         empty: Aucun cours découverte n'est disponible actuellement.
+      create:
+        invalid_date: Cette date n'est pas disponible pour ce cours.
       show:
         closed: Les inscriptions à cette séance sont fermées.
         full: Cette séance est complète.

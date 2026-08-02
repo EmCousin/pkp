@@ -137,7 +137,7 @@ Rails.application.routes.draw do
       end
       resources :registrations, only: [:create, :destroy], controller: 'camps/registrations'
     end
-    resources :discovery_sessions, only: %i[index show] do
+    resources :discovery_sessions, only: %i[index show create] do
       resources :subscriptions, only: %i[create destroy], controller: 'discovery_sessions/subscriptions'
     end
     resource :vacation, only: [:show]

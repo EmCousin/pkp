@@ -2,7 +2,7 @@
 
 <p>
   Votre inscription au cours découverte <strong><%= @subscription.discovery_session.course.title %></strong>
-  du <%= l(@subscription.discovery_session.starts_at, format: :event) %> est confirmée.
+  du <%= discovery_session_date(@subscription.discovery_session) %> est confirmée.
 </p>
 
 <p>À bientôt !</p>

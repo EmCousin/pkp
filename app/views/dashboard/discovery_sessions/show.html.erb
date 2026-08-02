@@ -1,6 +1,6 @@
 <div class="max-w-3xl mx-auto px-4 py-8">
   <div class="bg-white shadow-sm border border-gray-200 rounded-xl p-6">
-    <p class="text-sm font-semibold text-amber-600"><%= l(@discovery_session.starts_at, format: :event) %></p>
+    <p class="text-sm font-semibold text-amber-600"><%= discovery_session_date(@discovery_session) %></p>
     <h1 class="mt-2 text-2xl font-bold text-gray-900"><%= @discovery_session.course.title %></h1>
     <div class="mt-5 flex gap-6 text-sm text-gray-600">
       <span><%= number_to_currency(@discovery_session.price, unit: '€') %></span>
@@ -40,7 +40,7 @@
             <% end %>
           <% end %>
         </div>
-      <% elsif !@discovery_session.closed? && !@discovery_session.fully_booked? %>
+      <% elsif @discovery_session.open_for_registration? && !@discovery_session.fully_booked? %>
         <%= link_to t('.add_member'), new_dashboard_member_path(return_to: dashboard_discovery_session_path(@discovery_session)),
             class: "inline-flex rounded-md bg-blue-600 px-4 py-2 text-white font-medium" %>
       <% end %>

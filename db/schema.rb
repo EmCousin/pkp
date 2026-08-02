@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_31_090000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_02_160000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -140,6 +140,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_31_090000) do
     t.boolean "active", default: true
     t.bigint "category_id"
     t.boolean "features_attendance_sheet", default: false, null: false
+    t.boolean "discovery_enabled", default: false, null: false
+    t.decimal "discovery_price"
+    t.integer "discovery_capacity"
     t.index ["category_id"], name: "index_courses_on_category_id"
   end
 
@@ -161,6 +164,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_31_090000) do
     t.boolean "open", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "occurs_on"
+    t.index ["course_id", "occurs_on"], name: "index_one_discovery_session_per_course_and_date", unique: true, where: "(occurs_on IS NOT NULL)"
     t.index ["course_id"], name: "index_discovery_sessions_on_course_id"
     t.index ["starts_at"], name: "index_discovery_sessions_on_starts_at"
   end
