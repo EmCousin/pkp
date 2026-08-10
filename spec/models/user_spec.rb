@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
+# rubocop:disable Metrics/BlockLength
 describe User, type: :model do
   let(:user) { create :user }
 
@@ -13,11 +16,19 @@ describe User, type: :model do
 
   it { is_expected.to validate_acceptance_of(:terms_of_service) }
 
+  it { is_expected.to validate_presence_of(:first_name).on(:account_setup) }
+  it { is_expected.to validate_presence_of(:last_name).on(:account_setup) }
   it { is_expected.to validate_presence_of(:phone_number).on(:account_setup) }
   it { is_expected.to validate_presence_of(:address).on(:account_setup) }
   it { is_expected.to validate_presence_of(:zip_code).on(:account_setup) }
   it { is_expected.to validate_presence_of(:city).on(:account_setup) }
   it { is_expected.to validate_presence_of(:country).on(:account_setup) }
+
+  it 'normalizes the billing country to an ISO code' do
+    user.country = 'France'
+
+    expect(user.country).to eq('FR')
+  end
 
   describe 'email confirmation' do
     let(:email) { Faker::Internet.email }
@@ -52,3 +63,4 @@ describe User, type: :model do
     expect(subscription.reload).to be_persisted
   end
 end
+# rubocop:enable Metrics/BlockLength

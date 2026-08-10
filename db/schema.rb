@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_02_160000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_10_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -217,12 +217,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_02_160000) do
     t.string "type", default: "AnnualSubscription", null: false
     t.bigint "discovery_session_id"
     t.enum "attendance_status", enum_type: "attendance_record_status"
+    t.bigint "pennylane_invoice_id"
+    t.string "pennylane_invoice_number"
+    t.datetime "pennylane_invoice_requested_at"
+    t.datetime "pennylane_invoiced_at"
+    t.text "pennylane_invoice_error"
     t.index ["created_at"], name: "index_subscriptions_on_created_at", order: :desc
     t.index ["discovery_session_id", "member_id"], name: "index_one_subscription_per_discovery_session_and_member", unique: true, where: "(discovery_session_id IS NOT NULL)"
     t.index ["discovery_session_id"], name: "index_subscriptions_on_discovery_session_id"
     t.index ["member_id", "year"], name: "index_one_annual_subscription_per_member_and_year", unique: true, where: "(((type)::text = 'AnnualSubscription'::text) AND (parent_subscription_id IS NULL))"
     t.index ["member_id"], name: "index_subscriptions_on_member_id"
     t.index ["parent_subscription_id"], name: "index_subscriptions_on_parent_subscription_id"
+    t.index ["pennylane_invoice_id"], name: "index_subscriptions_on_pennylane_invoice_id", unique: true
     t.index ["type"], name: "index_subscriptions_on_type"
     t.index ["status"], name: "index_subscriptions_on_status"
     t.index ["year"], name: "index_subscriptions_on_year"
@@ -252,8 +258,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_02_160000) do
     t.string "stripe_customer_id"
     t.boolean "terms_of_service", default: false
     t.boolean "coach", default: false, null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.bigint "pennylane_customer_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["pennylane_customer_id"], name: "index_users_on_pennylane_customer_id", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end

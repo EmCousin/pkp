@@ -3,6 +3,7 @@
 module Admin
   class CreditNotesController < Admin::Abstract::SubscriptionsController
     before_action :set_subscription!, only: %i[new create]
+    before_action :reject_pennylane_invoice!, only: %i[new create]
 
     def new; end
 
@@ -19,6 +20,12 @@ module Admin
     end
 
     private
+
+    def reject_pennylane_invoice!
+      return unless @subscription.pennylane_invoice_id?
+
+      redirect_to admin_subscription_path(@subscription), alert: t('.pennylane_invoice'), status: :see_other
+    end
 
     def generate_credit_note_pdf
       PdfGenerator.setup_document { |pdf| add_credit_note_content(pdf) }

@@ -53,6 +53,7 @@ env:
     RAILS_SERVE_STATIC_FILES: true
   secret:
     - RAILS_MASTER_KEY
+    - PENNYLANE_API_TOKEN
 
 # Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:
 # "bin/kamal app logs -r job" will tail logs from the first server in the job section.

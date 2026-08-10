@@ -47,6 +47,22 @@
       <%= form.fields_for :user, @member.user || @member.build_user do |user_form| %>
         <%= user_form.hidden_field :id, value: @member.user_id %>
 
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div>
+            <%= user_form.label :first_name, class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= user_form.text_field :first_name,
+                required: true,
+                class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
+          </div>
+
+          <div>
+            <%= user_form.label :last_name, class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= user_form.text_field :last_name,
+                required: true,
+                class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
+          </div>
+        </div>
+
         <div data-controller="places"
              data-places-app-id="<%= Rails.application.credentials.algolia(:application_id) %>"
              data-places-api-key="<%= Rails.application.credentials.algolia(:search_key) %>">

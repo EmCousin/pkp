@@ -32,8 +32,19 @@ class User < ApplicationRecord
   validates :terms_of_service, acceptance: true
 
   with_options on: :account_setup do
-    validates :phone_number, :address, :zip_code, :city, :country, presence: true
+    validates :first_name, :last_name, :phone_number, :address, :zip_code, :city, :country, presence: true
     validates :phone_number, phone: true
+    validates :country, format: { with: /\A[A-Z]{2}\z/ }, allow_blank: true
+  end
+
+  normalizes :first_name, :last_name, with: ->(name) { name.strip.downcase.titleize }
+  normalizes :country, with: lambda { |country|
+    normalized_country = country.strip
+    normalized_country.casecmp?('france') ? 'FR' : normalized_country.upcase
+  }
+
+  def full_name
+    "#{first_name} #{last_name}"
   end
 
   def full_address

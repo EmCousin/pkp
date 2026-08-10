@@ -9,8 +9,8 @@ describe Members::Searchable, type: :model do
     it 'performs a search query' do
       expect(Member.search('WHATEVER').to_sql).to eq(
         Member.joins(:user).where(
-          'LOWER(first_name) LIKE :search
-          OR LOWER(last_name) LIKE :search
+          'LOWER(members.first_name) LIKE :search
+          OR LOWER(members.last_name) LIKE :search
           OR LOWER(users.email) LIKE :search
           OR users.phone_number LIKE :search',
           search: "%whatever%"

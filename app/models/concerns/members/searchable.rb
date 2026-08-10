@@ -17,8 +17,8 @@ module Members
         return all if query.blank?
 
         joins(:user).where(
-          'LOWER(first_name) LIKE :search
-          OR LOWER(last_name) LIKE :search
+          'LOWER(members.first_name) LIKE :search
+          OR LOWER(members.last_name) LIKE :search
           OR LOWER(users.email) LIKE :search
           OR users.phone_number LIKE :search',
           search: "%#{query.downcase}%"

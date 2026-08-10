@@ -10,8 +10,11 @@ module Admin
     end
 
     def destroy
-      @subscription.mark_as_not_paid!
-      redirect_back_or_to [:admin, @subscription], notice: t('.success'), status: :see_other
+      if @subscription.mark_as_not_paid!
+        redirect_back_or_to [:admin, @subscription], notice: t('.success'), status: :see_other
+      else
+        redirect_back_or_to [:admin, @subscription], alert: @subscription.errors.full_messages.to_sentence, status: :see_other
+      end
     end
 
     private

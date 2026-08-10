@@ -72,7 +72,7 @@
       <%= button_to t('defaults.mark_as_not_paid'),
           [:admin, subscription, :payment],
           method: :delete,
-          class: "w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50" if subscription.paid? %>
+          class: "w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50" if subscription.paid? && !subscription.pennylane_invoice_id? %>
 
       <% if subscription.cancellable? %>
         <%= button_to t('defaults.destroy'),
