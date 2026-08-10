@@ -30,11 +30,12 @@ class User < ApplicationRecord
   validates :email, confirmation: true, if: :email_confirmation_required?
   validate :valid_email_provider, if: :email?, on: :create
   validates :terms_of_service, acceptance: true
+  validates :first_name, :last_name, presence: true
+  validates :country, inclusion: { in: TZInfo::Country.all_codes }, allow_blank: true
 
   with_options on: :account_setup do
-    validates :first_name, :last_name, :phone_number, :address, :zip_code, :city, :country, presence: true
+    validates :phone_number, :address, :zip_code, :city, :country, presence: true
     validates :phone_number, phone: true
-    validates :country, format: { with: /\A[A-Z]{2}\z/ }, allow_blank: true
   end
 
   normalizes :first_name, :last_name, with: ->(name) { name.strip.downcase.titleize }
@@ -55,11 +56,32 @@ class User < ApplicationRecord
     ].join("\n")
   end
 
+  def pennylane_customer_snapshot
+    {
+      first_name:,
+      last_name:,
+      phone: phone_number,
+      emails: [email],
+      billing_language: 'fr_FR',
+      payment_conditions: 'upon_receipt',
+      billing_address: pennylane_billing_address
+    }
+  end
+
   def invalid_email_provider?
     INVALID_EMAIL_PROVIDERS.any? { |provider| email.ends_with?(provider) }
   end
 
   private
+
+  def pennylane_billing_address
+    {
+      address:,
+      postal_code: zip_code,
+      city:,
+      country_alpha2: country
+    }
+  end
 
   def email_confirmation_required?
     new_record? && email.present? && email_confirmation.present?

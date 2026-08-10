@@ -7,41 +7,69 @@ module Subscriptions
     included do
       has_one_attached :invoice
       has_many_attached :credit_notes
+      has_one :billing_invoice, as: :invoiceable, class_name: 'Invoice', dependent: :restrict_with_error
 
-      before_save :request_pennylane_invoice, if: :being_paid?
-      after_save_commit :enqueue_pennylane_invoice, if: :just_paid?
-
-      validates :pennylane_invoice_id, uniqueness: true, allow_nil: true
+      after_save :request_billing_invoice!, if: -> { saved_change_to_paid_at? && paid_at? }
 
       attr_accessor :credit_note_amount
     end
 
     def mark_as_not_paid!
-      if pennylane_invoice_id?
-        errors.add(:base, :pennylane_invoice_finalized)
-        return false
-      end
+      with_lock do
+        if billing_invoice
+          errors.add(:base, :pennylane_invoice_finalized)
+          next false
+        end
 
-      super
+        super
+      end
+    end
+
+    def request_billing_invoice!
+      with_lock do
+        next billing_invoice if billing_invoice
+        next unless paid?
+
+        create_billing_invoice!(billing_invoice_attributes)
+      end
+    end
+
+    def invoice_document
+      return billing_invoice.document if billing_invoice&.document&.attached?
+
+      invoice
+    end
+
+    def invoice_description
+      [
+        "Participant : #{member.full_name}",
+        "Saison : #{year}-#{year + 1}",
+        *invoice_details
+      ].join("\n")
+    end
+
+    def invoice_transaction_reference
+      return unless paid_via_credit_card? && stripe_payment_intent_id?
+
+      {
+        banking_provider: 'stripe',
+        provider_field_name: 'payment_id',
+        provider_field_value: stripe_payment_intent_id
+      }
     end
 
     private
 
-    def being_paid?
-      will_save_change_to_paid_at? && paid_at?
-    end
-
-    def just_paid?
-      saved_change_to_paid_at? && paid_at?
-    end
-
-    def request_pennylane_invoice
-      self.pennylane_invoice_requested_at = Time.current
-      self.pennylane_invoice_error = nil
-    end
-
-    def enqueue_pennylane_invoice
-      Pennylane::CreateInvoiceJob.perform_later(self)
+    def billing_invoice_attributes
+      {
+        issue_date: Date.current,
+        amount: fee,
+        label: invoice_label,
+        description: invoice_description,
+        customer_snapshot: member.user.pennylane_customer_snapshot,
+        transaction_reference: invoice_transaction_reference,
+        requested_at: Time.current
+      }
     end
   end
 end

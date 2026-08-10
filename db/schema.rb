@@ -170,6 +170,32 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_10_120000) do
     t.index ["starts_at"], name: "index_discovery_sessions_on_starts_at"
   end
 
+  create_table "invoices", force: :cascade do |t|
+    t.string "provider", default: "pennylane", null: false
+    t.string "state", default: "pending", null: false
+    t.uuid "sync_token", null: false
+    t.bigint "external_id"
+    t.string "number"
+    t.date "issue_date", null: false
+    t.decimal "amount", null: false
+    t.string "currency", default: "EUR", null: false
+    t.string "vat_rate", default: "FR_200", null: false
+    t.string "label", null: false
+    t.text "description", null: false
+    t.jsonb "customer_snapshot", default: {}, null: false
+    t.jsonb "transaction_reference"
+    t.datetime "requested_at", null: false
+    t.datetime "completed_at"
+    t.text "error"
+    t.string "invoiceable_type", null: false
+    t.bigint "invoiceable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["external_id"], name: "index_invoices_on_external_id", unique: true
+    t.index ["invoiceable_type", "invoiceable_id"], name: "index_invoices_on_invoiceable_type_and_invoiceable_id", unique: true
+    t.index ["state"], name: "index_invoices_on_state"
+  end
+
   create_table "members", force: :cascade do |t|
     t.bigint "user_id"
     t.string "first_name", null: false
@@ -217,18 +243,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_10_120000) do
     t.string "type", default: "AnnualSubscription", null: false
     t.bigint "discovery_session_id"
     t.enum "attendance_status", enum_type: "attendance_record_status"
-    t.bigint "pennylane_invoice_id"
-    t.string "pennylane_invoice_number"
-    t.datetime "pennylane_invoice_requested_at"
-    t.datetime "pennylane_invoiced_at"
-    t.text "pennylane_invoice_error"
     t.index ["created_at"], name: "index_subscriptions_on_created_at", order: :desc
     t.index ["discovery_session_id", "member_id"], name: "index_one_subscription_per_discovery_session_and_member", unique: true, where: "(discovery_session_id IS NOT NULL)"
     t.index ["discovery_session_id"], name: "index_subscriptions_on_discovery_session_id"
     t.index ["member_id", "year"], name: "index_one_annual_subscription_per_member_and_year", unique: true, where: "(((type)::text = 'AnnualSubscription'::text) AND (parent_subscription_id IS NULL))"
     t.index ["member_id"], name: "index_subscriptions_on_member_id"
     t.index ["parent_subscription_id"], name: "index_subscriptions_on_parent_subscription_id"
-    t.index ["pennylane_invoice_id"], name: "index_subscriptions_on_pennylane_invoice_id", unique: true
     t.index ["type"], name: "index_subscriptions_on_type"
     t.index ["status"], name: "index_subscriptions_on_status"
     t.index ["year"], name: "index_subscriptions_on_year"
@@ -258,8 +278,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_10_120000) do
     t.string "stripe_customer_id"
     t.boolean "terms_of_service", default: false
     t.boolean "coach", default: false, null: false
-    t.string "first_name"
-    t.string "last_name"
+    t.string "first_name", null: false
+    t.string "last_name", null: false
     t.bigint "pennylane_customer_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true

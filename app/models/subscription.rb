@@ -27,8 +27,8 @@ class Subscription < ApplicationRecord
        prefix: :attendance
 
   scope :destruction_protected, lambda {
-    where(
-      'stripe_payment_intent_id IS NOT NULL OR (type IN (?) AND (paid_at IS NOT NULL OR status = ?))',
+    left_joins(:billing_invoice).where(
+      'invoices.id IS NOT NULL OR stripe_payment_intent_id IS NOT NULL OR (type IN (?) AND (paid_at IS NOT NULL OR status = ?))',
       %w[CampRegistration DiscoveryRegistration],
       statuses[:confirmed]
     )
@@ -71,6 +71,10 @@ class Subscription < ApplicationRecord
 
   def medical_certificate_required?
     false
+  end
+
+  def invoice_details
+    []
   end
 
   def status_color

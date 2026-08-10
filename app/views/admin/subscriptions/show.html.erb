@@ -276,27 +276,27 @@
             <%= Subscription.human_attribute_name(:invoice) %>:
           </span>
           <div class="mt-2">
-            <% if @subscription.invoice.attached? %>
+            <% if @subscription.invoice_document.attached? %>
               <div class="flex flex-col sm:flex-row gap-3">
                 <%= link_to t('defaults.download'),
-                    rails_blob_path(@subscription.invoice, disposition: "attachment"),
+                    rails_blob_path(@subscription.invoice_document, disposition: "attachment"),
                     class: "inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800" %>
-                <% unless @subscription.pennylane_invoice_id? %>
+                <% unless @subscription.billing_invoice %>
                   <%= link_to t('.generate_credit_note'),
                       new_admin_subscription_credit_note_path(@subscription.id),
                       class: "inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" %>
                 <% end %>
               </div>
-            <% elsif @subscription.pennylane_invoice_error? %>
+            <% elsif @subscription.billing_invoice&.failed? %>
               <div class="space-y-2">
-                <p class="text-sm text-red-600"><%= @subscription.pennylane_invoice_error %></p>
+                <p class="text-sm text-red-600"><%= @subscription.billing_invoice.error %></p>
                 <%= link_to t('.retry_invoice'),
                     admin_subscription_invoice_path(@subscription.id),
                     class: "inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700" %>
               </div>
-            <% elsif @subscription.pennylane_invoice_id? %>
+            <% elsif @subscription.billing_invoice&.external_id? %>
               <p class="text-sm text-green-700">
-                <%= t('.pennylane_invoice_created', number: @subscription.pennylane_invoice_number) %>
+                <%= t('.pennylane_invoice_created', number: @subscription.billing_invoice.number) %>
               </p>
             <% else %>
               <%= link_to t('.invoice_pending'),

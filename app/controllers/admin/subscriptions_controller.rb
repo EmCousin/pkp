@@ -4,6 +4,7 @@ module Admin
   class SubscriptionsController < BaseController
     before_action :set_subscription!, only: %i[show edit update destroy unlink_course]
     before_action :reject_event_edit!, only: %i[edit update], if: -> { @subscription.event? }
+    before_action :reject_invoiced_edit!, only: %i[edit update unlink_course], if: -> { @subscription.billing_invoice }
 
     def index
       @subscriptions = Subscription.search_and_filter(
@@ -37,7 +38,7 @@ module Admin
     end
 
     def update
-      if @subscription.update(subscription_params)
+      if update_subscription
         redirect_to admin_subscription_path(@subscription, updated: true), notice: t('.success'), status: :see_other
       else
         render :edit, status: :unprocessable_content
@@ -54,7 +55,9 @@ module Admin
 
     def unlink_course
       @course = @subscription.courses.find(params[:course_id])
-      @subscription.courses_subscriptions.destroy_by(course_id: @course.id)
+      @subscription.with_lock do
+        @subscription.courses_subscriptions.destroy_by(course_id: @course.id) unless @subscription.billing_invoice
+      end
       redirect_back_or_to(:root, notice: t('.success'))
     end
 
@@ -77,12 +80,25 @@ module Admin
       camp ? camp.with_lock { @subscription.save } : @subscription.save
     end
 
+    def update_subscription
+      @subscription.with_lock do
+        next @subscription.update(subscription_params) unless @subscription.billing_invoice
+
+        @subscription.errors.add(:base, :invoiced)
+        false
+      end
+    end
+
     def subscription_class
       subscription_params.dig(:camps_subscription_attributes, :camp_id).present? ? CampRegistration : AnnualSubscription
     end
 
     def reject_event_edit!
       redirect_to [:admin, @subscription], alert: t('.event_not_editable'), status: :see_other
+    end
+
+    def reject_invoiced_edit!
+      redirect_to [:admin, @subscription], alert: t('.invoiced_not_editable'), status: :see_other
     end
   end
 end

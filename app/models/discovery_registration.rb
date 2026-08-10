@@ -18,6 +18,14 @@ class DiscoveryRegistration < EventRegistration
     @description ||= discovery_session.course.title
   end
 
+  def invoice_label
+    "Cours découverte - #{description}"
+  end
+
+  def invoice_details
+    ["Date : #{I18n.l(discovery_session.occurrence_date, format: :long)}"]
+  end
+
   def notify_confirmation!
     SubscriptionMailer.confirm_discovery_subscription(self).deliver_later
   end

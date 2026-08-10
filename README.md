@@ -29,7 +29,7 @@ Back-Office interface for [Parkour Paris](https://inscriptions.parkourparis.fr)
 * Run `bin/dev`
 
 ## Pennylane
-Customer invoices are created automatically after a payment is recorded. Configure an API v2 token with the `customers:all` and `customer_invoices:all` scopes in `PENNYLANE_API_TOKEN` or in the Rails credentials under `pennylane.api_token`.
+Customer invoices are created automatically after a payment is recorded. Configure an API v2 token with the `customers:all` and `customer_invoices:all` scopes in the Rails credentials under `pennylane.api_token`.
 
 ## Running tests
 * Run `rspec`

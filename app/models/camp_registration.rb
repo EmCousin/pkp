@@ -16,6 +16,16 @@ class CampRegistration < EventRegistration
     @description ||= camp.title
   end
 
+  def invoice_label
+    "Stage - #{description}"
+  end
+
+  def invoice_details
+    dates = "Dates : du #{I18n.l(camp.starts_at, format: :long)} au #{I18n.l(camp.ends_at, format: :long)}"
+    rate = parent_subscription_id? ? 'Tarif interne' : 'Tarif externe'
+    [dates, rate]
+  end
+
   def notify_confirmation!
     SubscriptionMailer.confirm_camp_subscription(self).deliver_later
   end

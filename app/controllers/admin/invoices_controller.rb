@@ -9,9 +9,12 @@ module Admin
     def edit; end
 
     def create
-      Pennylane::CreateInvoiceJob.perform_later(@subscription)
+      invoice = @subscription.billing_invoice
+      queued = invoice ? invoice.retry! : @subscription.request_billing_invoice!.present?
 
-      redirect_to admin_subscription_path(@subscription.id), notice: t('.queued'), status: :see_other
+      redirect_to admin_subscription_path(@subscription.id),
+                  **(queued ? { notice: t('.queued') } : { alert: t('.not_queued') }),
+                  status: :see_other
     end
 
     def update

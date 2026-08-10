@@ -30,6 +30,13 @@ describe User, type: :model do
     expect(user.country).to eq('FR')
   end
 
+  it 'rejects a country that is not an ISO-3166 alpha-2 code' do
+    user.country = 'ZZ'
+
+    expect(user).not_to be_valid
+    expect(user.errors.of_kind?(:country, :inclusion)).to be true
+  end
+
   describe 'email confirmation' do
     let(:email) { Faker::Internet.email }
     let(:email_confirmation) { email }

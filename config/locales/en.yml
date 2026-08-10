@@ -138,6 +138,10 @@ en:
             member:
               too_young: "does not meet the minimum age requirement"
               too_old: "exceeds the maximum age requirement"
+        courses_subscription:
+          attributes:
+            subscription:
+              invoiced: "cannot be changed because its invoice is pending or finalized"
         invoice:
           attributes:
             subscription:
@@ -324,8 +328,10 @@ en:
         success: "Subscription created"
       edit:
         title: "Edit Subscription"
+        invoiced_not_editable: "This registration cannot be changed because its invoice is pending or finalized."
       update:
         success: "Subscription updated"
+        invoiced_not_editable: "This registration cannot be changed because its invoice is pending or finalized."
       destroy:
         success: "Subscription deleted"
       confirm:
@@ -336,6 +342,7 @@ en:
         failure: "The subscription is already archived"
       unlink_course:
         success: "Subscription removed"
+        invoiced_not_editable: "This registration cannot be changed because its invoice is pending or finalized."
       form:
         users: "Members"
         select_a_member: "Choose a Member"
@@ -372,6 +379,7 @@ en:
         retrying: "Synchronizing..."
       create:
         queued: "Pennylane invoice synchronization queued"
+        not_queued: "The invoice requires a validated payment or a failed synchronization before it can be retried"
       update:
         success: "Invoice generated"
     credit_notes:

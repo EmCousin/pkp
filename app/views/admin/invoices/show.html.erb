@@ -1,16 +1,17 @@
 <div class="mx-auto max-w-2xl py-8 px-4">
+  <% billing_invoice = @subscription.billing_invoice %>
   <div class="rounded-lg bg-white p-6 shadow-sm">
     <h1 class="text-xl font-semibold text-gray-900"><%= t('.title') %></h1>
     <p class="mt-2 text-sm text-gray-600"><%= @subscription.description %></p>
 
-    <% if @subscription.pennylane_invoice_error? %>
+    <% if billing_invoice&.failed? %>
       <div class="mt-6 rounded-md bg-red-50 p-4 text-red-800">
         <p class="font-medium"><%= t('.failed') %></p>
-        <p class="mt-1 text-sm"><%= @subscription.pennylane_invoice_error %></p>
+        <p class="mt-1 text-sm"><%= billing_invoice.error %></p>
       </div>
-    <% elsif @subscription.pennylane_invoice_id? %>
+    <% elsif billing_invoice&.external_id? %>
       <div class="mt-6 rounded-md bg-green-50 p-4 text-green-800">
-        <p class="font-medium"><%= t('.created', number: @subscription.pennylane_invoice_number) %></p>
+        <p class="font-medium"><%= t('.created', number: billing_invoice.number) %></p>
         <p class="mt-1 text-sm"><%= t('.created_description') %></p>
       </div>
     <% else %>
@@ -21,9 +22,9 @@
     <% end %>
 
     <div class="mt-6 flex flex-wrap gap-3">
-      <% if @subscription.invoice.attached? %>
+      <% if @subscription.invoice_document.attached? %>
         <%= link_to t('defaults.download'),
-                    rails_blob_path(@subscription.invoice, disposition: 'attachment'),
+                    rails_blob_path(@subscription.invoice_document, disposition: 'attachment'),
                     class: "inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700" %>
       <% end %>
       <%= button_to t('.retry'),

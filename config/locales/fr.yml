@@ -91,6 +91,10 @@ fr:
         camps_subscription:
           attributes:
             already_subscribed_to_this_camp: "L'élève est déjà inscrit à ce stage"
+        courses_subscription:
+          attributes:
+            subscription:
+              invoiced: ne peut plus être modifiée car sa facture est en cours ou finalisée
         user:
           attributes:
             email:
@@ -553,6 +557,7 @@ fr:
         retrying: Synchronisation en cours...
       create:
         queued: La synchronisation de la facture avec Pennylane a été relancée
+        not_queued: La facture nécessite un paiement validé ou un échec de synchronisation avant d'être relancée
       update:
         success: Facture générée
 
@@ -642,12 +647,16 @@ fr:
         success: Inscription créée
       edit:
         title: Modifier l'inscription
+        invoiced_not_editable: Cette inscription ne peut plus être modifiée car sa facture est en cours ou finalisée.
       update:
         success: Inscription modifiée
         event_not_editable: Les inscriptions aux événements ne sont pas modifiables depuis ce formulaire.
+        invoiced_not_editable: Cette inscription ne peut plus être modifiée car sa facture est en cours ou finalisée.
       destroy:
         success: Inscription supprimée
         error: Une inscription avec un paiement initié, confirmée ou payée ne peut pas être supprimée
+      unlink_course:
+        invoiced_not_editable: Cette inscription ne peut plus être modifiée car sa facture est en cours ou finalisée.
       confirm:
         success: Inscription confirmée
         failure: "L'inscription est déjà confirmée"

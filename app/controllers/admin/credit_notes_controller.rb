@@ -22,7 +22,7 @@ module Admin
     private
 
     def reject_pennylane_invoice!
-      return unless @subscription.pennylane_invoice_id?
+      return unless @subscription.billing_invoice
 
       redirect_to admin_subscription_path(@subscription), alert: t('.pennylane_invoice'), status: :see_other
     end

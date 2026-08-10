@@ -11,8 +11,8 @@
     </p>
   </div>
   <div class="flex gap-2">
-    <% if subscription.invoice.attached? %>
-      <%= link_to t('defaults.download'), rails_blob_path(subscription.invoice, disposition: 'attachment'),
+    <% if subscription.invoice_document.attached? %>
+      <%= link_to t('defaults.download'), rails_blob_path(subscription.invoice_document, disposition: 'attachment'),
           class: "inline-flex justify-center rounded-md border border-blue-600 px-4 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50" %>
     <% end %>
     <% if subscription.completion_open? && completion_path != dashboard_path %>

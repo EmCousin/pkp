@@ -137,6 +137,8 @@ feature "Subscription Workflow", type: :feature do
     expect(page).to have_text("Vous pouvez utiliser ce compte pour vous inscrire aux cours découverte et aux stages ouverts aux externes.")
 
     within("#new_user") do
+      fill_in "user_first_name", with: user.first_name
+      fill_in "user_last_name", with: user.last_name
       fill_in "user_email", with: user.email
       fill_in "user_email_confirmation", with: user.email
       fill_in "user_password", with: password

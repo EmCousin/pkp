@@ -2,29 +2,24 @@
 
 module Pennylane
   class CreateInvoiceJob < ApplicationJob
-    retry_on RetryableError, wait: :polynomially_longer, attempts: 8
+    retry_on RetryableError, wait: :polynomially_longer, attempts: 8 do |job, error|
+      job.arguments.first.fail!(job.arguments.second, error)
+    end
     retry_on DocumentPending, wait: 1.minute, attempts: 10 do |job, error|
-      job.send(:record_error, job.arguments.first, error)
+      job.arguments.first.fail!(job.arguments.second, error)
     end
 
-    def perform(subscription)
-      return unless subscription.paid?
+    def perform(invoice, sync_token)
+      return unless invoice.claim!(sync_token)
 
-      CreateInvoice.new(subscription).call
-    rescue DocumentPending
-      raise
+      CreateInvoice.new(invoice, sync_token:).call
+    rescue DocumentPending, RetryableError
+      raise if invoice.mark_retrying!(sync_token)
+    rescue Error => e
+      invoice.fail!(sync_token, e)
     rescue StandardError => e
-      record_error(subscription, e)
+      invoice.fail!(sync_token, e)
       raise
-    end
-
-    private
-
-    def record_error(subscription, error)
-      # The failure must remain visible even if mutable registration data no longer validates.
-      # rubocop:disable Rails/SkipsModelValidations
-      subscription.update_column(:pennylane_invoice_error, error.message.truncate(1000))
-      # rubocop:enable Rails/SkipsModelValidations
     end
   end
 end

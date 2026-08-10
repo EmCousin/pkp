@@ -10,8 +10,8 @@ module Pennylane
     RETRYABLE_STATUSES = [408, 425, 429, *500..599].freeze
 
     def initialize(
-      api_token: ENV['PENNYLANE_API_TOKEN'] || Rails.application.credentials.dig(:pennylane, :api_token),
-      base_url: ENV['PENNYLANE_API_URL'] || Rails.application.credentials.dig(:pennylane, :api_url) || DEFAULT_BASE_URL
+      api_token: Rails.application.credentials.dig(:pennylane, :api_token),
+      base_url: Rails.application.credentials.dig(:pennylane, :api_url) || DEFAULT_BASE_URL
     )
       raise Error, 'Le jeton API Pennylane est manquant' if api_token.blank?
 
@@ -110,14 +110,24 @@ module Pennylane
     def raise_response_error(response)
       status = response.code.to_i
       error_class = RETRYABLE_STATUSES.include?(status) ? RetryableError : Error
-      raise error_class.new("Erreur Pennylane (#{status}) : #{response_message(response)}", status:)
+      response_body = parsed_response_body(response)
+      raise error_class.new(
+        "Erreur Pennylane (#{status}) : #{response_message(response, response_body)}",
+        status:,
+        response_body:
+      )
     end
 
-    def response_message(response)
-      payload = JSON.parse(response.body)
-      payload['error'] || payload['message'] || response.message
+    def parsed_response_body(response)
+      JSON.parse(response.body)
     rescue JSON::ParserError
-      response.body.presence || response.message
+      nil
+    end
+
+    def response_message(response, payload)
+      return response.body.presence || response.message unless payload
+
+      payload['message'] || payload['error'] || response.message
     end
   end
 end
