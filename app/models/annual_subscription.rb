@@ -49,6 +49,14 @@ class AnnualSubscription < Subscription
     @description ||= courses.map(&:title).join(', ')
   end
 
+  def invoice_label
+    I18n.t('billing.invoice.annual_label', start_year: year, end_year: year + 1, description:)
+  end
+
+  def invoice_details
+    []
+  end
+
   def available_courses
     @available_courses ||= category_id.present? ? Course.active.where(category_id:).order(:created_at) : Course.none
   end

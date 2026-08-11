@@ -1,4 +1,15 @@
 fr:
+  billing:
+    invoice:
+      annual_label: "Cours annuels %{start_year}-%{end_year} - %{description}"
+      camp_dates: "Dates : du %{starts_at} au %{ends_at}"
+      camp_label: "Stage - %{description}"
+      discovery_date: "Date : %{date}"
+      discovery_label: "Cours découverte - %{description}"
+      external_rate: Tarif externe
+      internal_rate: Tarif interne
+      participant: "Participant : %{name}"
+      season: "Saison : %{start_year}-%{end_year}"
   defaults:
     action: Action
     added: "Ajouté"
@@ -91,6 +102,10 @@ fr:
         camps_subscription:
           attributes:
             already_subscribed_to_this_camp: "L'élève est déjà inscrit à ce stage"
+        courses_subscription:
+          attributes:
+            subscription:
+              invoiced: ne peut plus être modifiée car sa facture est en cours ou finalisée
         user:
           attributes:
             email:
@@ -109,10 +124,12 @@ fr:
           attributes:
             base:
               finalized_event_registration: Une inscription avec un paiement initié, confirmée ou payée ne peut pas être supprimée.
+              pennylane_invoice_finalized: Le paiement ne peut plus être annulé ici car la facture Pennylane est finalisée. Créez un avoir dans Pennylane.
               stripe_payment_in_progress: Le paiement Stripe ne peut pas être annulé. Veuillez réessayer dans quelques instants.
             courses_count:
               limit_exceeded: "Maximum %{count} cours"
             courses:
+              invoiced: ne peuvent plus être modifiés car la facture est en cours ou finalisée
               must_exist: "Minimum un cours"
               unique_category: "Les cours doivent être de la même catégorie"
               unique_weekday: "Les cours ne doivent pas être le même jour"
@@ -208,13 +225,15 @@ fr:
         email: E-mail additionnel
       user:
         admin: Administrateur
+        first_name: Prénom du titulaire du compte
+        last_name: Nom du titulaire du compte
         email: E-mail
         email_confirmation: Confirmation de l'E-mail
         phone_number: Numéro de téléphone
         address: Adresse
         zip_code: Code Postal
         city: Ville
-        country: Pays
+        country: Pays (code ISO)
         terms_of_service: Les Conditions Générales d'Utilisation
       member:
         first_name: Prénom
@@ -314,6 +333,7 @@ fr:
         if_you_are_alumni: Si vous êtes un·e ancien·ne élève, vous pouvez vous connecter/inscrire, puis cliquer sur "Choisir mes cours" puis sur "Je suis un·e ancien·ne élève"
       edit:
         title: Modifier mon compte
+        country_code_hint: Utilisez le code pays à deux lettres, par exemple FR pour la France.
         delete_my_account: Supprimer mon compte
         click_below_to_delete_your_account: Pour supprimer votre compte, cliquez sur le bouton ci-dessous.
         warning_cannot_be_undone: Les données relatives à votre compte seront immédiatement détruites. Cette action est irréversible.
@@ -532,14 +552,24 @@ fr:
         create_attendance_sheet: "Feuille de présence"
         discovery_enabled: "Découverte : %{price} · %{capacity} places"
     credit_notes:
+      new:
+        pennylane_invoice: Cette facture est finalisée dans Pennylane. Créez l'avoir directement dans Pennylane.
       create:
         success: Avoir généré
+        pennylane_invoice: Cette facture est finalisée dans Pennylane. Créez l'avoir directement dans Pennylane.
     invoices:
       show:
-        generate_invoice: Génerer cette facture
-        generating: Génération en cours...
+        title: Facture Pennylane
+        created: "Facture Pennylane %{number} créée"
+        created_description: Le document est généré par Pennylane et sera téléchargeable ici dès qu'il sera disponible.
+        failed: La création de la facture a échoué
+        pending: Création de la facture en cours
+        pending_description: La facture est créée automatiquement après l'enregistrement du paiement.
+        retry: Relancer la synchronisation
+        retrying: Synchronisation en cours...
       create:
-        success: Facture générée
+        queued: La synchronisation de la facture avec Pennylane a été relancée
+        not_queued: La facture nécessite un paiement validé ou un échec de synchronisation avant d'être relancée
       update:
         success: Facture générée
 
@@ -598,6 +628,9 @@ fr:
         generate_invoice: Générer une facture
         generate_credit_note: Générer un avoir
         preview_invoice: Prévisualiser la facture
+        invoice_pending: Facture Pennylane en attente de synchronisation
+        retry_invoice: Réessayer la création de la facture
+        pennylane_invoice_created: "Facture Pennylane %{number} créée, PDF en cours de génération"
         generating: "Génération en cours..."
         select_action: "Sélectionner une action..."
         download_subscription_form: Télécharger le formulaire
@@ -626,12 +659,16 @@ fr:
         success: Inscription créée
       edit:
         title: Modifier l'inscription
+        invoiced_not_editable: Cette inscription ne peut plus être modifiée car sa facture est en cours ou finalisée.
       update:
         success: Inscription modifiée
         event_not_editable: Les inscriptions aux événements ne sont pas modifiables depuis ce formulaire.
+        invoiced_not_editable: Cette inscription ne peut plus être modifiée car sa facture est en cours ou finalisée.
       destroy:
         success: Inscription supprimée
         error: Une inscription avec un paiement initié, confirmée ou payée ne peut pas être supprimée
+      unlink_course:
+        invoiced_not_editable: Cette inscription ne peut plus être modifiée car sa facture est en cours ou finalisée.
       confirm:
         success: Inscription confirmée
         failure: "L'inscription est déjà confirmée"

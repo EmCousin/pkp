@@ -66,7 +66,7 @@ module Admin
                  :contact_name, :contact_phone_number, :contact_relationship,
                  :avatar,
                  :agreed_to_advertising_right,
-                 { user_attributes: %i[id email password address zip_code city country phone_number admin coach] }]
+                 { user_attributes: %i[id first_name last_name email password address zip_code city country phone_number admin coach] }]
       )
     end
 

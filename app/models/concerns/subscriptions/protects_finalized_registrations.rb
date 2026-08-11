@@ -6,6 +6,7 @@ module Subscriptions
 
     included do
       before_destroy :prevent_destroying_finalized_event_registrations, prepend: true
+      around_destroy :with_lock, prepend: true
     end
 
     def destroyable?

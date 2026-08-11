@@ -30,6 +30,17 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  billing:
+    invoice:
+      annual_label: "Annual classes %{start_year}-%{end_year} - %{description}"
+      camp_dates: "Dates: from %{starts_at} to %{ends_at}"
+      camp_label: "Camp - %{description}"
+      discovery_date: "Date: %{date}"
+      discovery_label: "Discovery class - %{description}"
+      external_rate: External rate
+      internal_rate: Internal rate
+      participant: "Participant: %{name}"
+      season: "Season: %{start_year}-%{end_year}"
   defaults:
     added: "Added"
     attach: "Attach"
@@ -127,7 +138,10 @@ en:
               inclusion: "%{value} is not a valid date"
         subscription:
           attributes:
+            base:
+              pennylane_invoice_finalized: "The payment cannot be reverted here because the Pennylane invoice is finalized. Create a credit note in Pennylane."
             courses:
+              invoiced: "cannot be changed because the invoice is pending or finalized"
               must_exist: "must have at least one course"
               limit_exceeded: "maximum %{count} courses"
               unique_category: "courses must be from the same category"
@@ -136,6 +150,10 @@ en:
             member:
               too_young: "does not meet the minimum age requirement"
               too_old: "exceeds the maximum age requirement"
+        courses_subscription:
+          attributes:
+            subscription:
+              invoiced: "cannot be changed because its invoice is pending or finalized"
         invoice:
           attributes:
             subscription:
@@ -151,6 +169,10 @@ en:
               greater_than: "must be greater than the minimum age"
               less_than_or_equal_to: "must be less than or equal to 100"
     attributes:
+      user:
+        first_name: "Account holder's first name"
+        last_name: "Account holder's last name"
+        country: "Country (ISO code)"
       camp:
         title: "Title"
         description: "Description"
@@ -192,6 +214,7 @@ en:
         if_you_are_alumni: "If you are an alumnus, you can log in/register, then click on 'Choose my courses' and then 'I am an alumnus'"
       edit:
         title: "Edit my account"
+        country_code_hint: "Use the two-letter country code, for example FR for France."
         delete_my_account: "Delete my account"
         click_below_to_delete_your_account: "To delete your account, click the button below."
         warning_cannot_be_undone: "The data related to your account will be immediately destroyed. This action is irreversible."
@@ -307,6 +330,9 @@ en:
         generate_invoice: "Generate Invoice"
         generate_credit_note: "Generate Credit Note"
         preview_invoice: "Preview Invoice"
+        invoice_pending: "Pennylane invoice creation in progress"
+        retry_invoice: "Retry invoice creation"
+        pennylane_invoice_created: "Pennylane invoice %{number} created; PDF generation in progress"
         generating: "Generating..."
       new:
         title: "Enroll a Member"
@@ -314,8 +340,10 @@ en:
         success: "Subscription created"
       edit:
         title: "Edit Subscription"
+        invoiced_not_editable: "This registration cannot be changed because its invoice is pending or finalized."
       update:
         success: "Subscription updated"
+        invoiced_not_editable: "This registration cannot be changed because its invoice is pending or finalized."
       destroy:
         success: "Subscription deleted"
       confirm:
@@ -326,6 +354,7 @@ en:
         failure: "The subscription is already archived"
       unlink_course:
         success: "Subscription removed"
+        invoiced_not_editable: "This registration cannot be changed because its invoice is pending or finalized."
       form:
         users: "Members"
         select_a_member: "Choose a Member"
@@ -352,10 +381,17 @@ en:
           other: "courses"
     invoices:
       show:
-        generate_invoice: "Generate this Invoice"
-        generating: "Generating..."
+        title: "Pennylane invoice"
+        created: "Pennylane invoice %{number} created"
+        created_description: "Pennylane is generating the downloadable document."
+        failed: "Invoice creation failed"
+        pending: "Invoice creation in progress"
+        pending_description: "The invoice is created automatically after payment is recorded."
+        retry: "Retry synchronization"
+        retrying: "Synchronizing..."
       create:
-        success: "Invoice generated"
+        queued: "Pennylane invoice synchronization queued"
+        not_queued: "The invoice requires a validated payment or a failed synchronization before it can be retried"
       update:
         success: "Invoice generated"
     credit_notes:
@@ -441,6 +477,23 @@ en:
         title: "Attendance sheet for %{course_title} - %{date}"
 
   admin:
+    invoices:
+      show:
+        title: "Pennylane invoice"
+        created: "Pennylane invoice %{number} created"
+        created_description: "Pennylane is generating the downloadable document."
+        failed: "Invoice creation failed"
+        pending: "Invoice creation in progress"
+        pending_description: "The invoice is created automatically after payment is recorded."
+        retry: "Retry synchronization"
+        retrying: "Synchronizing..."
+      create:
+        queued: "Pennylane invoice synchronization queued"
+    credit_notes:
+      new:
+        pennylane_invoice: "This invoice is finalized in Pennylane. Create the credit note directly in Pennylane."
+      create:
+        pennylane_invoice: "This invoice is finalized in Pennylane. Create the credit note directly in Pennylane."
     subscriptions:
       index:
         title: Subscriptions
@@ -454,6 +507,9 @@ en:
       show:
         select_action: "Select an action..."
         download_subscription_form: "Download form"
+        invoice_pending: "Pennylane invoice awaiting synchronization"
+        retry_invoice: "Retry invoice creation"
+        pennylane_invoice_created: "Pennylane invoice %{number} created; PDF generation in progress"
         mark_as_confirmed_by_check: "Mark as confirmed by check"
         mark_as_confirmed_by_cash: "Mark as confirmed by cash"
         mark_as_confirmed_by_transfer: "Mark as confirmed by bank transfer"

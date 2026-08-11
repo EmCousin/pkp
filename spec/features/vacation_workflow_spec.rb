@@ -97,6 +97,8 @@ feature "Vacation Workflow", type: :feature do
     expect(page).to have_text("Vous pouvez utiliser ce compte pour vous inscrire aux cours découverte et aux stages ouverts aux externes.")
 
     within("#new_user") do
+      fill_in "user_first_name", with: user.first_name
+      fill_in "user_last_name", with: user.last_name
       fill_in "user_email", with: user.email
       fill_in "user_email_confirmation", with: user.email
       fill_in "user_password", with: password
@@ -112,6 +114,8 @@ feature "Vacation Workflow", type: :feature do
     within("#edit_user") do
       expect(find_field(id: 'user_email').value).to eq user.email
 
+      fill_in "user_first_name", with: user.first_name
+      fill_in "user_last_name", with: user.last_name
       fill_in "user_phone_number", with: user.phone_number
       fill_in "user_address", with: user.address
       fill_in "user_zip_code", with: user.zip_code

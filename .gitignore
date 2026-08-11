@@ -51,3 +51,7 @@ db/server.crt
 db/server.key
 db/certificates/*
 !db/certificates/.keep
+
+# Ignore key files for decrypting credentials and more.
+/config/credentials/*.key
+

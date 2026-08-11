@@ -24,7 +24,7 @@
       <div class="p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <%= link_to discovery_session.course.title, [:admin, discovery_session], class: "font-semibold text-gray-900 hover:text-blue-700" %>
-          <p class="text-sm text-gray-600"><%= discovery_session_date(discovery_session) %></p>
+          <p class="text-sm text-gray-600"><%= discovery_session.discovery_session_date %></p>
           <p class="text-sm text-gray-500"><%= discovery_session.subscriptions.confirmed.size %>/<%= discovery_session.capacity %> inscrits</p>
         </div>
         <div class="flex shrink-0 items-center justify-end gap-3">

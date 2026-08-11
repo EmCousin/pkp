@@ -18,6 +18,8 @@ User.destroy_all
 
 user = User.new
 user.email = "monemail@mail.fr"
+user.first_name = "Maria"
+user.last_name = "Silva"
 user.phone_number = "+33299506779"
 user.email_confirmation = "monemail@mail.fr"
 user.password = "s3cr3tp4$$w0rd"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_02_160000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_10_120200) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -170,6 +170,32 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_02_160000) do
     t.index ["starts_at"], name: "index_discovery_sessions_on_starts_at"
   end
 
+  create_table "billing_invoices", force: :cascade do |t|
+    t.string "provider", default: "pennylane", null: false
+    t.string "state", default: "pending", null: false
+    t.uuid "sync_token", null: false
+    t.bigint "external_id"
+    t.string "number"
+    t.date "issue_date", null: false
+    t.decimal "amount", null: false
+    t.string "currency", default: "EUR", null: false
+    t.string "vat_rate", default: "FR_200", null: false
+    t.string "label", null: false
+    t.text "description", null: false
+    t.jsonb "customer_snapshot", default: {}, null: false
+    t.jsonb "transaction_reference"
+    t.datetime "requested_at", null: false
+    t.datetime "completed_at"
+    t.text "error"
+    t.string "invoiceable_type", null: false
+    t.bigint "invoiceable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["external_id"], name: "index_billing_invoices_on_external_id", unique: true
+    t.index ["invoiceable_type", "invoiceable_id"], name: "index_billing_invoices_on_invoiceable_type_and_invoiceable_id", unique: true
+    t.index ["state"], name: "index_billing_invoices_on_state"
+  end
+
   create_table "members", force: :cascade do |t|
     t.bigint "user_id"
     t.string "first_name", null: false
@@ -252,8 +278,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_02_160000) do
     t.string "stripe_customer_id"
     t.boolean "terms_of_service", default: false
     t.boolean "coach", default: false, null: false
+    t.string "first_name", null: false
+    t.string "last_name", null: false
+    t.bigint "pennylane_customer_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["pennylane_customer_id"], name: "index_users_on_pennylane_customer_id", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end

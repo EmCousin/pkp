@@ -6,11 +6,15 @@
     <p class="font-medium text-gray-900"><%= subscription.description %></p>
     <p class="text-sm text-gray-600"><%= subscription.member.full_name %> - <%= number_to_currency(subscription.fee, unit: '€') %></p>
     <p class="text-xs text-gray-500">
-      <%= camp_registration ? l(event.starts_at, format: :long) : discovery_session_date(event) %>
+      <%= camp_registration ? l(event.starts_at, format: :long) : event.discovery_session_date %>
       - <%= Subscription.human_attribute_name(subscription.status) %>
     </p>
   </div>
   <div class="flex gap-2">
+    <% if subscription.invoice_document.attached? %>
+      <%= link_to t('defaults.download'), rails_blob_path(subscription.invoice_document, disposition: 'attachment'),
+          class: "inline-flex justify-center rounded-md border border-blue-600 px-4 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50" %>
+    <% end %>
     <% if subscription.completion_open? && completion_path != dashboard_path %>
       <%= link_to t('.resume'), completion_path, class: "inline-flex justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700" %>
     <% end %>

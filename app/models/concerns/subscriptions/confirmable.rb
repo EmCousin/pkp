@@ -10,6 +10,7 @@ module Subscriptions
     end
 
     def cancellable?
+      return false if billing_invoice
       return false if event? && (paid? || confirmed?)
 
       child_subscriptions.destruction_protected.empty?

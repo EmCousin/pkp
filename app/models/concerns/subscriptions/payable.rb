@@ -50,11 +50,13 @@ module Subscriptions
     end
 
     def mark_as_paid!(payment_method:, at: Time.current)
-      update!(paid_at: at, payment_method:)
+      with_lock { update(paid_at: at, payment_method:).tap { restore_attributes(%w[paid_at payment_method]) unless it } }
     end
 
     def mark_as_not_paid!
-      update!(paid_at: nil, payment_method: nil)
+      with_lock do
+        update(paid_at: nil, payment_method: nil).tap { restore_attributes(%w[paid_at payment_method]) unless it }
+      end
     end
 
     def paid?

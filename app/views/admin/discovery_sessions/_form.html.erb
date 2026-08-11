@@ -8,7 +8,7 @@
   <% if discovery_session.occurs_on? %>
     <div class="rounded-lg bg-amber-50 border border-amber-200 p-4">
       <p class="font-medium text-amber-900"><%= discovery_session.course.title %></p>
-      <p class="mt-1 text-sm text-amber-800"><%= discovery_session_date(discovery_session) %></p>
+      <p class="mt-1 text-sm text-amber-800"><%= discovery_session.discovery_session_date %></p>
       <p class="mt-2 text-xs text-amber-700"><%= t('.automatic_occurrence') %></p>
     </div>
   <% else %>

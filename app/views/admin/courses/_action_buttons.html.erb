@@ -1,20 +1,22 @@
-<% Subscription.payment_methods.each_key do |payment_method| %>
-  <%= next if subscription.payment_method == payment_method %>
+<% unless subscription.billing_invoice %>
+  <% Subscription.payment_methods.each_key do |payment_method| %>
+    <%= next if subscription.payment_method == payment_method %>
 
-  <%= button_to t("defaults.paid_with_#{payment_method}"),
-      {
-        controller: 'admin/payments',
-        action: 'create',
-        subscription_id: subscription.id,
-        subscription: { payment_method: }
-      },
-      class: "w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+    <%= button_to t("defaults.paid_with_#{payment_method}"),
+        {
+          controller: 'admin/payments',
+          action: 'create',
+          subscription_id: subscription.id,
+          subscription: { payment_method: }
+        },
+        class: "w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+  <% end %>
 <% end %>
 
 <%= button_to t('defaults.mark_as_not_paid'),
               [:admin, subscription, :payment],
               method: :delete,
-              class: "w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100" if subscription.paid? %>
+              class: "w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100" if subscription.paid? && !subscription.billing_invoice %>
 
 <% Subscription.statuses.each_key do |status| %>
   <%= next if subscription.status == status %>

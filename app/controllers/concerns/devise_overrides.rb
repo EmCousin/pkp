@@ -9,6 +9,8 @@ module DeviseOverrides
 
   DEVISE_SIGN_UP_KEYS = %i[
     email_confirmation
+    first_name
+    last_name
     terms_of_service
   ].freeze
 

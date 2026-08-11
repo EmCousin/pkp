@@ -81,6 +81,11 @@ describe Subscriptions::Payable, type: :model do
     it { expect(subject.balance).to eq 0 }
   end
 
+  it 'queues the snapshotted invoice through the completed Stripe flow' do
+    expect(Pennylane::CreateInvoiceJob)
+      .to have_been_enqueued.with(subscription.billing_invoice, subscription.billing_invoice.sync_token)
+  end
+
   context 'when Stripe has not confirmed the payment' do
     let(:stripe_status) { 'requires_payment_method' }
 
