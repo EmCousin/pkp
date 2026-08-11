@@ -92,7 +92,7 @@
       <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         <% @presenter.discovery_sessions.each do |discovery_session| %>
           <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-            <p class="text-xs font-semibold uppercase tracking-wide text-amber-600"><%= discovery_session_date(discovery_session) %></p>
+            <p class="text-xs font-semibold uppercase tracking-wide text-amber-600"><%= discovery_session.discovery_session_date %></p>
             <h3 class="mt-2 text-lg font-semibold text-gray-900"><%= discovery_session.course.title %></h3>
             <div class="mt-5 flex items-end justify-between">
               <div>

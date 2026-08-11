@@ -2,7 +2,7 @@
   <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
     <div>
       <h1 class="text-2xl font-bold text-gray-900"><%= @discovery_session.course.title %></h1>
-      <p class="mt-1 text-sm text-gray-600"><%= discovery_session_date(@discovery_session) %></p>
+      <p class="mt-1 text-sm text-gray-600"><%= @discovery_session.discovery_session_date %></p>
       <p class="mt-1 text-sm text-gray-500"><%= @attendance_records.size + @discovery_session.subscriptions.confirmed.size %> participants</p>
     </div>
     <div class="flex gap-3">

@@ -174,7 +174,7 @@
     <% elsif @subscription.is_a?(DiscoveryRegistration) %>
       <div class="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-6">
         <h3 class="text-lg font-semibold text-amber-900"><%= @subscription.discovery_session.course.title %></h3>
-        <p class="mt-2 text-sm text-amber-800"><%= discovery_session_date(@subscription.discovery_session) %></p>
+        <p class="mt-2 text-sm text-amber-800"><%= @subscription.discovery_session.discovery_session_date %></p>
         <%= link_to t('defaults.view'), [:admin, @subscription.discovery_session], class: "mt-4 inline-flex text-sm font-medium text-amber-900 underline" %>
       </div>
     <% elsif @subscription.courses.any? %>

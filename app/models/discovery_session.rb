@@ -61,6 +61,10 @@ class DiscoverySession < ApplicationRecord
     occurs_on || starts_at.to_date
   end
 
+  def discovery_session_date
+    I18n.l(occurs_on || starts_at, format: occurs_on? ? :long : :event)
+  end
+
   def registration_open?
     occurs_on? ? !occurs_on.past? : !starts_at.past?
   end
