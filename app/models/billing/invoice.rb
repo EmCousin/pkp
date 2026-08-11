@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
-module Billing
-  class Invoice < ApplicationRecord
-    self.table_name = 'invoices'
-
+class Billing
+  class Invoice < Billing
     STALE_AFTER = 15.minutes
     RETRY_STALE_AFTER = 2.hours
 

@@ -30,11 +30,13 @@ class Subscription < ApplicationRecord
        prefix: :attendance
 
   scope :destruction_protected, lambda {
-    left_joins(:billing_invoice).where(
-      'invoices.id IS NOT NULL OR stripe_payment_intent_id IS NOT NULL OR (type IN (?) AND (paid_at IS NOT NULL OR status = ?))',
-      %w[CampRegistration DiscoveryRegistration],
-      statuses[:confirmed]
-    )
+    registrations = left_joins(:billing_invoice)
+    event_types = %w[CampRegistration DiscoveryRegistration]
+
+    registrations.where.not(billing_invoices: { id: nil })
+                 .or(registrations.where.not(stripe_payment_intent_id: nil))
+                 .or(registrations.where(type: event_types).where.not(paid_at: nil))
+                 .or(registrations.where(type: event_types, status: statuses[:confirmed]))
   }
   scope :annual_dashboard, lambda {
     where(type: 'AnnualSubscription', year: current_year, parent_subscription_id: nil)

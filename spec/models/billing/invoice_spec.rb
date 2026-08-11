@@ -14,6 +14,11 @@ describe Billing::Invoice, type: :model do
   it { is_expected.to belong_to(:invoiceable) }
   it { is_expected.to define_enum_for(:state).backed_by_column_of_type(:string) }
 
+  it 'uses the Billing table prefix' do
+    expect(Billing).to be_abstract_class
+    expect(described_class.table_name).to eq('billing_invoices')
+  end
+
   it 'serializes concurrent claims' do
     expect(invoice.claim!(invoice.sync_token)).to be true
     expect(invoice.claim!(invoice.sync_token)).to be false

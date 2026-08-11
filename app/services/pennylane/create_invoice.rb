@@ -2,7 +2,6 @@
 
 module Pennylane
   class CreateInvoice
-    CUSTOMER_LOCK_NAMESPACE = 1_986_110
     VAT_MULTIPLIER = BigDecimal('1.2')
 
     def initialize(invoice, sync_token:, client: Client.new)
@@ -160,7 +159,8 @@ module Pennylane
     def with_customer_lock
       user_id = Integer(subscription.member.user_id)
       ApplicationRecord.connection_pool.with_connection do |connection|
-        lock = "#{CUSTOMER_LOCK_NAMESPACE}, #{connection.quote(user_id)}"
+        namespace = connection.quote('pennylane_customer')
+        lock = "hashtext(#{namespace}), #{connection.quote(user_id)}"
         connection.execute("SELECT pg_advisory_lock(#{lock})")
         yield
       ensure

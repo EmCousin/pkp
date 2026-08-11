@@ -1,17 +1,12 @@
 # frozen_string_literal: true
 
 class AddPennylaneBilling < ActiveRecord::Migration[8.1]
-  def up
+  def change
     add_column :users, :first_name, :string
     add_column :users, :last_name, :string
-    backfill_user_names
-    change_column_null :users, :first_name, false
-    change_column_null :users, :last_name, false
-
     add_column :users, :pennylane_customer_id, :bigint
-    add_index :users, :pennylane_customer_id, unique: true
 
-    create_table :invoices do |t|
+    create_table :billing_invoices do |t|
       t.references :invoiceable, polymorphic: true, null: false, index: false
       t.string :provider, null: false, default: 'pennylane'
       t.string :state, null: false, default: 'pending'
@@ -32,30 +27,8 @@ class AddPennylaneBilling < ActiveRecord::Migration[8.1]
 
       t.timestamps
     end
-    add_index :invoices, %i[invoiceable_type invoiceable_id], unique: true
-    add_index :invoices, :external_id, unique: true
-    add_index :invoices, :state
-  end
-
-  def down
-    drop_table :invoices
-    remove_index :users, :pennylane_customer_id
-    remove_columns :users, :first_name, :last_name, :pennylane_customer_id
-  end
-
-  private
-
-  def backfill_user_names
-    execute <<~SQL.squish
-      UPDATE users
-      SET first_name = COALESCE(
-            (SELECT members.first_name FROM members WHERE members.user_id = users.id ORDER BY members.created_at LIMIT 1),
-            'Compte'
-          ),
-          last_name = COALESCE(
-            (SELECT members.last_name FROM members WHERE members.user_id = users.id ORDER BY members.created_at LIMIT 1),
-            'A completer'
-          )
-    SQL
+    add_index :billing_invoices, %i[invoiceable_type invoiceable_id], unique: true
+    add_index :billing_invoices, :external_id, unique: true
+    add_index :billing_invoices, :state
   end
 end

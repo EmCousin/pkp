@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_10_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_10_120200) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -170,7 +170,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_10_120000) do
     t.index ["starts_at"], name: "index_discovery_sessions_on_starts_at"
   end
 
-  create_table "invoices", force: :cascade do |t|
+  create_table "billing_invoices", force: :cascade do |t|
     t.string "provider", default: "pennylane", null: false
     t.string "state", default: "pending", null: false
     t.uuid "sync_token", null: false
@@ -191,9 +191,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_10_120000) do
     t.bigint "invoiceable_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["external_id"], name: "index_invoices_on_external_id", unique: true
-    t.index ["invoiceable_type", "invoiceable_id"], name: "index_invoices_on_invoiceable_type_and_invoiceable_id", unique: true
-    t.index ["state"], name: "index_invoices_on_state"
+    t.index ["external_id"], name: "index_billing_invoices_on_external_id", unique: true
+    t.index ["invoiceable_type", "invoiceable_id"], name: "index_billing_invoices_on_invoiceable_type_and_invoiceable_id", unique: true
+    t.index ["state"], name: "index_billing_invoices_on_state"
   end
 
   create_table "members", force: :cascade do |t|
