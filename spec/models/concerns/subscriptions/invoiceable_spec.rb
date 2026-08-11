@@ -13,7 +13,7 @@ describe Subscriptions::Invoiceable, type: :model do
     subscription = create(:discovery_registration, discovery_session: create(:discovery_session))
 
     expect { subscription.update!(paid_at: Time.current, payment_method: :credit_card) }
-      .to change(Invoice, :count).by(1)
+      .to change(Billing::Invoice, :count).by(1)
       .and have_enqueued_job(Pennylane::CreateInvoiceJob)
 
     expect(subscription.billing_invoice).to have_attributes(
@@ -37,13 +37,13 @@ describe Subscriptions::Invoiceable, type: :model do
   it 'does not create an invoice for an unrelated update' do
     subscription = create(:discovery_registration, discovery_session: create(:discovery_session))
 
-    expect { subscription.update!(status: :confirmed) }.not_to change(Invoice, :count)
+    expect { subscription.update!(status: :confirmed) }.not_to change(Billing::Invoice, :count)
   end
 
   it 'does not reserve an invoice before payment' do
     subscription = create(:discovery_registration, discovery_session: create(:discovery_session))
 
-    expect { subscription.request_billing_invoice! }.not_to change(Invoice, :count)
+    expect { subscription.request_billing_invoice! }.not_to change(Billing::Invoice, :count)
     expect(subscription.billing_invoice).to be_nil
   end
 
@@ -56,10 +56,10 @@ describe Subscriptions::Invoiceable, type: :model do
 
     expect(subscription.mark_as_not_paid!).to be false
     expect(subscription).to be_paid
-    expect(subscription.errors.of_kind?(:base, :pennylane_invoice_finalized)).to be true
+    expect(subscription.errors.of_kind?(:billing_invoice, :present)).to be true
   end
 
-  it 'prevents destroying a subscription or changing its courses after invoicing is requested' do
+  it 'prevents destroying a subscription or adding courses after invoicing is requested' do
     category = create(:category)
     initial_course = create(:course, category:)
     added_course = create(:course, category:)
@@ -72,6 +72,36 @@ describe Subscriptions::Invoiceable, type: :model do
     expect(added_course_subscription.save).to be false
     expect(subscription).to be_persisted
     expect(course_subscription).to be_persisted
+  end
+
+  it 'prevents collection removal paths after invoicing is requested' do
+    course = create(:course)
+    subscription = create(:subscription, courses: [course], paid_at: Time.current)
+
+    subscription.courses.delete(course)
+
+    expect(subscription.reload.courses).to contain_exactly(course)
+    expect(subscription.errors.of_kind?(:courses, :invoiced)).to be true
+
+    subscription.update(course_ids: [])
+    expect(subscription.reload.courses).to contain_exactly(course)
+  end
+
+  it 'prevents changing billing attributes after invoicing is requested' do
+    subscription = create(:subscription, courses: [create(:course)], paid_at: Time.current)
+
+    expect(subscription.update(member: create(:member))).to be false
+    expect(subscription.errors.of_kind?(:billing_invoice, :present)).to be true
+  end
+
+  it 'does not recalculate the snapshotted fee during a later confirmation' do
+    subscription = create(:subscription, courses: [create(:course)], paid_at: Time.current)
+    snapshotted_fee = subscription.fee
+    allow(subscription).to receive(:calculated_fee).and_return(snapshotted_fee - 10)
+
+    subscription.confirmed!
+
+    expect(subscription.reload.fee).to eq(snapshotted_fee)
   end
 
   it 'prevents cascading deletion through the member and account holder' do

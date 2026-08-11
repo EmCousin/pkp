@@ -23,7 +23,7 @@ module Subscriptions
     end
 
     def set_fee
-      return if event_fee_locked?
+      return if event_fee_locked? || (persisted? && (paid? || Billing::Invoice.exists?(invoiceable: self)))
 
       self.fee = calculated_fee
     end

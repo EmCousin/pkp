@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Invoice, type: :model do
+describe Billing::Invoice, type: :model do
   subject(:invoice) do
     create(
       :discovery_registration,

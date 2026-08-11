@@ -10,11 +10,13 @@ module Admin
 
     def create
       invoice = @subscription.billing_invoice
-      queued = invoice ? invoice.retry! : @subscription.request_billing_invoice!.present?
+      queued = invoice ? invoice.retry! : @subscription.request_billing_invoice!
 
-      redirect_to admin_subscription_path(@subscription.id),
-                  **(queued ? { notice: t('.queued') } : { alert: t('.not_queued') }),
-                  status: :see_other
+      if queued
+        redirect_to admin_subscription_path(@subscription.id), notice: t('.queued'), status: :see_other
+      else
+        redirect_to admin_subscription_path(@subscription.id), alert: t('.not_queued'), status: :see_other
+      end
     end
 
     def update

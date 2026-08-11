@@ -23,8 +23,6 @@ class Course < ApplicationRecord
   has_many :attendance_records, through: :attendance_sheets
   has_many :discovery_sessions, dependent: :restrict_with_error
 
-  before_destroy :lock_subscriptions_in_order, prepend: true
-
   enum :weekday, lundi: 1, mardi: 2, mercredi: 3, jeudi: 4, vendredi: 5, samedi: 6, dimanche: 7
 
   scope :featuring_attendance_sheet, -> { where(features_attendance_sheet: true) }
@@ -47,11 +45,5 @@ class Course < ApplicationRecord
   def discovery_date_available?(date, today: Date.current)
     active? && discovery_enabled? && date.between?(today, discovery_season_end(today)) &&
       date.cwday == self.class.weekdays.fetch(weekday)
-  end
-
-  private
-
-  def lock_subscriptions_in_order
-    Subscription.where(id: subscriptions.select(:id)).order(:id).lock.load
   end
 end

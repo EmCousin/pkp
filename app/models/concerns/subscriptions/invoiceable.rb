@@ -7,22 +7,14 @@ module Subscriptions
     included do
       has_one_attached :invoice
       has_many_attached :credit_notes
-      has_one :billing_invoice, as: :invoiceable, class_name: 'Invoice', dependent: :restrict_with_error
+      has_one :billing_invoice, as: :invoiceable, class_name: 'Billing::Invoice', dependent: :restrict_with_error
 
-      after_save :request_billing_invoice!, if: -> { saved_change_to_paid_at? && paid_at? }
+      after_save :request_billing_invoice!, if: %i[saved_change_to_paid_at? paid_at?]
+
+      before_validation :reload_billing_invoice, on: :update
+      validates :billing_invoice, absence: true, on: :update, if: :billing_attributes_changed?
 
       attr_accessor :credit_note_amount
-    end
-
-    def mark_as_not_paid!
-      with_lock do
-        if billing_invoice
-          errors.add(:base, :pennylane_invoice_finalized)
-          next false
-        end
-
-        super
-      end
     end
 
     def request_billing_invoice!
@@ -42,8 +34,8 @@ module Subscriptions
 
     def invoice_description
       [
-        "Participant : #{member.full_name}",
-        "Saison : #{year}-#{year + 1}",
+        I18n.t('billing.invoice.participant', name: member.full_name),
+        I18n.t('billing.invoice.season', start_year: year, end_year: year + 1),
         *invoice_details
       ].join("\n")
     end
@@ -59,6 +51,14 @@ module Subscriptions
     end
 
     private
+
+    def billing_attributes_changed?
+      changes_to_save.keys.intersect?(%w[fee member_id paid_at year parent_subscription_id discovery_session_id type])
+    end
+
+    def reload_billing_invoice
+      association(:billing_invoice).reset
+    end
 
     def billing_invoice_attributes
       {

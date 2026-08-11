@@ -38,7 +38,7 @@ module Admin
     end
 
     def update
-      if update_subscription
+      if @subscription.with_lock { @subscription.update(subscription_params) }
         redirect_to admin_subscription_path(@subscription, updated: true), notice: t('.success'), status: :see_other
       else
         render :edit, status: :unprocessable_content
@@ -78,15 +78,6 @@ module Admin
     def save_subscription
       camp = @subscription.subscription_camp
       camp ? camp.with_lock { @subscription.save } : @subscription.save
-    end
-
-    def update_subscription
-      @subscription.with_lock do
-        next @subscription.update(subscription_params) unless @subscription.billing_invoice
-
-        @subscription.errors.add(:base, :invoiced)
-        false
-      end
     end
 
     def subscription_class

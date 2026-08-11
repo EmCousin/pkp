@@ -19,11 +19,11 @@ class DiscoveryRegistration < EventRegistration
   end
 
   def invoice_label
-    "Cours découverte - #{description}"
+    I18n.t('billing.invoice.discovery_label', description:)
   end
 
   def invoice_details
-    ["Date : #{I18n.l(discovery_session.occurrence_date, format: :long)}"]
+    [I18n.t('billing.invoice.discovery_date', date: I18n.l(discovery_session.occurrence_date, format: :long))]
   end
 
   def notify_confirmation!

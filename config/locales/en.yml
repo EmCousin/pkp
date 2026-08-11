@@ -30,6 +30,17 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  billing:
+    invoice:
+      annual_label: "Annual classes %{start_year}-%{end_year} - %{description}"
+      camp_dates: "Dates: from %{starts_at} to %{ends_at}"
+      camp_label: "Camp - %{description}"
+      discovery_date: "Date: %{date}"
+      discovery_label: "Discovery class - %{description}"
+      external_rate: External rate
+      internal_rate: Internal rate
+      participant: "Participant: %{name}"
+      season: "Season: %{start_year}-%{end_year}"
   defaults:
     added: "Added"
     attach: "Attach"
@@ -130,6 +141,7 @@ en:
             base:
               pennylane_invoice_finalized: "The payment cannot be reverted here because the Pennylane invoice is finalized. Create a credit note in Pennylane."
             courses:
+              invoiced: "cannot be changed because the invoice is pending or finalized"
               must_exist: "must have at least one course"
               limit_exceeded: "maximum %{count} courses"
               unique_category: "courses must be from the same category"

@@ -1,4 +1,15 @@
 fr:
+  billing:
+    invoice:
+      annual_label: "Cours annuels %{start_year}-%{end_year} - %{description}"
+      camp_dates: "Dates : du %{starts_at} au %{ends_at}"
+      camp_label: "Stage - %{description}"
+      discovery_date: "Date : %{date}"
+      discovery_label: "Cours découverte - %{description}"
+      external_rate: Tarif externe
+      internal_rate: Tarif interne
+      participant: "Participant : %{name}"
+      season: "Saison : %{start_year}-%{end_year}"
   defaults:
     action: Action
     added: "Ajouté"
@@ -118,6 +129,7 @@ fr:
             courses_count:
               limit_exceeded: "Maximum %{count} cours"
             courses:
+              invoiced: ne peuvent plus être modifiés car la facture est en cours ou finalisée
               must_exist: "Minimum un cours"
               unique_category: "Les cours doivent être de la même catégorie"
               unique_weekday: "Les cours ne doivent pas être le même jour"

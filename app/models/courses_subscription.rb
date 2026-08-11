@@ -4,34 +4,23 @@ class CoursesSubscription < ApplicationRecord
   belongs_to :course
   belongs_to :subscription
 
-  validate :subscription_must_not_be_invoiced
-  before_create :prevent_saving_invoiced_course
+  delegate :billing_invoice, to: :subscription, prefix: true, allow_nil: true
+  validates :subscription_billing_invoice, absence: true
+
+  before_validation :reload_subscription_billing_invoice
   before_destroy :prevent_destroying_invoiced_course
 
   private
 
-  def subscription_must_not_be_invoiced
-    errors.add(:subscription, :invoiced) if subscription&.billing_invoice
-  end
-
-  def prevent_saving_invoiced_course
-    lock_subscription
-    prevent_change_if_invoiced
+  def reload_subscription_billing_invoice
+    subscription&.association(:billing_invoice)&.reset
   end
 
   def prevent_destroying_invoiced_course
-    lock_subscription
-    prevent_change_if_invoiced
-  end
+    reload_subscription_billing_invoice
+    return unless subscription_billing_invoice
 
-  def lock_subscription
-    Subscription.lock.where(id: subscription_id).pick(:id)
-  end
-
-  def prevent_change_if_invoiced
-    return unless Invoice.exists?(invoiceable: subscription)
-
-    errors.add(:subscription, :invoiced)
+    errors.add(:subscription_billing_invoice, :present)
     throw :abort
   end
 end

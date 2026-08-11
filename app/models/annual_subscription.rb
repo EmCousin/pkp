@@ -50,7 +50,7 @@ class AnnualSubscription < Subscription
   end
 
   def invoice_label
-    "Cours annuels #{year}-#{year + 1} - #{description}"
+    I18n.t('billing.invoice.annual_label', start_year: year, end_year: year + 1, description:)
   end
 
   def invoice_details

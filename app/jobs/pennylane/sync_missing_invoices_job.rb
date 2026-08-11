@@ -3,7 +3,7 @@
 module Pennylane
   class SyncMissingInvoicesJob < ApplicationJob
     def perform
-      Invoice.recoverable.find_each(&:recover!)
+      Billing::Invoice.recoverable.find_each(&:recover!)
     end
   end
 end

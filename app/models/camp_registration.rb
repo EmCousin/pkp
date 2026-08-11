@@ -17,12 +17,16 @@ class CampRegistration < EventRegistration
   end
 
   def invoice_label
-    "Stage - #{description}"
+    I18n.t('billing.invoice.camp_label', description:)
   end
 
   def invoice_details
-    dates = "Dates : du #{I18n.l(camp.starts_at, format: :long)} au #{I18n.l(camp.ends_at, format: :long)}"
-    rate = parent_subscription_id? ? 'Tarif interne' : 'Tarif externe'
+    dates = I18n.t(
+      'billing.invoice.camp_dates',
+      starts_at: I18n.l(camp.starts_at, format: :long),
+      ends_at: I18n.l(camp.ends_at, format: :long)
+    )
+    rate = I18n.t("billing.invoice.#{parent_subscription_id? ? 'internal_rate' : 'external_rate'}")
     [dates, rate]
   end
 

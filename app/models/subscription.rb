@@ -12,7 +12,10 @@ class Subscription < ApplicationRecord
 
   belongs_to :member
   has_many :courses_subscriptions, dependent: :destroy
-  has_many :courses, through: :courses_subscriptions
+  has_many :courses,
+           through: :courses_subscriptions,
+           before_add: :prevent_invoiced_course_change,
+           before_remove: :prevent_invoiced_course_change
   has_many :child_subscriptions, class_name: 'Subscription', foreign_key: 'parent_subscription_id', inverse_of: :parent_subscription, dependent: :destroy
   belongs_to :parent_subscription, class_name: 'Subscription', optional: true
   has_one :camps_subscription, dependent: :destroy
@@ -99,6 +102,13 @@ class Subscription < ApplicationRecord
   }.freeze
 
   private
+
+  def prevent_invoiced_course_change(_course)
+    return unless persisted? && Billing::Invoice.exists?(invoiceable: self)
+
+    errors.add(:courses, :invoiced)
+    throw :abort
+  end
 
   def parent_subscription_must_be_annual_root
     return if parent_subscription.is_a?(AnnualSubscription) && parent_subscription.parent_subscription_id.nil? && parent_subscription.year == year
