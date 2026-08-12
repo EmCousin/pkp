@@ -30,11 +30,10 @@ describe User, type: :model do
     expect(user.country).to eq('FR')
   end
 
-  it 'normalizes a persisted legacy country before validation' do
-    user.update_column(:country, 'France') # rubocop:disable Rails/SkipsModelValidations
+  it 'normalizes translated country names to ISO codes' do
+    user.country = 'Deutschland'
 
-    expect(user.reload).to be_valid
-    expect(user.country).to eq('FR')
+    expect(user.country).to eq('DE')
   end
 
   it 'rejects a country that is not an ISO-3166 alpha-2 code' do

@@ -1,23 +1,6 @@
 # frozen_string_literal: true
 
 class NormalizeLegacyUserCountries < ActiveRecord::Migration[8.1]
-  COUNTRY_CODES = {
-    'deutschland' => 'DE',
-    'france' => 'FR',
-    'francia' => 'FR',
-    'francre' => 'FR',
-    'fransa' => 'FR',
-    'frannce' => 'FR',
-    'germany' => 'DE',
-    'maroc' => 'MA',
-    'mexique' => 'MX',
-    'uk' => 'GB',
-    'united kimgdom' => 'GB',
-    'united states' => 'US',
-    'österreich' => 'AT',
-    '法国' => 'FR'
-  }.freeze
-
   def up
     normalize_known_country_names
     normalize_country_codes
@@ -29,6 +12,10 @@ class NormalizeLegacyUserCountries < ActiveRecord::Migration[8.1]
   end
 
   private
+
+  def country_codes
+    @country_codes ||= YAML.safe_load_file(Rails.root.join('config/country_codes.yml'))
+  end
 
   def normalize_known_country_names
     execute <<~SQL.squish
@@ -62,13 +49,13 @@ class NormalizeLegacyUserCountries < ActiveRecord::Migration[8.1]
   end
 
   def country_cases
-    COUNTRY_CODES.map do |country, code|
+    country_codes.map do |country, code|
       "WHEN #{connection.quote(country)} THEN #{connection.quote(code)}"
     end.join(' ')
   end
 
   def quoted_country_names
-    COUNTRY_CODES.keys.map { connection.quote(it) }.join(', ')
+    country_codes.keys.map { connection.quote(it) }.join(', ')
   end
 
   def quoted_country_codes
