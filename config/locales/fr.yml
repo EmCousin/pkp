@@ -488,6 +488,8 @@ fr:
         title: Catégories
         description: Gérez les catégories et leurs grilles tarifaires
         new_category: Nouvelle catégorie
+        renew_pricings: Reconduire les tarifs pour %{season}
+        renew_pricings_confirm: Les tarifs de la saison précédente seront recopiés sans remplacer les tarifs déjà saisis. Continuer ?
       show:
         title: Catégorie
         pricings_title: Tarifs
@@ -517,6 +519,17 @@ fr:
         success: Les informations de la catégorie ont été mises à jour
       destroy:
         success: La catégorie a été supprimée
+      renew_pricings:
+        success:
+          one: Les tarifs ont été reconduits pour une catégorie.
+          other: Les tarifs ont été reconduits pour %{count} catégories.
+
+    pricing_warning:
+      title: La saison %{season} approche.
+      message:
+        one: Une catégorie n'a pas encore de tarifs.
+        other: "%{count} catégories n'ont pas encore de tarifs."
+      action: Mettre à jour les tarifs
 
     courses:
       index:

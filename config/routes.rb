@@ -96,7 +96,9 @@ Rails.application.routes.draw do
     get '/', to: redirect('/admin/members')
     concerns :courses_manageable
 
-    resources :categories, only: [:index, :show, :new, :create, :edit, :update, :destroy]
+    resources :categories, only: [:index, :show, :new, :create, :edit, :update, :destroy] do
+      post :renew_pricings, on: :collection
+    end
     resources :members do
       resource :level, only: [:update]
     end

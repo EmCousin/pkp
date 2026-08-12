@@ -29,6 +29,7 @@
     <div class="min-h-full flex flex-col">
       <%= render 'layouts/pwa' %>
       <%= render 'layouts/navbar' %>
+      <%= render 'admin/pricing_warning' if controller_path.start_with?('admin/') %>
 
       <main class="flex-grow flex">
         <div class="max-w-7xl w-full mx-auto py-6 sm:px-6 lg:px-8">

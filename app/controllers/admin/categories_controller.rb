@@ -42,6 +42,14 @@ module Admin
       end
     end
 
+    def renew_pricings
+      renewed_count = PricingRenewal.new(year: @pricing_year).call
+
+      redirect_to admin_categories_path,
+                  notice: t('.success', count: renewed_count),
+                  status: :see_other
+    end
+
     private
 
     def category_params

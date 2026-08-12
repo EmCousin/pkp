@@ -314,10 +314,23 @@ en:
       form:
         new_category: "Add another category"
     categories:
+      index:
+        renew_pricings: "Renew prices for %{season}"
+        renew_pricings_confirm: "Prices from the previous season will be copied without replacing existing prices. Continue?"
       new:
         title: "Create a Category"
       create:
         success: "Category created"
+      renew_pricings:
+        success:
+          one: "Prices were renewed for one category."
+          other: "Prices were renewed for %{count} categories."
+    pricing_warning:
+      title: "The %{season} season is approaching."
+      message:
+        one: "One category does not have prices yet."
+        other: "%{count} categories do not have prices yet."
+      action: "Update prices"
     subscriptions:
       index:
         title: "Subscriptions"
