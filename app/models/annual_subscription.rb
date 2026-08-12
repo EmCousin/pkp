@@ -5,6 +5,8 @@ class AnnualSubscription < Subscription
 
   attr_accessor :category_id
 
+  validate :price_must_be_available, if: -> { courses.any? }
+
   delegate :kidz?, :teen?, :adult?, to: :category, prefix: true, allow_nil: true
 
   validates :member_id, uniqueness: {

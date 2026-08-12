@@ -10,7 +10,6 @@ module Subscriptions
       before_save :set_category_id, if: -> { courses.any? }
       before_save :set_fee
       validate :event_year_must_match, if: :event?
-      validate :price_must_be_available, if: -> { !event? && courses.any? }
     end
 
     def fee_cents
