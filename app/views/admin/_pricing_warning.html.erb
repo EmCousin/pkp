@@ -1,0 +1,11 @@
+<% if @missing_pricing_categories_count.to_i.positive? %>
+  <div class="border-b border-amber-300 bg-amber-50">
+    <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <p class="text-sm text-amber-900">
+        <strong><%= t('.title', season: "#{@pricing_year - 1}-#{@pricing_year}") %></strong>
+        <%= t('.message', count: @missing_pricing_categories_count) %>
+      </p>
+      <%= link_to t('.action'), admin_categories_path, class: 'text-sm font-semibold text-amber-900 underline hover:text-amber-700' %>
+    </div>
+  </div>
+<% end %>
