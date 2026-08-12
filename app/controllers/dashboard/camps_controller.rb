@@ -7,7 +7,8 @@ module Dashboard
     end
 
     def show
-      @camp = Camp.available.find(params[:id])
+      @camp = Camp.available.find_by(id: params[:id])
+      redirect_to dashboard_camps_path, notice: t('.unavailable') unless @camp
     end
   end
 end
