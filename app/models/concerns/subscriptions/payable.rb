@@ -35,20 +35,6 @@ module Subscriptions
       "https://dashboard.stripe.com/payments/#{stripe_payment_intent_id}"
     end
 
-    def verify_stripe_payment!(payment_intent_id:, payment_intent_client_secret:, redirect_status:)
-      with_lock do
-        next unless stripe_payment_intent_id?
-
-        intent = Stripe::PaymentIntent.retrieve(stripe_payment_intent_id)
-        next unless valid_payment_intent?(intent, payment_intent_id, payment_intent_client_secret, redirect_status)
-
-        charge = Stripe::Charge.retrieve(intent.latest_charge)
-        next unless valid_charge?(charge)
-
-        record_stripe_payment!(charge)
-      end
-    end
-
     def mark_as_paid!(payment_method:, at: Time.current)
       with_lock { update(paid_at: at, payment_method:).tap { restore_attributes(%w[paid_at payment_method]) unless it } }
     end
@@ -97,11 +83,6 @@ module Subscriptions
       intent
     end
 
-    def record_stripe_payment!(charge)
-      update!(paid_at: Time.zone.at(charge.created), payment_method: :credit_card, stripe_charge_id: charge.id)
-      confirm! if completed? && !archived?
-    end
-
     def cancel_open_stripe_payment_intent_without_lock?
       return true if paid? || !stripe_payment_intent_id?
 
@@ -110,19 +91,6 @@ module Subscriptions
       update!(stripe_payment_intent_id: nil)
       self.stripe_payment_intent = nil
       true
-    end
-
-    def valid_payment_intent?(intent, payment_intent_id, client_secret, redirect_status)
-      payment_intent_id == intent.id &&
-        client_secret == intent.client_secret &&
-        redirect_status == 'succeeded' &&
-        intent.status == 'succeeded' &&
-        intent.currency == 'eur' &&
-        intent.amount_received == fee_cents
-    end
-
-    def valid_charge?(charge)
-      charge.paid && charge.currency == 'eur' && charge.amount == fee_cents
     end
 
     def stripe_charge

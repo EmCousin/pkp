@@ -140,4 +140,27 @@ describe Subscriptions::Payable, type: :model do
       expect(unstarted_subscription).not_to be_paid
     end
   end
+
+  describe '#reconcile_stripe_payment!' do
+    let(:webhook_subscription) do
+      create(:discovery_registration, member: create(:member), discovery_session:, year: discovery_session.year).tap do |record|
+        record.update!(stripe_payment_intent_id: stripe_payment_intent_id)
+      end
+    end
+
+    it 'records a valid payment without browser return parameters' do
+      webhook_subscription.reconcile_stripe_payment!
+
+      expect(webhook_subscription).to be_paid
+      expect(webhook_subscription.stripe_charge_id).to eq(stripe_charge_id)
+    end
+
+    it 'does not retrieve Stripe resources again after the payment was recorded' do
+      webhook_subscription.reconcile_stripe_payment!
+      allow(Stripe::PaymentIntent).to receive(:retrieve).and_raise('unexpected duplicate reconciliation')
+
+      expect { webhook_subscription.reconcile_stripe_payment! }.not_to raise_error
+      expect(Billing::Invoice.where(invoiceable: webhook_subscription).count).to eq(1)
+    end
+  end
 end

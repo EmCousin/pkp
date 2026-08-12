@@ -3,6 +3,7 @@
 class Subscription < ApplicationRecord
   include Subscriptions::Priceable
   include Subscriptions::Payable
+  include Subscriptions::StripeReconcilable
   include Subscriptions::Invoiceable
   include Subscriptions::Completable
   include Subscriptions::Confirmable
