@@ -125,6 +125,7 @@ fr:
             base:
               finalized_event_registration: Une inscription avec un paiement initié, confirmée ou payée ne peut pas être supprimée.
               pennylane_invoice_finalized: Le paiement ne peut plus être annulé ici car la facture Pennylane est finalisée. Créez un avoir dans Pennylane.
+              pricing_unavailable: Aucun tarif n'est disponible pour les cours sélectionnés.
               stripe_payment_in_progress: Le paiement Stripe ne peut pas être annulé. Veuillez réessayer dans quelques instants.
             courses_count:
               limit_exceeded: "Maximum %{count} cours"

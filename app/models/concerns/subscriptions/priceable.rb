@@ -28,6 +28,10 @@ module Subscriptions
       self.fee = calculated_fee
     end
 
+    def price_must_be_available
+      errors.add(:base, :pricing_unavailable) unless calculated_fee
+    end
+
     def event_fee_locked?
       event? && persisted?
     end

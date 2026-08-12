@@ -140,6 +140,7 @@ en:
           attributes:
             base:
               pennylane_invoice_finalized: "The payment cannot be reverted here because the Pennylane invoice is finalized. Create a credit note in Pennylane."
+              pricing_unavailable: "No price is available for the selected courses."
             courses:
               invoiced: "cannot be changed because the invoice is pending or finalized"
               must_exist: "must have at least one course"

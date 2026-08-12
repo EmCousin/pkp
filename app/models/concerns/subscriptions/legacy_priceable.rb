@@ -31,7 +31,7 @@ module Subscriptions
     private
 
     def legacy_price_for_courses_count
-      pricing[courses.size - 1]
+      pricing&.[](courses.size - 1)
     end
 
     def pricing
@@ -42,7 +42,7 @@ module Subscriptions
     end
 
     def spring_pricing
-      case category.title
+      case courses_category.title
       when 'Adulte', 'Adolescent (10 - 12 ans)', 'Adolescent (13 - 15 ans)'
         [145, 215]
       when 'Kidz (6 - 7 ans)', 'Kidz (8 - 9 ans)'
@@ -51,7 +51,7 @@ module Subscriptions
     end
 
     def winter_pricing
-      case category.title
+      case courses_category.title
       when 'Adulte', 'Adolescent (10 - 12 ans)', 'Adolescent (13 - 15 ans)'
         [205, 275]
       when 'Kidz (6 - 7 ans)', 'Kidz (8 - 9 ans)'
@@ -60,7 +60,7 @@ module Subscriptions
     end
 
     def default_pricing
-      case category.title
+      case courses_category.title
       when 'Adulte'
         [240, 360, 420]
       when 'Adolescent (10 - 12 ans)', 'Adolescent (13 - 15 ans)'

@@ -61,6 +61,16 @@ describe Subscriptions::Priceable, type: :model do
     end
   end
 
+  context 'when the category has no available pricing' do
+    let(:category_title) { 'Adultes' }
+
+    it 'reports a validation error instead of raising' do
+      expect(subject).not_to be_persisted
+      expect(subject.errors.of_kind?(:base, :pricing_unavailable)).to be true
+      expect(subject.fee).to be_nil
+    end
+  end
+
   context 'when the category is Adolescent (10 - 12 ans)' do
     let(:category_title) { 'Adolescent (10 - 12 ans)' }
 
