@@ -215,7 +215,6 @@ en:
         if_you_are_alumni: "If you are an alumnus, you can log in/register, then click on 'Choose my courses' and then 'I am an alumnus'"
       edit:
         title: "Edit my account"
-        country_code_hint: "Use the two-letter country code, for example FR for France."
         delete_my_account: "Delete my account"
         click_below_to_delete_your_account: "To delete your account, click the button below."
         warning_cannot_be_undone: "The data related to your account will be immediately destroyed. This action is irreversible."

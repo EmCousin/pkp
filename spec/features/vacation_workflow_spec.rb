@@ -120,7 +120,7 @@ feature "Vacation Workflow", type: :feature do
       fill_in "user_address", with: user.address
       fill_in "user_zip_code", with: user.zip_code
       fill_in "user_city", with: user.city
-      fill_in "user_country", with: user.country
+      select "France", from: "user_country"
       fill_in "user_current_password", with: password
 
       click_button "Sauvegarder"

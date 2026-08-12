@@ -30,6 +30,12 @@ describe User, type: :model do
     expect(user.country).to eq('FR')
   end
 
+  it 'normalizes translated country names to ISO codes' do
+    user.country = 'Deutschland'
+
+    expect(user.country).to eq('DE')
+  end
+
   it 'rejects a country that is not an ISO-3166 alpha-2 code' do
     user.country = 'ZZ'
 

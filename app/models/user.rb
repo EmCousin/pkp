@@ -2,6 +2,7 @@
 
 class User < ApplicationRecord
   INVALID_EMAIL_PROVIDERS = %w[@wanadoo.fr @orange.fr].freeze
+  COUNTRY_CODES = YAML.safe_load_file(Rails.root.join('config/country_codes.yml')).freeze
 
   devise :database_authenticatable,
          :registerable,
@@ -41,7 +42,7 @@ class User < ApplicationRecord
   normalizes :first_name, :last_name, with: ->(name) { name.strip.downcase.titleize }
   normalizes :country, with: lambda { |country|
     normalized_country = country.strip
-    normalized_country.casecmp?('france') ? 'FR' : normalized_country.upcase
+    COUNTRY_CODES.fetch(normalized_country.downcase, normalized_country.upcase)
   }
 
   def full_name
