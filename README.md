@@ -32,7 +32,7 @@ Back-Office interface for [Parkour Paris](https://inscriptions.parkourparis.fr)
 Customer invoices are created automatically after a payment is recorded. Configure an API v2 token with the `customers:all` and `customer_invoices:all` scopes in the Rails credentials under `pennylane.api_token`.
 
 ## Stripe webhooks
-Configure a live Stripe webhook endpoint at `https://inscriptions.parkourparis.fr/webhooks/stripe` for the `payment_intent.succeeded` event. Store its signing secret in the Rails credentials under `stripe.webhook_secret`.
+Configure a live Stripe webhook endpoint at `https://inscriptions.parkourparis.fr/webhook/stripe` for the `payment_intent.succeeded` event. Store its signing secret in the Rails credentials under `stripe.webhook_secret`.
 
 ## Running tests
 * Run `rspec`

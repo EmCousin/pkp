@@ -108,6 +108,7 @@ feature "Subscription Workflow", type: :feature do
     stripe_charge = OpenStruct.new(
       id: 'ch_test_123',
       paid: true,
+      amount_refunded: 0,
       currency: 'eur',
       created: Time.current.to_i,
       amount: 36000

@@ -20,6 +20,7 @@ describe Subscriptions::Payable, type: :model do
   let(:stripe_payment_intent_currency) { 'eur' }
   let(:stripe_charge_currency) { 'eur' }
   let(:stripe_charge_paid) { true }
+  let(:stripe_charge_amount_refunded) { 0 }
   let(:stripe_payment_intent) do
     OpenStruct.new(
       id: stripe_payment_intent_id,
@@ -36,6 +37,7 @@ describe Subscriptions::Payable, type: :model do
     OpenStruct.new(
       id: stripe_charge_id,
       paid: stripe_charge_paid,
+      amount_refunded: stripe_charge_amount_refunded,
       currency: stripe_charge_currency,
       created: stripe_created_at.to_i,
       amount: stripe_charge_amount
@@ -118,6 +120,18 @@ describe Subscriptions::Payable, type: :model do
 
   context 'when Stripe reports an unpaid charge' do
     let(:stripe_charge_paid) { false }
+
+    it { expect(subject).not_to be_paid }
+  end
+
+  context 'when Stripe reports a refunded charge' do
+    let(:stripe_charge_amount_refunded) { stripe_charge_amount }
+
+    it { expect(subject).not_to be_paid }
+  end
+
+  context 'when Stripe reports a partially refunded charge' do
+    let(:stripe_charge_amount_refunded) { 100 }
 
     it { expect(subject).not_to be_paid }
   end

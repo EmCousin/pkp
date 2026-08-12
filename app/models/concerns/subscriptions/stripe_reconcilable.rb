@@ -43,7 +43,7 @@ module Subscriptions
     end
 
     def valid_charge?(charge)
-      charge.paid && charge.currency == 'eur' && charge.amount == fee_cents
+      charge.paid && charge.amount_refunded.zero? && charge.currency == 'eur' && charge.amount == fee_cents
     end
 
     def reconcile_stripe_payment_intent!(intent)

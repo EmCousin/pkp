@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module Webhooks
-  class StripeController < ApplicationController
+module Webhook
+  class StripesController < ApplicationController
     skip_forgery_protection
 
     def create
@@ -12,7 +12,7 @@ module Webhooks
         request.headers['Stripe-Signature'],
         webhook_secret
       )
-      Stripe::ProcessWebhookJob.perform_later(event.id) if event.type == 'payment_intent.succeeded'
+      reconcile_payment(event) if event.type == 'payment_intent.succeeded'
 
       head :ok
     rescue JSON::ParserError, Stripe::SignatureVerificationError
@@ -20,6 +20,10 @@ module Webhooks
     end
 
     private
+
+    def reconcile_payment(event)
+      Subscription.find_by(stripe_payment_intent_id: event.data.object.id)&.reconcile_stripe_payment!
+    end
 
     def webhook_secret
       Rails.application.credentials.dig(:stripe, :webhook_secret)
