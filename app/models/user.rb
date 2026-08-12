@@ -43,6 +43,7 @@ class User < ApplicationRecord
     normalized_country = country.strip
     normalized_country.casecmp?('france') ? 'FR' : normalized_country.upcase
   }
+  before_validation :normalize_persisted_country
 
   def full_name
     "#{first_name} #{last_name}"
@@ -73,6 +74,10 @@ class User < ApplicationRecord
   end
 
   private
+
+  def normalize_persisted_country
+    normalize_attribute(:country) if country.present?
+  end
 
   def pennylane_billing_address
     {
