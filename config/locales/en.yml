@@ -536,6 +536,7 @@ en:
         no_camps_title: "No camps available"
         no_camps_description: "There are currently no camps available."
       show:
+        unavailable: "This camp is no longer available."
         back_to_camps: "Back to camps"
         details: "Details"
         starts_at: "Start date"

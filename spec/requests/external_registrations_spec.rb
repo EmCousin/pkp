@@ -225,6 +225,15 @@ describe 'External event registrations', type: :request do
       expect(response.body).to include(member.full_name)
     end
 
+    it 'redirects stale camp links to the available camps' do
+      camp = create(:camp, active: false)
+
+      get dashboard_camp_path(camp)
+
+      expect(response).to redirect_to(dashboard_camps_path)
+      expect(flash[:notice]).to eq("Ce stage n'est plus disponible.")
+    end
+
     it 'keeps an existing registration visible when the event is full or closed' do
       discovery_session = create(:discovery_session, capacity: 1)
       subscription = create(:discovery_registration, member:, discovery_session:)

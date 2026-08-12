@@ -795,6 +795,7 @@ fr:
           success: "Justificatif de paiement ajouté avec succès !"
           already_paid_for: "%{member} a déjà payé pour ce stage"
       show:
+        unavailable: "Ce stage n'est plus disponible."
         back_to_camps: "Retour aux stages"
         details: "Détails"
         starts_at: "Date de début"
