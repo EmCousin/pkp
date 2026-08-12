@@ -153,6 +153,7 @@ describe 'External event registrations', type: :request do
       charge = OpenStruct.new(
         id: 'ch_test_123',
         paid: true,
+        amount_refunded: 0,
         currency: 'eur',
         amount: subscription.fee_cents,
         created: Time.current.to_i
@@ -192,6 +193,7 @@ describe 'External event registrations', type: :request do
       charge = OpenStruct.new(
         id: 'ch_test_123',
         paid: true,
+        amount_refunded: 0,
         currency: 'eur',
         amount: subscription.fee_cents,
         created: Time.current.to_i

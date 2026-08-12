@@ -20,6 +20,7 @@ describe Subscriptions::Payable, type: :model do
   let(:stripe_payment_intent_currency) { 'eur' }
   let(:stripe_charge_currency) { 'eur' }
   let(:stripe_charge_paid) { true }
+  let(:stripe_charge_amount_refunded) { 0 }
   let(:stripe_payment_intent) do
     OpenStruct.new(
       id: stripe_payment_intent_id,
@@ -36,6 +37,7 @@ describe Subscriptions::Payable, type: :model do
     OpenStruct.new(
       id: stripe_charge_id,
       paid: stripe_charge_paid,
+      amount_refunded: stripe_charge_amount_refunded,
       currency: stripe_charge_currency,
       created: stripe_created_at.to_i,
       amount: stripe_charge_amount
@@ -122,6 +124,18 @@ describe Subscriptions::Payable, type: :model do
     it { expect(subject).not_to be_paid }
   end
 
+  context 'when Stripe reports a refunded charge' do
+    let(:stripe_charge_amount_refunded) { stripe_charge_amount }
+
+    it { expect(subject).not_to be_paid }
+  end
+
+  context 'when Stripe reports a partially refunded charge' do
+    let(:stripe_charge_amount_refunded) { 100 }
+
+    it { expect(subject).not_to be_paid }
+  end
+
   context 'without a stored payment intent' do
     let(:unstarted_subscription) do
       create :discovery_registration, member: create(:member), discovery_session:,
@@ -138,6 +152,29 @@ describe Subscriptions::Payable, type: :model do
       )
 
       expect(unstarted_subscription).not_to be_paid
+    end
+  end
+
+  describe '#reconcile_stripe_payment!' do
+    let(:webhook_subscription) do
+      create(:discovery_registration, member: create(:member), discovery_session:, year: discovery_session.year).tap do |record|
+        record.update!(stripe_payment_intent_id: stripe_payment_intent_id)
+      end
+    end
+
+    it 'records a valid payment without browser return parameters' do
+      webhook_subscription.reconcile_stripe_payment!
+
+      expect(webhook_subscription).to be_paid
+      expect(webhook_subscription.stripe_charge_id).to eq(stripe_charge_id)
+    end
+
+    it 'does not retrieve Stripe resources again after the payment was recorded' do
+      webhook_subscription.reconcile_stripe_payment!
+      allow(Stripe::PaymentIntent).to receive(:retrieve).and_raise('unexpected duplicate reconciliation')
+
+      expect { webhook_subscription.reconcile_stripe_payment! }.not_to raise_error
+      expect(Billing::Invoice.where(invoiceable: webhook_subscription).count).to eq(1)
     end
   end
 end
