@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module ApplicationHelper
-  def country_options
-    TZInfo::Country.all.sort_by(&:name).map { |country| [country.name, country.code] }
+  def countries_by_name
+    TZInfo::Country.all.sort_by(&:name)
   end
 
   def number_to_euros(number)
