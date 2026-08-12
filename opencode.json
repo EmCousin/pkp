@@ -26,6 +26,10 @@
         "POSTGRES_MCP_RUNTIME": "node"
       },
       "enabled": true
+    },
+    "pennylane": {
+      "type": "remote",
+      "url": "https://mcp.pennylane.com/mcp"
     }
   }
 }
