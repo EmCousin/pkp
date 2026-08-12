@@ -515,6 +515,9 @@ en:
         mark_as_confirmed_by_transfer: "Mark as confirmed by bank transfer"
 
   dashboard:
+    members:
+      create:
+        empty_submission: "The form was not received. Check your connection and try again."
     camps:
       camp:
         duration_days:

@@ -944,6 +944,7 @@ fr:
         permissions_description: Consentement pour l'utilisation d'images
         advertising_right_statement_description: J'autorise l'utilisation, l'affichage et la publication de mon image provenant des activités de Parkour Paris, à des fins de promotion (tous médias) et d'information des activités de l'association. (panneaux, plaquettes, site internet).
       create:
+        empty_submission: Le formulaire n'a pas été reçu. Vérifiez votre connexion et réessayez.
         success: Élève ajouté·e
       update:
         success: Élève modifié·e

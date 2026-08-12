@@ -3,6 +3,7 @@
 module Dashboard
   class MembersController < DashboardController
     before_action :set_member, only: %i[edit update]
+    before_action :require_member_submission, only: :create
 
     def new
       @member = current_user.members.new
@@ -29,6 +30,14 @@ module Dashboard
     end
 
     private
+
+    def require_member_submission
+      return if params[:member].present?
+
+      @member = current_user.members.new
+      flash.now[:alert] = t('.empty_submission')
+      render :new, status: :unprocessable_content
+    end
 
     def set_member
       @member = current_user.members.find(params[:id])
