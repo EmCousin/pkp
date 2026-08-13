@@ -46,10 +46,12 @@ module Admin
     end
 
     def destroy
+      redirect_path = url_from(params[:return_to]) || admin_subscriptions_path
+
       if @subscription.destroy
-        redirect_to admin_subscriptions_path(destroyed: true), notice: t('.success'), status: :see_other
+        redirect_to redirect_path, notice: t('.success'), status: :see_other
       else
-        redirect_to admin_subscriptions_path, alert: t('.error'), status: :see_other
+        redirect_to redirect_path, alert: t('.error'), status: :see_other
       end
     end
 
