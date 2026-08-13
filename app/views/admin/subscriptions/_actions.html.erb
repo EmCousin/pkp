@@ -78,9 +78,8 @@
 
       <% if subscription.cancellable? %>
         <%= button_to t('defaults.destroy'),
-            [:admin, subscription],
+            admin_subscription_path(subscription, format: destroy_format),
             method: :delete,
-            params: { return_to: },
             data: { turbo_frame: '_top', turbo_confirm: t('defaults.are_you_sure') },
             class: "w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50" %>
       <% end %>

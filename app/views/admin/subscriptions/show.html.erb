@@ -37,7 +37,7 @@
     </div>
     <div class="border-b border-gray-200"></div>
     <div class="flex flex-col sm:flex-row sm:justify-end mt-4">
-      <%= render 'actions', subscription: @subscription, return_to: nil %>
+      <%= render 'actions', subscription: @subscription, destroy_format: :html %>
     </div>
   </div>
 
@@ -402,7 +402,7 @@
     <% end %>
     <% if @subscription.cancellable? %>
       <%= button_to t('defaults.destroy'),
-          [:admin, @subscription],
+          admin_subscription_path(@subscription, format: :html),
           method: :delete,
           data: {
             controller: :confirm,

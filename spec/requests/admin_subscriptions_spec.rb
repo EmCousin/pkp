@@ -7,32 +7,36 @@ describe 'Admin subscriptions', type: :request do
 
   before { sign_in create(:user, :admin, phone_number: '+33612345679') }
 
-  it 'includes the current list page in the destroy action' do
-    course = create(:course)
-    subscription = create(:subscription, courses: [course])
-    create(:subscription, courses: [course])
-    current_page = admin_subscriptions_path(page: 2, per_page: 1, status: :pending)
+  it 'uses a Turbo Stream destroy action from the subscriptions list' do
+    subscription = create(:subscription, courses: [create(:course)])
 
-    get current_page
+    get admin_subscriptions_path
 
-    form = Nokogiri::HTML(response.body).at_css("form[action='#{admin_subscription_path(subscription)}']")
-    expect(form.at_css("input[name='return_to']")['value']).to eq(current_page)
+    destroy_path = admin_subscription_path(subscription, format: :turbo_stream)
+    form = Nokogiri::HTML(response.body).at_css("form[action='#{destroy_path}']")
+    expect(form).to be_present
   end
 
-  it 'returns to the current list page after destroying a subscription' do
+  it 'removes the subscription row after destroying from the list' do
     subscription = create(:subscription, courses: [create(:course)])
-    return_to = admin_subscriptions_path(page: 2, status: :pending, year: subscription.year)
 
-    delete admin_subscription_path(subscription), params: { return_to: }
+    delete admin_subscription_path(subscription, format: :turbo_stream)
 
-    expect(response).to redirect_to(return_to)
+    expect(response.media_type).to eq(Mime[:turbo_stream].to_s)
+    expect(response.body).to include(%(action="remove" target="row_subscription_#{subscription.id}"))
     expect(Subscription).not_to exist(subscription.id)
   end
 
   it 'returns to the subscriptions list when destroyed from its page' do
     subscription = create(:subscription, courses: [create(:course)])
+    destroy_path = admin_subscription_path(subscription, format: :html)
 
-    delete admin_subscription_path(subscription)
+    get admin_subscription_path(subscription)
+
+    forms = Nokogiri::HTML(response.body).css("form[action='#{destroy_path}']")
+    expect(forms.size).to eq(2)
+
+    delete destroy_path
 
     expect(response).to redirect_to(admin_subscriptions_path)
   end
