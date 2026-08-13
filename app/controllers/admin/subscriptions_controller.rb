@@ -47,7 +47,10 @@ module Admin
 
     def destroy
       if @subscription.destroy
-        redirect_to admin_subscriptions_path(destroyed: true), notice: t('.success'), status: :see_other
+        respond_to do |format|
+          format.turbo_stream
+          format.html { redirect_to admin_subscriptions_path, notice: t('.success'), status: :see_other }
+        end
       else
         redirect_to admin_subscriptions_path, alert: t('.error'), status: :see_other
       end

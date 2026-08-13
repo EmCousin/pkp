@@ -1,7 +1,7 @@
 <%= turbo_frame_tag dom_id(subscription, :row), class: "block border bg-white rounded-lg shadow-sm p-4" do %>
   <div class="relative">
     <div class="mb-4 flex justify-end sm:absolute sm:top-0 sm:right-0 sm:mb-0">
-      <%= render 'admin/subscriptions/actions', subscription: %>
+      <%= render 'admin/subscriptions/actions', subscription:, destroy_format: :turbo_stream %>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-4 sm:pr-28">
