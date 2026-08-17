@@ -48,7 +48,7 @@ Rails.application.routes.draw do
   direct :next_completion_step do |subscription|
     next edit_dashboard_subscription_terms_path(subscription) unless subscription.terms_accepted_at?
     if subscription.medical_certificate_required?
-      next edit_dashboard_subscription_medical_certificate_path(subscription) unless subscription.doctor_certified_at?
+      next edit_dashboard_subscription_medical_certificate_path(subscription) unless subscription.medical_certificate_valid?
     end
     next new_dashboard_subscription_payment_path(subscription) unless subscription.paid? || subscription.payment_proof.attached?
 
@@ -95,6 +95,7 @@ Rails.application.routes.draw do
   namespace :admin do
     get '/', to: redirect('/admin/members')
     concerns :courses_manageable
+    resource :platform, only: %i[edit update]
 
     resources :categories, only: [:index, :show, :new, :create, :edit, :update, :destroy] do
       post :renew_pricings, on: :collection

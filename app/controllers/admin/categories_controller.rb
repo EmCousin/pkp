@@ -11,14 +11,14 @@ module Admin
     def show; end
 
     def new
-      @category = Category.new
+      @category = Platform.current.categories.new
       @category.pricings.build
     end
 
     def edit; end
 
     def create
-      @category = Category.new(category_params)
+      @category = Platform.current.categories.new(category_params)
       if @category.save
         redirect_to [:admin, @category], notice: t('.success'), status: :see_other
       else

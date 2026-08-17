@@ -12,6 +12,7 @@ class Subscription < ApplicationRecord
   include Subscriptions::Seasonable
 
   belongs_to :member
+  has_one :platform, through: :member
   has_many :courses_subscriptions, dependent: :destroy
   has_many :courses,
            through: :courses_subscriptions,
@@ -42,7 +43,7 @@ class Subscription < ApplicationRecord
   scope :annual_dashboard, lambda {
     where(type: 'AnnualSubscription', year: current_year, parent_subscription_id: nil)
       .not_archived
-      .includes(:member, :child_subscriptions)
+      .includes(:child_subscriptions, member: { subscriptions: { medical_certificate_attachment: :blob } })
       .with_attached_medical_certificate
   }
   scope :event_dashboard, lambda {

@@ -9,6 +9,7 @@ describe Member, type: :model do
   let(:too_young_member) { build :member, user: user, birthdate: 5.years.ago }
 
   it { is_expected.to belong_to(:user) }
+  it { is_expected.to belong_to(:platform) }
   it { is_expected.to have_many(:contacts).through(:user) }
   it { is_expected.to have_many(:subscriptions).dependent(:destroy) }
   it { is_expected.to have_many(:courses).through(:subscriptions) }

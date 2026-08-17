@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 describe Camp, type: :model do
+  it { is_expected.to belong_to(:platform) }
   it { is_expected.to have_rich_text(:description) }
   it { is_expected.to have_one_attached(:cover_picture) }
 

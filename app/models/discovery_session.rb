@@ -4,6 +4,7 @@ class DiscoverySession < ApplicationRecord
   include Events::CapacityLimited
 
   belongs_to :course
+  has_one :platform, through: :course
   has_many :subscriptions, dependent: :restrict_with_error
   has_many :members, through: :subscriptions
 

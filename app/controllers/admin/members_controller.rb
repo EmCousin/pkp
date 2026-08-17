@@ -22,13 +22,13 @@ module Admin
     def show; end
 
     def new
-      @member = Member.new
+      @member = Member.new(platform: Platform.current)
     end
 
     def edit; end
 
     def create
-      @member = Member.new(member_params)
+      @member = Member.new(member_params.merge(platform: Platform.current))
       @member.user.terms_of_service = true
 
       if @member.save

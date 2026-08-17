@@ -13,7 +13,8 @@ module Admin
                                    .order(created_at: :desc)
                                    .page(params[:page])
                                    .per(params[:per_page] || 25)
-                                   .includes(:camp, :courses, { discovery_session: :course }, member: :avatar_attachment)
+                                   .includes(:camp, :courses, { discovery_session: :course },
+                                             member: [:avatar_attachment, { subscriptions: { medical_certificate_attachment: :blob } }])
                                    .with_attached_medical_certificate
     end
 

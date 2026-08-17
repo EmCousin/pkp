@@ -26,6 +26,7 @@ class Member < ApplicationRecord
   ].freeze
 
   belongs_to :user
+  belongs_to :platform
   accepts_nested_attributes_for :user
 
   has_many :contacts, through: :user

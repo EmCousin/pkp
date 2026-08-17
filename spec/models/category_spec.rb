@@ -16,9 +16,10 @@ describe Category, type: :model do
   end
 
   it { is_expected.to have_many(:courses).dependent(:restrict_with_error) }
+  it { is_expected.to belong_to(:platform) }
 
   it { is_expected.to validate_presence_of(:title) }
-  it { is_expected.to validate_uniqueness_of(:title) }
+  it { is_expected.to validate_uniqueness_of(:title).scoped_to(:platform_id) }
   it { is_expected.to validate_presence_of(:min_age) }
   it { is_expected.to validate_numericality_of(:min_age).is_greater_than_or_equal_to(described_class::MIN_AGE).is_less_than(subject.max_age).only_integer }
   it { is_expected.to validate_presence_of(:max_age) }

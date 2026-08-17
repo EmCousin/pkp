@@ -359,8 +359,15 @@
         <span class="block text-xs font-medium text-gray-500 uppercase mb-3">
           <%= Subscription.human_attribute_name(:doctor_certified_at) %>
         </span>
-        <% if @subscription.doctor_certified_at? && @subscription.medical_certificate.attached? %>
-          <span class="text-gray-700 font-semibold">✅ <%= t('.doctor_certified') %></span>
+        <% if @subscription.medical_certificate_valid? %>
+          <span class="text-gray-700 font-semibold">
+            ✅
+            <% if @subscription.inherited_medical_certificate? %>
+              <%= t('.medical_certificate_from_season', season: @subscription.medical_certificate_source.season) %>
+            <% else %>
+              <%= t('.doctor_certified') %>
+            <% end %>
+          </span>
         <% elsif @subscription.doctor_certified_at? %>
           <span class="text-yellow-600 font-semibold" title="<%= t('.medical_certificate_missing_explanation') %>">⚠️ <%= t('.medical_certificate_missing') %></span>
         <% else %>

@@ -14,13 +14,13 @@ module Admin
     end
 
     def new
-      @camp = Camp.new
+      @camp = Platform.current.camps.new
     end
 
     def edit; end
 
     def create
-      @camp = Camp.new(camp_params)
+      @camp = Platform.current.camps.new(camp_params)
       if @camp.save
         redirect_back_or_to [:admin, @camp], notice: t('.success'), status: :see_other
       else

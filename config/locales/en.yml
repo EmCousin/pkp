@@ -185,6 +185,9 @@ en:
         active: "Active"
       course:
         features_attendance_sheet: "Attendance Sheet"
+      platform:
+        name: "Name"
+        medical_certificate_validity_seasons: "Medical certificate validity in seasons"
       subscription:
         statuses:
           confirmed_bank_transfer: "Paid by bank transfer"
@@ -424,6 +427,7 @@ en:
       members: "Members"
       courses: "Courses"
       subscriptions: "Subscriptions"
+      platform_settings: "Settings"
       my_account: "My Account"
       logout: "Logout"
   kaminari:
@@ -490,6 +494,13 @@ en:
         title: "Attendance sheet for %{course_title} - %{date}"
 
   admin:
+    platforms:
+      edit:
+        title: "Platform settings"
+        description: "Settings applied to all registrations on %{platform}."
+        medical_certificate_validity_seasons_hint: "The upload season counts as the first valid season. A value of 3 makes the certificate valid for the upload season and the following two seasons."
+      update:
+        success: "Settings updated"
     invoices:
       show:
         title: "Pennylane invoice"
@@ -519,6 +530,7 @@ en:
     subscriptions:
       show:
         select_action: "Select an action..."
+        medical_certificate_from_season: "Valid since season %{season}"
         download_subscription_form: "Download form"
         invoice_pending: "Pennylane invoice awaiting synchronization"
         retry_invoice: "Retry invoice creation"
@@ -526,8 +538,12 @@ en:
         mark_as_confirmed_by_check: "Mark as confirmed by check"
         mark_as_confirmed_by_cash: "Mark as confirmed by cash"
         mark_as_confirmed_by_transfer: "Mark as confirmed by bank transfer"
+      subscription:
+        medical_certificate_from_season: "since %{season}"
 
   dashboard:
+    subscription:
+      medical_certificate_from_season: "Valid certificate uploaded in %{season}"
     camps:
       camp:
         duration_days:

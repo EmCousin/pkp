@@ -17,8 +17,8 @@
       </label>
       <div class="flex items-center space-x-4">
         <%= form.file_field :medical_certificate, accept: ".pdf,.jpg,.jpeg,.png", class: "block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition" %>
-        <% if subscription.medical_certificate.attached? %>
-          <%= link_to t('dashboard.subscription.download_subscription_form'), url_for(subscription.medical_certificate), target: "_blank", class: "text-indigo-600 hover:underline text-sm" %>
+        <% if subscription.medical_certificate_valid? %>
+          <%= link_to t('dashboard.subscription.download_medical_certificate'), url_for(subscription.effective_medical_certificate), target: "_blank", class: "text-indigo-600 hover:underline text-sm" %>
         <% end %>
       </div>
       <p class="text-xs text-gray-500 mt-1">

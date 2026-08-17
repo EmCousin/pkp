@@ -1,5 +1,6 @@
 FactoryBot.define do
   factory :camp do
+    platform { Platform.current }
     sequence(:title) { |n| "Stage #{n}" }
     description { "Description du stage" }
     capacity { 20 }

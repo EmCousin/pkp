@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe Subscriptions::Completable, type: :model do
@@ -9,13 +11,22 @@ describe Subscriptions::Completable, type: :model do
     )
   end
 
-  let(:subscription) { build :subscription }
+  let(:platform) { create(:platform, medical_certificate_validity_seasons: 3) }
+  let(:member) { create(:member, platform:) }
+  let(:course) { create(:course, category: create(:category, platform:, title: 'Adulte')) }
+  let(:subscription) { build(:subscription, member:) }
 
   it { is_expected.to respond_to :form }
 
   describe '#completed?' do
     before do
-      subscription.update(paid_at: Time.current, payment_method: :cash, doctor_certified_at: Time.current, terms_accepted_at: Time.current, medical_certificate: file)
+      subscription.update(
+        paid_at: Time.current,
+        payment_method: :cash,
+        doctor_certified_at: Time.current,
+        terms_accepted_at: Time.current,
+        medical_certificate: file
+      )
     end
 
     it { expect(subscription.completed?).to be true }
@@ -50,6 +61,70 @@ describe Subscriptions::Completable, type: :model do
       end
 
       it { expect(subscription.completed?).to be false }
+    end
+  end
+
+  describe 'medical certificate validity' do
+    let(:current_year) { 2026 }
+    let(:subscription) do
+      create(
+        :subscription,
+        member:,
+        courses: [course],
+        year: current_year,
+        paid_at: Time.current,
+        payment_method: :cash,
+        terms_accepted_at: Time.current
+      )
+    end
+
+    def create_certificate_source(year)
+      create(
+        :subscription,
+        member:,
+        courses: [course],
+        year:,
+        doctor_certified_at: Time.current,
+        medical_certificate: file
+      )
+    end
+
+    it 'uses a certificate uploaded two seasons earlier' do
+      source = create_certificate_source(current_year - 2)
+
+      expect(subscription.medical_certificate_source).to eq(source)
+      expect(subscription.effective_medical_certificate).to be_attached
+      expect(subscription).to be_inherited_medical_certificate
+      expect(subscription.medical_certificate).not_to be_attached
+      expect(subscription).to be_completed
+    end
+
+    it 'does not use a certificate uploaded three seasons earlier' do
+      create_certificate_source(current_year - 3)
+
+      expect(subscription).not_to be_medical_certificate_valid
+      expect(subscription).not_to be_completed
+    end
+
+    it 'uses the configured number of consecutive seasons' do
+      platform.update!(medical_certificate_validity_seasons: 2)
+      create_certificate_source(current_year - 2)
+
+      expect(subscription).not_to be_medical_certificate_valid
+    end
+
+    it 'uses the most recent valid certificate as the new source' do
+      create_certificate_source(current_year - 2)
+      recent_source = create_certificate_source(current_year - 1)
+
+      expect(subscription.medical_certificate_source).to eq(recent_source)
+    end
+
+    it 'keeps an archived certificate source valid' do
+      source = create_certificate_source(current_year - 2)
+      source.archived!
+
+      expect(subscription.medical_certificate_source).to eq(source)
     end
   end
 end

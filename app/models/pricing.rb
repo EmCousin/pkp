@@ -2,6 +2,7 @@
 
 class Pricing < ApplicationRecord
   belongs_to :category
+  has_one :platform, through: :category
 
   # Virtual attribute to edit prices as a comma-separated list in forms
   attribute :prices_string, :string

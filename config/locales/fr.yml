@@ -268,6 +268,9 @@ fr:
         title: Titre
         min_age: Âge minimum
         max_age: Âge maximum
+      platform:
+        name: Nom
+        medical_certificate_validity_seasons: Nombre de saisons de validité du certificat médical
       subscription:
         camp: Stage
         terms_accepted_at: Conditions d'inscription
@@ -375,6 +378,13 @@ fr:
         create_attendance_sheet: "Feuille de présence"
 
   admin:
+    platforms:
+      edit:
+        title: Configuration de la plateforme
+        description: Paramètres appliqués à l'ensemble des inscriptions de %{platform}.
+        medical_certificate_validity_seasons_hint: La saison du dépôt compte comme la première saison de validité. Une valeur de 3 autorise donc ce certificat pendant la saison du dépôt et les deux suivantes.
+      update:
+        success: Configuration mise à jour
     discovery_sessions:
       index:
         title: Cours découverte
@@ -658,6 +668,7 @@ fr:
         terms_accepted: Accepté
         terms_not_accepted: Non accepté
         doctor_certified: Confirmé
+        medical_certificate_from_season: Valide depuis la saison %{season}
         doctor_not_certified: Non confirmé
         medical_certificate_missing: Manquant
         medical_certificate_missing_explanation: L'élève a indiqué avoir un certificat médical, mais il ne l'a pas encore joint.
@@ -721,6 +732,7 @@ fr:
         terms_not_accepted: Non accepté
         doctor_certified: Certificat médical
         medical_certified: Oui
+        medical_certificate_from_season: depuis %{season}
         medical_certificate: Certificat médical
         medical_certificate_missing: Manquant
         medical_certificate_missing_explanation: L'élève a indiqué avoir un certificat médical, mais il ne l'a pas encore joint.
@@ -898,6 +910,7 @@ fr:
       cotisation: Cotisation
       terms_accepted: J'ai accepté les conditions d'inscription
       doctor_certified: J'ai un certificat médical
+      medical_certificate_from_season: Certificat valide déposé en %{season}
       certify_doctor: Certifier par un médecin
       terms_not_accepted: Conditions non acceptées
       doctor_not_certified: Non certifié par un médecin
@@ -1062,6 +1075,7 @@ fr:
       camps: "Stages"
       discovery_sessions: "Cours découverte"
       subscriptions: "Inscriptions"
+      platform_settings: "Configuration"
       my_account: "Mon compte"
       logout: "Déconnexion"
   kaminari:

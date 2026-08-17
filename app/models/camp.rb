@@ -5,6 +5,7 @@ class Camp < ApplicationRecord
 
   has_rich_text :description
   has_one_attached :cover_picture
+  belongs_to :platform
 
   validates :title, :capacity, :starts_at, :ends_at, :price, :external_price, presence: true
   validates :capacity, numericality: { greater_than_or_equal_to: 1, only_integer: true }

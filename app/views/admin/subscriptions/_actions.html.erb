@@ -44,9 +44,9 @@
             ) %>
       <% end %>
 
-      <% if subscription.medical_certificate.attached? %>
+      <% if subscription.medical_certificate_valid? %>
         <%= link_to t('admin.subscriptions.show.download_medical_certificate'),
-            rails_blob_path(subscription.medical_certificate, disposition: "attachment"),
+            rails_blob_path(subscription.effective_medical_certificate, disposition: "attachment"),
             class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50",
             data: { turbo_frame: '_top' },
             target: '_blank' %>

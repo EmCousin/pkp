@@ -5,13 +5,13 @@ module Dashboard
     before_action :set_member, only: %i[edit update]
 
     def new
-      @member = current_user.members.new
+      @member = current_user.members.new(platform: Platform.current)
     end
 
     def edit; end
 
     def create
-      @member = current_user.members.new(member_params)
+      @member = current_user.members.new(member_params.merge(platform: Platform.current))
 
       if @member.save
         redirect_to(return_path || new_dashboard_subscription_path(member_id: @member.id), notice: t('.success'))

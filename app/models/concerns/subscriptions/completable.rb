@@ -10,12 +10,39 @@ module Subscriptions
 
       has_one_attached :form
       has_one_attached :medical_certificate
+
+      scope :with_direct_medical_certificate, lambda {
+        where.not(doctor_certified_at: nil).joins(:medical_certificate_attachment)
+      }
     end
 
     def completed?
       return paid? && terms_accepted_at? unless medical_certificate_required?
 
-      paid? && terms_accepted_at? && doctor_certified_at? && medical_certificate.attached?
+      paid? && terms_accepted_at? && medical_certificate_valid?
+    end
+
+    def medical_certificate_valid?
+      medical_certificate_source.present?
+    end
+
+    def medical_certificate_source
+      return @medical_certificate_source if defined?(@medical_certificate_source)
+
+      @medical_certificate_source = if own_medical_certificate_valid?
+                                      self
+                                    else
+                                      previous_medical_certificate_source
+                                    end
+    end
+
+    def effective_medical_certificate
+      medical_certificate_source&.medical_certificate
+    end
+
+    def inherited_medical_certificate?
+      source = medical_certificate_source
+      source.present? && source != self
     end
 
     def pending_confirmation?
@@ -28,8 +55,50 @@ module Subscriptions
     end
 
     def doctor_certified=(value)
+      remove_instance_variable(:@medical_certificate_source) if defined?(@medical_certificate_source)
       certified = super
       self.doctor_certified_at = certified ? Time.current : nil
+    end
+
+    private
+
+    def own_medical_certificate_valid?
+      doctor_certified_at? && medical_certificate.attached?
+    end
+
+    def previous_medical_certificate_source
+      return unless medical_certificate_history_available?
+      return loaded_medical_certificate_source if member.subscriptions.loaded?
+
+      member.subscriptions
+            .with_direct_medical_certificate
+            .where(type: AnnualSubscription.sti_name, parent_subscription_id: nil, year: medical_certificate_validity_years)
+            .includes(medical_certificate_attachment: :blob)
+            .order(year: :desc, id: :desc)
+            .first
+    end
+
+    def medical_certificate_history_available?
+      medical_certificate_required? && persisted? && member&.platform
+    end
+
+    def loaded_medical_certificate_source
+      member.subscriptions
+            .select { |source| medical_certificate_source_candidate?(source) }
+            .max_by { |source| [source.year, source.id] }
+    end
+
+    def medical_certificate_source_candidate?(source)
+      source.is_a?(AnnualSubscription) &&
+        source.parent_subscription_id.nil? &&
+        medical_certificate_validity_years.cover?(source.year) &&
+        source.doctor_certified_at? &&
+        source.medical_certificate.attached?
+    end
+
+    def medical_certificate_validity_years
+      validity_seasons = member.platform.medical_certificate_validity_seasons
+      (year - validity_seasons + 1)..year
     end
   end
 end

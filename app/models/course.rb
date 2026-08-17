@@ -16,6 +16,7 @@ class Course < ApplicationRecord
   end
 
   belongs_to :category
+  has_one :platform, through: :category
   has_many :courses_subscriptions, dependent: :destroy
   has_many :subscriptions, through: :courses_subscriptions
   has_many :members, through: :subscriptions

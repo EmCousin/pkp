@@ -16,6 +16,8 @@ Category.destroy_all
 Member.destroy_all
 User.destroy_all
 
+platform = Platform.current
+
 user = User.new
 user.email = "monemail@mail.fr"
 user.first_name = "Maria"
@@ -31,6 +33,7 @@ user.admin = true
 user.terms_of_service = true
 
 member = user.members.new
+member.platform = platform
 member.first_name = "Maria"
 member.last_name = "Silva"
 member.birthdate = 20.years.ago
@@ -45,10 +48,10 @@ user.save
 ## Default courses
 
 categories = {
-  adults: Category.create!(title: "Adultes (16 ans et +)", min_age: 16, max_age: 100),
-  teens: Category.create!(title: "Ados (10 - 15 ans)", min_age: 10, max_age: 15),
-  kids: Category.create!(title: "Kidz (6 - 9 ans)", min_age: 6, max_age: 9),
-  health: Category.create!(title: "Parkour Santé", min_age: 16, max_age: 100)
+  adults: platform.categories.create!(title: "Adultes (16 ans et +)", min_age: 16, max_age: 100),
+  teens: platform.categories.create!(title: "Ados (10 - 15 ans)", min_age: 10, max_age: 15),
+  kids: platform.categories.create!(title: "Kidz (6 - 9 ans)", min_age: 6, max_age: 9),
+  health: platform.categories.create!(title: "Parkour Santé", min_age: 16, max_age: 100)
 }
 
 course_description = <<~DESCRIPTION
@@ -180,7 +183,7 @@ end
 
 ## Camps
 
-Camp.create!(
+platform.camps.create!(
   title: "Kidz Summer Camp (6 - 9 ans)",
   description: "Immersion de deux heures à Austerlitz autour de jeux, murets, barres et structures variées. Le stage développe coordination, maîtrise des mouvements et confiance dans un cadre adapté aux enfants.",
   capacity: 20,
@@ -193,7 +196,7 @@ Camp.create!(
   open_to_externals: true
 )
 
-Camp.create!(
+platform.camps.create!(
   title: "Parkour Summer Camp (10 - 15 ans)",
   description: "Immersion de quatre jours sur le Quai Saint-Bernard à Austerlitz pour travailler précision, fluidité, enchaînements et contrôle du mouvement avec des coachs diplômés.",
   capacity: 30,

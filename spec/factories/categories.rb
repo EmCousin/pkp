@@ -1,5 +1,6 @@
 FactoryBot.define do
   factory :category do
+    platform { Platform.current }
     title { 'Adulte' }
     min_age { 1 }
     max_age { 100 }
