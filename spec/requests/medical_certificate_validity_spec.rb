@@ -5,7 +5,9 @@ require 'rails_helper'
 describe 'Medical certificate validity', type: :request do
   include Devise::Test::IntegrationHelpers
 
-  let(:platform) { create(:platform, medical_certificate_validity_seasons: 3) }
+  let(:platform) do
+    Platform.current.tap { |current_platform| current_platform.update!(medical_certificate_validity_seasons: 3) }
+  end
   let(:user) { create(:user) }
   let(:member) { create(:member, user:, platform:) }
   let(:category) { create(:category, title: 'Adulte', platform:) }

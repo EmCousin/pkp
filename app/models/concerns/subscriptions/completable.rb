@@ -45,6 +45,13 @@ module Subscriptions
       source.present? && source != self
     end
 
+    def medical_certificate_source_in_use?
+      return false if destroyed_by_association
+      return false unless own_medical_certificate_valid? && member&.platform
+
+      medical_certificate_dependents.any? { |subscription| subscription.medical_certificate_source == self }
+    end
+
     def pending_confirmation?
       pending? && completed?
     end
@@ -99,6 +106,15 @@ module Subscriptions
     def medical_certificate_validity_years
       validity_seasons = member.platform.medical_certificate_validity_seasons
       (year - validity_seasons + 1)..year
+    end
+
+    def medical_certificate_dependents
+      last_valid_year = year + member.platform.medical_certificate_validity_seasons - 1
+      member.subscriptions.where(
+        type: AnnualSubscription.sti_name,
+        parent_subscription_id: nil,
+        year: (year + 1)..last_valid_year
+      )
     end
   end
 end

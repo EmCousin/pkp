@@ -17,12 +17,10 @@
       </div>
 
       <div class="relative">
-        <%= f.grouped_collection_select :member_id,
-                                        User.all,
-                                        :members,
-                                        :email,
+        <%= f.collection_select :member_id,
+                                        current_platform.members.joins(:user).includes(:user).order('users.email', :first_name, :last_name),
                                         :id,
-                                        :full_name,
+                                        :admin_label,
                                         { include_blank: t('.select_a_member') },
                                         class: "w-full bg-gray-50 border-2 border-gray-200 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-slate-600 focus:border-slate-600 transition-all duration-200 hover:border-gray-300 focus:-translate-y-1 focus:shadow-lg appearance-none cursor-pointer",
                                         required: true,
@@ -154,13 +152,13 @@
                       .where.not(id: @subscription.id)
                       .joins(:courses)
                       .pluck(:course_id)
-                    Course.active.where.not(id: existing_course_ids).order(:created_at)
+                    current_platform.courses.active.where.not(id: existing_course_ids).order(:created_at)
                   else
-                    Course.active.order(:created_at)
+                    current_platform.courses.active.order(:created_at)
                   end
                 %>
                 <% if available_courses.any? %>
-                  <%= f.collection_check_boxes :course_ids, Course.active.order(:created_at), :id, :title do |b| %>
+                  <%= f.collection_check_boxes :course_ids, available_courses, :id, :title do |b| %>
                     <div class="flex items-start space-x-3 group hover:bg-gray-100 rounded-lg p-2 transition-colors duration-200">
                       <div class="flex-shrink-0 mt-0.5">
                         <%= b.check_box(class: "h-5 w-5 text-slate-600 border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-slate-600 focus:ring-offset-2 transition-all duration-200 appearance-none relative cursor-pointer checked:bg-gradient-to-r checked:from-slate-600 checked:to-slate-700 checked:border-transparent") %>
@@ -204,9 +202,9 @@
                         .where(year: Subscription.current_year)
                         .joins(:camp)
                         .pluck(:camp_id)
-                      Camp.available.where.not(id: existing_camp_ids)
+                      current_platform.camps.available.where.not(id: existing_camp_ids)
                     else
-                      Camp.available
+                      current_platform.camps.available
                     end
                   %>
                   <% if available_camps.any? %>

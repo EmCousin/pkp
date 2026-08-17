@@ -126,5 +126,32 @@ describe Subscriptions::Completable, type: :model do
 
       expect(subscription.medical_certificate_source).to eq(source)
     end
+
+    it 'prevents deletion while a later subscription uses the certificate' do
+      source = create_certificate_source(current_year - 2)
+      subscription
+
+      expect(source.destroy).to be false
+      expect(source.errors.of_kind?(:base, :medical_certificate_in_use)).to be true
+      expect(source).to be_persisted
+      expect(subscription.reload).to be_medical_certificate_valid
+    end
+
+    it 'allows deletion when a later subscription has its own certificate' do
+      source = create_certificate_source(current_year - 2)
+      subscription.update!(doctor_certified_at: Time.current, medical_certificate: file)
+
+      expect(source.destroy).to eq(source)
+      expect(source).not_to be_persisted
+    end
+
+    it 'allows the member and all subscriptions to be deleted together' do
+      create_certificate_source(current_year - 2)
+      create(:subscription, member:, courses: [course], year: current_year)
+
+      expect(member.destroy).to eq(member)
+      expect(member).not_to be_persisted
+      expect(Subscription.where(member_id: member.id)).to be_empty
+    end
   end
 end

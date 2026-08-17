@@ -5,7 +5,7 @@ module Admin
     before_action :set_discovery_session, only: %i[show edit update destroy]
 
     def index
-      @discovery_sessions = DiscoverySession.on_date(search_date)
+      @discovery_sessions = current_platform.discovery_sessions.on_date(search_date)
                                             .includes(:course, :subscriptions)
                                             .order(starts_at: :desc)
                                             .page(params[:page])
@@ -52,7 +52,7 @@ module Admin
     private
 
     def set_discovery_session
-      @discovery_session = DiscoverySession.find(params[:id])
+      @discovery_session = current_platform.discovery_sessions.find(params[:id])
     end
 
     def search_date
@@ -62,7 +62,9 @@ module Admin
     end
 
     def discovery_session_params
-      params.expect(discovery_session: %i[course_id starts_at capacity price active open])
+      attributes = params.expect(discovery_session: %i[course_id starts_at capacity price active open])
+      current_platform.courses.find(attributes[:course_id]) if attributes[:course_id].present?
+      attributes
     end
   end
 end

@@ -4,7 +4,8 @@ module Dashboard
   class DiscoverySessionsPresenter
     attr_reader :categories, :category, :courses, :course, :discovery_dates, :discovery_sessions
 
-    def initialize(category_id:, course_id:)
+    def initialize(category_id:, course_id:, platform: Platform.current)
+      @platform = platform
       @categories = discoverable_categories
       @category = categories.find_by(id: category_id)
       @courses = discoverable_courses
@@ -16,7 +17,7 @@ module Dashboard
     private
 
     def discoverable_categories
-      Category.joins(:courses).merge(Course.discoverable).distinct.order(:title)
+      @platform.categories.joins(:courses).merge(Course.discoverable).distinct.order(:title)
     end
 
     def discoverable_courses
@@ -29,10 +30,10 @@ module Dashboard
     end
 
     def legacy_discovery_sessions
-      DiscoverySession.available
-                      .where(occurs_on: nil)
-                      .includes(:course, :subscriptions)
-                      .order(:starts_at)
+      sessions = @platform.discovery_sessions.available
+      sessions.where(occurs_on: nil)
+              .includes(:course, :subscriptions)
+              .order(:starts_at)
     end
   end
 end

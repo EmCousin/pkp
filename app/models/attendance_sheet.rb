@@ -5,6 +5,7 @@ class AttendanceSheet < ApplicationRecord
   has_many :attendance_records, dependent: :destroy
 
   validates :date, presence: true, uniqueness: { scope: :course_id }
+  validate :course_cannot_change_with_records, if: :will_save_change_to_course_id?
 
   class << self
     def find_or_create_for_course(course, date = Time.current.to_date)
@@ -29,5 +30,13 @@ class AttendanceSheet < ApplicationRecord
         unique_by: %i[attendance_sheet_id member_id]
       )
     end
+  end
+
+  private
+
+  def course_cannot_change_with_records
+    return unless persisted? && attendance_records.exists?
+
+    errors.add(:course, :locked)
   end
 end

@@ -23,7 +23,7 @@ module Admin
     private
 
     def set_subscription!
-      @subscription = Subscription.find(params[:subscription_id])
+      @subscription = current_platform.subscriptions.find(params[:subscription_id])
     end
 
     def payment_method_param

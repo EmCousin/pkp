@@ -47,6 +47,17 @@ describe DiscoverySession, type: :model do
     expect(discovery_session.errors.of_kind?(:starts_at, :event_year_locked)).to be true
   end
 
+  it 'cannot move registrations to another course' do
+    discovery_session = create(:discovery_session)
+    create(:discovery_registration, discovery_session:)
+    other_platform = create(:platform, name: 'Other platform')
+    other_category = create(:category, platform: other_platform, title: 'Other category')
+    other_course = create(:course, category: other_category)
+
+    expect(discovery_session.update(course: other_course)).to be false
+    expect(discovery_session.errors.of_kind?(:course, :locked)).to be true
+  end
+
   describe '.find_or_create_for_course!' do
     let(:course) { create(:course, :discoverable, weekday: :samedi, discovery_capacity: 8, discovery_price: 30) }
     let(:occurs_on) { course.next_discovery_date }

@@ -3,15 +3,15 @@
 module Dashboard
   class DiscoverySessionsController < DashboardController
     def index
-      @presenter = DiscoverySessionsPresenter.new(category_id: params[:category_id], course_id: params[:course_id])
+      @presenter = DiscoverySessionsPresenter.new(platform: current_platform, category_id: params[:category_id], course_id: params[:course_id])
     end
 
     def show
-      @discovery_session = DiscoverySession.available.find(params[:id])
+      @discovery_session = current_platform.discovery_sessions.available.find(params[:id])
     end
 
     def create
-      course = Course.discoverable.find(params[:course_id])
+      course = find_course
       occurs_on = Date.iso8601(params[:occurs_on].to_s)
       return invalid_date_redirect(course) unless course.discovery_date_available?(occurs_on)
 
@@ -24,6 +24,10 @@ module Dashboard
     end
 
     private
+
+    def find_course
+      current_platform.courses.discoverable.find(params[:course_id])
+    end
 
     def invalid_date_redirect(course)
       redirect_to dashboard_discovery_sessions_path(category_id: course.category_id, course_id: course.id),

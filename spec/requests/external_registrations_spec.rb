@@ -24,6 +24,19 @@ describe 'External event registrations', type: :request do
       expect(response).to redirect_to(edit_dashboard_subscription_terms_path(subscription))
     end
 
+    it 'does not expose or accept a camp from another platform' do
+      other_platform = create(:platform, name: 'Other platform')
+      other_camp = create(:camp, platform: other_platform, open_to_externals: true)
+
+      get dashboard_camps_path
+      expect(response.body).not_to include(other_camp.title)
+
+      expect do
+        post dashboard_camp_registrations_path(other_camp), params: { member_id: member.id }
+      end.not_to change(CampRegistration, :count)
+      expect(response).to have_http_status(:not_found)
+    end
+
     it 'keeps the internal rate and annual parent for an annual student' do
       annual_subscription = create(
         :subscription,

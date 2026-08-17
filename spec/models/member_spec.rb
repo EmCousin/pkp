@@ -121,4 +121,11 @@ describe Member, type: :model do
     expect(member).to be_persisted
     expect(subscription.reload).to be_persisted
   end
+
+  it 'does not move a subscribed member to another platform' do
+    create(:subscription, member:, courses: [create(:course)])
+
+    expect(member.update(platform: create(:platform, name: 'Other platform'))).to be false
+    expect(member.errors.of_kind?(:platform, :locked)).to be true
+  end
 end

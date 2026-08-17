@@ -24,6 +24,6 @@ module AccessFilteringHelpers
   end
 
   def full?
-    Course.available.empty?
+    Platform.current.courses.available.empty?
   end
 end

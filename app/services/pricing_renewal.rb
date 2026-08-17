@@ -1,17 +1,18 @@
 # frozen_string_literal: true
 
 class PricingRenewal
-  def initialize(year:)
+  def initialize(year:, categories: Category.all)
     @year = year
+    @categories = categories
   end
 
   def call
-    Category.find_each.count { |category| renew(category) }
+    categories.find_each.count { |category| renew(category) }
   end
 
   private
 
-  attr_reader :year
+  attr_reader :year, :categories
 
   def renew(category)
     category.with_lock do

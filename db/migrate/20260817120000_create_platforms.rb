@@ -28,14 +28,9 @@ class CreatePlatforms < ActiveRecord::Migration[8.1]
       change_column_null table, :platform_id, false
     end
 
-    remove_index :categories, :title
-    add_index :categories, %i[platform_id title], unique: true
   end
 
   def down
-    remove_index :categories, %i[platform_id title]
-    add_index :categories, :title, unique: true
-
     %i[members categories camps].each do |table|
       remove_reference table, :platform, foreign_key: true
     end

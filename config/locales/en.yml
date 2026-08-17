@@ -122,6 +122,9 @@ en:
         camp:
           one: "Camp"
           other: "Camps"
+          attributes:
+            platform:
+              locked: "cannot be changed while the camp has registrations"
         user:
           attributes:
             email:
@@ -136,14 +139,19 @@ en:
               content_type: "must be in JPG, JPEG, or PNG format"
             birthdate:
               inclusion: "%{value} is not a valid date"
+            platform:
+              locked: "cannot be changed after a registration or attendance record exists"
         subscription:
           attributes:
             base:
+              finalized_event_registration: "A registration with a started payment, or a confirmed or paid registration, cannot be deleted."
+              medical_certificate_in_use: "This registration cannot be deleted because its medical certificate is used by a later registration."
               pennylane_invoice_finalized: "The payment cannot be reverted here because the Pennylane invoice is finalized. Create a credit note in Pennylane."
               pricing_unavailable: "No price is available for the selected courses."
             courses:
               invoiced: "cannot be changed because the invoice is pending or finalized"
               must_exist: "must have at least one course"
+              wrong_platform: "must belong to the same platform as the member"
               limit_exceeded: "maximum %{count} courses"
               unique_category: "courses must be from the same category"
               unique_weekday: "courses must not be on the same day"
@@ -151,10 +159,27 @@ en:
             member:
               too_young: "does not meet the minimum age requirement"
               too_old: "exceeds the maximum age requirement"
+              wrong_platform: "must belong to the same platform as the event"
+            discovery_session:
+              wrong_platform: "must belong to the same platform as the member"
         courses_subscription:
           attributes:
+            course:
+              wrong_platform: "must belong to the same platform as the registration"
             subscription:
               invoiced: "cannot be changed because its invoice is pending or finalized"
+        camps_subscription:
+          attributes:
+            camp:
+              wrong_platform: "must belong to the same platform as the registration"
+        attendance_record:
+          attributes:
+            member:
+              wrong_platform: "must belong to the same platform as the course"
+        attendance_sheet:
+          attributes:
+            course:
+              locked: "cannot be changed while the sheet has attendance records"
         invoice:
           attributes:
             subscription:
@@ -163,12 +188,22 @@ en:
               taken: "already has an invoice"
         category:
           attributes:
+            platform:
+              locked: "cannot be changed while the category has courses or prices"
             min_age:
               less_than: "must be less than the maximum age"
               greater_than_or_equal_to: "must be greater than or equal to 1"
             max_age:
               greater_than: "must be greater than the minimum age"
               less_than_or_equal_to: "must be less than or equal to 100"
+        discovery_session:
+          attributes:
+            course:
+              locked: "cannot be changed while the session has registrations"
+        course:
+          attributes:
+            category:
+              platform_locked: "cannot move an in-use course to another platform"
     attributes:
       user:
         first_name: "Account holder's first name"

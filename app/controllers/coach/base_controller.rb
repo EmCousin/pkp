@@ -2,12 +2,18 @@
 
 module Coach
   class BaseController < ApplicationController
+    helper_method :current_platform
+
     before_action :authenticate_user!
     before_action :ensure_current_user_is_coach
 
     def index; end
 
     private
+
+    def current_platform
+      @current_platform ||= Platform.current
+    end
 
     def ensure_current_user_is_coach
       return if current_user.coach?

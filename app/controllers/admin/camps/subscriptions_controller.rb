@@ -30,13 +30,15 @@ module Admin
       private
 
       def set_camp
-        @camp = Camp.find(params.require(:camp_id))
+        @camp = current_platform.camps.find(params.require(:camp_id))
       end
 
       def set_parent_subscription
-        @parent_subscription = AnnualSubscription.confirmed
-                                                 .where(parent_subscription_id: nil, year: @camp.year)
-                                                 .find(params.require(:subscription_id))
+        @parent_subscription = current_platform.subscriptions
+                                               .where(type: AnnualSubscription.sti_name)
+                                               .confirmed
+                                               .where(parent_subscription_id: nil, year: @camp.year)
+                                               .find(params.require(:subscription_id))
       end
 
       def set_subscription

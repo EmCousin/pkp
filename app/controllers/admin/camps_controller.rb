@@ -6,7 +6,7 @@ module Admin
     before_action :set_subscriptions, only: :show
 
     def index
-      @camps = Camp.includes(:subscriptions).order(:starts_at, :created_at)
+      @camps = current_platform.camps.includes(:subscriptions).order(:starts_at, :created_at)
     end
 
     def show
@@ -14,13 +14,13 @@ module Admin
     end
 
     def new
-      @camp = Platform.current.camps.new
+      @camp = current_platform.camps.new
     end
 
     def edit; end
 
     def create
-      @camp = Platform.current.camps.new(camp_params)
+      @camp = current_platform.camps.new(camp_params)
       if @camp.save
         redirect_back_or_to [:admin, @camp], notice: t('.success'), status: :see_other
       else
@@ -47,7 +47,7 @@ module Admin
     private
 
     def set_camp
-      @camp = Camp.find(params[:id])
+      @camp = current_platform.camps.find(params[:id])
     end
 
     def set_subscriptions

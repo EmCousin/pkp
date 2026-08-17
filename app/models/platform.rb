@@ -10,6 +10,8 @@ class Platform < ApplicationRecord
   has_many :courses, through: :categories
   has_many :pricings, through: :categories
   has_many :discovery_sessions, through: :courses
+  has_many :attendance_sheets, through: :courses
+  has_many :attendance_records, through: :attendance_sheets
   has_many :camps, dependent: :restrict_with_error
 
   validates :name, presence: true, uniqueness: true

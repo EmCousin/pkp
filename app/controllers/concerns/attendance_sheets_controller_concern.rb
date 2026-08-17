@@ -33,10 +33,10 @@ module AttendanceSheetsControllerConcern
   end
 
   def set_course
-    @course = Course.featuring_attendance_sheet.find(params[:course_id])
+    @course = current_platform.courses.featuring_attendance_sheet.find(params[:course_id])
   end
 
   def set_attendance_sheet
-    @attendance_sheet = AttendanceSheet.find(params[:id])
+    @attendance_sheet = current_platform.attendance_sheets.find(params[:id])
   end
 end

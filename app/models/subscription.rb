@@ -52,6 +52,7 @@ class Subscription < ApplicationRecord
       .includes(:camp, :discovery_session, :member)
       .order(created_at: :desc)
   }
+  scope :for_platform, ->(platform) { joins(:member).where(members: { platform_id: platform }) }
   scope :for_discovery_attendance, lambda {
     confirmed
       .includes(member: %i[user avatar_attachment])
@@ -62,6 +63,7 @@ class Subscription < ApplicationRecord
   validates :fee, numericality: { greater_than_or_equal_to: 0, allow_blank: true }
   validates :parent_subscription_member, comparison: { equal_to: :member }, if: :parent_subscription_id?
   validate :parent_subscription_must_be_annual_root, if: :parent_subscription_id?
+  validate :courses_must_belong_to_member_platform, if: -> { member && courses.any? }
   delegate :member, to: :parent_subscription, prefix: true, allow_nil: true
 
   def root_subscription
@@ -118,5 +120,11 @@ class Subscription < ApplicationRecord
     return if parent_subscription.is_a?(AnnualSubscription) && parent_subscription.parent_subscription_id.nil? && parent_subscription.year == year
 
     errors.add(:parent_subscription, :invalid)
+  end
+
+  def courses_must_belong_to_member_platform
+    return if courses.all? { |course| course.category&.platform == member.platform }
+
+    errors.add(:courses, :wrong_platform)
   end
 end

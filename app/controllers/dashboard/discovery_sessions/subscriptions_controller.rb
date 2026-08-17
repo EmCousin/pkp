@@ -31,15 +31,16 @@ module Dashboard
       private
 
       def set_available_discovery_session
-        @discovery_session = DiscoverySession.available.find(params[:discovery_session_id])
+        @discovery_session = current_platform.discovery_sessions.available.find(params[:discovery_session_id])
       end
 
       def set_member
-        @member = current_user.members.find(params.require(:member_id))
+        @member = current_user.members.where(platform: current_platform).find(params.require(:member_id))
       end
 
       def set_subscription
         @subscription = current_user.subscriptions
+                                    .for_platform(current_platform)
                                     .where(type: DiscoveryRegistration.sti_name)
                                     .joins(:discovery_session)
                                     .find_by!(id: params[:id], discovery_sessions: { id: params[:discovery_session_id] })

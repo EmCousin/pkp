@@ -22,6 +22,21 @@ describe 'Admin categories', type: :request do
     expect(response.body).to include(admin_categories_path)
   end
 
+  it 'does not expose categories from another platform' do
+    current_category = create(:category, title: 'Parkour Paris')
+    other_platform = create(:platform, name: 'Other platform')
+    other_category = create(:category, platform: other_platform, title: 'Other category')
+
+    get admin_categories_path
+
+    expect(response.body).to include(current_category.title)
+    expect(response.body).not_to include(other_category.title)
+
+    get admin_category_path(other_category)
+
+    expect(response).to have_http_status(:not_found)
+  end
+
   it 'renews previous season prices without replacing existing prices' do
     renewed_category = create(:category, title: 'Adultes')
     previous_pricing = create(

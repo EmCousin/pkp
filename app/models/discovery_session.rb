@@ -14,6 +14,7 @@ class DiscoverySession < ApplicationRecord
   validate :registration_year_must_match
   validate :occurs_on_matches_course_schedule, on: :create, if: :occurs_on?
   validate :course_date_must_be_unique, if: :course_or_date_changed?
+  validate :course_cannot_change_with_registrations, if: :will_save_change_to_course_id?
 
   scope :active, -> { where(active: true) }
   scope :on_date, lambda { |date|
@@ -98,6 +99,12 @@ class DiscoverySession < ApplicationRecord
     return unless course && starts_at
 
     errors.add(:starts_at, :taken) if course_sessions_on_occurrence_date.exists?
+  end
+
+  def course_cannot_change_with_registrations
+    return unless persisted? && subscriptions.exists?
+
+    errors.add(:course, :locked)
   end
 
   def course_sessions_on_occurrence_date

@@ -55,4 +55,13 @@ describe Course, type: :model do
       expect(course.discovery_date_available?(date + 7.days, today: date)).to be false
     end
   end
+
+  it 'does not move an in-use course to a category on another platform' do
+    course = create(:course)
+    create(:subscription, courses: [course], member: create(:member, platform: course.platform))
+    other_category = create(:category, platform: create(:platform, name: 'Other platform'), title: 'Other category')
+
+    expect(course.update(category: other_category)).to be false
+    expect(course.errors.of_kind?(:category, :platform_locked)).to be true
+  end
 end

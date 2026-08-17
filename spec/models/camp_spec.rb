@@ -157,4 +157,12 @@ describe Camp, type: :model do
     expect(camp.update(starts_at: boundary, ends_at: boundary)).to be false
     expect(camp.errors.of_kind?(:starts_at, :event_year_locked)).to be true
   end
+
+  it 'cannot move registrations to another platform' do
+    camp = create(:camp, open_to_externals: true)
+    create(:camp_registration, year: camp.year, camps_subscription_attributes: { camp_id: camp.id })
+
+    expect(camp.update(platform: create(:platform, name: 'Other platform'))).to be false
+    expect(camp.errors.of_kind?(:platform, :locked)).to be true
+  end
 end

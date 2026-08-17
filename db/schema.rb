@@ -147,8 +147,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_17_120000) do
     t.bigint "platform_id", null: false
     t.string "title", null: false
     t.datetime "updated_at", null: false
-    t.index ["platform_id", "title"], name: "index_categories_on_platform_id_and_title", unique: true
     t.index ["platform_id"], name: "index_categories_on_platform_id"
+    t.index ["title"], name: "index_categories_on_title", unique: true
   end
 
   create_table "contacts", force: :cascade do |t|

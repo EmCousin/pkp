@@ -7,23 +7,23 @@ module Admin
     before_action :reject_invoiced_edit!, only: %i[edit update unlink_course], if: -> { @subscription.billing_invoice }
 
     def index
-      @subscriptions = Subscription.search_and_filter(
+      subscriptions = current_platform.subscriptions.search_and_filter(
         params.to_unsafe_h.slice(:status, :level, :year, :course_ids, :camp_id, :discovery_session_id)
       )
-                                   .order(created_at: :desc)
-                                   .page(params[:page])
-                                   .per(params[:per_page] || 25)
-                                   .includes(:camp, :courses, { discovery_session: :course },
-                                             member: [:avatar_attachment, { subscriptions: { medical_certificate_attachment: :blob } }])
-                                   .with_attached_medical_certificate
+      @subscriptions = subscriptions.order(created_at: :desc)
+                                    .page(params[:page])
+                                    .per(params[:per_page] || 25)
+                                    .includes(:camp, :courses, { discovery_session: :course },
+                                              member: [:avatar_attachment, { subscriptions: { medical_certificate_attachment: :blob } }])
+                                    .with_attached_medical_certificate
     end
 
     def show; end
 
     def new
       @subscription = AnnualSubscription.new(
-        member_id: params[:member_id],
-        course_ids: params[:course_ids]
+        member: current_platform.members.find_by(id: params[:member_id]),
+        course_ids: current_platform.courses.where(id: params[:course_ids]).ids
       )
     end
 
@@ -68,7 +68,7 @@ module Admin
     private
 
     def set_subscription!
-      @subscription = Subscription.find(params[:id])
+      @subscription = current_platform.subscriptions.find(params[:id])
     end
 
     def subscription_params
@@ -76,7 +76,27 @@ module Admin
         subscription: [:member_id, :status, :parent_subscription_id, { course_ids: [] }, { camps_subscription_attributes: [:camp_id] }]
       )
       attributes.delete(:camps_subscription_attributes) if @subscription&.persisted?
+      validate_platform_attributes!(attributes)
       attributes
+    end
+
+    def validate_platform_attributes!(attributes)
+      validate_member_platform!(attributes[:member_id])
+      validate_course_platforms!(attributes[:course_ids])
+      validate_camp_platform!(attributes.dig(:camps_subscription_attributes, :camp_id))
+    end
+
+    def validate_member_platform!(member_id)
+      current_platform.members.find(member_id) if member_id.present?
+    end
+
+    def validate_course_platforms!(course_ids)
+      course_ids = Array(course_ids).compact_blank
+      current_platform.courses.find(course_ids) if course_ids.any?
+    end
+
+    def validate_camp_platform!(camp_id)
+      current_platform.camps.find(camp_id) if camp_id.present?
     end
 
     def save_subscription
