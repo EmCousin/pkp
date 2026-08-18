@@ -120,6 +120,14 @@ describe Subscriptions::Completable, type: :model do
       expect(subscription.medical_certificate_source).to eq(recent_source)
     end
 
+    it 'rechecks validity after the certificate changes on the same instance' do
+      expect(subscription).not_to be_medical_certificate_valid
+
+      subscription.update!(doctor_certified_at: Time.current, medical_certificate: file)
+
+      expect(subscription).to be_medical_certificate_valid
+    end
+
     it 'keeps an archived certificate source valid' do
       source = create_certificate_source(current_year - 2)
       source.archived!

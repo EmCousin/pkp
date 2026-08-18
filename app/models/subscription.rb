@@ -63,7 +63,7 @@ class Subscription < ApplicationRecord
   validates :fee, numericality: { greater_than_or_equal_to: 0, allow_blank: true }
   validates :parent_subscription_member, comparison: { equal_to: :member }, if: :parent_subscription_id?
   validate :parent_subscription_must_be_annual_root, if: :parent_subscription_id?
-  validate :courses_must_belong_to_member_platform, if: -> { member && courses.any? }
+  validate :courses_must_belong_to_member_platform, if: %i[member_present? courses?]
   delegate :member, to: :parent_subscription, prefix: true, allow_nil: true
 
   def root_subscription
@@ -123,8 +123,14 @@ class Subscription < ApplicationRecord
   end
 
   def courses_must_belong_to_member_platform
-    return if courses.all? { |course| course.category&.platform == member.platform }
+    subscription_courses = courses.to_a
+    ActiveRecord::Associations::Preloader.new(records: subscription_courses, associations: :category).call
+    return if subscription_courses.all? { |course| course.category&.platform_id == member.platform_id }
 
     errors.add(:courses, :wrong_platform)
+  end
+
+  def member_present?
+    member.present?
   end
 end

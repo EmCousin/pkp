@@ -16,7 +16,11 @@ Category.destroy_all
 Member.destroy_all
 User.destroy_all
 
-platform = Platform.current
+platform = Platform.find_or_initialize_by(name: 'Parkour Paris')
+platform.update!(
+  domain: Rails.env.development? ? 'localhost' : 'parkourparis.fr',
+  medical_certificate_validity_seasons: 3
+)
 
 user = User.new
 user.email = "monemail@mail.fr"

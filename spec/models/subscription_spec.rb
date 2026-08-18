@@ -396,6 +396,15 @@ describe Subscription, type: :model do
       expect(subscription.errors.of_kind?(:courses, :wrong_platform)).to be true
     end
 
+    it 'rejects an annual course from another platform for a new member' do
+      category = create(:category, platform: activity_platform, title: 'Other adults')
+      new_member = build(:member, platform: member_platform)
+      subscription = build(:subscription, member: new_member, courses: [create(:course, category:)])
+
+      expect(subscription).not_to be_valid
+      expect(subscription.errors.of_kind?(:courses, :wrong_platform)).to be true
+    end
+
     it 'rejects a camp from another platform' do
       camp = create(:camp, platform: activity_platform)
       subscription = build(:camp_registration, member:, camps_subscription_attributes: { camp_id: camp.id })

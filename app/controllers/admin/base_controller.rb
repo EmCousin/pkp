@@ -2,8 +2,6 @@
 
 module Admin
   class BaseController < ApplicationController
-    helper_method :current_platform
-
     before_action :authenticate_user!
     before_action :ensure_current_user_is_admin!
     before_action :set_pricing_warning
@@ -17,10 +15,6 @@ module Admin
       @missing_pricing_categories_count = current_platform.categories.where.not(
         id: Pricing.covering_year(@pricing_year).select(:category_id)
       ).count
-    end
-
-    def current_platform
-      @current_platform ||= Platform.current
     end
 
     def ensure_current_user_is_admin!

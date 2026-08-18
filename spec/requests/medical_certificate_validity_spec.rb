@@ -6,7 +6,10 @@ describe 'Medical certificate validity', type: :request do
   include Devise::Test::IntegrationHelpers
 
   let(:platform) do
-    Platform.current.tap { |current_platform| current_platform.update!(medical_certificate_validity_seasons: 3) }
+    Platform.find_or_create_by!(domain: 'example.com') do |current_platform|
+      current_platform.name = 'Parkour Paris'
+      current_platform.medical_certificate_validity_seasons = 3
+    end
   end
   let(:user) { create(:user) }
   let(:member) { create(:member, user:, platform:) }

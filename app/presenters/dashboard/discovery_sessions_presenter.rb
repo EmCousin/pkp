@@ -4,7 +4,7 @@ module Dashboard
   class DiscoverySessionsPresenter
     attr_reader :categories, :category, :courses, :course, :discovery_dates, :discovery_sessions
 
-    def initialize(category_id:, course_id:, platform: Platform.current)
+    def initialize(category_id:, course_id:, platform:)
       @platform = platform
       @categories = discoverable_categories
       @category = categories.find_by(id: category_id)

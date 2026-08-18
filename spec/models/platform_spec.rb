@@ -14,28 +14,15 @@ describe Platform, type: :model do
 
   it { is_expected.to validate_presence_of(:name) }
   it { is_expected.to validate_uniqueness_of(:name) }
+  it { is_expected.to validate_presence_of(:domain) }
+  it { is_expected.to validate_uniqueness_of(:domain).ignoring_case_sensitivity }
   it { is_expected.to validate_numericality_of(:medical_certificate_validity_seasons).only_integer.is_greater_than(0) }
 
-  describe '.current' do
-    it 'creates the default platform when none exists' do
-      expect { described_class.current }.to change(described_class, :count).by(1)
+  describe 'domain normalization' do
+    it 'strips whitespace and lowercases the domain' do
+      platform.domain = ' ParkourParis.FR '
 
-      expect(described_class.current).to have_attributes(
-        name: 'Parkour Paris',
-        medical_certificate_validity_seasons: 3
-      )
-    end
-
-    it 'returns the existing platform' do
-      existing_platform = create(:platform, name: 'Parkour Paris')
-
-      expect(described_class.current).to eq(existing_platform)
-    end
-
-    it 'does not select another platform as the current Parkour Paris platform' do
-      create(:platform, name: 'Another platform')
-
-      expect(described_class.current.name).to eq('Parkour Paris')
+      expect(platform.tap(&:validate).domain).to eq('parkourparis.fr')
     end
   end
 end

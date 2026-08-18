@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_17_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_18_100000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -221,9 +221,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_17_120000) do
 
   create_table "platforms", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.string "domain", null: false
     t.integer "medical_certificate_validity_seasons", default: 3, null: false
     t.string "name", null: false
     t.datetime "updated_at", null: false
+    t.index ["domain"], name: "index_platforms_on_domain", unique: true
     t.index ["name"], name: "index_platforms_on_name", unique: true
     t.check_constraint "medical_certificate_validity_seasons > 0", name: "platforms_medical_certificate_validity_seasons_positive"
   end

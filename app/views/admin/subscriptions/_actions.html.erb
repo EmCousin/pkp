@@ -1,3 +1,4 @@
+<% medical_certificate = local_assigns.fetch(:medical_certificate) { subscription.medical_certificate_record } %>
 <div class="relative">
   <details class="group">
     <summary class="flex cursor-pointer items-center rounded-md px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
@@ -44,9 +45,9 @@
             ) %>
       <% end %>
 
-      <% if subscription.medical_certificate_valid? %>
+      <% if medical_certificate.valid? %>
         <%= link_to t('admin.subscriptions.show.download_medical_certificate'),
-            rails_blob_path(subscription.effective_medical_certificate, disposition: "attachment"),
+            rails_blob_path(medical_certificate.attachment, disposition: "attachment"),
             class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50",
             data: { turbo_frame: '_top' },
             target: '_blank' %>

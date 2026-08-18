@@ -26,7 +26,7 @@ module Admin
     end
 
     def set_platform
-      @platform = Platform.current
+      @platform = Current.platform
     end
 
     def platform_params

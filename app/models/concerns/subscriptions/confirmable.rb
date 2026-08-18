@@ -29,6 +29,7 @@ module Subscriptions
     private
 
     def with_lock_preserving_destroyed_by_association
+      # with_lock reloads the record, which clears Rails' marker for dependent destroys.
       association = destroyed_by_association
       with_lock do
         self.destroyed_by_association = association
