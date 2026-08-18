@@ -80,6 +80,11 @@ describe 'Admin categories', type: :request do
     expect(other_category.pricings.covering_year(pricing_year)).to be_empty
     expect(response).to redirect_to(admin_categories_path)
 
+    get admin_category_path(renewed_category)
+    selected_year = Nokogiri::HTML(response.body).at_css('select[name="year"] option[selected]')
+    expect(selected_year['value']).to eq(pricing_year.to_s)
+    expect(response.body).to include(I18n.l(renewed_pricing.starts_at, format: :short))
+
     expect do
       post renew_pricings_admin_categories_path
     end.not_to change(Pricing, :count)
