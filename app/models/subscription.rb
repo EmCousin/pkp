@@ -12,6 +12,7 @@ class Subscription < ApplicationRecord
   include Subscriptions::Seasonable
 
   belongs_to :member
+  has_one :platform, through: :member
   has_many :courses_subscriptions, dependent: :destroy
   has_many :courses,
            through: :courses_subscriptions,
@@ -42,7 +43,7 @@ class Subscription < ApplicationRecord
   scope :annual_dashboard, lambda {
     where(type: 'AnnualSubscription', year: current_year, parent_subscription_id: nil)
       .not_archived
-      .includes(:member, :child_subscriptions)
+      .includes(:child_subscriptions, member: { subscriptions: { medical_certificate_attachment: :blob } })
       .with_attached_medical_certificate
   }
   scope :event_dashboard, lambda {
@@ -51,6 +52,7 @@ class Subscription < ApplicationRecord
       .includes(:camp, :discovery_session, :member)
       .order(created_at: :desc)
   }
+  scope :for_platform, ->(platform) { joins(:member).where(members: { platform_id: platform }) }
   scope :for_discovery_attendance, lambda {
     confirmed
       .includes(member: %i[user avatar_attachment])
@@ -61,6 +63,9 @@ class Subscription < ApplicationRecord
   validates :fee, numericality: { greater_than_or_equal_to: 0, allow_blank: true }
   validates :parent_subscription_member, comparison: { equal_to: :member }, if: :parent_subscription_id?
   validate :parent_subscription_must_be_annual_root, if: :parent_subscription_id?
+  validate :member_must_belong_to_current_platform, if: %i[member current_platform?]
+  validate :member_cannot_change, on: :update, if: :will_save_change_to_member_id?
+  validate :courses_must_belong_to_member_platform, if: %i[member courses?]
   delegate :member, to: :parent_subscription, prefix: true, allow_nil: true
 
   def root_subscription
@@ -117,5 +122,25 @@ class Subscription < ApplicationRecord
     return if parent_subscription.is_a?(AnnualSubscription) && parent_subscription.parent_subscription_id.nil? && parent_subscription.year == year
 
     errors.add(:parent_subscription, :invalid)
+  end
+
+  def courses_must_belong_to_member_platform
+    subscription_courses = courses.to_a
+    ActiveRecord::Associations::Preloader.new(records: subscription_courses, associations: :category).call
+    return if subscription_courses.all? { |course| course.category&.platform_id == member.platform_id }
+
+    errors.add(:courses, :wrong_platform)
+  end
+
+  def member_must_belong_to_current_platform
+    errors.add(:member, :wrong_platform) unless member.platform == Current.platform
+  end
+
+  def member_cannot_change
+    errors.add(:member, :locked)
+  end
+
+  def current_platform?
+    Current.platform.present?
   end
 end

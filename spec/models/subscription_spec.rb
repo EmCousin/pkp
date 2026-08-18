@@ -382,4 +382,85 @@ describe Subscription, type: :model do
       expect(child.reload).to be_persisted
     end
   end
+
+  describe 'platform isolation' do
+    let(:member_platform) { create(:platform, name: 'Member platform') }
+    let(:activity_platform) { create(:platform, name: 'Activity platform') }
+    let(:member) { create(:member, platform: member_platform) }
+
+    it 'rejects an annual course from another platform' do
+      category = create(:category, platform: activity_platform, title: 'Other adults')
+      subscription = build(:subscription, member:, courses: [create(:course, category:)])
+
+      expect(subscription).not_to be_valid
+      expect(subscription.errors.of_kind?(:courses, :wrong_platform)).to be true
+    end
+
+    it 'rejects an annual course from another platform for a new member' do
+      category = create(:category, platform: activity_platform, title: 'Other adults')
+      new_member = build(:member, platform: member_platform)
+      subscription = build(:subscription, member: new_member, courses: [create(:course, category:)])
+
+      expect(subscription).not_to be_valid
+      expect(subscription.errors.of_kind?(:courses, :wrong_platform)).to be true
+    end
+
+    it 'rejects an internally consistent subscription for another current platform' do
+      category = create(:category, platform: activity_platform, title: 'Other adults')
+      other_member = create(:member, platform: activity_platform)
+      subscription = build(:subscription, member: other_member, courses: [create(:course, category:)])
+
+      Current.set(platform: member_platform) do
+        expect(subscription).not_to be_valid
+        expect(subscription.errors.of_kind?(:member, :wrong_platform)).to be true
+      end
+    end
+
+    it 'rejects a camp from another platform' do
+      camp = create(:camp, platform: activity_platform)
+      subscription = build(:camp_registration, member:, camps_subscription_attributes: { camp_id: camp.id })
+
+      expect(subscription).not_to be_valid
+      expect(subscription.camps_subscription.errors.of_kind?(:camp, :wrong_platform)).to be true
+    end
+
+    it 'rejects a discovery session from another platform' do
+      category = create(:category, platform: activity_platform, title: 'Other discovery')
+      discovery_session = create(:discovery_session, course: create(:course, category:))
+      subscription = build(:discovery_registration, member:, discovery_session:, year: discovery_session.year)
+
+      expect(subscription).not_to be_valid
+      expect(subscription.errors.of_kind?(:discovery_session, :unavailable)).to be true
+    end
+
+    it 'rejects moving an existing discovery registration to another platform' do
+      member_category = create(:category, platform: member_platform, title: 'Member discovery')
+      original_session = create(:discovery_session, course: create(:course, category: member_category))
+      other_category = create(:category, platform: activity_platform, title: 'Other discovery')
+      other_session = create(:discovery_session, course: create(:course, category: other_category))
+      subscription = create(:discovery_registration, member:, discovery_session: original_session, year: original_session.year)
+
+      expect(subscription.update(discovery_session: other_session)).to be false
+      expect(subscription.errors.of_kind?(:member, :wrong_platform)).to be true
+    end
+
+    it 'rejects moving an existing camp registration to a member on another platform' do
+      camp = create(:camp, platform: member_platform, open_to_externals: true)
+      subscription = create(:camp_registration, member:, year: camp.year, camps_subscription_attributes: { camp_id: camp.id })
+      other_member = create(:member, platform: activity_platform)
+
+      expect(subscription.update(member: other_member)).to be false
+      expect(subscription.errors.of_kind?(:member, :wrong_platform)).to be true
+    end
+
+    it 'does not move a subscription to another member' do
+      category = create(:category, platform: member_platform, title: 'Member adults')
+      create(:pricing, category:)
+      subscription = create(:subscription, member:, courses: [create(:course, category:)])
+      other_member = create(:member, platform: member_platform)
+
+      expect(subscription.update(member: other_member)).to be false
+      expect(subscription.errors.of_kind?(:member, :locked)).to be true
+    end
+  end
 end

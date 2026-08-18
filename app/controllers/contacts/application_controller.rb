@@ -2,6 +2,9 @@
 
 module Contacts
   class ApplicationController < ActionController::Base
+    include CurrentRequest
+    include CurrentPlatform
+
     layout 'application'
     protect_from_forgery with: :exception
   end

@@ -1,5 +1,10 @@
 FactoryBot.define do
   factory :camp do
+    platform do
+      Platform.find_or_create_by!(domain: 'example.com') do |platform|
+        platform.name = 'Parkour Paris'
+      end
+    end
     sequence(:title) { |n| "Stage #{n}" }
     description { "Description du stage" }
     capacity { 20 }

@@ -26,6 +26,7 @@
                     <%= link_to t('.camps'), %i[admin camps], class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
                     <%= link_to t('.discovery_sessions'), %i[admin discovery_sessions], class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
                     <%= link_to t('.subscriptions'), %i[admin subscriptions], class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+                    <%= link_to t('.platform_settings'), edit_admin_platform_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
                   </div>
                 </details>
               </div>
@@ -43,6 +44,7 @@
                   <div class="absolute z-50 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5">
                     <%= link_to t('.courses'), %i[coach courses], class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
                     <%= link_to t('.discovery_sessions'), %i[coach discovery_sessions], class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+                    <%= link_to t('.platform_settings'), edit_admin_platform_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
                   </div>
                 </details>
               </div>
@@ -92,6 +94,7 @@
                       <%= link_to t('.camps'), %i[admin camps], class: "text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium" %>
                       <%= link_to t('.discovery_sessions'), %i[admin discovery_sessions], class: "text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium" %>
                       <%= link_to t('.subscriptions'), %i[admin subscriptions], class: "text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium" %>
+                      <%= link_to t('.platform_settings'), edit_admin_platform_path, class: "text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium" %>
                     </div>
                     <div class="border-t border-gray-700 my-2"></div>
                   <% end %>
@@ -100,6 +103,7 @@
                       <p class="text-gray-300 px-3 py-2 text-sm font-medium"><%= t('.coach') %></p>
                       <%= link_to t('.courses'), %i[coach courses], class: "text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium" %>
                       <%= link_to t('.discovery_sessions'), %i[coach discovery_sessions], class: "text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium" %>
+                      <%= link_to t('.platform_settings'), edit_admin_platform_path, class: "text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium" %>
                     </div>
                     <div class="border-t border-gray-700 my-2"></div>
                   <% end %>

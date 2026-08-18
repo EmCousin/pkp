@@ -33,15 +33,16 @@ module Dashboard
       private
 
       def set_member
-        @member = current_user.members.find(params.require(:member_id))
+        @member = current_user.members.find_by!(platform: Current.platform, id: params.require(:member_id))
       end
 
       def set_available_camp
-        @camp = Camp.available.find(params[:camp_id])
+        @camp = Current.platform.camps.available.find(params[:camp_id])
       end
 
       def set_registration
         @registration = current_user.subscriptions
+                                    .for_platform(Current.platform)
                                     .where(type: CampRegistration.sti_name, parent_subscription_id: nil)
                                     .joins(:camp)
                                     .find_by!(id: params[:id], camps: { id: params[:camp_id] })

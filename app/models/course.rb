@@ -9,6 +9,7 @@ class Course < ApplicationRecord
 
   validates :title, :capacity, presence: true
   validates :capacity, numericality: { greater_than_or_equal_to: 1, only_integer: true }
+  validate :category_platform_cannot_change, on: :update, if: :will_save_change_to_category_id?
   with_options if: :discovery_enabled? do
     validates :discovery_price, presence: true, numericality: { greater_than: 0 }
     validates :discovery_capacity, presence: true,
@@ -16,6 +17,7 @@ class Course < ApplicationRecord
   end
 
   belongs_to :category
+  has_one :platform, through: :category
   has_many :courses_subscriptions, dependent: :destroy
   has_many :subscriptions, through: :courses_subscriptions
   has_many :members, through: :subscriptions
@@ -45,5 +47,14 @@ class Course < ApplicationRecord
   def discovery_date_available?(date, today: Date.current)
     active? && discovery_enabled? && date.between?(today, discovery_season_end(today)) &&
       date.cwday == self.class.weekdays.fetch(weekday)
+  end
+
+  private
+
+  def category_platform_cannot_change
+    previous_platform_id = Category.where(id: category_id_in_database).pick(:platform_id)
+    return if previous_platform_id == category&.platform_id
+
+    errors.add(:category, :platform_locked)
   end
 end

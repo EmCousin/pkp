@@ -26,6 +26,7 @@ class Member < ApplicationRecord
   ].freeze
 
   belongs_to :user
+  belongs_to :platform
   accepts_nested_attributes_for :user
 
   has_many :contacts, through: :user
@@ -47,6 +48,7 @@ class Member < ApplicationRecord
   validates :birthdate, inclusion: { in: ->(_) { 99.years.ago.to_date..6.years.ago.to_date } }, on: :create, allow_blank: true
   validates :contact_phone_number, presence: true, phone: true
   validates :contact_relationship, presence: true, inclusion: { in: CONTACTS }
+  validate :platform_cannot_change, on: :update, if: :will_save_change_to_platform_id?
 
   delegate :email, :phone_number, :address, :zip_code, :city, :country, :full_address,
            to: :user
@@ -56,6 +58,10 @@ class Member < ApplicationRecord
 
   def full_name
     "#{first_name.strip.downcase.titleize} #{last_name.strip.downcase.titleize}"
+  end
+
+  def admin_label
+    "#{user.email} - #{full_name}"
   end
 
   def age(year = Time.current.year)
@@ -83,6 +89,7 @@ class Member < ApplicationRecord
   alias current_subscription annual_subscription_for
 
   def can_subscribe?(camp)
+    return false unless camp.platform == platform
     return false if camp.closed?
     return false if camp.fully_booked?
     return false unless camp.accessible_to?(self)
@@ -92,9 +99,16 @@ class Member < ApplicationRecord
   end
 
   def can_subscribe_to_discovery?(discovery_session)
-    discovery_session.open_for_registration? &&
+    discovery_session.platform == platform &&
+      discovery_session.open_for_registration? &&
       !discovery_session.fully_booked? &&
       discovery_session.course.category.suitable_for_age?(age(discovery_session.year)) &&
       !discovery_sessions.exists?(discovery_session.id)
+  end
+
+  private
+
+  def platform_cannot_change
+    errors.add(:platform, :locked)
   end
 end

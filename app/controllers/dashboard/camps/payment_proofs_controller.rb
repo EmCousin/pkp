@@ -25,7 +25,7 @@ module Dashboard
       private
 
       def set_camp
-        @camp = Camp.available.find(params[:camp_id])
+        @camp = Current.platform.camps.available.find(params[:camp_id])
       end
 
       def set_subscription

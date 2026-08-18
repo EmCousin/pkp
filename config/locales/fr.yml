@@ -74,6 +74,7 @@ fr:
       messages:
         blank: doit être rempli
         invalid: invalide
+        required: est requise
     attributes:
       alumni_access:
         username: Identifiant
@@ -99,11 +100,19 @@ fr:
               later_than_or_equal_to: doit être plus tard ou le même jour la date de début (%{date})
             cover_picture:
               content_type: doit être au format PNG, JPG, JPEG ou WEBP
+            platform:
+              locked: ne peut pas être modifiée
         camps_subscription:
           attributes:
             already_subscribed_to_this_camp: "L'élève est déjà inscrit à ce stage"
+            camp:
+              wrong_platform: doit appartenir à la même plateforme que l'inscription
+            subscription:
+              already_has_camp: "Cette inscription a déjà un stage"
         courses_subscription:
           attributes:
+            course:
+              wrong_platform: doit appartenir à la même plateforme que l'inscription
             subscription:
               invoiced: ne peut plus être modifiée car sa facture est en cours ou finalisée
         user:
@@ -120,10 +129,13 @@ fr:
               content_type: doit être au format JPG, JPEG ou PNG
             birthdate:
               inclusion: "%{value} n'est pas une date valide"
+            platform:
+              locked: ne peut pas être modifiée
         subscription:
           attributes:
             base:
               finalized_event_registration: Une inscription avec un paiement initié, confirmée ou payée ne peut pas être supprimée.
+              medical_certificate_in_use: Cette inscription ne peut pas être supprimée car son certificat médical est utilisé par une inscription ultérieure.
               pennylane_invoice_finalized: Le paiement ne peut plus être annulé ici car la facture Pennylane est finalisée. Créez un avoir dans Pennylane.
               pricing_unavailable: Aucun tarif n'est disponible pour les cours sélectionnés.
               stripe_payment_in_progress: Le paiement Stripe ne peut pas être annulé. Veuillez réessayer dans quelques instants.
@@ -132,6 +144,7 @@ fr:
             courses:
               invoiced: ne peuvent plus être modifiés car la facture est en cours ou finalisée
               must_exist: "Minimum un cours"
+              wrong_platform: doivent appartenir à la même plateforme que le membre
               unique_category: "Les cours doivent être de la même catégorie"
               unique_weekday: "Les cours ne doivent pas être le même jour"
               unavailable: "L'un des cours est complet"
@@ -140,13 +153,20 @@ fr:
               invalid: "doit être une inscription annuelle confirmée de la même saison"
             discovery_session:
               unavailable: "n'est plus disponible pour ce participant"
+              wrong_platform: doit appartenir à la même plateforme que le membre
             year:
               event_mismatch: ne correspond pas à la saison de l'événement
             member:
               too_young: n'a pas l'âge minimum requis
               too_old: n'a pas l'âge maximum requis
+              wrong_platform: doit appartenir à cette plateforme
+              locked: ne peut pas être modifié après la création de l'inscription
         discovery_session:
           attributes:
+            course:
+              locked: ne peut pas être modifié lorsque la séance contient des inscriptions
+              platform_locked: ne peut pas déplacer une séance vers une autre plateforme
+              wrong_platform: doit appartenir à cette plateforme
             occurs_on:
               unavailable: ne correspond pas à une date disponible pour ce cours
             starts_at:
@@ -159,16 +179,31 @@ fr:
               taken: a déjà une facture
         category:
           attributes:
+            platform:
+              locked: ne peut pas être modifiée
             min_age:
               less_than: doit être inférieur à l'âge maximum
               greater_than_or_equal_to: doit être supérieur ou égal à 1
             max_age:
               greater_than: doit être supérieur à l'âge minimum
               less_than_or_equal_to: doit être inférieur ou égal à 100
-        camps_subscription:
+        course:
           attributes:
-            subscription:
-              already_has_camp: "Cette inscription a déjà un stage"
+            category:
+              platform_locked: ne peut pas déplacer un cours vers une autre plateforme
+        pricing:
+          attributes:
+            category:
+              platform_locked: ne peut pas déplacer un tarif vers une autre plateforme
+        attendance_record:
+          attributes:
+            member:
+              wrong_platform: doit appartenir à la même plateforme que le cours
+        attendance_sheet:
+          attributes:
+            course:
+              locked: ne peut pas être modifié lorsque la feuille contient des présences
+              platform_locked: ne peut pas déplacer une feuille de présence vers une autre plateforme
     models:
       camp:
         one: Stage
@@ -268,6 +303,9 @@ fr:
         title: Titre
         min_age: Âge minimum
         max_age: Âge maximum
+      platform:
+        name: Nom
+        medical_certificate_validity_seasons: Nombre de saisons de validité du certificat médical
       subscription:
         camp: Stage
         terms_accepted_at: Conditions d'inscription
@@ -375,6 +413,13 @@ fr:
         create_attendance_sheet: "Feuille de présence"
 
   admin:
+    platforms:
+      edit:
+        title: Configuration de la plateforme
+        description: Paramètres appliqués à l'ensemble des inscriptions de %{platform}.
+        medical_certificate_validity_seasons_hint: La saison du dépôt compte comme la première saison de validité. Une valeur de 3 autorise donc ce certificat pendant la saison du dépôt et les deux suivantes.
+      update:
+        success: Configuration mise à jour
     discovery_sessions:
       index:
         title: Cours découverte
@@ -520,6 +565,7 @@ fr:
       destroy:
         success: La catégorie a été supprimée
       renew_pricings:
+        empty: Aucun tarif n'a été reconduit. Vérifiez que les catégories ont des tarifs pour la saison précédente.
         success:
           one: Les tarifs ont été reconduits pour une catégorie.
           other: Les tarifs ont été reconduits pour %{count} catégories.
@@ -658,6 +704,7 @@ fr:
         terms_accepted: Accepté
         terms_not_accepted: Non accepté
         doctor_certified: Confirmé
+        medical_certificate_from_season: Valide depuis la saison %{season}
         doctor_not_certified: Non confirmé
         medical_certificate_missing: Manquant
         medical_certificate_missing_explanation: L'élève a indiqué avoir un certificat médical, mais il ne l'a pas encore joint.
@@ -721,6 +768,7 @@ fr:
         terms_not_accepted: Non accepté
         doctor_certified: Certificat médical
         medical_certified: Oui
+        medical_certificate_from_season: depuis %{season}
         medical_certificate: Certificat médical
         medical_certificate_missing: Manquant
         medical_certificate_missing_explanation: L'élève a indiqué avoir un certificat médical, mais il ne l'a pas encore joint.
@@ -898,6 +946,7 @@ fr:
       cotisation: Cotisation
       terms_accepted: J'ai accepté les conditions d'inscription
       doctor_certified: J'ai un certificat médical
+      medical_certificate_from_season: Certificat valide déposé en %{season}
       certify_doctor: Certifier par un médecin
       terms_not_accepted: Conditions non acceptées
       doctor_not_certified: Non certifié par un médecin
@@ -1062,6 +1111,7 @@ fr:
       camps: "Stages"
       discovery_sessions: "Cours découverte"
       subscriptions: "Inscriptions"
+      platform_settings: "Configuration"
       my_account: "Mon compte"
       logout: "Déconnexion"
   kaminari:

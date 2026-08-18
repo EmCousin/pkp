@@ -14,7 +14,7 @@ module Admin
       private
 
       def set_discovery_session
-        @discovery_session = DiscoverySession.find(params[:discovery_session_id])
+        @discovery_session = Current.platform.discovery_sessions.find(params[:discovery_session_id])
       end
 
       def set_subscription

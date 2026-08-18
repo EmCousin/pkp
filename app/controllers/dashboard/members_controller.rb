@@ -5,13 +5,13 @@ module Dashboard
     before_action :set_member, only: %i[edit update]
 
     def new
-      @member = current_user.members.new
+      @member = current_user.members.new(platform: Current.platform)
     end
 
     def edit; end
 
     def create
-      @member = current_user.members.new(member_params)
+      @member = current_user.members.new(member_params.merge(platform: Current.platform))
 
       if @member.save
         redirect_to(return_path || new_dashboard_subscription_path(member_id: @member.id), notice: t('.success'))
@@ -31,7 +31,7 @@ module Dashboard
     private
 
     def set_member
-      @member = current_user.members.find(params[:id])
+      @member = current_user.members.find_by!(platform: Current.platform, id: params[:id])
     end
 
     def member_params

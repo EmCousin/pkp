@@ -120,13 +120,15 @@ feature "Subscription Workflow", type: :feature do
       amount: 36000,
       currency: 'eur',
       description: anything,
-      customer: anything
+      customer: anything,
+      metadata: anything
     ).and_return(stripe_payment_intent)
     allow(Stripe::PaymentIntent).to receive(:create).with(
       amount: 15000,
       currency: 'eur',
       description: 'Stage Nature',
-      customer: anything
+      customer: anything,
+      metadata: anything
     ).and_return(camp_payment_intent)
     allow(Stripe::PaymentIntent).to receive(:retrieve).with('pi_test_123').and_return(stripe_payment_intent)
     allow(Stripe::PaymentIntent).to receive(:retrieve).with('pi_camp_123').and_return(camp_payment_intent)

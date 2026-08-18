@@ -5,11 +5,11 @@ module Admin
     before_action :set_discovery_session, only: %i[show edit update destroy]
 
     def index
-      @discovery_sessions = DiscoverySession.on_date(search_date)
-                                            .includes(:course, :subscriptions)
-                                            .order(starts_at: :desc)
-                                            .page(params[:page])
-                                            .per(25)
+      sessions = Current.platform.discovery_sessions.on_date(search_date)
+      @discovery_sessions = sessions.includes(:course, :subscriptions)
+                                    .order(starts_at: :desc)
+                                    .page(params[:page])
+                                    .per(25)
     end
 
     def show
@@ -52,7 +52,7 @@ module Admin
     private
 
     def set_discovery_session
-      @discovery_session = DiscoverySession.find(params[:id])
+      @discovery_session = Current.platform.discovery_sessions.find(params[:id])
     end
 
     def search_date

@@ -9,6 +9,7 @@ class AttendanceRecord < ApplicationRecord
   enum :status, { present: 'present', absent: 'absent', excused: 'excused' }
 
   validates :member, uniqueness: { scope: :attendance_sheet_id }
+  validate :member_must_belong_to_course_platform
 
   after_save :check_consecutive_absences, if: :absent?
 
@@ -51,5 +52,12 @@ class AttendanceRecord < ApplicationRecord
     return unless recent_records.count == 3 && recent_records.all?(&:absent?)
 
     AttendanceMailer.consecutive_absences(member, attendance_sheet.course).deliver_now
+  end
+
+  def member_must_belong_to_course_platform
+    return unless member && attendance_sheet&.course
+    return if member.platform == attendance_sheet.course.platform
+
+    errors.add(:member, :wrong_platform)
   end
 end

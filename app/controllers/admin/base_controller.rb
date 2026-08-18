@@ -12,7 +12,7 @@ module Admin
 
     def set_pricing_warning
       @pricing_year = Date.current.year + 1
-      @missing_pricing_categories_count = Category.where.not(
+      @missing_pricing_categories_count = Current.platform.categories.where.not(
         id: Pricing.covering_year(@pricing_year).select(:category_id)
       ).count
     end

@@ -7,7 +7,7 @@ module Admin
     before_action :filter_available_categories!, only: %i[new], unless: :available_categories?
 
     def index
-      @courses = Course.includes(:subscriptions).order(:weekday, :created_at)
+      @courses = Current.platform.courses.includes(:subscriptions).order(:weekday, :created_at)
     end
 
     def show
@@ -52,11 +52,11 @@ module Admin
     end
 
     def available_categories?
-      Category.any?
+      Current.platform.categories.any?
     end
 
     def set_course
-      @course = Course.find(params[:id])
+      @course = Current.platform.courses.find(params[:id])
     end
 
     def set_subscriptions
@@ -78,8 +78,11 @@ module Admin
     end
 
     def course_params
-      params.expect(course: %i[title description capacity category_id weekday active features_attendance_sheet
-                               discovery_enabled discovery_price discovery_capacity])
+      permitted = %i[title description capacity category_id weekday active features_attendance_sheet
+                     discovery_enabled discovery_price discovery_capacity]
+      attributes = params.expect(course: permitted)
+      Current.platform.categories.find(attributes[:category_id]) if attributes[:category_id].present?
+      attributes
     end
   end
 end

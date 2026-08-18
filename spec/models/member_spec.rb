@@ -9,6 +9,7 @@ describe Member, type: :model do
   let(:too_young_member) { build :member, user: user, birthdate: 5.years.ago }
 
   it { is_expected.to belong_to(:user) }
+  it { is_expected.to belong_to(:platform) }
   it { is_expected.to have_many(:contacts).through(:user) }
   it { is_expected.to have_many(:subscriptions).dependent(:destroy) }
   it { is_expected.to have_many(:courses).through(:subscriptions) }
@@ -119,5 +120,10 @@ describe Member, type: :model do
     expect(member.destroy).to be false
     expect(member).to be_persisted
     expect(subscription.reload).to be_persisted
+  end
+
+  it 'does not move a member to another platform' do
+    expect(member.update(platform: create(:platform, name: 'Other platform'))).to be false
+    expect(member.errors.of_kind?(:platform, :locked)).to be true
   end
 end

@@ -4,12 +4,14 @@ class Category < ApplicationRecord
   MIN_AGE = 1
   MAX_AGE = 100
 
+  belongs_to :platform
   has_many :courses, dependent: :restrict_with_error
   has_many :pricings, dependent: :destroy
 
   accepts_nested_attributes_for :pricings, allow_destroy: true, reject_if: :all_blank
 
   validates :title, presence: true, uniqueness: true
+  validate :platform_cannot_change, on: :update, if: :will_save_change_to_platform_id?
 
   validates :min_age, presence: true,
                       numericality: {
@@ -53,5 +55,11 @@ class Category < ApplicationRecord
 
   def suitable_for_age?(age)
     age.in?(min_age..max_age)
+  end
+
+  private
+
+  def platform_cannot_change
+    errors.add(:platform, :locked)
   end
 end

@@ -4,6 +4,7 @@ class DiscoverySession < ApplicationRecord
   include Events::CapacityLimited
 
   belongs_to :course
+  has_one :platform, through: :course
   has_many :subscriptions, dependent: :restrict_with_error
   has_many :members, through: :subscriptions
 
@@ -13,6 +14,9 @@ class DiscoverySession < ApplicationRecord
   validate :registration_year_must_match
   validate :occurs_on_matches_course_schedule, on: :create, if: :occurs_on?
   validate :course_date_must_be_unique, if: :course_or_date_changed?
+  validate :course_must_belong_to_current_platform, if: %i[course current_platform?]
+  validate :course_platform_cannot_change, on: :update, if: :will_save_change_to_course_id?
+  validate :course_cannot_change_with_registrations, if: :will_save_change_to_course_id?
 
   scope :active, -> { where(active: true) }
   scope :on_date, lambda { |date|
@@ -97,6 +101,25 @@ class DiscoverySession < ApplicationRecord
     return unless course && starts_at
 
     errors.add(:starts_at, :taken) if course_sessions_on_occurrence_date.exists?
+  end
+
+  def course_cannot_change_with_registrations
+    return unless persisted? && subscriptions.exists?
+
+    errors.add(:course, :locked)
+  end
+
+  def course_must_belong_to_current_platform
+    errors.add(:course, :wrong_platform) unless course.platform == Current.platform
+  end
+
+  def course_platform_cannot_change
+    previous_platform_id = Course.joins(:category).where(id: course_id_in_database).pick('categories.platform_id')
+    errors.add(:course, :platform_locked) unless previous_platform_id == course&.platform&.id
+  end
+
+  def current_platform?
+    Current.platform.present?
   end
 
   def course_sessions_on_occurrence_date

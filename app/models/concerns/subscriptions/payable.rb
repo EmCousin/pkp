@@ -78,7 +78,8 @@ module Subscriptions
 
     def create_stripe_payment_intent
       intent = Stripe::PaymentIntent.create(amount: fee_cents, currency: 'eur', description:,
-                                            customer: member.user.stripe_customer_id)
+                                            customer: member.user.stripe_customer_id,
+                                            metadata: { platform_id: platform.id.to_s })
       update!(stripe_payment_intent_id: intent.id)
       intent
     end

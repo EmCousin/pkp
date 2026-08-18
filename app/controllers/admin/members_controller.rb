@@ -6,9 +6,9 @@ module Admin
 
     # rubocop:disable Metrics/AbcSize
     def index
-      @members = Member.search_and_filter(params.to_unsafe_h.slice(:q, :level, :subscription_year, :course_ids, :camp_ids))
-                       .includes(:user, :contacts).with_attached_avatar
-                       .paginate_if_active(params[:page], active: params[:no_paginate] != '1', per_page: params[:per_page] || 25)
+      members = Current.platform.members.search_and_filter(params.to_unsafe_h.slice(:q, :level, :subscription_year, :course_ids, :camp_ids))
+      @members = members.includes(:user, :contacts).with_attached_avatar
+                        .paginate_if_active(params[:page], active: params[:no_paginate] != '1', per_page: params[:per_page] || 25)
 
       respond_to do |format|
         format.html
@@ -22,13 +22,13 @@ module Admin
     def show; end
 
     def new
-      @member = Member.new
+      @member = Current.platform.members.new
     end
 
     def edit; end
 
     def create
-      @member = Member.new(member_params)
+      @member = Current.platform.members.new(member_params)
       @member.user.terms_of_service = true
 
       if @member.save
@@ -57,7 +57,7 @@ module Admin
     private
 
     def set_member
-      @member = Member.find(params[:id])
+      @member = Current.platform.members.find(params[:id])
     end
 
     def member_params

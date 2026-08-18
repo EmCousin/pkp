@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 describe Camp, type: :model do
+  it { is_expected.to belong_to(:platform) }
   it { is_expected.to have_rich_text(:description) }
   it { is_expected.to have_one_attached(:cover_picture) }
 
@@ -155,5 +156,12 @@ describe Camp, type: :model do
 
     expect(camp.update(starts_at: boundary, ends_at: boundary)).to be false
     expect(camp.errors.of_kind?(:starts_at, :event_year_locked)).to be true
+  end
+
+  it 'cannot move a camp to another platform' do
+    camp = create(:camp)
+
+    expect(camp.update(platform: create(:platform, name: 'Other platform'))).to be false
+    expect(camp.errors.of_kind?(:platform, :locked)).to be true
   end
 end

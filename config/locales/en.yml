@@ -101,6 +101,7 @@ en:
       messages:
         blank: "can't be blank"
         invalid: "is invalid"
+        required: "is required"
     attributes:
       alumni_access:
         username: "Username"
@@ -122,6 +123,9 @@ en:
         camp:
           one: "Camp"
           other: "Camps"
+          attributes:
+            platform:
+              locked: "cannot be changed"
         user:
           attributes:
             email:
@@ -136,14 +140,19 @@ en:
               content_type: "must be in JPG, JPEG, or PNG format"
             birthdate:
               inclusion: "%{value} is not a valid date"
+            platform:
+              locked: "cannot be changed"
         subscription:
           attributes:
             base:
+              finalized_event_registration: "A registration with a started payment, or a confirmed or paid registration, cannot be deleted."
+              medical_certificate_in_use: "This registration cannot be deleted because its medical certificate is used by a later registration."
               pennylane_invoice_finalized: "The payment cannot be reverted here because the Pennylane invoice is finalized. Create a credit note in Pennylane."
               pricing_unavailable: "No price is available for the selected courses."
             courses:
               invoiced: "cannot be changed because the invoice is pending or finalized"
               must_exist: "must have at least one course"
+              wrong_platform: "must belong to the same platform as the member"
               limit_exceeded: "maximum %{count} courses"
               unique_category: "courses must be from the same category"
               unique_weekday: "courses must not be on the same day"
@@ -151,10 +160,29 @@ en:
             member:
               too_young: "does not meet the minimum age requirement"
               too_old: "exceeds the maximum age requirement"
+              wrong_platform: "must belong to this platform"
+              locked: "cannot be changed after the registration is created"
+            discovery_session:
+              wrong_platform: "must belong to the same platform as the member"
         courses_subscription:
           attributes:
+            course:
+              wrong_platform: "must belong to the same platform as the registration"
             subscription:
               invoiced: "cannot be changed because its invoice is pending or finalized"
+        camps_subscription:
+          attributes:
+            camp:
+              wrong_platform: "must belong to the same platform as the registration"
+        attendance_record:
+          attributes:
+            member:
+              wrong_platform: "must belong to the same platform as the course"
+        attendance_sheet:
+          attributes:
+            course:
+              locked: "cannot be changed while the sheet has attendance records"
+              platform_locked: "cannot move an attendance sheet to another platform"
         invoice:
           attributes:
             subscription:
@@ -163,12 +191,28 @@ en:
               taken: "already has an invoice"
         category:
           attributes:
+            platform:
+              locked: "cannot be changed"
             min_age:
               less_than: "must be less than the maximum age"
               greater_than_or_equal_to: "must be greater than or equal to 1"
             max_age:
               greater_than: "must be greater than the minimum age"
               less_than_or_equal_to: "must be less than or equal to 100"
+        pricing:
+          attributes:
+            category:
+              platform_locked: "cannot move a pricing to another platform"
+        discovery_session:
+          attributes:
+            course:
+              locked: "cannot be changed while the session has registrations"
+              platform_locked: "cannot move a session to another platform"
+              wrong_platform: "must belong to this platform"
+        course:
+          attributes:
+            category:
+              platform_locked: "cannot move a course to another platform"
     attributes:
       user:
         first_name: "Account holder's first name"
@@ -185,6 +229,9 @@ en:
         active: "Active"
       course:
         features_attendance_sheet: "Attendance Sheet"
+      platform:
+        name: "Name"
+        medical_certificate_validity_seasons: "Medical certificate validity in seasons"
       subscription:
         statuses:
           confirmed_bank_transfer: "Paid by bank transfer"
@@ -322,6 +369,7 @@ en:
       create:
         success: "Category created"
       renew_pricings:
+        empty: "No prices were renewed. Check that the categories have prices for the previous season."
         success:
           one: "Prices were renewed for one category."
           other: "Prices were renewed for %{count} categories."
@@ -424,6 +472,7 @@ en:
       members: "Members"
       courses: "Courses"
       subscriptions: "Subscriptions"
+      platform_settings: "Settings"
       my_account: "My Account"
       logout: "Logout"
   kaminari:
@@ -490,6 +539,13 @@ en:
         title: "Attendance sheet for %{course_title} - %{date}"
 
   admin:
+    platforms:
+      edit:
+        title: "Platform settings"
+        description: "Settings applied to all registrations on %{platform}."
+        medical_certificate_validity_seasons_hint: "The upload season counts as the first valid season. A value of 3 makes the certificate valid for the upload season and the following two seasons."
+      update:
+        success: "Settings updated"
     invoices:
       show:
         title: "Pennylane invoice"
@@ -519,6 +575,7 @@ en:
     subscriptions:
       show:
         select_action: "Select an action..."
+        medical_certificate_from_season: "Valid since season %{season}"
         download_subscription_form: "Download form"
         invoice_pending: "Pennylane invoice awaiting synchronization"
         retry_invoice: "Retry invoice creation"
@@ -526,8 +583,12 @@ en:
         mark_as_confirmed_by_check: "Mark as confirmed by check"
         mark_as_confirmed_by_cash: "Mark as confirmed by cash"
         mark_as_confirmed_by_transfer: "Mark as confirmed by bank transfer"
+      subscription:
+        medical_certificate_from_season: "since %{season}"
 
   dashboard:
+    subscription:
+      medical_certificate_from_season: "Valid certificate uploaded in %{season}"
     camps:
       camp:
         duration_days:

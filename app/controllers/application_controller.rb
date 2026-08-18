@@ -3,6 +3,8 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
+  include CurrentRequest
+  include CurrentPlatform
   include DeviseOverrides
   include ProfileCompletable
   include AccessFilteringHelpers

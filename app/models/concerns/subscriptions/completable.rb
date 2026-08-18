@@ -12,14 +12,14 @@ module Subscriptions
       has_one_attached :medical_certificate
     end
 
-    def completed?
+    def completed?(medical_certificate: Subscriptions::MedicalCertificate.new(subscription: self))
       return paid? && terms_accepted_at? unless medical_certificate_required?
 
-      paid? && terms_accepted_at? && doctor_certified_at? && medical_certificate.attached?
+      paid? && terms_accepted_at? && medical_certificate.valid?
     end
 
-    def pending_confirmation?
-      pending? && completed?
+    def pending_confirmation?(medical_certificate: Subscriptions::MedicalCertificate.new(subscription: self))
+      pending? && completed?(medical_certificate:)
     end
 
     def terms_accepted=(value)

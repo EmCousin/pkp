@@ -7,22 +7,23 @@ module Admin
     before_action :reject_invoiced_edit!, only: %i[edit update unlink_course], if: -> { @subscription.billing_invoice }
 
     def index
-      @subscriptions = Subscription.search_and_filter(
+      subscriptions = Current.platform.subscriptions.search_and_filter(
         params.to_unsafe_h.slice(:status, :level, :year, :course_ids, :camp_id, :discovery_session_id)
       )
-                                   .order(created_at: :desc)
-                                   .page(params[:page])
-                                   .per(params[:per_page] || 25)
-                                   .includes(:camp, :courses, { discovery_session: :course }, member: :avatar_attachment)
-                                   .with_attached_medical_certificate
+      @subscriptions = subscriptions.order(created_at: :desc)
+                                    .page(params[:page])
+                                    .per(params[:per_page] || 25)
+                                    .includes(:camp, :courses, { discovery_session: :course },
+                                              member: [:avatar_attachment, { subscriptions: { medical_certificate_attachment: :blob } }])
+                                    .with_attached_medical_certificate
     end
 
     def show; end
 
     def new
       @subscription = AnnualSubscription.new(
-        member_id: params[:member_id],
-        course_ids: params[:course_ids]
+        member: Current.platform.members.find_by(id: params[:member_id]),
+        course_ids: Current.platform.courses.where(id: params[:course_ids]).ids
       )
     end
 
@@ -67,7 +68,7 @@ module Admin
     private
 
     def set_subscription!
-      @subscription = Subscription.find(params[:id])
+      @subscription = Current.platform.subscriptions.find(params[:id])
     end
 
     def subscription_params

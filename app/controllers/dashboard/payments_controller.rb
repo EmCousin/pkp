@@ -24,7 +24,7 @@ module Dashboard
     private
 
     def set_subscription_for_payment_return!
-      @subscription = current_user.subscriptions.find(params[:subscription_id])
+      @subscription = current_user.subscriptions.for_platform(Current.platform).find(params[:subscription_id])
     end
 
     def filter_already_paid!

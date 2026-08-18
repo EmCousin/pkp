@@ -1,4 +1,4 @@
-<% year = params[:year]&.to_i || Subscription.current_year %>
+<% year = params[:year]&.to_i || Subscription.current_year + 1 %>
 
 <div class="min-h-screen bg-gray-50 py-8">
   <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -60,5 +60,4 @@
     </div>
   </div>
 </div>
-
 

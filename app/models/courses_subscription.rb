@@ -6,6 +6,7 @@ class CoursesSubscription < ApplicationRecord
 
   delegate :billing_invoice, to: :subscription, prefix: true, allow_nil: true
   validates :subscription_billing_invoice, absence: true
+  validate :course_must_belong_to_subscription_platform
 
   before_validation :reload_subscription_billing_invoice
   before_destroy :prevent_destroying_invoiced_course
@@ -22,5 +23,12 @@ class CoursesSubscription < ApplicationRecord
 
     errors.add(:subscription_billing_invoice, :present)
     throw :abort
+  end
+
+  def course_must_belong_to_subscription_platform
+    return unless course && subscription&.persisted?
+    return if course.category&.platform == subscription.member.platform
+
+    errors.add(:course, :wrong_platform)
   end
 end

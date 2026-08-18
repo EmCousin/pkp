@@ -3,6 +3,8 @@
 class Camp < ApplicationRecord
   include Events::CapacityLimited
 
+  belongs_to :platform
+
   has_rich_text :description
   has_one_attached :cover_picture
 
@@ -20,6 +22,7 @@ class Camp < ApplicationRecord
     if: :ends_at?
   }
   validate :registration_year_must_match
+  validate :platform_cannot_change, on: :update, if: :will_save_change_to_platform_id?
 
   has_many :camps_subscriptions, dependent: :restrict_with_error
   has_many :subscriptions, through: :camps_subscriptions
@@ -54,8 +57,8 @@ class Camp < ApplicationRecord
   end
 
   class << self
-    def struct_by_year
-      hash = order(created_at: :desc).group_by { |camp| Subscription.current_year(camp.starts_at) }
+    def struct_by_year(scope = all)
+      hash = scope.order(created_at: :desc).group_by { |camp| Subscription.current_year(camp.starts_at) }
       hash.map do |year, camps|
         struct = Struct.new(:year, :camps)
         struct.new(year, camps)
@@ -69,5 +72,9 @@ class Camp < ApplicationRecord
     return unless starts_at && subscriptions.where.not(year: year).exists?
 
     errors.add(:starts_at, :event_year_locked)
+  end
+
+  def platform_cannot_change
+    errors.add(:platform, :locked)
   end
 end

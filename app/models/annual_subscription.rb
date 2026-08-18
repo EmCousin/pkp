@@ -60,11 +60,11 @@ class AnnualSubscription < Subscription
   end
 
   def available_courses
-    @available_courses ||= category_id.present? ? Course.active.where(category_id:).order(:created_at) : Course.none
+    @available_courses ||= category_id.present? ? member.platform.courses.active.where(category_id:).order(:created_at) : Course.none
   end
 
   def suitable_categories
-    member.nil? ? Category.none : Category.suitable_for_age(member.age(year))
+    member.nil? ? Category.none : member.platform.categories.suitable_for_age(member.age(year))
   end
 
   def courses_category
@@ -73,7 +73,8 @@ class AnnualSubscription < Subscription
 
   def category
     return @category if defined?(@category)
+    return @category = nil unless member
 
-    @category = Category.find_by(id: category_id)
+    @category = member.platform.categories.find_by(id: category_id)
   end
 end
