@@ -23,7 +23,17 @@ module Webhook
     private
 
     def reconcile_payment(event)
-      Subscription.find_by(stripe_payment_intent_id: event.data.object.id)&.reconcile_stripe_payment!
+      subscription = subscription_for(event.data.object)
+      return unless subscription
+
+      Current.set(platform: subscription.platform) { subscription.reconcile_stripe_payment! }
+    end
+
+    def subscription_for(payment_intent)
+      platform_id = payment_intent.metadata&.[](:platform_id)
+      return Subscription.find_by(stripe_payment_intent_id: payment_intent.id) if platform_id.blank?
+
+      Platform.find(platform_id).subscriptions.find_by(stripe_payment_intent_id: payment_intent.id)
     end
 
     def webhook_secret

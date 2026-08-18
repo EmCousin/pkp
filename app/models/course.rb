@@ -9,7 +9,7 @@ class Course < ApplicationRecord
 
   validates :title, :capacity, presence: true
   validates :capacity, numericality: { greater_than_or_equal_to: 1, only_integer: true }
-  validate :category_platform_cannot_change_with_activity, if: :will_save_change_to_category_id?
+  validate :category_platform_cannot_change, on: :update, if: :will_save_change_to_category_id?
   with_options if: :discovery_enabled? do
     validates :discovery_price, presence: true, numericality: { greater_than: 0 }
     validates :discovery_capacity, presence: true,
@@ -51,10 +51,9 @@ class Course < ApplicationRecord
 
   private
 
-  def category_platform_cannot_change_with_activity
+  def category_platform_cannot_change
     previous_platform_id = Category.where(id: category_id_in_database).pick(:platform_id)
     return if previous_platform_id == category&.platform_id
-    return unless persisted? && (subscriptions.exists? || attendance_sheets.exists? || discovery_sessions.exists?)
 
     errors.add(:category, :platform_locked)
   end

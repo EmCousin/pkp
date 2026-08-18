@@ -56,9 +56,8 @@ describe Course, type: :model do
     end
   end
 
-  it 'does not move an in-use course to a category on another platform' do
+  it 'does not move a course to a category on another platform' do
     course = create(:course)
-    create(:subscription, courses: [course], member: create(:member, platform: course.platform))
     other_category = create(:category, platform: create(:platform, name: 'Other platform'), title: 'Other category')
 
     expect(course.update(category: other_category)).to be false

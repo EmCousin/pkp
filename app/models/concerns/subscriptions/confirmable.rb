@@ -12,7 +12,7 @@ module Subscriptions
     def cancellable?
       return false if billing_invoice
       return false if event? && (paid? || confirmed?)
-      return false if medical_certificate_source_in_use?
+      return false if Subscriptions::MedicalCertificate.new(subscription: self).source_in_use?
 
       child_subscriptions.destruction_protected.empty?
     end
@@ -38,7 +38,8 @@ module Subscriptions
     end
 
     def prevent_destroying_finalized_event_registration
-      error = medical_certificate_source_in_use? ? :medical_certificate_in_use : :finalized_event_registration
+      medical_certificate = Subscriptions::MedicalCertificate.new(subscription: self)
+      error = medical_certificate.source_in_use? ? :medical_certificate_in_use : :finalized_event_registration
       errors.add(:base, error)
       throw :abort
     end

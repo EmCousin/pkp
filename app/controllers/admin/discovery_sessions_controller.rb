@@ -62,9 +62,7 @@ module Admin
     end
 
     def discovery_session_params
-      attributes = params.expect(discovery_session: %i[course_id starts_at capacity price active open])
-      Current.platform.courses.find(attributes[:course_id]) if attributes[:course_id].present?
-      attributes
+      params.expect(discovery_session: %i[course_id starts_at capacity price active open])
     end
   end
 end

@@ -74,6 +74,7 @@ fr:
       messages:
         blank: doit être rempli
         invalid: invalide
+        required: est requise
     attributes:
       alumni_access:
         username: Identifiant
@@ -100,7 +101,7 @@ fr:
             cover_picture:
               content_type: doit être au format PNG, JPG, JPEG ou WEBP
             platform:
-              locked: ne peut pas être modifiée lorsque le stage contient des inscriptions
+              locked: ne peut pas être modifiée
         camps_subscription:
           attributes:
             already_subscribed_to_this_camp: "L'élève est déjà inscrit à ce stage"
@@ -129,7 +130,7 @@ fr:
             birthdate:
               inclusion: "%{value} n'est pas une date valide"
             platform:
-              locked: ne peut pas être modifiée après une inscription ou une présence
+              locked: ne peut pas être modifiée
         subscription:
           attributes:
             base:
@@ -158,11 +159,14 @@ fr:
             member:
               too_young: n'a pas l'âge minimum requis
               too_old: n'a pas l'âge maximum requis
-              wrong_platform: doit appartenir à la même plateforme que l'événement
+              wrong_platform: doit appartenir à cette plateforme
+              locked: ne peut pas être modifié après la création de l'inscription
         discovery_session:
           attributes:
             course:
               locked: ne peut pas être modifié lorsque la séance contient des inscriptions
+              platform_locked: ne peut pas déplacer une séance vers une autre plateforme
+              wrong_platform: doit appartenir à cette plateforme
             occurs_on:
               unavailable: ne correspond pas à une date disponible pour ce cours
             starts_at:
@@ -176,7 +180,7 @@ fr:
         category:
           attributes:
             platform:
-              locked: ne peut pas être modifiée lorsque la catégorie contient des cours ou des tarifs
+              locked: ne peut pas être modifiée
             min_age:
               less_than: doit être inférieur à l'âge maximum
               greater_than_or_equal_to: doit être supérieur ou égal à 1
@@ -186,7 +190,11 @@ fr:
         course:
           attributes:
             category:
-              platform_locked: ne peut pas déplacer un cours utilisé vers une autre plateforme
+              platform_locked: ne peut pas déplacer un cours vers une autre plateforme
+        pricing:
+          attributes:
+            category:
+              platform_locked: ne peut pas déplacer un tarif vers une autre plateforme
         attendance_record:
           attributes:
             member:
@@ -195,6 +203,7 @@ fr:
           attributes:
             course:
               locked: ne peut pas être modifié lorsque la feuille contient des présences
+              platform_locked: ne peut pas déplacer une feuille de présence vers une autre plateforme
     models:
       camp:
         one: Stage

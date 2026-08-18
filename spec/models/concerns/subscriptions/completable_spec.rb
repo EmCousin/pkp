@@ -89,12 +89,16 @@ describe Subscriptions::Completable, type: :model do
       )
     end
 
+    def medical_certificate
+      Subscriptions::MedicalCertificate.new(subscription:)
+    end
+
     it 'uses a certificate uploaded two seasons earlier' do
       source = create_certificate_source(current_year - 2)
 
-      expect(subscription.medical_certificate_source).to eq(source)
-      expect(subscription.effective_medical_certificate).to be_attached
-      expect(subscription).to be_inherited_medical_certificate
+      expect(medical_certificate.source).to eq(source)
+      expect(medical_certificate.attachment).to be_attached
+      expect(medical_certificate).to be_inherited
       expect(subscription.medical_certificate).not_to be_attached
       expect(subscription).to be_completed
     end
@@ -102,7 +106,7 @@ describe Subscriptions::Completable, type: :model do
     it 'does not use a certificate uploaded three seasons earlier' do
       create_certificate_source(current_year - 3)
 
-      expect(subscription).not_to be_medical_certificate_valid
+      expect(medical_certificate).not_to be_valid
       expect(subscription).not_to be_completed
     end
 
@@ -110,29 +114,29 @@ describe Subscriptions::Completable, type: :model do
       platform.update!(medical_certificate_validity_seasons: 2)
       create_certificate_source(current_year - 2)
 
-      expect(subscription).not_to be_medical_certificate_valid
+      expect(medical_certificate).not_to be_valid
     end
 
     it 'uses the most recent valid certificate as the new source' do
       create_certificate_source(current_year - 2)
       recent_source = create_certificate_source(current_year - 1)
 
-      expect(subscription.medical_certificate_source).to eq(recent_source)
+      expect(medical_certificate.source).to eq(recent_source)
     end
 
     it 'rechecks validity after the certificate changes on the same instance' do
-      expect(subscription).not_to be_medical_certificate_valid
+      expect(medical_certificate).not_to be_valid
 
       subscription.update!(doctor_certified_at: Time.current, medical_certificate: file)
 
-      expect(subscription).to be_medical_certificate_valid
+      expect(medical_certificate).to be_valid
     end
 
     it 'keeps an archived certificate source valid' do
       source = create_certificate_source(current_year - 2)
       source.archived!
 
-      expect(subscription.medical_certificate_source).to eq(source)
+      expect(medical_certificate.source).to eq(source)
     end
 
     it 'prevents deletion while a later subscription uses the certificate' do
@@ -142,7 +146,7 @@ describe Subscriptions::Completable, type: :model do
       expect(source.destroy).to be false
       expect(source.errors.of_kind?(:base, :medical_certificate_in_use)).to be true
       expect(source).to be_persisted
-      expect(subscription.reload).to be_medical_certificate_valid
+      expect(Subscriptions::MedicalCertificate.new(subscription: subscription.reload)).to be_valid
     end
 
     it 'allows deletion when a later subscription has its own certificate' do

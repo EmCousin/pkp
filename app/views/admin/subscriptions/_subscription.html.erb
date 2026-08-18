@@ -1,4 +1,4 @@
-<% medical_certificate = subscription.medical_certificate_record %>
+<% medical_certificate = Subscriptions::MedicalCertificate.new(subscription:) %>
 <%= turbo_frame_tag dom_id(subscription, :row), class: "block border bg-white rounded-lg shadow-sm p-4" do %>
   <div class="relative">
     <div class="mb-4 flex justify-end sm:absolute sm:top-0 sm:right-0 sm:mb-0">

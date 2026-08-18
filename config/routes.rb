@@ -48,7 +48,8 @@ Rails.application.routes.draw do
   direct :next_completion_step do |subscription|
     next edit_dashboard_subscription_terms_path(subscription) unless subscription.terms_accepted_at?
     if subscription.medical_certificate_required?
-      next edit_dashboard_subscription_medical_certificate_path(subscription) unless subscription.medical_certificate_valid?
+      medical_certificate = Subscriptions::MedicalCertificate.new(subscription:)
+      next edit_dashboard_subscription_medical_certificate_path(subscription) unless medical_certificate.valid?
     end
     next new_dashboard_subscription_payment_path(subscription) unless subscription.paid? || subscription.payment_proof.attached?
 

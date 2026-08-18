@@ -14,6 +14,8 @@ class DiscoverySession < ApplicationRecord
   validate :registration_year_must_match
   validate :occurs_on_matches_course_schedule, on: :create, if: :occurs_on?
   validate :course_date_must_be_unique, if: :course_or_date_changed?
+  validate :course_must_belong_to_current_platform, if: %i[course current_platform?]
+  validate :course_platform_cannot_change, on: :update, if: :will_save_change_to_course_id?
   validate :course_cannot_change_with_registrations, if: :will_save_change_to_course_id?
 
   scope :active, -> { where(active: true) }
@@ -105,6 +107,19 @@ class DiscoverySession < ApplicationRecord
     return unless persisted? && subscriptions.exists?
 
     errors.add(:course, :locked)
+  end
+
+  def course_must_belong_to_current_platform
+    errors.add(:course, :wrong_platform) unless course.platform == Current.platform
+  end
+
+  def course_platform_cannot_change
+    previous_platform_id = Course.joins(:category).where(id: course_id_in_database).pick('categories.platform_id')
+    errors.add(:course, :platform_locked) unless previous_platform_id == course&.platform&.id
+  end
+
+  def current_platform?
+    Current.platform.present?
   end
 
   def course_sessions_on_occurrence_date

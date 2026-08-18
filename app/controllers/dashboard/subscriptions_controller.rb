@@ -17,7 +17,7 @@ module Dashboard
     end
 
     def create
-      member = current_user.members.where(platform: Current.platform).find(subscription_params[:member_id])
+      member = current_user.members.find_by!(platform: Current.platform, id: subscription_params[:member_id])
       @subscription = AnnualSubscription.new(subscription_params.merge(member:))
       if @subscription.save
         redirect_to next_completion_step_path(@subscription), status: :see_other
@@ -49,7 +49,7 @@ module Dashboard
     end
 
     def set_member
-      @member = current_user.members.where(platform: Current.platform).find_by(id: params[:member_id])
+      @member = current_user.members.find_by(platform: Current.platform, id: params[:member_id])
     end
   end
 end

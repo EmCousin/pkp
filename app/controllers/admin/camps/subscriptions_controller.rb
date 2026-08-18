@@ -34,12 +34,12 @@ module Admin
       end
 
       def set_parent_subscription
-        subscriptions = Current.platform.subscriptions.confirmed.where(
+        @parent_subscription = Current.platform.subscriptions.confirmed.find_by!(
           type: AnnualSubscription.sti_name,
           parent_subscription_id: nil,
-          year: @camp.year
+          year: @camp.year,
+          id: params.require(:subscription_id)
         )
-        @parent_subscription = subscriptions.find(params.require(:subscription_id))
       end
 
       def set_subscription

@@ -452,5 +452,15 @@ describe Subscription, type: :model do
       expect(subscription.update(member: other_member)).to be false
       expect(subscription.errors.of_kind?(:member, :wrong_platform)).to be true
     end
+
+    it 'does not move a subscription to another member' do
+      category = create(:category, platform: member_platform, title: 'Member adults')
+      create(:pricing, category:)
+      subscription = create(:subscription, member:, courses: [create(:course, category:)])
+      other_member = create(:member, platform: member_platform)
+
+      expect(subscription.update(member: other_member)).to be false
+      expect(subscription.errors.of_kind?(:member, :locked)).to be true
+    end
   end
 end

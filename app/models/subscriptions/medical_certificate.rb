@@ -6,7 +6,7 @@ module Subscriptions
 
     attr_reader :subscription
 
-    validate :source_must_exist
+    validates :source, presence: { message: :required }
 
     def initialize(subscription:)
       @subscription = subscription
@@ -37,25 +37,24 @@ module Subscriptions
 
     private
 
-    def source_must_exist
-      errors.add(:base, :invalid) unless source
-    end
-
     def own_certificate_valid?
       subscription.doctor_certified_at? && subscription.medical_certificate.attached?
     end
 
+    # rubocop:disable Metrics/AbcSize
     def previous_source
       return unless history_available?
       return loaded_source if subscription.member.subscriptions.loaded?
 
       subscription.member.subscriptions
-                  .with_direct_medical_certificate
+                  .where.not(doctor_certified_at: nil)
+                  .joins(:medical_certificate_attachment)
                   .where(type: AnnualSubscription.sti_name, parent_subscription_id: nil, year: validity_years)
                   .includes(medical_certificate_attachment: :blob)
                   .order(year: :desc, id: :desc)
                   .first
     end
+    # rubocop:enable Metrics/AbcSize
 
     def history_available?
       subscription.medical_certificate_required? && subscription.persisted? && subscription.member&.platform

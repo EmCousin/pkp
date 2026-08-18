@@ -43,7 +43,7 @@ module Admin
     end
 
     def renew_pricings
-      renewed_count = PricingRenewal.new(year: @pricing_year, categories: Current.platform.categories).call
+      renewed_count = PricingRenewal.new(year: @pricing_year).call
 
       redirect_to admin_categories_path,
                   notice: t('.success', count: renewed_count),

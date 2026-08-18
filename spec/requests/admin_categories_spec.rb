@@ -56,6 +56,14 @@ describe 'Admin categories', type: :request do
       starts_at: Date.new(2026, 8, 1),
       ends_at: Date.new(2027, 6, 30)
     )
+    other_platform = create(:platform, name: 'Other platform')
+    other_category = create(:category, platform: other_platform, title: 'Other adults')
+    create(
+      :pricing,
+      category: other_category,
+      starts_at: Date.new(2025, 8, 1),
+      ends_at: Date.new(2026, 6, 30)
+    )
 
     expect do
       post renew_pricings_admin_categories_path
@@ -69,6 +77,7 @@ describe 'Admin categories', type: :request do
       ends_at: previous_pricing.ends_at.next_year
     )
     expect(configured_category.pricings.covering_year(pricing_year)).to contain_exactly(existing_pricing)
+    expect(other_category.pricings.covering_year(pricing_year)).to be_empty
     expect(response).to redirect_to(admin_categories_path)
 
     expect do

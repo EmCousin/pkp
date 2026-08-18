@@ -33,7 +33,7 @@ module Dashboard
       private
 
       def set_member
-        @member = current_user.members.where(platform: Current.platform).find(params.require(:member_id))
+        @member = current_user.members.find_by!(platform: Current.platform, id: params.require(:member_id))
       end
 
       def set_available_camp

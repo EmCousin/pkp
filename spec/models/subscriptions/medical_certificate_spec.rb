@@ -56,6 +56,7 @@ describe Subscriptions::MedicalCertificate, type: :model do
 
     expect(medical_certificate).not_to be_valid
     expect(medical_certificate.source).to be_nil
+    expect(medical_certificate.errors[:source]).to include(I18n.t('activemodel.errors.messages.required'))
   end
 
   it 'uses the configured validity period' do

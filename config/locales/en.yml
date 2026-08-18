@@ -101,6 +101,7 @@ en:
       messages:
         blank: "can't be blank"
         invalid: "is invalid"
+        required: "is required"
     attributes:
       alumni_access:
         username: "Username"
@@ -124,7 +125,7 @@ en:
           other: "Camps"
           attributes:
             platform:
-              locked: "cannot be changed while the camp has registrations"
+              locked: "cannot be changed"
         user:
           attributes:
             email:
@@ -140,7 +141,7 @@ en:
             birthdate:
               inclusion: "%{value} is not a valid date"
             platform:
-              locked: "cannot be changed after a registration or attendance record exists"
+              locked: "cannot be changed"
         subscription:
           attributes:
             base:
@@ -159,7 +160,8 @@ en:
             member:
               too_young: "does not meet the minimum age requirement"
               too_old: "exceeds the maximum age requirement"
-              wrong_platform: "must belong to the same platform as the event"
+              wrong_platform: "must belong to this platform"
+              locked: "cannot be changed after the registration is created"
             discovery_session:
               wrong_platform: "must belong to the same platform as the member"
         courses_subscription:
@@ -180,6 +182,7 @@ en:
           attributes:
             course:
               locked: "cannot be changed while the sheet has attendance records"
+              platform_locked: "cannot move an attendance sheet to another platform"
         invoice:
           attributes:
             subscription:
@@ -189,21 +192,27 @@ en:
         category:
           attributes:
             platform:
-              locked: "cannot be changed while the category has courses or prices"
+              locked: "cannot be changed"
             min_age:
               less_than: "must be less than the maximum age"
               greater_than_or_equal_to: "must be greater than or equal to 1"
             max_age:
               greater_than: "must be greater than the minimum age"
               less_than_or_equal_to: "must be less than or equal to 100"
+        pricing:
+          attributes:
+            category:
+              platform_locked: "cannot move a pricing to another platform"
         discovery_session:
           attributes:
             course:
               locked: "cannot be changed while the session has registrations"
+              platform_locked: "cannot move a session to another platform"
+              wrong_platform: "must belong to this platform"
         course:
           attributes:
             category:
-              platform_locked: "cannot move an in-use course to another platform"
+              platform_locked: "cannot move a course to another platform"
     attributes:
       user:
         first_name: "Account holder's first name"

@@ -1,4 +1,4 @@
-<% medical_certificate = subscription.medical_certificate_record %>
+<% medical_certificate = Subscriptions::MedicalCertificate.new(subscription:) %>
 <div class="grid bg-white border rounded-lg shadow-sm">
   <!-- Toggle control is driven by this hidden checkbox -->
   <%= check_box_tag dom_id(subscription, :dashboard),

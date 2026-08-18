@@ -13,6 +13,7 @@ class Pricing < ApplicationRecord
   validates :starts_at, :ends_at, presence: true
   validates :ends_at, comparison: { greater_than: :starts_at, if: %i[starts_at? ends_at?] }
   validate :prices_presence_and_numericality
+  validate :category_platform_cannot_change, on: :update, if: :will_save_change_to_category_id?
 
   scope :current, -> { covering(Date.current) }
   scope :for_category, ->(category) { where(category_id: category.is_a?(Category) ? category.id : category) }
@@ -44,5 +45,10 @@ class Pricing < ApplicationRecord
     return if values.all? { |v| v.is_a?(Numeric) || v.to_s.match?(/\A-?\d+(?:[.,]\d+)?\z/) }
 
     errors.add(:prices, :not_a_number)
+  end
+
+  def category_platform_cannot_change
+    previous_platform_id = Category.where(id: category_id_in_database).pick(:platform_id)
+    errors.add(:category, :platform_locked) unless previous_platform_id == category&.platform_id
   end
 end

@@ -48,7 +48,7 @@ class Member < ApplicationRecord
   validates :birthdate, inclusion: { in: ->(_) { 99.years.ago.to_date..6.years.ago.to_date } }, on: :create, allow_blank: true
   validates :contact_phone_number, presence: true, phone: true
   validates :contact_relationship, presence: true, inclusion: { in: CONTACTS }
-  validate :platform_cannot_change_with_activity, if: :will_save_change_to_platform_id?
+  validate :platform_cannot_change, on: :update, if: :will_save_change_to_platform_id?
 
   delegate :email, :phone_number, :address, :zip_code, :city, :country, :full_address,
            to: :user
@@ -108,9 +108,7 @@ class Member < ApplicationRecord
 
   private
 
-  def platform_cannot_change_with_activity
-    return unless persisted? && (subscriptions.exists? || attendance_records.exists?)
-
+  def platform_cannot_change
     errors.add(:platform, :locked)
   end
 end

@@ -3,9 +3,10 @@
 class Camp < ApplicationRecord
   include Events::CapacityLimited
 
+  belongs_to :platform
+
   has_rich_text :description
   has_one_attached :cover_picture
-  belongs_to :platform
 
   validates :title, :capacity, :starts_at, :ends_at, :price, :external_price, presence: true
   validates :capacity, numericality: { greater_than_or_equal_to: 1, only_integer: true }
@@ -21,7 +22,7 @@ class Camp < ApplicationRecord
     if: :ends_at?
   }
   validate :registration_year_must_match
-  validate :platform_cannot_change_with_registrations, if: :will_save_change_to_platform_id?
+  validate :platform_cannot_change, on: :update, if: :will_save_change_to_platform_id?
 
   has_many :camps_subscriptions, dependent: :restrict_with_error
   has_many :subscriptions, through: :camps_subscriptions
@@ -73,9 +74,7 @@ class Camp < ApplicationRecord
     errors.add(:starts_at, :event_year_locked)
   end
 
-  def platform_cannot_change_with_registrations
-    return unless persisted? && subscriptions.exists?
-
+  def platform_cannot_change
     errors.add(:platform, :locked)
   end
 end

@@ -52,7 +52,8 @@ describe Subscriptions::Payable, type: :model do
         amount: subscription.fee_cents,
         currency: 'eur',
         description: subscription.description,
-        customer: user.stripe_customer_id
+        customer: user.stripe_customer_id,
+        metadata: { platform_id: subscription.platform.id.to_s }
       ).and_return(stripe_payment_intent)
 
       allow(Stripe::PaymentIntent).to receive(:retrieve).with(stripe_payment_intent_id).and_return(stripe_payment_intent)

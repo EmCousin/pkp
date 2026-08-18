@@ -8,12 +8,14 @@ describe 'Stripe webhooks', type: :request do
     {
       id: 'evt_test_123',
       type: event_type,
-      data: { object: { id: stripe_payment_intent_id } }
+      data: { object: { id: stripe_payment_intent_id, metadata: stripe_metadata } }
     }.to_json
   end
   let(:event_type) { 'payment_intent.succeeded' }
   let(:stripe_payment_intent_id) { 'pi_test_123' }
-  let(:subscription) { instance_double(Subscription, reconcile_stripe_payment!: true) }
+  let(:platform) { create(:platform, name: 'Webhook platform') }
+  let(:stripe_metadata) { { platform_id: platform.id.to_s } }
+  let(:subscription) { instance_double(Subscription, platform:, reconcile_stripe_payment!: true) }
   let(:signature) do
     timestamp = Time.now
     value = Stripe::Webhook::Signature.compute_signature(timestamp, payload, webhook_secret)
@@ -23,18 +25,46 @@ describe 'Stripe webhooks', type: :request do
   before do
     allow(Rails.application.credentials).to receive(:dig).and_call_original
     allow(Rails.application.credentials).to receive(:dig).with(:stripe, :webhook_secret).and_return(webhook_secret)
-    allow(Subscription).to receive(:find_by).with(stripe_payment_intent_id:).and_return(subscription)
+    allow(Platform).to receive(:find).with(platform.id.to_s).and_return(platform)
+    allow(platform.subscriptions).to receive(:find_by).with(stripe_payment_intent_id:).and_return(subscription)
   end
 
   it 'reconciles a valid successful payment event' do
     allow(subscription).to receive(:reconcile_stripe_payment!) do
-      expect(Current.platform).to be_nil
+      expect(Current.platform).to eq(platform)
     end
 
     post '/webhook/stripe', params: payload, headers: { 'Stripe-Signature' => signature }
 
     expect(response).to have_http_status(:ok)
     expect(subscription).to have_received(:reconcile_stripe_payment!)
+  end
+
+  it 'does not look outside the platform identified by Stripe metadata' do
+    allow(platform.subscriptions).to receive(:find_by).with(stripe_payment_intent_id:).and_return(nil)
+    allow(Subscription).to receive(:find_by)
+
+    post '/webhook/stripe', params: payload, headers: { 'Stripe-Signature' => signature }
+
+    expect(response).to have_http_status(:ok)
+    expect(Subscription).not_to have_received(:find_by)
+    expect(subscription).not_to have_received(:reconcile_stripe_payment!)
+  end
+
+  context 'with an in-flight payment intent created before platform metadata was added' do
+    let(:stripe_metadata) { {} }
+
+    it 'reconciles the payment using the legacy lookup' do
+      allow(Subscription).to receive(:find_by).with(stripe_payment_intent_id:).and_return(subscription)
+      allow(subscription).to receive(:reconcile_stripe_payment!) do
+        expect(Current.platform).to eq(platform)
+      end
+
+      post '/webhook/stripe', params: payload, headers: { 'Stripe-Signature' => signature }
+
+      expect(response).to have_http_status(:ok)
+      expect(subscription).to have_received(:reconcile_stripe_payment!)
+    end
   end
 
   it 'acknowledges events that do not require payment reconciliation' do

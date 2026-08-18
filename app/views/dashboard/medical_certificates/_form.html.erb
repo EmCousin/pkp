@@ -1,4 +1,4 @@
-<% medical_certificate = subscription.medical_certificate_record %>
+<% medical_certificate = Subscriptions::MedicalCertificate.new(subscription:) %>
 <%= form_for subscription,
              url: dashboard_subscription_medical_certificate_path(subscription),
              html: { class: "mt-6 animate-slide-in-from-left animation-duration-500" } do |form| %>

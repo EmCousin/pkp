@@ -11,7 +11,7 @@ class Category < ApplicationRecord
   accepts_nested_attributes_for :pricings, allow_destroy: true, reject_if: :all_blank
 
   validates :title, presence: true, uniqueness: true
-  validate :platform_cannot_change_with_activity, if: :will_save_change_to_platform_id?
+  validate :platform_cannot_change, on: :update, if: :will_save_change_to_platform_id?
 
   validates :min_age, presence: true,
                       numericality: {
@@ -59,9 +59,7 @@ class Category < ApplicationRecord
 
   private
 
-  def platform_cannot_change_with_activity
-    return unless persisted? && (courses.exists? || pricings.exists?)
-
+  def platform_cannot_change
     errors.add(:platform, :locked)
   end
 end

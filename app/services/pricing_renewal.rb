@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PricingRenewal
-  def initialize(year:, categories: Category.all)
+  def initialize(year:, categories: Current.platform.categories)
     @year = year
     @categories = categories
   end

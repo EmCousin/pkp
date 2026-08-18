@@ -2,9 +2,11 @@
 
 class AttendanceSheet < ApplicationRecord
   belongs_to :course
+  has_one :platform, through: :course
   has_many :attendance_records, dependent: :destroy
 
   validates :date, presence: true, uniqueness: { scope: :course_id }
+  validate :course_platform_cannot_change, on: :update, if: :will_save_change_to_course_id?
   validate :course_cannot_change_with_records, if: :will_save_change_to_course_id?
 
   class << self
@@ -38,5 +40,10 @@ class AttendanceSheet < ApplicationRecord
     return unless persisted? && attendance_records.exists?
 
     errors.add(:course, :locked)
+  end
+
+  def course_platform_cannot_change
+    previous_platform_id = Course.joins(:category).where(id: course_id_in_database).pick('categories.platform_id')
+    errors.add(:course, :platform_locked) unless previous_platform_id == course&.platform&.id
   end
 end
