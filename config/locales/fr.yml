@@ -565,6 +565,7 @@ fr:
       destroy:
         success: La catégorie a été supprimée
       renew_pricings:
+        empty: Aucun tarif n'a été reconduit. Vérifiez que les catégories ont des tarifs pour la saison précédente.
         success:
           one: Les tarifs ont été reconduits pour une catégorie.
           other: Les tarifs ont été reconduits pour %{count} catégories.

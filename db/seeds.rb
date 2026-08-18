@@ -58,6 +58,20 @@ categories = {
   health: platform.categories.create!(title: "Parkour Santé", min_age: 16, max_age: 100)
 }
 
+pricing_year = Subscription.current_year
+{
+  adults: [280, 420, 490],
+  teens: [280, 420],
+  kids: [250]
+}.each do |category, prices|
+  categories.fetch(category).pricings.create!(
+    name: "Tarif annuel (septembre à juin)",
+    prices:,
+    starts_at: Date.new(pricing_year - 1, 8, 1),
+    ends_at: Date.new(pricing_year, 6, 30)
+  )
+end
+
 course_description = <<~DESCRIPTION
   Cours extérieur de parkour à Paris, encadré par des coachs diplômés.
   Les séances comprennent un échauffement, une préparation physique et mentale,

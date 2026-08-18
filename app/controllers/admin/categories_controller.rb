@@ -44,9 +44,11 @@ module Admin
 
     def renew_pricings
       renewed_count = PricingRenewal.new(year: @pricing_year).call
+      message_key = renewed_count.zero? ? '.empty' : '.success'
+      flash_type = renewed_count.zero? ? :alert : :notice
 
       redirect_to admin_categories_path,
-                  notice: t('.success', count: renewed_count),
+                  flash: { flash_type => t(message_key, count: renewed_count) },
                   status: :see_other
     end
 

@@ -369,6 +369,7 @@ en:
       create:
         success: "Category created"
       renew_pricings:
+        empty: "No prices were renewed. Check that the categories have prices for the previous season."
         success:
           one: "Prices were renewed for one category."
           other: "Prices were renewed for %{count} categories."

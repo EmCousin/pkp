@@ -84,4 +84,14 @@ describe 'Admin categories', type: :request do
       post renew_pricings_admin_categories_path
     end.not_to change(Pricing, :count)
   end
+
+  it 'warns when there are no previous season prices to renew' do
+    create(:category)
+
+    expect do
+      post renew_pricings_admin_categories_path
+    end.not_to change(Pricing, :count)
+
+    expect(flash[:alert]).to eq("Aucun tarif n'a été reconduit. Vérifiez que les catégories ont des tarifs pour la saison précédente.")
+  end
 end
