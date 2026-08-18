@@ -3,6 +3,7 @@
 module Webhook
   class StripesController < ApplicationController
     skip_forgery_protection
+    skip_before_action :set_current_platform
 
     def create
       return head :service_unavailable if webhook_secret.blank?

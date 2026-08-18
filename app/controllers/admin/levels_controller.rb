@@ -12,7 +12,7 @@ module Admin
     private
 
     def set_member!
-      @member = current_platform.members.find(params[:member_id])
+      @member = Current.platform.members.find(params[:member_id])
     end
 
     def level_param

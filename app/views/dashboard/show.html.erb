@@ -1,6 +1,6 @@
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-  <% subscriptions = current_user.subscriptions.for_platform(current_platform).annual_dashboard %>
-  <% event_subscriptions = current_user.subscriptions.for_platform(current_platform).event_dashboard %>
+  <% subscriptions = current_user.subscriptions.for_platform(Current.platform).annual_dashboard %>
+  <% event_subscriptions = current_user.subscriptions.for_platform(Current.platform).event_dashboard %>
   <h1 class="text-center text-2xl sm:text-3xl font-bold mb-4 text-slate-800"><%= t('defaults.welcome') %> !</h1>
   <div class="border-b border-gray-200 mb-6"></div>
 

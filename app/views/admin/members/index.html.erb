@@ -13,7 +13,7 @@
           </div>
           <div>
             <%= f.grouped_collection_select :course_ids,
-                                            current_platform.categories,
+                                            Current.platform.categories,
                                             :courses,
                                             :title,
                                             :id,
@@ -24,7 +24,7 @@
           </div>
           <div>
             <%= f.grouped_collection_select :camp_ids,
-                                            Camp.struct_by_year(current_platform.camps),
+                                            Camp.struct_by_year(Current.platform.camps),
                                             :camps,
                                             :year,
                                             :id,

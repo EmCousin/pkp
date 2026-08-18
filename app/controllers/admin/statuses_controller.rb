@@ -16,7 +16,7 @@ module Admin
     private
 
     def set_subscription!
-      @subscription = current_platform.subscriptions.find(params[:subscription_id])
+      @subscription = Current.platform.subscriptions.find(params[:subscription_id])
     end
 
     def status_param

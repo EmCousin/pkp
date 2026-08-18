@@ -40,4 +40,19 @@ describe 'Admin subscriptions', type: :request do
 
     expect(response).to redirect_to(admin_subscriptions_path)
   end
+
+  it 'validates a subscription submitted for another platform' do
+    other_platform = create(:platform)
+    other_member = create(:member, platform: other_platform)
+    category = create(:category, platform: other_platform, title: 'Other adults')
+    course = create(:course, category:)
+
+    expect do
+      post admin_subscriptions_path, params: {
+        subscription: { member_id: other_member.id, course_ids: [course.id] }
+      }
+    end.not_to change(Subscription, :count)
+
+    expect(response).to have_http_status(:unprocessable_content)
+  end
 end

@@ -33,7 +33,7 @@ module Dashboard
 
       def set_parent_subscription
         @parent_subscription = current_user.subscriptions
-                                           .for_platform(current_platform)
+                                           .for_platform(Current.platform)
                                            .where(type: AnnualSubscription.sti_name)
                                            .confirmed
                                            .where(year: @camp.year, parent_subscription_id: nil)
@@ -41,12 +41,12 @@ module Dashboard
       end
 
       def set_available_camp
-        @camp = current_platform.camps.available.find(params[:camp_id])
+        @camp = Current.platform.camps.available.find(params[:camp_id])
       end
 
       def set_subscription
         @subscription = current_user.subscriptions
-                                    .for_platform(current_platform)
+                                    .for_platform(Current.platform)
                                     .where(type: CampRegistration.sti_name)
                                     .where.not(parent_subscription_id: nil)
                                     .joins(:camp)

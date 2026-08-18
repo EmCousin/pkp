@@ -27,6 +27,10 @@ describe 'Stripe webhooks', type: :request do
   end
 
   it 'reconciles a valid successful payment event' do
+    allow(subscription).to receive(:reconcile_stripe_payment!) do
+      expect(Current.platform).to be_nil
+    end
+
     post '/webhook/stripe', params: payload, headers: { 'Stripe-Signature' => signature }
 
     expect(response).to have_http_status(:ok)

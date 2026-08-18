@@ -5,20 +5,20 @@ module Admin
     before_action :set_category, only: %i[show edit update destroy]
 
     def index
-      @categories = current_platform.categories.order(:title)
+      @categories = Current.platform.categories.order(:title)
     end
 
     def show; end
 
     def new
-      @category = current_platform.categories.new
+      @category = Current.platform.categories.new
       @category.pricings.build
     end
 
     def edit; end
 
     def create
-      @category = current_platform.categories.new(category_params)
+      @category = Current.platform.categories.new(category_params)
       if @category.save
         redirect_to [:admin, @category], notice: t('.success'), status: :see_other
       else
@@ -43,7 +43,7 @@ module Admin
     end
 
     def renew_pricings
-      renewed_count = PricingRenewal.new(year: @pricing_year, categories: current_platform.categories).call
+      renewed_count = PricingRenewal.new(year: @pricing_year, categories: Current.platform.categories).call
 
       redirect_to admin_categories_path,
                   notice: t('.success', count: renewed_count),
@@ -62,7 +62,7 @@ module Admin
     end
 
     def set_category
-      @category = current_platform.categories.find(params[:id])
+      @category = Current.platform.categories.find(params[:id])
     end
   end
 end

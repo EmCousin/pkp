@@ -18,7 +18,7 @@
 
       <div class="relative">
         <%= f.collection_select :member_id,
-                                        current_platform.members.joins(:user).includes(:user).order('users.email', :first_name, :last_name),
+                                         Current.platform.members.joins(:user).includes(:user).order('users.email', :first_name, :last_name),
                                         :id,
                                         :admin_label,
                                         { include_blank: t('.select_a_member') },
@@ -40,7 +40,7 @@
       <%= f.error_for :member %>
     </div>
 
-    <% if @subscription.member&.valid? %>
+    <% if @subscription.member&.platform == Current.platform && @subscription.member.valid? %>
       <!-- Member's Current Year Subscriptions Info -->
       <% current_year_subscriptions = @subscription.member.subscriptions.where(year: Subscription.current_year) %>
       <% if current_year_subscriptions.any? %>
@@ -152,9 +152,9 @@
                       .where.not(id: @subscription.id)
                       .joins(:courses)
                       .pluck(:course_id)
-                    current_platform.courses.active.where.not(id: existing_course_ids).order(:created_at)
+                    Current.platform.courses.active.where.not(id: existing_course_ids).order(:created_at)
                   else
-                    current_platform.courses.active.order(:created_at)
+                    Current.platform.courses.active.order(:created_at)
                   end
                 %>
                 <% if available_courses.any? %>
@@ -202,9 +202,9 @@
                         .where(year: Subscription.current_year)
                         .joins(:camp)
                         .pluck(:camp_id)
-                      current_platform.camps.available.where.not(id: existing_camp_ids)
+                      Current.platform.camps.available.where.not(id: existing_camp_ids)
                     else
-                      current_platform.camps.available
+                      Current.platform.camps.available
                     end
                   %>
                   <% if available_camps.any? %>

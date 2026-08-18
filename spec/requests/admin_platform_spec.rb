@@ -20,7 +20,7 @@ describe 'Admin platform settings', type: :request do
 
   it 'allows a coach to update the settings' do
     sign_out :user
-    sign_in create(:user, coach: true)
+    sign_in create(:user, coach: true, phone_number: '+33612345680')
 
     patch admin_platform_path, params: {
       platform: { medical_certificate_validity_seasons: 2 }

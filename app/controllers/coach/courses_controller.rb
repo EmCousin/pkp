@@ -3,7 +3,7 @@
 module Coach
   class CoursesController < BaseController
     def index
-      @courses = current_platform.courses.featuring_attendance_sheet.order(:weekday, :created_at)
+      @courses = Current.platform.courses.featuring_attendance_sheet.order(:weekday, :created_at)
     end
   end
 end

@@ -14,7 +14,7 @@ module Coach
       private
 
       def set_discovery_session
-        @discovery_session = current_platform.discovery_sessions.active.find(params[:discovery_session_id])
+        @discovery_session = Current.platform.discovery_sessions.active.find(params[:discovery_session_id])
       end
 
       def set_subscription

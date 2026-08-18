@@ -405,6 +405,17 @@ describe Subscription, type: :model do
       expect(subscription.errors.of_kind?(:courses, :wrong_platform)).to be true
     end
 
+    it 'rejects an internally consistent subscription for another current platform' do
+      category = create(:category, platform: activity_platform, title: 'Other adults')
+      other_member = create(:member, platform: activity_platform)
+      subscription = build(:subscription, member: other_member, courses: [create(:course, category:)])
+
+      Current.set(platform: member_platform) do
+        expect(subscription).not_to be_valid
+        expect(subscription.errors.of_kind?(:member, :wrong_platform)).to be true
+      end
+    end
+
     it 'rejects a camp from another platform' do
       camp = create(:camp, platform: activity_platform)
       subscription = build(:camp_registration, member:, camps_subscription_attributes: { camp_id: camp.id })

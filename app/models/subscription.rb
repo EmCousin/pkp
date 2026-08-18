@@ -63,6 +63,7 @@ class Subscription < ApplicationRecord
   validates :fee, numericality: { greater_than_or_equal_to: 0, allow_blank: true }
   validates :parent_subscription_member, comparison: { equal_to: :member }, if: :parent_subscription_id?
   validate :parent_subscription_must_be_annual_root, if: :parent_subscription_id?
+  validate :member_must_belong_to_current_platform, if: %i[member_present? current_platform?]
   validate :courses_must_belong_to_member_platform, if: %i[member_present? courses?]
   delegate :member, to: :parent_subscription, prefix: true, allow_nil: true
 
@@ -130,7 +131,15 @@ class Subscription < ApplicationRecord
     errors.add(:courses, :wrong_platform)
   end
 
+  def member_must_belong_to_current_platform
+    errors.add(:member, :wrong_platform) unless member.platform == Current.platform
+  end
+
   def member_present?
     member.present?
+  end
+
+  def current_platform?
+    Current.platform.present?
   end
 end

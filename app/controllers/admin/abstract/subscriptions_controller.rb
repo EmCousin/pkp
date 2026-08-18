@@ -6,7 +6,7 @@ module Admin
       protected
 
       def set_subscription!
-        @subscription = current_platform.subscriptions.find_by!(
+        @subscription = Current.platform.subscriptions.find_by!(
           id: params[:subscription_id],
           year: Subscription.current_year
         )
