@@ -75,6 +75,20 @@ describe Camp, type: :model do
     end
   end
 
+  describe '#closed?' do
+    it 'returns false when the camp is open only to externals' do
+      camp = build(:camp, open: false, open_to_externals: true)
+
+      expect(camp).not_to be_closed
+    end
+
+    it 'returns true when the camp is closed to students and externals' do
+      camp = build(:camp, open: false, open_to_externals: false)
+
+      expect(camp).to be_closed
+    end
+  end
+
   describe '#available_slots' do
     let(:camp) { create(:camp, capacity: 10) }
 

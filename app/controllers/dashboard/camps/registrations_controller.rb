@@ -50,7 +50,7 @@ module Dashboard
       end
 
       def check_open_status
-        redirect_to [:dashboard, @camp], alert: t('.closed') unless @camp.open?
+        redirect_to [:dashboard, @camp], alert: t('.closed') unless @camp.open_to_externals?
       end
 
       def check_cancellable

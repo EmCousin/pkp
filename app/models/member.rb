@@ -90,9 +90,8 @@ class Member < ApplicationRecord
 
   def can_subscribe?(camp)
     return false unless camp.platform == platform
-    return false if camp.closed?
+    return false unless camp.open_for?(self)
     return false if camp.fully_booked?
-    return false unless camp.accessible_to?(self)
     return false if camps.exists?(camp.id)
 
     true

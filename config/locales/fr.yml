@@ -240,7 +240,7 @@ fr:
         ends_at: Date de fin
         cover_picture: Image de couverture
         active: Visible
-        open: Ouvert
+        open: Ouvert aux élèves
         open_to_externals: Ouvert aux externes
       discovery_session:
         course: Cours concerné
@@ -454,7 +454,9 @@ fr:
         active: "Visible"
         inactive: "Non-visible"
       open_status:
-        open: "Ouvert"
+        open_to_everyone: "Ouvert aux élèves et externes"
+        open_to_students: "Ouvert aux élèves"
+        open_to_externals: "Ouvert aux externes"
         closed: "Fermé"
       camp:
         duration_days:

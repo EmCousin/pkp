@@ -33,7 +33,7 @@ class Camp < ApplicationRecord
   scope :available, -> { active.upcoming }
 
   def closed?
-    !open?
+    !open? && !open_to_externals?
   end
 
   def duration_days
@@ -44,8 +44,8 @@ class Camp < ApplicationRecord
     member.annual_subscription_for(year).present?
   end
 
-  def accessible_to?(member)
-    internal_for?(member) || open_to_externals?
+  def open_for?(member)
+    internal_for?(member) ? open? : open_to_externals?
   end
 
   def price_for(member)
