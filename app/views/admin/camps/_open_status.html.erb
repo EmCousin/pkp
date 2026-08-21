@@ -1,6 +1,14 @@
-<% if camp.open? %>
+<% if camp.open? && camp.open_to_externals? %>
   <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-    <%= t('.open') %>
+    <%= t('.open_to_everyone') %>
+  </span>
+<% elsif camp.open? %>
+  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+    <%= t('.open_to_students') %>
+  </span>
+<% elsif camp.open_to_externals? %>
+  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+    <%= t('.open_to_externals') %>
   </span>
 <% else %>
   <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">

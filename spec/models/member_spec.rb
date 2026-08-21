@@ -99,9 +99,15 @@ describe Member, type: :model do
 
     it 'allows an external member when the camp is open to externals' do
       annual_subscription.destroy!
-      camp.update!(open_to_externals: true)
+      camp.update!(open: false, open_to_externals: true)
 
       expect(member.can_subscribe?(camp)).to be true
+    end
+
+    it 'rejects an annual student when the camp is open only to externals' do
+      camp.update!(open: false, open_to_externals: true)
+
+      expect(member.can_subscribe?(camp)).to be false
     end
 
     it 'rejects a discovery session outside the member age range' do

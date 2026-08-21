@@ -10,9 +10,9 @@ describe 'External event registrations', type: :request do
   before { sign_in user }
 
   describe 'camp registration' do
-    let(:camp) { create(:camp, price: 90, external_price: 140, open_to_externals: true) }
+    let(:camp) { create(:camp, price: 90, external_price: 140, open: false, open_to_externals: true) }
 
-    it 'creates a standalone registration at the external rate' do
+    it 'creates a standalone registration at the external rate when open only to externals' do
       expect do
         post dashboard_camp_registrations_path(camp), params: { member_id: member.id }
         expect(response).to have_http_status(:see_other)
@@ -38,6 +38,7 @@ describe 'External event registrations', type: :request do
     end
 
     it 'keeps the internal rate and annual parent for an annual student' do
+      camp.update!(open: true)
       annual_subscription = create(
         :subscription,
         member:,
@@ -53,6 +54,22 @@ describe 'External event registrations', type: :request do
       expect(subscription.parent_subscription).to eq(annual_subscription)
       expect(subscription.fee).to eq(90)
       expect(response).to redirect_to(new_dashboard_subscription_payment_path(subscription))
+    end
+
+    it 'keeps internal registration closed when open only to externals' do
+      annual_subscription = create(
+        :subscription,
+        member:,
+        courses: [create(:course)],
+        status: :confirmed,
+        year: camp.year
+      )
+
+      expect do
+        post dashboard_camp_subscriptions_path(camp), params: { subscription_id: annual_subscription.id }
+      end.not_to change(CampRegistration, :count)
+
+      expect(response).to redirect_to(dashboard_camp_path(camp))
     end
 
     it 'keeps standalone registration unavailable to an annual student' do
@@ -101,6 +118,7 @@ describe 'External event registrations', type: :request do
     end
 
     it 'keeps cancellation available for an internal registration after the camp closes' do
+      camp.update!(open: true)
       annual_subscription = create(
         :subscription,
         member:,
