@@ -31,6 +31,23 @@ class Camp < ApplicationRecord
   scope :active, -> { where(active: true) }
   scope :upcoming, -> { where(starts_at: Date.current..) }
   scope :available, -> { active.upcoming }
+  scope :search_by_title, lambda { |query|
+    query.present? ? where('LOWER(camps.title) LIKE ?', "%#{sanitize_sql_like(query.downcase)}%") : all
+  }
+  scope :filter_by_flag, ->(attribute, value) { value.present? ? where(attribute => value) : all }
+  scope :filter_by_year, lambda { |year|
+    year = Integer(year, exception: false)
+    next all unless year
+
+    where(starts_at: Course.vacation_start(year).to_date...Course.vacation_start(year + 1).to_date)
+  }
+  scope :search_and_filter, lambda { |attributes|
+    search_by_title(attributes[:q])
+      .filter_by_flag(:active, attributes[:active])
+      .filter_by_flag(:open, attributes[:open])
+      .filter_by_flag(:open_to_externals, attributes[:open_to_externals])
+      .filter_by_year(attributes[:year])
+  }
 
   def closed?
     !open? && !open_to_externals?

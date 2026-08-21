@@ -6,7 +6,8 @@ module Admin
     before_action :set_subscriptions, only: :show
 
     def index
-      @camps = Current.platform.camps.includes(:subscriptions).order(:starts_at, :created_at)
+      @camp_years = camp_years
+      @camps = filtered_camps.includes(:subscriptions).order(:starts_at, :created_at).page(params[:page]).per(25)
     end
 
     def show
@@ -45,6 +46,16 @@ module Admin
     end
 
     private
+
+    def filtered_camps
+      Current.platform.camps.search_and_filter(
+        params.to_unsafe_h.slice(:q, :active, :open, :open_to_externals, :year)
+      )
+    end
+
+    def camp_years
+      Current.platform.camps.pluck(:starts_at).compact.map { Subscription.current_year(it) }.uniq.sort.reverse
+    end
 
     def set_camp
       @camp = Current.platform.camps.find(params[:id])

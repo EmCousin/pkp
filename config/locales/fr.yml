@@ -473,6 +473,19 @@ fr:
       index:
         title: "Stages"
         new_camp: "Nouveau stage"
+        empty: "Aucun stage ne correspond à ces critères."
+        filters:
+          title: "Rechercher des stages"
+          description: "Combinez les critères pour affiner les résultats."
+          name: "Nom"
+          name_placeholder: "Rechercher par nom"
+          year: "Année"
+          all: "Tous"
+          visible: "Visible"
+          not_visible: "Non-visible"
+          open: "Ouvert"
+          closed: "Fermé"
+          reset: "Réinitialiser"
       new:
         title: "Nouveau stage"
       edit:

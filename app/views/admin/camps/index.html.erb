@@ -4,13 +4,71 @@
     <%= link_to t('.new_camp'), new_admin_camp_path, class: "inline-flex items-center px-3 py-2 border border-transparent text-xs sm:text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 w-fit" %>
   </div>
 
-  <div class="bg-white shadow sm:rounded-md">
-    <ul class="divide-y divide-gray-200">
-      <% @camps.each do |camp| %>
-        <li>
-          <%= render 'camp', camp: %>
-        </li>
-      <% end %>
-    </ul>
+  <div class="mb-6 rounded-lg border border-slate-200 bg-slate-50 p-4 shadow-sm sm:p-6">
+    <%= form_with url: admin_camps_path, method: :get, class: "space-y-5" do |form| %>
+      <div>
+        <h2 class="text-base font-semibold text-slate-900"><%= t('.filters.title') %></h2>
+        <p class="mt-1 text-sm text-slate-600"><%= t('.filters.description') %></p>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <div>
+          <%= form.label :q, t('.filters.name'), class: 'mb-1 block text-sm font-medium text-gray-700' %>
+          <%= form.text_field :q,
+                              value: params[:q],
+                              placeholder: t('.filters.name_placeholder'),
+                              class: 'block w-full rounded-md border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-slate-800 focus:ring-slate-800 sm:text-sm' %>
+        </div>
+        <div>
+          <%= form.label :active, Camp.human_attribute_name(:active), class: 'mb-1 block text-sm font-medium text-gray-700' %>
+          <%= form.select :active,
+                          options_for_select([[t('.filters.visible'), 'true'], [t('.filters.not_visible'), 'false']], params[:active]),
+                          { include_blank: t('.filters.all') },
+                          class: 'block w-full rounded-md border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-slate-800 focus:ring-slate-800 sm:text-sm' %>
+        </div>
+        <div>
+          <%= form.label :open, Camp.human_attribute_name(:open), class: 'mb-1 block text-sm font-medium text-gray-700' %>
+          <%= form.select :open,
+                          options_for_select([[t('.filters.open'), 'true'], [t('.filters.closed'), 'false']], params[:open]),
+                          { include_blank: t('.filters.all') },
+                          class: 'block w-full rounded-md border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-slate-800 focus:ring-slate-800 sm:text-sm' %>
+        </div>
+        <div>
+          <%= form.label :open_to_externals, Camp.human_attribute_name(:open_to_externals), class: 'mb-1 block text-sm font-medium text-gray-700' %>
+          <%= form.select :open_to_externals,
+                          options_for_select([[t('.filters.open'), 'true'], [t('.filters.closed'), 'false']], params[:open_to_externals]),
+                          { include_blank: t('.filters.all') },
+                          class: 'block w-full rounded-md border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-slate-800 focus:ring-slate-800 sm:text-sm' %>
+        </div>
+        <div>
+          <%= form.label :year, t('.filters.year'), class: 'mb-1 block text-sm font-medium text-gray-700' %>
+          <%= form.select :year,
+                          options_for_select(@camp_years.map { |year| ["#{year} - #{year + 1}", year] }, params[:year]),
+                          { include_blank: t('.filters.all') },
+                          class: 'block w-full rounded-md border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-slate-800 focus:ring-slate-800 sm:text-sm' %>
+        </div>
+      </div>
+
+      <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+        <%= link_to t('.filters.reset'), admin_camps_path, class: 'rounded-md px-5 py-2 text-center text-sm font-medium text-slate-700 hover:bg-slate-200' %>
+        <%= form.submit t('defaults.filter'), class: 'rounded-md bg-blue-600 px-5 py-2 text-sm font-medium text-white hover:bg-blue-700' %>
+      </div>
+    <% end %>
   </div>
+
+  <div class="bg-white shadow sm:rounded-md">
+    <% if @camps.empty? %>
+      <p class="p-8 text-center text-gray-500"><%= t('.empty') %></p>
+    <% else %>
+      <ul class="divide-y divide-gray-200">
+        <% @camps.each do |camp| %>
+          <li>
+            <%= render 'camp', camp: %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+
+  <div class="mt-6"><%= paginate @camps %></div>
 </div>
