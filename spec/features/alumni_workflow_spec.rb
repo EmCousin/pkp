@@ -131,9 +131,9 @@ feature "Alumni Workflow", type: :feature do
     expect(page).to have_text('Vos modifications ont bien été enregistrées.')
     expect(page).to have_text('Bienvenue !')
     expect(page).to have_text("Vous n'êtes pas encore inscrit·e pour l'année #{Subscription.current_year} - #{Subscription.next_year} ! Cliquez sur le bouton pour vous inscrire :")
-    expect(find_link('Choisir mes cours').visible?).to be true
+    expect(find_link('Inscription annuelle').visible?).to be true
 
-    click_link 'Choisir mes cours'
+    click_link 'Inscription annuelle'
 
     expect(page).to have_text("C'est les vacances")
     expect(page).to have_text("Les cours reprennent en Septembre !")
