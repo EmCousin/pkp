@@ -45,7 +45,10 @@ describe 'Admin camps', type: :request do
 
     page = Nokogiri::HTML(response.body)
     %w[active visible_to_externals open open_to_externals].each do |filter|
-      expect(page.at_css("input[type='checkbox'][name='#{filter}'][value='true']")).to be_present
+      checkbox = page.at_css("input[type='checkbox'][name='#{filter}'][value='true']")
+      expect(checkbox).to be_present
+      expect(checkbox.parent.name).to eq('label')
+      expect(checkbox.parent.text).to include(Camp.human_attribute_name(filter))
       expect(page.at_css("input[type='hidden'][name='#{filter}'][value='']")).to be_present
     end
   end

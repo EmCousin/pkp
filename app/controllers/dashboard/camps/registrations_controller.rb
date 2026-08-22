@@ -10,7 +10,7 @@ module Dashboard
       before_action :check_open_status, only: :create
 
       def create
-        raise ActiveRecord::RecordNotFound if @member.annual_subscription_for(@camp.year)
+        raise ActiveRecord::RecordNotFound if @member.annual_registration_for(@camp.year)
 
         @registration = CampRegistration.new(member: @member, year: @camp.year,
                                              camps_subscription_attributes: { camp_id: @camp.id })

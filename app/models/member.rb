@@ -99,17 +99,25 @@ class Member < ApplicationRecord
                  .find_by(year:, parent_subscription_id: nil)
   end
 
+  def annual_registration_for(year = Subscription.current_year)
+    if subscriptions.loaded?
+      return subscriptions.find do |subscription|
+        subscription.is_a?(AnnualSubscription) && !subscription.archived? && subscription.year == year && subscription.parent_subscription_id.nil?
+      end
+    end
+
+    subscriptions.where(type: AnnualSubscription.sti_name)
+                 .not_archived
+                 .find_by(year:, parent_subscription_id: nil)
+  end
+
   alias current_subscription annual_subscription_for
 
   def can_subscribe?(camp)
     return false if tombstoned_at?
-    return false unless camp.platform == platform
-    return false unless camp.visible_for?(self)
-    return false unless camp.open_for?(self)
-    return false if camp.fully_booked?
-    return false if camps.exists?(camp.id)
+    return false if annual_registration_blocks_external_camp?(camp)
 
-    true
+    camp_available_for_registration?(camp) && !camps.exists?(camp.id)
   end
 
   def can_subscribe_to_discovery?(discovery_session)
@@ -119,6 +127,17 @@ class Member < ApplicationRecord
   end
 
   private
+
+  def annual_registration_blocks_external_camp?(camp)
+    !camp.internal_for?(self) && annual_registration_for(camp.year).present?
+  end
+
+  def camp_available_for_registration?(camp)
+    camp.platform == platform &&
+      camp.visible_for?(self) &&
+      camp.open_for?(self) &&
+      !camp.fully_booked?
+  end
 
   def discovery_available?(discovery_session)
     discovery_session.platform == platform &&

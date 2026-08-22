@@ -11,29 +11,13 @@
         <p class="mt-1 text-sm text-slate-600"><%= t('.filters.description') %></p>
       </div>
 
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <%= form.label :q, t('.filters.name'), class: 'mb-1 block text-sm font-medium text-gray-700' %>
           <%= form.text_field :q,
                               value: params[:q],
                               placeholder: t('.filters.name_placeholder'),
                               class: 'block w-full rounded-md border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-slate-800 focus:ring-slate-800 sm:text-sm' %>
-        </div>
-        <div class="flex items-center gap-3 sm:pt-6">
-          <%= form.switch :visible_to_externals, { checked: params[:visible_to_externals] == 'true' }, 'true', '' %>
-          <%= form.label :visible_to_externals, Camp.human_attribute_name(:visible_to_externals), class: 'text-sm font-medium text-gray-700' %>
-        </div>
-        <div class="flex items-center gap-3 sm:pt-6">
-          <%= form.switch :active, { checked: params[:active] == 'true' }, 'true', '' %>
-          <%= form.label :active, Camp.human_attribute_name(:active), class: 'text-sm font-medium text-gray-700' %>
-        </div>
-        <div class="flex items-center gap-3 sm:pt-6">
-          <%= form.switch :open, { checked: params[:open] == 'true' }, 'true', '' %>
-          <%= form.label :open, Camp.human_attribute_name(:open), class: 'text-sm font-medium text-gray-700' %>
-        </div>
-        <div class="flex items-center gap-3 sm:pt-6">
-          <%= form.switch :open_to_externals, { checked: params[:open_to_externals] == 'true' }, 'true', '' %>
-          <%= form.label :open_to_externals, Camp.human_attribute_name(:open_to_externals), class: 'text-sm font-medium text-gray-700' %>
         </div>
         <div>
           <%= form.label :year, t('.filters.year'), class: 'mb-1 block text-sm font-medium text-gray-700' %>
@@ -42,6 +26,21 @@
                           { include_blank: t('.filters.all') },
                           class: 'block w-full rounded-md border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-slate-800 focus:ring-slate-800 sm:text-sm' %>
         </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <% %i[active visible_to_externals open open_to_externals].each do |filter| %>
+          <%= form.switch filter,
+                          {
+                            checked: params[filter] == 'true',
+                            label_options: {
+                              class: 'flex min-h-14 cursor-pointer items-center gap-3 rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-sm transition hover:border-slate-300 hover:bg-slate-50'
+                            }
+                          },
+                          'true', '' do %>
+            <span class="text-sm font-medium text-gray-700"><%= Camp.human_attribute_name(filter) %></span>
+          <% end %>
+        <% end %>
       </div>
 
       <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">

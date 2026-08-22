@@ -82,6 +82,16 @@ describe 'External event registrations', type: :request do
       expect(response).to have_http_status(:not_found)
     end
 
+    it 'keeps standalone registration unavailable while annual enrollment is pending' do
+      create(:subscription, member:, courses: [create(:course)], status: :pending, year: camp.year)
+
+      expect do
+        post dashboard_camp_registrations_path(camp), params: { member_id: member.id }
+      end.not_to change(CampRegistration, :count)
+
+      expect(response).to have_http_status(:not_found)
+    end
+
     it 'requires an annual subscription on the internal endpoint' do
       expect do
         post dashboard_camp_subscriptions_path(camp), params: { subscription_id: 0 }

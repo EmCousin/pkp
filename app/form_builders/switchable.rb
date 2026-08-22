@@ -48,29 +48,38 @@ module Switchable
     after:duration-200
   ].freeze
 
-  # rubocop:disable Metrics/MethodLength
-  def switch(method, options = {}, checked_value = '1', unchecked_value = '0')
+  def switch(method, options = {}, checked_value = '1', unchecked_value = '0', &block)
     label_options = options.delete(:label_options) || {}
 
     options[:class] = class_names(SWITCH_INPUT_DEFAULT_CLASSES, options[:class])
     slider_class = options.delete(:slider_class)
 
     @template.tag.label class: class_names(SWITCH_LABEL_DEFAULT_CLASSES, label_options[:class]) do
-      @template.concat(
-        check_box(method, options, checked_value, unchecked_value)
-      )
-      @template.concat(
-        @template.tag.span(
-          class: class_names(SWITCH_SLIDER_DEFAULT_CLASSES, slider_class),
-          role: :switch,
-          aria: options[:aria]
-        )
-      )
+      append_switch_input(method, options, checked_value, unchecked_value)
+      append_switch_slider(slider_class, options[:aria])
+      append_switch_content(block)
     end
-    # rubocop:enable Metrics/MethodLength
   end
 
   private
+
+  def append_switch_input(method, options, checked_value, unchecked_value)
+    @template.concat(check_box(method, options, checked_value, unchecked_value))
+  end
+
+  def append_switch_slider(slider_class, aria)
+    @template.concat(
+      @template.tag.span(
+        class: class_names(SWITCH_SLIDER_DEFAULT_CLASSES, slider_class),
+        role: :switch,
+        aria:
+      )
+    )
+  end
+
+  def append_switch_content(block)
+    @template.concat(@template.capture(&block)) if block
+  end
 
   def switch_label(label_name)
     @template.tag.span(class: 'text-sm font-medium text-gray-900') { label_name }

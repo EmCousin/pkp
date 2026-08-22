@@ -110,6 +110,13 @@ describe Member, type: :model do
       expect(member.can_subscribe?(camp)).to be false
     end
 
+    it 'rejects a pending annual enrollment when the camp is open only to externals' do
+      annual_subscription.update!(status: :pending)
+      camp.update!(active: false, visible_to_externals: true, open: false, open_to_externals: true)
+
+      expect(member.can_subscribe?(camp)).to be false
+    end
+
     it 'rejects a discovery session outside the member age range' do
       category = create(:category, title: 'Adultes découverte', min_age: 18, max_age: 100)
       discovery_session = create(:discovery_session, course: create(:course, category:))

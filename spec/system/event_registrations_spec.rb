@@ -86,6 +86,27 @@ describe 'Event registrations', type: :system do
     expect(registration).to have_attributes(fee: 140, parent_subscription: nil)
   end
 
+  it 'does not offer an external-only camp to a member with an annual enrollment' do
+    category = create(:category, platform:)
+    course = create(:course, category:)
+    camp = create(
+      :camp,
+      platform:,
+      title: 'Stage externe',
+      active: false,
+      visible_to_externals: true,
+      open: false,
+      open_to_externals: true
+    )
+    create(:subscription, member:, courses: [course], status: :pending, year: camp.year)
+
+    sign_in
+    visit dashboard_camp_path(camp)
+
+    expect(page).to have_no_button("S'inscrire avec #{member.full_name}")
+    expect(page).to have_text("Impossible de s'inscrire avec #{member.full_name}")
+  end
+
   def sign_in
     visit new_user_session_path
     fill_in 'user_email', with: user.email
