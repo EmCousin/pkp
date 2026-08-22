@@ -99,7 +99,7 @@ describe Member, type: :model do
 
     it 'allows an external member when the camp is open to externals' do
       annual_subscription.destroy!
-      camp.update!(open: false, open_to_externals: true)
+      camp.update!(open: false, open_to_externals: true, visible_to_externals: true)
 
       expect(member.can_subscribe?(camp)).to be true
     end

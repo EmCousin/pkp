@@ -128,6 +128,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_22_120100) do
     t.date "starts_at"
     t.string "title"
     t.datetime "updated_at", null: false
+    t.boolean "visible_to_externals", default: false, null: false
     t.index ["platform_id"], name: "index_camps_on_platform_id"
   end
 

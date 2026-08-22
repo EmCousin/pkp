@@ -37,7 +37,7 @@ module Dashboard
       end
 
       def set_available_camp
-        @camp = Current.platform.camps.available.find(params.expect(:camp_id))
+        @camp = Current.platform.camps.upcoming.where(visible_to_externals: true).find(params.expect(:camp_id))
       end
 
       def set_registration
