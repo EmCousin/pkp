@@ -31,7 +31,7 @@ module Dashboard
       private
 
       def set_available_discovery_session
-        @discovery_session = Current.platform.discovery_sessions.available.find(params[:discovery_session_id])
+        @discovery_session = Current.platform.discovery_sessions.available.find(params.expect(:discovery_session_id))
       end
 
       def set_member
@@ -43,7 +43,7 @@ module Dashboard
                                     .for_platform(Current.platform)
                                     .where(type: DiscoveryRegistration.sti_name)
                                     .joins(:discovery_session)
-                                    .find_by!(id: params[:id], discovery_sessions: { id: params[:discovery_session_id] })
+                                    .find_by!(id: params.expect(:id), discovery_sessions: { id: params.expect(:discovery_session_id) })
         @discovery_session = @subscription.discovery_session
       end
 

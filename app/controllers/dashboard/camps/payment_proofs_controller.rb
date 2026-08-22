@@ -25,11 +25,11 @@ module Dashboard
       private
 
       def set_camp
-        @camp = Current.platform.camps.visible.upcoming.find(params[:camp_id])
+        @camp = Current.platform.camps.visible.upcoming.find(params.expect(:camp_id))
       end
 
       def set_subscription
-        @subscription = @camp.subscriptions.merge(current_user.subscriptions).find(params[:subscription_id])
+        @subscription = @camp.subscriptions.merge(current_user.subscriptions).find(params.expect(:subscription_id))
       end
 
       def payment_proof_params

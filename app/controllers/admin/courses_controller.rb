@@ -56,7 +56,7 @@ module Admin
     end
 
     def set_course
-      @course = Current.platform.courses.find(params[:id])
+      @course = Current.platform.courses.find(params.expect(:id))
     end
 
     def set_subscriptions

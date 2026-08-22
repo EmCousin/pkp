@@ -57,7 +57,7 @@ module Admin
     private
 
     def set_member
-      @member = Current.platform.members.find(params[:id])
+      @member = Current.platform.members.find(params.expect(:id))
     end
 
     def member_params
