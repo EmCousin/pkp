@@ -591,6 +591,11 @@ en:
       medical_certificate_from_season: "Valid certificate uploaded in %{season}"
     camps:
       camp:
+        audience:
+          everyone: Open to everyone
+          students: Students only
+          externals: External participants only
+          closed: Registration closed
         duration_days:
           one: "%{count} day"
           other: "%{count} days"
@@ -627,7 +632,7 @@ en:
         confirm_unsubscribe: "Are you sure you want to unsubscribe from this camp?"
         available_for_subscription: "Available for registration"
         choose_member: "Choose a member to register:"
-        no_confirmed_subscriptions: "No confirmed registrations"
+        no_eligible_members: "No other eligible members"
         need_confirmed_subscription: "You must have a confirmed registration to register for camps."
         description: "Description"
         duration_days:
@@ -637,7 +642,12 @@ en:
       subscription:
         unsubscribe: "Unsubscribe"
         subscribe_with: "Register with %{member}"
-        cannot_subscribe_with: "Cannot register with %{member}"
+        unavailability:
+          full: This camp is full.
+          externals_only: "%{member} has an annual enrollment and is therefore a student, while this camp is reserved for external participants."
+          annual_pending: "%{member}'s annual enrollment must be confirmed before registering for this camp."
+          students_only: "%{member} has no confirmed annual enrollment for this season, while this camp is reserved for students."
+          unavailable: "%{member} does not meet the registration requirements for this camp."
       subscriptions:
         create:
           success: "Camp registration confirmed"

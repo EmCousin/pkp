@@ -31,8 +31,10 @@
             <div>
               <dt class="text-sm font-medium text-gray-500"><%= t('.price') %></dt>
               <dd class="mt-1 text-sm text-gray-900">
-                <span class="block"><%= t('.internal_price') %> : <strong><%= number_to_currency(@camp.price, unit: "€") %></strong></span>
-                <% if @camp.open_to_externals? %>
+                <% if @camp.open? || @camp.closed? %>
+                  <span class="block"><%= t('.internal_price') %> : <strong><%= number_to_currency(@camp.price, unit: "€") %></strong></span>
+                <% end %>
+                <% if @camp.open_to_externals? || @camp.closed? %>
                   <span class="block"><%= t('.external_price') %> : <strong><%= number_to_currency(@camp.external_price, unit: "€") %></strong></span>
                 <% end %>
               </dd>
@@ -79,7 +81,7 @@
                 </div>
                 <div class="ml-3">
                   <h3 class="text-sm font-medium text-yellow-800">
-                    <%= t('.no_confirmed_subscriptions') %>
+                    <%= t('.no_eligible_members') %>
                   </h3>
                   <div class="mt-2 text-sm text-yellow-700">
                     <p><%= t('.add_member_description') %></p>

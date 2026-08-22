@@ -1,5 +1,6 @@
 <% camp_subscription = member.subscriptions.not_archived.joins(:camps_subscription).find_by(camps_subscriptions: { camp_id: @camp.id }) %>
 <% annual_subscription = member.annual_subscription_for(@camp.year) %>
+<% annual_registration = member.annual_registration_for(@camp.year) %>
 
 <% if camp_subscription %>
   <% completion_path = next_completion_step_path(camp_subscription) %>
@@ -34,6 +35,16 @@
   <% end %>
 <% else %>
   <div class="text-sm text-gray-500 bg-gray-50 rounded-lg px-4 py-3 border border-gray-200">
-    <%= @camp.open_to_externals? ? t('.cannot_subscribe_with', member: member.full_name) : t('.external_registration_closed', member: member.full_name) %>
+    <% if @camp.fully_booked? %>
+      <%= t('.unavailability.full') %>
+    <% elsif annual_registration && !@camp.open? %>
+      <%= t('.unavailability.externals_only', member: member.full_name) %>
+    <% elsif annual_registration && !annual_subscription %>
+      <%= t('.unavailability.annual_pending', member: member.full_name) %>
+    <% elsif !annual_registration && !@camp.open_to_externals? %>
+      <%= t('.unavailability.students_only', member: member.full_name) %>
+    <% else %>
+      <%= t('.unavailability.unavailable', member: member.full_name) %>
+    <% end %>
   </div>
 <% end %>

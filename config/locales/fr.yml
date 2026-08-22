@@ -847,6 +847,11 @@ fr:
           already_confirmed: Une inscription confirmée ou payée ne peut pas être annulée en ligne.
     camps:
       camp:
+        audience:
+          everyone: Ouvert à tous
+          students: Réservé aux élèves
+          externals: Réservé aux externes
+          closed: Inscriptions fermées
         duration_days:
           one: "%{count} jour"
           other: "%{count} jours"
@@ -894,10 +899,10 @@ fr:
         confirm_unsubscribe: "Êtes-vous sûr de vouloir vous désinscrire de ce stage ?"
         available_for_subscription: "Disponible pour inscription"
         choose_member: "Choisissez un membre pour vous inscrire :"
-        no_confirmed_subscriptions: "Aucune inscription confirmée"
+        no_eligible_members: "Aucun autre membre éligible"
         need_confirmed_subscription: "Vous devez avoir une inscription confirmée pour vous inscrire aux stages."
         add_member: Ajouter un participant
-        add_member_description: Ajoutez d'abord la personne que vous souhaitez inscrire.
+        add_member_description: Ajoutez une autre personne correspondant au public de ce stage.
         description: "Description"
         duration_days:
           one: "%{count} jour"
@@ -908,12 +913,16 @@ fr:
       subscription:
         unsubscribe: "Se désinscrire"
         subscribe_with: "S'inscrire avec %{member}"
-        cannot_subscribe_with: "Impossible de s'inscrire avec %{member}"
         pay: Payer en ligne
         upload_payment_proof: Justificatif
         internal_rate: Tarif élève
         external_rate: Tarif externe
-        external_registration_closed: "%{member} n'est pas inscrit aux cours annuels et ce stage n'est pas ouvert aux externes."
+        unavailability:
+          full: Ce stage est complet.
+          externals_only: "Ce stage est réservé aux externes. %{member} possède une inscription annuelle et fait donc partie des élèves."
+          annual_pending: "L'inscription annuelle de %{member} doit être confirmée avant de pouvoir l'inscrire à ce stage."
+          students_only: "Ce stage est réservé aux élèves. %{member} n'a pas d'inscription annuelle confirmée pour cette saison."
+          unavailable: "%{member} ne remplit pas les conditions d'inscription à ce stage."
       subscriptions:
         create:
           success: "Inscription au stage confirmée"

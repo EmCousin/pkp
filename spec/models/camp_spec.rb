@@ -138,6 +138,15 @@ describe Camp, type: :model do
     end
   end
 
+  describe '#registration_audience' do
+    it 'describes who can register' do
+      expect(build(:camp, open: true, open_to_externals: true).registration_audience).to eq(:everyone)
+      expect(build(:camp, open: true, open_to_externals: false).registration_audience).to eq(:students)
+      expect(build(:camp, open: false, open_to_externals: true).registration_audience).to eq(:externals)
+      expect(build(:camp, open: false, open_to_externals: false).registration_audience).to eq(:closed)
+    end
+  end
+
   describe '#available_slots' do
     let(:camp) { create(:camp, capacity: 10) }
 

@@ -51,6 +51,7 @@ describe 'Event registrations', type: :system do
 
     sign_in
     visit dashboard_camps_path
+    expect(page).to have_text('Réservé aux élèves')
     click_link 'Voir les détails'
     expect(page).to have_text('Tarif élève - 90,00 €')
     click_button "S'inscrire avec #{member.full_name}"
@@ -76,6 +77,7 @@ describe 'Event registrations', type: :system do
 
     sign_in
     visit dashboard_camps_path
+    expect(page).to have_text('Réservé aux externes')
     click_link 'Voir les détails'
     expect(page).to have_text('Tarif externe - 140,00 €')
     click_button "S'inscrire avec #{member.full_name}"
@@ -104,7 +106,7 @@ describe 'Event registrations', type: :system do
     visit dashboard_camp_path(camp)
 
     expect(page).to have_no_button("S'inscrire avec #{member.full_name}")
-    expect(page).to have_text("Impossible de s'inscrire avec #{member.full_name}")
+    expect(page).to have_text("Ce stage est réservé aux externes. #{member.full_name} possède une inscription annuelle et fait donc partie des élèves.")
   end
 
   def sign_in

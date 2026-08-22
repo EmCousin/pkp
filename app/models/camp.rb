@@ -55,6 +55,14 @@ class Camp < ApplicationRecord
     !open? && !open_to_externals?
   end
 
+  def registration_audience
+    return :everyone if open? && open_to_externals?
+    return :students if open?
+    return :externals if open_to_externals?
+
+    :closed
+  end
+
   def duration_days
     (ends_at - starts_at).to_i + 1
   end
