@@ -31,7 +31,7 @@ module Dashboard
     private
 
     def set_member
-      @member = current_user.members.find_by!(platform: Current.platform, id: params[:id])
+      @member = current_user.members.find_by!(platform: Current.platform, id: params.expect(:id))
     end
 
     def member_params

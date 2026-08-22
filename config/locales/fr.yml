@@ -239,7 +239,8 @@ fr:
         starts_at: Date de début
         ends_at: Date de fin
         cover_picture: Image de couverture
-        active: Visible
+        active: Visible aux élèves
+        visible_to_externals: Visible aux externes
         open: Ouvert aux élèves
         open_to_externals: Ouvert aux externes
       discovery_session:
@@ -451,8 +452,10 @@ fr:
 
     camps:
       active_status:
-        active: "Visible"
-        inactive: "Non-visible"
+        visible_to_everyone: "Visible aux élèves et externes"
+        visible_to_students: "Visible aux élèves"
+        visible_to_externals: "Visible aux externes"
+        hidden: "Non-visible"
       open_status:
         open_to_everyone: "Ouvert aux élèves et externes"
         open_to_students: "Ouvert aux élèves"
@@ -502,7 +505,7 @@ fr:
           one: "%{current}/%{count} place occupée"
           other: "%{current}/%{count} places occupées"
         status: "Statut"
-        active: "Actif"
+        active: "Visibilité"
         inactive: "Inactif"
         description: "Description"
         subscriptions: "Inscriptions"
@@ -521,7 +524,7 @@ fr:
         or_drag_drop: "ou glisser-déposer"
         cancel: "Annuler"
         visibility_title: "Visibilité"
-        visibility_headline: "Rendez le stage visible ou invisible par les élèves"
+        visibility_headline: "Choisissez si le stage est visible par les élèves, les externes ou les deux"
         open_title: "Ouvert aux inscriptions"
         open_headline: "Indiquez si le stage est ouvert aux inscriptions"
       create:

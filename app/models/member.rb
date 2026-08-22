@@ -81,6 +81,12 @@ class Member < ApplicationRecord
   end
 
   def annual_subscription_for(year = Subscription.current_year)
+    if subscriptions.loaded?
+      return subscriptions.find do |subscription|
+        subscription.is_a?(AnnualSubscription) && subscription.confirmed? && subscription.year == year && subscription.parent_subscription_id.nil?
+      end
+    end
+
     subscriptions.where(type: AnnualSubscription.sti_name)
                  .confirmed
                  .find_by(year:, parent_subscription_id: nil)
@@ -90,6 +96,7 @@ class Member < ApplicationRecord
 
   def can_subscribe?(camp)
     return false unless camp.platform == platform
+    return false unless camp.visible_for?(self)
     return false unless camp.open_for?(self)
     return false if camp.fully_booked?
     return false if camps.exists?(camp.id)

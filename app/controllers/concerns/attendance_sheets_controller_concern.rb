@@ -20,7 +20,7 @@ module AttendanceSheetsControllerConcern
   end
 
   def update
-    @attendance_record = @attendance_sheet.attendance_records.find(params[:record_id])
+    @attendance_record = @attendance_sheet.attendance_records.find(params.expect(:record_id))
     @attendance_record.update(absent: params[:absent])
 
     redirect_to polymorphic_path([namespace, @attendance_sheet]), status: :see_other
@@ -33,10 +33,10 @@ module AttendanceSheetsControllerConcern
   end
 
   def set_course
-    @course = Current.platform.courses.featuring_attendance_sheet.find(params[:course_id])
+    @course = Current.platform.courses.featuring_attendance_sheet.find(params.expect(:course_id))
   end
 
   def set_attendance_sheet
-    @attendance_sheet = Current.platform.attendance_sheets.find(params[:id])
+    @attendance_sheet = Current.platform.attendance_sheets.find(params.expect(:id))
   end
 end

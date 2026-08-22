@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_18_100000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_22_100000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -127,6 +127,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_18_100000) do
     t.date "starts_at"
     t.string "title"
     t.datetime "updated_at", null: false
+    t.boolean "visible_to_externals", default: false, null: false
     t.index ["platform_id"], name: "index_camps_on_platform_id"
   end
 

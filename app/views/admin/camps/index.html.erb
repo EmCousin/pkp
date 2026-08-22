@@ -11,7 +11,7 @@
         <p class="mt-1 text-sm text-slate-600"><%= t('.filters.description') %></p>
       </div>
 
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <div>
           <%= form.label :q, t('.filters.name'), class: 'mb-1 block text-sm font-medium text-gray-700' %>
           <%= form.text_field :q,
@@ -19,26 +19,21 @@
                               placeholder: t('.filters.name_placeholder'),
                               class: 'block w-full rounded-md border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-slate-800 focus:ring-slate-800 sm:text-sm' %>
         </div>
-        <div>
-          <%= form.label :active, Camp.human_attribute_name(:active), class: 'mb-1 block text-sm font-medium text-gray-700' %>
-          <%= form.select :active,
-                          options_for_select([[t('.filters.visible'), 'true'], [t('.filters.not_visible'), 'false']], params[:active]),
-                          { include_blank: t('.filters.all') },
-                          class: 'block w-full rounded-md border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-slate-800 focus:ring-slate-800 sm:text-sm' %>
+        <div class="flex items-center gap-3 sm:pt-6">
+          <%= form.switch :visible_to_externals, { checked: params[:visible_to_externals] == 'true' }, 'true', '' %>
+          <%= form.label :visible_to_externals, Camp.human_attribute_name(:visible_to_externals), class: 'text-sm font-medium text-gray-700' %>
         </div>
-        <div>
-          <%= form.label :open, Camp.human_attribute_name(:open), class: 'mb-1 block text-sm font-medium text-gray-700' %>
-          <%= form.select :open,
-                          options_for_select([[t('.filters.open'), 'true'], [t('.filters.closed'), 'false']], params[:open]),
-                          { include_blank: t('.filters.all') },
-                          class: 'block w-full rounded-md border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-slate-800 focus:ring-slate-800 sm:text-sm' %>
+        <div class="flex items-center gap-3 sm:pt-6">
+          <%= form.switch :active, { checked: params[:active] == 'true' }, 'true', '' %>
+          <%= form.label :active, Camp.human_attribute_name(:active), class: 'text-sm font-medium text-gray-700' %>
         </div>
-        <div>
-          <%= form.label :open_to_externals, Camp.human_attribute_name(:open_to_externals), class: 'mb-1 block text-sm font-medium text-gray-700' %>
-          <%= form.select :open_to_externals,
-                          options_for_select([[t('.filters.open'), 'true'], [t('.filters.closed'), 'false']], params[:open_to_externals]),
-                          { include_blank: t('.filters.all') },
-                          class: 'block w-full rounded-md border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-slate-800 focus:ring-slate-800 sm:text-sm' %>
+        <div class="flex items-center gap-3 sm:pt-6">
+          <%= form.switch :open, { checked: params[:open] == 'true' }, 'true', '' %>
+          <%= form.label :open, Camp.human_attribute_name(:open), class: 'text-sm font-medium text-gray-700' %>
+        </div>
+        <div class="flex items-center gap-3 sm:pt-6">
+          <%= form.switch :open_to_externals, { checked: params[:open_to_externals] == 'true' }, 'true', '' %>
+          <%= form.label :open_to_externals, Camp.human_attribute_name(:open_to_externals), class: 'text-sm font-medium text-gray-700' %>
         </div>
         <div>
           <%= form.label :year, t('.filters.year'), class: 'mb-1 block text-sm font-medium text-gray-700' %>

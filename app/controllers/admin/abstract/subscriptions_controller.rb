@@ -7,7 +7,7 @@ module Admin
 
       def set_subscription!
         @subscription = Current.platform.subscriptions.find_by!(
-          id: params[:subscription_id],
+          id: params.expect(:subscription_id),
           year: Subscription.current_year
         )
       end

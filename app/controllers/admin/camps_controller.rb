@@ -49,7 +49,7 @@ module Admin
 
     def filtered_camps
       Current.platform.camps.search_and_filter(
-        params.to_unsafe_h.slice(:q, :active, :open, :open_to_externals, :year)
+        params.to_unsafe_h.slice(:q, :active, :visible_to_externals, :open, :open_to_externals, :year)
       )
     end
 
@@ -58,7 +58,7 @@ module Admin
     end
 
     def set_camp
-      @camp = Current.platform.camps.find(params[:id])
+      @camp = Current.platform.camps.find(params.expect(:id))
     end
 
     def set_subscriptions
@@ -70,7 +70,8 @@ module Admin
     end
 
     def camp_params
-      params.expect(camp: %i[title description capacity starts_at ends_at price external_price active open open_to_externals cover_picture])
+      params.expect(camp: %i[title description capacity starts_at ends_at price external_price active visible_to_externals open
+                             open_to_externals cover_picture])
     end
   end
 end

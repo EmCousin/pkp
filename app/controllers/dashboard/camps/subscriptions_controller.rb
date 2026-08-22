@@ -41,7 +41,7 @@ module Dashboard
       end
 
       def set_available_camp
-        @camp = Current.platform.camps.available.find(params[:camp_id])
+        @camp = Current.platform.camps.active.upcoming.find(params.expect(:camp_id))
       end
 
       def set_subscription
@@ -50,7 +50,7 @@ module Dashboard
                                     .where(type: CampRegistration.sti_name)
                                     .where.not(parent_subscription_id: nil)
                                     .joins(:camp)
-                                    .find_by!(id: params[:id], camps: { id: params[:camp_id] })
+                                    .find_by!(id: params.expect(:id), camps: { id: params.expect(:camp_id) })
         @camp = @subscription.camp
       end
 

@@ -7,12 +7,12 @@ module Dashboard
     end
 
     def show
-      @discovery_session = Current.platform.discovery_sessions.available.find(params[:id])
+      @discovery_session = Current.platform.discovery_sessions.available.find(params.expect(:id))
     end
 
     # rubocop:disable Metrics/AbcSize
     def create
-      course = Current.platform.courses.discoverable.find(params[:course_id])
+      course = Current.platform.courses.discoverable.find(params.expect(:course_id))
       occurs_on = Date.iso8601(params[:occurs_on].to_s)
       return invalid_date_redirect(course) unless course.discovery_date_available?(occurs_on)
 

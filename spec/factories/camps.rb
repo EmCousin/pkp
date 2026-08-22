@@ -13,6 +13,7 @@ FactoryBot.define do
     price { 150.0 }
     external_price { 200.0 }
     active { true }
+    visible_to_externals { open_to_externals }
     open { true }
     open_to_externals { false }
 

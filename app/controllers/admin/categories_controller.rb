@@ -64,7 +64,7 @@ module Admin
     end
 
     def set_category
-      @category = Current.platform.categories.find(params[:id])
+      @category = Current.platform.categories.find(params.expect(:id))
     end
   end
 end

@@ -16,7 +16,7 @@ module Coach
     private
 
     def set_discovery_session
-      @discovery_session = Current.platform.discovery_sessions.active.find(params[:id])
+      @discovery_session = Current.platform.discovery_sessions.active.find(params.expect(:id))
     end
   end
 end

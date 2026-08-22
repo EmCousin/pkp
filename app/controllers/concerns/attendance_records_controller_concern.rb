@@ -24,10 +24,10 @@ module AttendanceRecordsControllerConcern
   end
 
   def set_attendance_sheet
-    @attendance_sheet = Current.platform.attendance_sheets.find(params[:attendance_sheet_id])
+    @attendance_sheet = Current.platform.attendance_sheets.find(params.expect(:attendance_sheet_id))
   end
 
   def set_attendance_record
-    @attendance_record = @attendance_sheet.attendance_records.find(params[:id])
+    @attendance_record = @attendance_sheet.attendance_records.find(params.expect(:id))
   end
 end
