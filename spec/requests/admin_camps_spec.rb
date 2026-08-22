@@ -42,6 +42,12 @@ describe 'Admin camps', type: :request do
     )
     expect(response.body).to include('name="q"', 'name="active"', 'name="visible_to_externals"', 'name="open"',
                                      'name="open_to_externals"', 'name="year"')
+
+    page = Nokogiri::HTML(response.body)
+    %w[active visible_to_externals open open_to_externals].each do |filter|
+      expect(page.at_css("input[type='checkbox'][name='#{filter}'][value='true']")).to be_present
+      expect(page.at_css("input[type='hidden'][name='#{filter}'][value='']")).to be_present
+    end
   end
 
   it 'updates student and external visibility independently' do
