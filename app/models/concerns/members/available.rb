@@ -14,7 +14,7 @@ module Members
       def available(year = Subscription.current_year)
         return none if year > Subscription.current_year
 
-        where.not(id: unavailable(year))
+        active.where.not(id: unavailable(year))
       end
     end
   end

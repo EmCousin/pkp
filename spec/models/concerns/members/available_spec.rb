@@ -10,7 +10,7 @@ describe Members::Available, type: :model do
 
     it 'performs a SQL query' do
       expect(Member.available(year).to_sql).to eq(
-        Member.where.not(id: Member.unavailable(year)).to_sql
+        Member.active.where.not(id: Member.unavailable(year)).to_sql
       )
     end
 

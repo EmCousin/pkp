@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_22_100000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_22_120100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -93,6 +93,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_22_100000) do
     t.datetime "completed_at"
     t.datetime "created_at", null: false
     t.string "currency", default: "EUR", null: false
+    t.string "customer_reference", null: false
     t.jsonb "customer_snapshot", default: {}, null: false
     t.text "description", null: false
     t.text "error"
@@ -203,20 +204,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_22_100000) do
 
   create_table "members", force: :cascade do |t|
     t.boolean "agreed_to_advertising_right", default: false, null: false
-    t.date "birthdate", null: false
-    t.string "contact_name", null: false
-    t.string "contact_phone_number", null: false
-    t.string "contact_relationship", null: false
+    t.date "birthdate"
+    t.string "contact_name"
+    t.string "contact_phone_number"
+    t.string "contact_relationship"
     t.datetime "created_at", null: false
-    t.string "first_name", null: false
-    t.string "last_name", null: false
+    t.string "first_name"
+    t.string "last_name"
     t.enum "level", default: "white", null: false, enum_type: "member_level"
     t.bigint "platform_id", null: false
+    t.datetime "tombstoned_at"
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.index ["first_name", "last_name"], name: "index_members_on_first_name_and_last_name"
     t.index ["level"], name: "index_members_on_level"
     t.index ["platform_id"], name: "index_members_on_platform_id"
+    t.index ["tombstoned_at"], name: "index_members_on_tombstoned_at"
     t.index ["user_id"], name: "index_members_on_user_id"
   end
 

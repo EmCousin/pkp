@@ -14,7 +14,7 @@
         <p class="rounded-md bg-red-50 p-4 text-red-700"><%= t('.full') %></p>
       <% end %>
 
-      <% members = current_user.members.includes(:subscriptions) %>
+      <% members = current_user.members.active.where(platform: Current.platform).includes(:subscriptions) %>
       <% if members.any? %>
         <h2 class="font-semibold text-gray-900 mb-4"><%= t('.choose_member') %></h2>
         <div class="space-y-3">
@@ -40,9 +40,11 @@
             <% end %>
           <% end %>
         </div>
-      <% elsif @discovery_session.open_for_registration? && !@discovery_session.fully_booked? %>
+      <% end %>
+
+      <% if members.none? { |member| member.can_subscribe_to_discovery?(@discovery_session) } && @discovery_session.open_for_registration? && !@discovery_session.fully_booked? %>
         <%= link_to t('.add_member'), new_dashboard_member_path(return_to: dashboard_discovery_session_path(@discovery_session)),
-            class: "inline-flex rounded-md bg-blue-600 px-4 py-2 text-white font-medium" %>
+            class: "mt-4 inline-flex rounded-md bg-blue-600 px-4 py-2 text-white font-medium" %>
       <% end %>
     </div>
   </div>

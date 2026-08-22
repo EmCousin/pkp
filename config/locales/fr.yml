@@ -205,6 +205,7 @@ fr:
               locked: ne peut pas être modifié lorsque la feuille contient des présences
               platform_locked: ne peut pas déplacer une feuille de présence vers une autre plateforme
     models:
+      tombstoned_member: "Membre supprimé #%{id}"
       camp:
         one: Stage
         other: Stages
@@ -1006,6 +1007,21 @@ fr:
         payment_by_card: Payer par carte bancaire
         upload_payment_proof: Joindre un justificatif
     members:
+      index:
+        title: Mes membres
+        description: Gérez les personnes que vous inscrivez aux cours et aux stages.
+        new_member: Ajouter un membre
+        empty: Aucun membre pour le moment
+        empty_description: Ajoutez une personne pour pouvoir l'inscrire à une activité.
+      show:
+        emergency_contact: Contact d'urgence
+        image_rights: Droit à l'image
+        danger_zone: Zone de danger
+        destroy_description: Le membre et toutes ses inscriptions présentes et passées seront définitivement supprimés.
+        tombstone_description: Les inscriptions finalisées seront conservées de façon anonyme pour les obligations administratives et comptables. Toutes les données personnelles du membre seront effacées.
+        irreversible: Cette action est irréversible.
+        destroy: Supprimer ce membre
+        destroy_confirmation: Êtes-vous sûr·e de vouloir supprimer %{member} ? Cette action est irréversible.
       new:
         title: Ajouter un·e élève
         description: "Vous pourrez ensuite l'inscrire aux cours et stages."
@@ -1028,6 +1044,9 @@ fr:
         success: Élève ajouté·e
       update:
         success: Élève modifié·e
+      destroy:
+        success: Membre supprimé
+        error: Impossible de supprimer ce membre
     payments:
       show:
         title: C'est tout bon !
@@ -1131,6 +1150,7 @@ fr:
       subscriptions: "Inscriptions"
       platform_settings: "Configuration"
       my_account: "Mon compte"
+      my_members: "Mes membres"
       logout: "Déconnexion"
   kaminari:
     gap:

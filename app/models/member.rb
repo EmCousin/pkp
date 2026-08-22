@@ -5,6 +5,7 @@ class Member < ApplicationRecord
   include Members::Available
   include Members::Searchable
   include Members::SubscriptionForm
+  include Members::Tombstonable
   include Subscriptions::ProtectsFinalizedRegistrations
 
   MAJORITY_AGE = 18
@@ -25,7 +26,7 @@ class Member < ApplicationRecord
     'Autre'
   ].freeze
 
-  belongs_to :user
+  belongs_to :user, optional: true
   belongs_to :platform
   accepts_nested_attributes_for :user
 
@@ -50,21 +51,27 @@ class Member < ApplicationRecord
   validates :contact_relationship, presence: true, inclusion: { in: CONTACTS }
   validate :platform_cannot_change, on: :update, if: :will_save_change_to_platform_id?
 
-  delegate :email, :phone_number, :address, :zip_code, :city, :country, :full_address,
-           to: :user
+  delegate :email, :phone_number, :address, :zip_code, :city, :country, :full_address, :admin?, :coach?,
+           to: :user, allow_nil: true
 
   normalizes :first_name, with: ->(first_name) { first_name.strip.downcase.titleize }
   normalizes :last_name, with: ->(last_name) { last_name.strip.downcase.titleize }
 
   def full_name
+    return I18n.t('activerecord.models.tombstoned_member', id:) if tombstoned_at?
+
     "#{first_name.strip.downcase.titleize} #{last_name.strip.downcase.titleize}"
   end
 
   def admin_label
+    return full_name unless user
+
     "#{user.email} - #{full_name}"
   end
 
   def age(year = Time.current.year)
+    return if birthdate.blank?
+
     year - birthdate.year
   end
 
@@ -95,6 +102,7 @@ class Member < ApplicationRecord
   alias current_subscription annual_subscription_for
 
   def can_subscribe?(camp)
+    return false if tombstoned_at?
     return false unless camp.platform == platform
     return false unless camp.visible_for?(self)
     return false unless camp.open_for?(self)
@@ -105,14 +113,20 @@ class Member < ApplicationRecord
   end
 
   def can_subscribe_to_discovery?(discovery_session)
+    return false if tombstoned_at?
+
+    discovery_available?(discovery_session)
+  end
+
+  private
+
+  def discovery_available?(discovery_session)
     discovery_session.platform == platform &&
       discovery_session.open_for_registration? &&
       !discovery_session.fully_booked? &&
       discovery_session.course.category.suitable_for_age?(age(discovery_session.year)) &&
       !discovery_sessions.exists?(discovery_session.id)
   end
-
-  private
 
   def platform_cannot_change
     errors.add(:platform, :locked)

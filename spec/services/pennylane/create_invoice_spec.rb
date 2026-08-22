@@ -120,4 +120,16 @@ describe Pennylane::CreateInvoice, type: :service do
 
     expect { create_invoice.call }.to raise_error(Pennylane::Error, 'Le paiement de la facture a été annulé')
   end
+
+  it 'finishes a queued invoice after its member is tombstoned' do
+    invoice
+    member.deactivate!
+    subscription.reload
+
+    create_invoice.call
+
+    expect(invoice.reload).to be_completed
+    expect(client).to have_received(:find_customer).with("pkp-user-#{user.id}")
+    expect(client).to have_received(:update_customer).once
+  end
 end

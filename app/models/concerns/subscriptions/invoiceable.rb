@@ -67,6 +67,7 @@ module Subscriptions
         label: invoice_label,
         description: invoice_description,
         customer_snapshot: member.user.pennylane_customer_snapshot,
+        customer_reference: "pkp-user-#{member.user_id}",
         transaction_reference: invoice_transaction_reference,
         requested_at: Time.current
       }

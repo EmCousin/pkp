@@ -128,6 +128,48 @@ describe Member, type: :model do
     expect(subscription.reload).to be_persisted
   end
 
+  describe '#deactivate!' do
+    it 'deletes a member and their unprotected registrations' do
+      subscription = create(:subscription, member:, courses: [create(:course)])
+
+      expect { member.deactivate! }.to change(described_class, :count).by(-1)
+        .and change(Subscription, :count).by(-1)
+
+      expect(Subscription).not_to exist(subscription.id)
+    end
+
+    it 'tombstones personal data while preserving a protected registration' do
+      category = create(:category, platform: member.platform)
+      unprotected_subscription = create(:subscription, member:, courses: [create(:course, category:)])
+      subscription = create(
+        :discovery_registration,
+        member:,
+        discovery_session: create(:discovery_session, course: create(:course, category:)),
+        status: :confirmed
+      )
+
+      expect { member.deactivate! }.not_to change(described_class, :count)
+
+      member.reload
+      expect(member).to be_tombstoned_at
+      expect(member).to have_attributes(
+        user_id: nil,
+        first_name: nil,
+        last_name: nil,
+        birthdate: nil,
+        contact_name: nil,
+        contact_phone_number: nil,
+        contact_relationship: nil,
+        agreed_to_advertising_right: false
+      )
+      expect(member.full_name).to eq("Membre supprimé ##{member.id}")
+      expect(described_class.active).not_to include(member)
+      expect(described_class.available).not_to include(member)
+      expect(subscription.reload).to be_persisted
+      expect(Subscription).not_to exist(unprotected_subscription.id)
+    end
+  end
+
   it 'does not move a member to another platform' do
     expect(member.update(platform: create(:platform, name: 'Other platform'))).to be false
     expect(member.errors.of_kind?(:platform, :locked)).to be true

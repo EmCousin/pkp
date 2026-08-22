@@ -350,6 +350,27 @@ describe 'External event registrations', type: :request do
 
       expect(response.body).not_to include(edit_dashboard_subscription_terms_path(subscription))
     end
+
+    it 'offers to add another member when nobody can register for a camp' do
+      camp = create(:camp, open_to_externals: true)
+      create(:camp_registration, member:, camps_subscription_attributes: { camp_id: camp.id })
+
+      get dashboard_camp_path(camp)
+
+      add_member_path = new_dashboard_member_path(return_to: dashboard_camp_path(camp))
+      expect(response.body).to include(CGI.escapeHTML(add_member_path), 'Ajouter un participant')
+    end
+
+    it 'offers to add another member when nobody is eligible for a discovery session' do
+      adult_category = create(:category, min_age: 18, max_age: 100)
+      discovery_session = create(:discovery_session, course: create(:course, category: adult_category))
+      member.update_column(:birthdate, 10.years.ago)
+
+      get dashboard_discovery_session_path(discovery_session)
+
+      add_member_path = new_dashboard_member_path(return_to: dashboard_discovery_session_path(discovery_session))
+      expect(response.body).to include(CGI.escapeHTML(add_member_path), 'Ajouter un participant')
+    end
   end
 
   it 'does not delete an account containing a finalized event registration' do
