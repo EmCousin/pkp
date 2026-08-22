@@ -37,6 +37,7 @@ describe Camp, type: :model do
   describe 'scopes' do
     let!(:active_camp) { create(:camp, active: true) }
     let!(:inactive_camp) { create(:camp, active: false) }
+    let!(:external_camp) { create(:camp, active: false, visible_to_externals: true) }
     let!(:past_camp) { create(:camp, starts_at: 1.week.ago, ends_at: 1.week.ago) }
     let!(:future_camp) { create(:camp, starts_at: 1.week.from_now, ends_at: 1.week.from_now) }
 
@@ -55,10 +56,58 @@ describe Camp, type: :model do
     end
 
     describe '.available' do
-      it 'returns only active and upcoming camps' do
+      it 'returns upcoming camps visible to students' do
         expect(described_class.available).to include(active_camp, future_camp)
-        expect(described_class.available).not_to include(inactive_camp, past_camp)
+        expect(described_class.available).not_to include(inactive_camp, external_camp, past_camp)
       end
+    end
+
+    describe '.visible' do
+      it 'returns camps visible to at least one audience' do
+        expect(described_class.visible).to include(active_camp, external_camp, future_camp, past_camp)
+        expect(described_class.visible).not_to include(inactive_camp)
+      end
+    end
+  end
+
+  describe '#visible_for?' do
+    let(:camp) { build(:camp, active: true, visible_to_externals: false) }
+    let(:member) { create(:member) }
+
+    it 'uses external visibility when the member is not an annual student' do
+      expect(camp).not_to be_visible_for(member)
+
+      camp.visible_to_externals = true
+
+      expect(camp).to be_visible_for(member)
+    end
+
+    it 'uses student visibility when the member has an annual subscription for the camp season' do
+      create(:subscription, member:, courses: [create(:course)], status: :confirmed, year: camp.year)
+
+      expect(camp).to be_visible_for(member)
+
+      camp.active = false
+      camp.visible_to_externals = true
+
+      expect(camp).not_to be_visible_for(member)
+    end
+  end
+
+  describe '#visible_to?' do
+    it 'combines the audiences of every member in a household' do
+      camp = build(:camp, active: false, visible_to_externals: true)
+      student = create(:member)
+      external = create(:member, user: student.user)
+      create(:subscription, member: student, courses: [create(:course)], status: :confirmed, year: camp.year)
+
+      expect(camp).to be_visible_to([student, external])
+    end
+
+    it 'treats an account without members as external' do
+      camp = build(:camp, active: false, visible_to_externals: true)
+
+      expect(camp).to be_visible_to([])
     end
   end
 

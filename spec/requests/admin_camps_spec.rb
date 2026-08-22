@@ -15,29 +15,42 @@ describe 'Admin camps', type: :request do
       starts_at:,
       ends_at: starts_at + 2.days,
       active: false,
+      visible_to_externals: false,
       open: true,
       open_to_externals: false
     }
     matching = create(:camp, **attributes, title: 'Stage cible')
     other_name = create(:camp, **attributes, title: 'Stage différent')
     visible = create(:camp, **attributes, title: 'Stage cible visible', active: true)
+    visible_to_externals = create(:camp, **attributes, title: 'Stage cible visible externe', visible_to_externals: true)
     closed_to_students = create(:camp, **attributes, title: 'Stage cible fermé aux élèves', open: false)
     open_to_externals = create(:camp, **attributes, title: 'Stage cible externes', open_to_externals: true)
     other_year_start = Course.vacation_start(year - 1).to_date + 1.month
     other_year = create(:camp, **attributes, title: 'Stage cible autre année',
                                              starts_at: other_year_start, ends_at: other_year_start + 2.days)
 
-    get admin_camps_path(q: 'CIBLE', active: 'false', open: 'true', open_to_externals: 'false', year:)
+    get admin_camps_path(q: 'CIBLE', active: 'false', visible_to_externals: 'false', open: 'true', open_to_externals: 'false', year:)
 
     expect(response.body).to include(admin_camp_path(matching))
     expect(response.body).not_to include(
       admin_camp_path(other_name),
       admin_camp_path(visible),
+      admin_camp_path(visible_to_externals),
       admin_camp_path(closed_to_students),
       admin_camp_path(open_to_externals),
       admin_camp_path(other_year)
     )
-    expect(response.body).to include('name="q"', 'name="active"', 'name="open"', 'name="open_to_externals"', 'name="year"')
+    expect(response.body).to include('name="q"', 'name="active"', 'name="visible_to_externals"', 'name="open"',
+                                     'name="open_to_externals"', 'name="year"')
+  end
+
+  it 'updates student and external visibility independently' do
+    camp = create(:camp, active: true, visible_to_externals: false)
+
+    patch admin_camp_path(camp), params: { camp: { active: false, visible_to_externals: true } }
+
+    expect(response).to have_http_status(:see_other)
+    expect(camp.reload).to have_attributes(active: false, visible_to_externals: true)
   end
 
   it 'paginates camps and preserves the search' do

@@ -258,6 +258,58 @@ describe 'External event registrations', type: :request do
       expect(response.body).to include(member.full_name)
     end
 
+    it 'shows an external user only camps visible to externals' do
+      student_camp = create(:camp, title: 'Stage élèves', active: true, visible_to_externals: false)
+      external_camp = create(:camp, title: 'Stage externes', active: false, visible_to_externals: true)
+      everyone_camp = create(:camp, title: 'Stage pour tous', active: true, visible_to_externals: true)
+      hidden_camp = create(:camp, title: 'Stage masqué', active: false, visible_to_externals: false)
+
+      get dashboard_camps_path
+
+      expect(response.body).to include(external_camp.title, everyone_camp.title)
+      expect(response.body).not_to include(student_camp.title, hidden_camp.title)
+    end
+
+    it 'shows an annual student only camps visible to students' do
+      student_camp = create(:camp, title: 'Stage élèves', active: true, visible_to_externals: false)
+      external_camp = create(:camp, title: 'Stage externes', active: false, visible_to_externals: true)
+      everyone_camp = create(:camp, title: 'Stage pour tous', active: true, visible_to_externals: true)
+      create(:subscription, member:, courses: [create(:course)], status: :confirmed, year: student_camp.year)
+
+      get dashboard_camps_path
+
+      expect(response.body).to include(student_camp.title, everyone_camp.title)
+      expect(response.body).not_to include(external_camp.title)
+    end
+
+    it 'redirects direct links to camps hidden from the user audience' do
+      student_camp = create(:camp, active: true, visible_to_externals: false)
+
+      get dashboard_camp_path(student_camp)
+
+      expect(response).to redirect_to(dashboard_camps_path)
+    end
+
+    it 'keeps the camp detail accessible to an existing registrant after its audience changes' do
+      camp = create(:camp, open_to_externals: true, visible_to_externals: true)
+      create(:camp_registration, member:, year: camp.year, camps_subscription_attributes: { camp_id: camp.id })
+      camp.update!(active: true, visible_to_externals: false)
+
+      get dashboard_camp_path(camp)
+
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'rejects direct registrations to camps hidden from the member audience' do
+      student_camp = create(:camp, active: true, visible_to_externals: false, open_to_externals: true)
+
+      expect do
+        post dashboard_camp_registrations_path(student_camp), params: { member_id: member.id }
+      end.not_to change(CampRegistration, :count)
+
+      expect(response).to have_http_status(:not_found)
+    end
+
     it 'redirects stale camp links to the available camps' do
       camp = create(:camp, active: false)
 

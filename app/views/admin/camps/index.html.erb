@@ -11,13 +11,20 @@
         <p class="mt-1 text-sm text-slate-600"><%= t('.filters.description') %></p>
       </div>
 
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <div>
           <%= form.label :q, t('.filters.name'), class: 'mb-1 block text-sm font-medium text-gray-700' %>
           <%= form.text_field :q,
                               value: params[:q],
                               placeholder: t('.filters.name_placeholder'),
                               class: 'block w-full rounded-md border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-slate-800 focus:ring-slate-800 sm:text-sm' %>
+        </div>
+        <div>
+          <%= form.label :visible_to_externals, Camp.human_attribute_name(:visible_to_externals), class: 'mb-1 block text-sm font-medium text-gray-700' %>
+          <%= form.select :visible_to_externals,
+                          options_for_select([[t('.filters.visible'), 'true'], [t('.filters.not_visible'), 'false']], params[:visible_to_externals]),
+                          { include_blank: t('.filters.all') },
+                          class: 'block w-full rounded-md border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-slate-800 focus:ring-slate-800 sm:text-sm' %>
         </div>
         <div>
           <%= form.label :active, Camp.human_attribute_name(:active), class: 'mb-1 block text-sm font-medium text-gray-700' %>

@@ -29,6 +29,7 @@ class Camp < ApplicationRecord
   has_many :members, through: :subscriptions
 
   scope :active, -> { where(active: true) }
+  scope :visible, -> { where(active: true).or(where(visible_to_externals: true)) }
   scope :upcoming, -> { where(starts_at: Date.current..) }
   scope :available, -> { active.upcoming }
   scope :search_by_title, lambda { |query|
@@ -44,6 +45,7 @@ class Camp < ApplicationRecord
   scope :search_and_filter, lambda { |attributes|
     search_by_title(attributes[:q])
       .filter_by_flag(:active, attributes[:active])
+      .filter_by_flag(:visible_to_externals, attributes[:visible_to_externals])
       .filter_by_flag(:open, attributes[:open])
       .filter_by_flag(:open_to_externals, attributes[:open_to_externals])
       .filter_by_year(attributes[:year])
@@ -63,6 +65,17 @@ class Camp < ApplicationRecord
 
   def open_for?(member)
     internal_for?(member) ? open? : open_to_externals?
+  end
+
+  def visible_for?(member)
+    internal_for?(member) ? active? : visible_to_externals?
+  end
+
+  def visible_to?(members)
+    members = Array(members)
+    return visible_to_externals? if members.empty?
+
+    members.any? { |member| visible_for?(member) }
   end
 
   def price_for(member)
