@@ -1,4 +1,4 @@
-var CACHE_VERSION = 'v1'
+var CACHE_VERSION = 'v2'
 var CACHE_NAME = CACHE_VERSION + ':sw-cache-PKP'
 
 function onInstall(event) {
@@ -33,6 +33,8 @@ function onActivate(event) {
 }
 
 function onFetch(event) {
+  if (event.request.method !== 'GET') return;
+
   event.respondWith(
     // try to return untouched request from network first
     fetch(event.request).catch(function() {

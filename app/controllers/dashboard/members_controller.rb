@@ -21,7 +21,7 @@ module Dashboard
       @member = current_user.members.new(member_params.merge(platform: Current.platform))
 
       if @member.save
-        redirect_to(return_path || new_dashboard_subscription_path(member_id: @member.id), notice: t('.success'))
+        redirect_to(return_path || new_dashboard_subscription_path(member_id: @member.id), notice: t('.success'), status: :see_other)
       else
         render :new, status: :unprocessable_content
       end

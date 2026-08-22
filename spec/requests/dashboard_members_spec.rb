@@ -95,6 +95,7 @@ describe 'Dashboard members', type: :request do
     }
 
     expect(response).to redirect_to(dashboard_camp_path(camp))
+    expect(response).to have_http_status(:see_other)
     expect(user.members.count).to eq(2)
   end
 
