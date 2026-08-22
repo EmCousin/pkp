@@ -8,7 +8,11 @@ module Dashboard
 
     def show
       @camp = Current.platform.camps.available.find_by(id: params[:id])
-      redirect_to dashboard_camps_path, notice: t('.unavailable') unless @camp
+      if @camp
+        @members = current_user.members.active.where(platform: Current.platform).includes(subscriptions: :camps_subscription)
+      else
+        redirect_to dashboard_camps_path, notice: t('.unavailable')
+      end
     end
   end
 end

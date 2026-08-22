@@ -43,24 +43,23 @@ module Pennylane
       client.invoice(invoice.external_id)
     end
 
-    def customer_id(user)
-      id = user.pennylane_customer_id || find_or_create_customer(user).fetch('id')
-      user.update_column(:pennylane_customer_id, id) unless user.pennylane_customer_id? # rubocop:disable Rails/SkipsModelValidations
+    def customer_id
+      id = user&.pennylane_customer_id || find_or_create_customer.fetch('id')
+      user&.update_column(:pennylane_customer_id, id) unless user&.pennylane_customer_id? # rubocop:disable Rails/SkipsModelValidations
       id
     end
 
     def create_invoice_with_customer
-      user = subscription.member.user
-      id = customer_id(user)
-      snapshot = customer_attributes(user)
+      id = customer_id
+      snapshot = customer_attributes
       client.update_customer(id, snapshot)
       find_or_create_invoice(id)
     ensure
-      restore_current_customer(user, id) if id
+      restore_current_customer(user, id) if user && id
     end
 
-    def find_or_create_customer(user)
-      find_or_create(:customer, customer_reference(user)) { client.create_customer(customer_attributes(user)) }
+    def find_or_create_customer
+      find_or_create(:customer, customer_reference) { client.create_customer(customer_attributes) }
     end
 
     def find_or_create_invoice(customer_id)
@@ -72,10 +71,9 @@ module Pennylane
     end
 
     def find_or_create_external_invoice
-      user = subscription.member.user
       external_invoice = find_external_invoice
       if external_invoice
-        restore_current_customer(user, customer_id(user))
+        restore_current_customer(user, customer_id) if user
         external_invoice
       else
         create_invoice_with_customer
@@ -91,12 +89,12 @@ module Pennylane
         raise(RetryableError, "La #{resource} Pennylane existe mais n'est pas encore disponible")
     end
 
-    def customer_attributes(user)
-      invoice.customer_snapshot.deep_symbolize_keys.merge(external_reference: customer_reference(user))
+    def customer_attributes
+      invoice.customer_snapshot.deep_symbolize_keys.merge(external_reference: customer_reference)
     end
 
     def current_customer_attributes(user)
-      user.pennylane_customer_snapshot.deep_symbolize_keys.merge(external_reference: customer_reference(user))
+      user.pennylane_customer_snapshot.deep_symbolize_keys.merge(external_reference: customer_reference)
     end
 
     def restore_current_customer(user, id)
@@ -148,8 +146,8 @@ module Pennylane
       (invoice.amount / VAT_MULTIPLIER).round(6).to_s('F')
     end
 
-    def customer_reference(user)
-      "pkp-user-#{user.id}"
+    def customer_reference
+      invoice.customer_reference
     end
 
     def invoice_reference
@@ -157,15 +155,19 @@ module Pennylane
     end
 
     def with_customer_lock
-      user_id = Integer(subscription.member.user_id)
       ApplicationRecord.connection_pool.with_connection do |connection|
         namespace = connection.quote('pennylane_customer')
-        lock = "hashtext(#{namespace}), #{connection.quote(user_id)}"
+        reference = connection.quote(customer_reference)
+        lock = "hashtext(#{namespace}), hashtext(#{reference})"
         connection.execute("SELECT pg_advisory_lock(#{lock})")
         yield
       ensure
         connection.execute("SELECT pg_advisory_unlock(#{lock})") if lock
       end
+    end
+
+    def user
+      subscription.member.user
     end
 
     def attach_document(external_invoice)

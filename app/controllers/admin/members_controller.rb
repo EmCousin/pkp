@@ -6,7 +6,7 @@ module Admin
 
     # rubocop:disable Metrics/AbcSize
     def index
-      members = Current.platform.members.search_and_filter(params.to_unsafe_h.slice(:q, :level, :subscription_year, :course_ids, :camp_ids))
+      members = Current.platform.members.active.search_and_filter(params.to_unsafe_h.slice(:q, :level, :subscription_year, :course_ids, :camp_ids))
       @members = members.includes(:user, :contacts).with_attached_avatar
                         .paginate_if_active(params[:page], active: params[:no_paginate] != '1', per_page: params[:per_page] || 25)
 
@@ -57,7 +57,7 @@ module Admin
     private
 
     def set_member
-      @member = Current.platform.members.find(params[:id])
+      @member = Current.platform.members.find(params.expect(:id))
     end
 
     def member_params

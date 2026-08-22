@@ -19,7 +19,8 @@ describe Subscriptions::Invoiceable, type: :model do
     expect(subscription.billing_invoice).to have_attributes(
       amount: subscription.fee,
       label: subscription.invoice_label,
-      description: subscription.invoice_description
+      description: subscription.invoice_description,
+      customer_reference: "pkp-user-#{subscription.member.user_id}"
     )
   end
 

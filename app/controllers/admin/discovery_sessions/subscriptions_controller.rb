@@ -14,11 +14,11 @@ module Admin
       private
 
       def set_discovery_session
-        @discovery_session = Current.platform.discovery_sessions.find(params[:discovery_session_id])
+        @discovery_session = Current.platform.discovery_sessions.find(params.expect(:discovery_session_id))
       end
 
       def set_subscription
-        @subscription = @discovery_session.subscriptions.confirmed.find(params[:id])
+        @subscription = @discovery_session.subscriptions.confirmed.find(params.expect(:id))
       end
 
       def attendance_params

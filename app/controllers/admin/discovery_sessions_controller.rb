@@ -52,7 +52,7 @@ module Admin
     private
 
     def set_discovery_session
-      @discovery_session = Current.platform.discovery_sessions.find(params[:id])
+      @discovery_session = Current.platform.discovery_sessions.find(params.expect(:id))
     end
 
     def search_date

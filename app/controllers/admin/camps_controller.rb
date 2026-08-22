@@ -58,7 +58,7 @@ module Admin
     end
 
     def set_camp
-      @camp = Current.platform.camps.find(params[:id])
+      @camp = Current.platform.camps.find(params.expect(:id))
     end
 
     def set_subscriptions

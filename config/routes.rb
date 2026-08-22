@@ -132,7 +132,7 @@ Rails.application.routes.draw do
   end
 
   namespace :dashboard do
-    resources :members, only: [:new, :create, :edit, :update]
+    resources :members
     resources :subscriptions, only: [:show, :new, :create] do
       resource :term, as: :terms, only: [:edit, :update]
       resource :medical_certificate, only: [:edit, :update]

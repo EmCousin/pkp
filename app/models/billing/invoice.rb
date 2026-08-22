@@ -19,7 +19,7 @@ class Billing
     }
 
     validates :provider, :state, :issue_date, :amount, :currency, :vat_rate,
-              :label, :description, :customer_snapshot, :sync_token, :requested_at, presence: true
+              :label, :description, :customer_snapshot, :customer_reference, :sync_token, :requested_at, presence: true
     validates :invoiceable_id, uniqueness: { scope: :invoiceable_type }
     validates :external_id, uniqueness: true, allow_nil: true
 

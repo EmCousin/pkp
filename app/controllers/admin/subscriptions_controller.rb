@@ -58,7 +58,7 @@ module Admin
     end
 
     def unlink_course
-      @course = @subscription.courses.find(params[:course_id])
+      @course = @subscription.courses.find(params.expect(:course_id))
       @subscription.with_lock do
         @subscription.courses_subscriptions.destroy_by(course_id: @course.id) unless @subscription.billing_invoice
       end
@@ -68,7 +68,7 @@ module Admin
     private
 
     def set_subscription!
-      @subscription = Current.platform.subscriptions.find(params[:id])
+      @subscription = Current.platform.subscriptions.find(params.expect(:id))
     end
 
     def subscription_params
