@@ -4,7 +4,7 @@ FactoryBot.define do
     last_name { Faker::Name.last_name }
     email { Faker::Internet.email }
     password { 'surprise' }
-    phone_number { Faker::PhoneNumber.phone_number }
+    sequence(:phone_number) { |n| format('+336%08d', n) }
     address { Faker::Address.street_address }
     zip_code { Faker::Address.zip_code }
     city { Faker::Address.city }
