@@ -8,7 +8,6 @@ module Dashboard
 
     def show
       @discovery_session = Current.platform.discovery_sessions.available.find(params.expect(:id))
-      @members = current_user.members.active.where(platform: Current.platform).includes(:subscriptions)
     end
 
     # rubocop:disable Metrics/AbcSize

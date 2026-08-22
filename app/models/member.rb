@@ -5,6 +5,7 @@ class Member < ApplicationRecord
   include Members::Available
   include Members::Searchable
   include Members::SubscriptionForm
+  include Members::Tombstonable
   include Subscriptions::ProtectsFinalizedRegistrations
 
   MAJORITY_AGE = 18
@@ -43,30 +44,23 @@ class Member < ApplicationRecord
 
   enum :level, white: 'white', yellow: 'yellow', green: 'green', red: 'red'
 
-  scope :active, -> { where(tombstoned_at: nil) }
-
   validates :first_name, :last_name, :contact_name, :avatar, presence: true
-  validates :user, presence: true, unless: :tombstoned?
   validates :birthdate, presence: true
   validates :birthdate, inclusion: { in: ->(_) { 99.years.ago.to_date..6.years.ago.to_date } }, on: :create, allow_blank: true
   validates :contact_phone_number, presence: true, phone: true
   validates :contact_relationship, presence: true, inclusion: { in: CONTACTS }
   validate :platform_cannot_change, on: :update, if: :will_save_change_to_platform_id?
 
-  delegate :email, :phone_number, :address, :zip_code, :city, :country, :full_address,
+  delegate :email, :phone_number, :address, :zip_code, :city, :country, :full_address, :admin?, :coach?,
            to: :user, allow_nil: true
 
   normalizes :first_name, with: ->(first_name) { first_name.strip.downcase.titleize }
   normalizes :last_name, with: ->(last_name) { last_name.strip.downcase.titleize }
 
   def full_name
-    return I18n.t('activerecord.models.tombstoned_member', id:) if tombstoned?
+    return I18n.t('activerecord.models.tombstoned_member', id:) if tombstoned_at?
 
     "#{first_name.strip.downcase.titleize} #{last_name.strip.downcase.titleize}"
-  end
-
-  def tombstoned?
-    tombstoned_at.present?
   end
 
   def admin_label
@@ -102,7 +96,7 @@ class Member < ApplicationRecord
   alias current_subscription annual_subscription_for
 
   def can_subscribe?(camp)
-    return false if tombstoned?
+    return false if tombstoned_at?
     return false unless camp.platform == platform
     return false unless camp.open_for?(self)
     return false if camp.fully_booked?
@@ -112,17 +106,9 @@ class Member < ApplicationRecord
   end
 
   def can_subscribe_to_discovery?(discovery_session)
-    return false if tombstoned?
+    return false if tombstoned_at?
 
     discovery_available?(discovery_session)
-  end
-
-  def remove!
-    with_lock do
-      return destroy! if destroyable?
-
-      tombstone!
-    end
   end
 
   private
@@ -133,36 +119,6 @@ class Member < ApplicationRecord
       !discovery_session.fully_booked? &&
       discovery_session.course.category.suitable_for_age?(age(discovery_session.year)) &&
       !discovery_sessions.exists?(discovery_session.id)
-  end
-
-  def tombstone!
-    destroy_unprotected_subscriptions
-    attendance_records.destroy_all
-    avatar.purge_later
-    purge_personal_subscription_files
-
-    update_columns(tombstone_attributes) # rubocop:disable Rails/SkipsModelValidations
-  end
-
-  def destroy_unprotected_subscriptions
-    subscriptions.to_a
-                 .sort_by { |subscription| subscription.parent_subscription_id? ? 0 : 1 }
-                 .each { |subscription| subscription.destroy if subscription.cancellable? }
-  end
-
-  def tombstone_attributes
-    {
-      user_id: nil, first_name: nil, last_name: nil, birthdate: nil,
-      contact_name: nil, contact_phone_number: nil, contact_relationship: nil,
-      agreed_to_advertising_right: false, tombstoned_at: Time.current, updated_at: Time.current
-    }
-  end
-
-  def purge_personal_subscription_files
-    subscriptions.find_each do |subscription|
-      subscription.form.purge_later
-      subscription.medical_certificate.purge_later
-    end
   end
 
   def platform_cannot_change

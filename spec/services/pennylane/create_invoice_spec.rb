@@ -123,7 +123,7 @@ describe Pennylane::CreateInvoice, type: :service do
 
   it 'finishes a queued invoice after its member is tombstoned' do
     invoice
-    member.remove!
+    member.deactivate!
     subscription.reload
 
     create_invoice.call

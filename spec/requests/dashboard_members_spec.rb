@@ -79,7 +79,7 @@ describe 'Dashboard members', type: :request do
     expect { delete dashboard_member_path(member) }.not_to change(Member, :count)
 
     expect(response).to redirect_to(dashboard_members_path)
-    expect(member.reload).to be_tombstoned
+    expect(member.reload).to be_tombstoned_at
     expect(registration.reload).to be_persisted
     expect(user.members).not_to include(member)
   end

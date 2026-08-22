@@ -128,11 +128,11 @@ describe Member, type: :model do
     expect(subscription.reload).to be_persisted
   end
 
-  describe '#remove!' do
+  describe '#deactivate!' do
     it 'deletes a member and their unprotected registrations' do
       subscription = create(:subscription, member:, courses: [create(:course)])
 
-      expect { member.remove! }.to change(described_class, :count).by(-1)
+      expect { member.deactivate! }.to change(described_class, :count).by(-1)
         .and change(Subscription, :count).by(-1)
 
       expect(Subscription).not_to exist(subscription.id)
@@ -148,10 +148,10 @@ describe Member, type: :model do
         status: :confirmed
       )
 
-      expect { member.remove! }.not_to change(described_class, :count)
+      expect { member.deactivate! }.not_to change(described_class, :count)
 
       member.reload
-      expect(member).to be_tombstoned
+      expect(member).to be_tombstoned_at
       expect(member).to have_attributes(
         user_id: nil,
         first_name: nil,

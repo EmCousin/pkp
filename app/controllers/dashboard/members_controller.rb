@@ -36,7 +36,7 @@ module Dashboard
     end
 
     def destroy
-      @member.remove!
+      @member.deactivate!
       redirect_to %i[dashboard members], notice: t('.success'), status: :see_other
     rescue ActiveRecord::RecordNotDestroyed
       redirect_to [:dashboard, @member], alert: t('.error'), status: :see_other

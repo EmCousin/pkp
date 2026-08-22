@@ -25,8 +25,10 @@ module Pennylane
 
     attr_reader :client, :invoice, :sync_token
 
-    delegate :invoiceable, to: :invoice
+    delegate :invoiceable, :customer_reference, to: :invoice
     alias subscription invoiceable
+    delegate :member, to: :subscription
+    delegate :user, to: :member
 
     def synchronize_invoice
       external_invoice = with_customer_lock { find_or_create_external_invoice }
@@ -146,10 +148,6 @@ module Pennylane
       (invoice.amount / VAT_MULTIPLIER).round(6).to_s('F')
     end
 
-    def customer_reference
-      invoice.customer_reference
-    end
-
     def invoice_reference
       "pkp-invoice-#{invoice.id}"
     end
@@ -164,10 +162,6 @@ module Pennylane
       ensure
         connection.execute("SELECT pg_advisory_unlock(#{lock})") if lock
       end
-    end
-
-    def user
-      subscription.member.user
     end
 
     def attach_document(external_invoice)
