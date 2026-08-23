@@ -1,16 +1,19 @@
-var CACHE_VERSION = 'v2'
+var CACHE_VERSION = 'v3'
 var CACHE_NAME = CACHE_VERSION + ':sw-cache-PKP'
 
 function onInstall(event) {
   console.log('[Serviceworker]', "Installing!", event);
   event.waitUntil(
-    caches.open(CACHE_NAME).then(function prefill(cache) {
-      return cache.addAll([
-        "<%= offline_errors_path %>",
-        '/favicon.ico',
-        '/assets/logopkp.webp'
-      ])
-    })
+    Promise.all([
+      self.skipWaiting(),
+      caches.open(CACHE_NAME).then(function prefill(cache) {
+        return cache.addAll([
+          "<%= offline_errors_path %>",
+          '/favicon.ico',
+          '/assets/logopkp.webp'
+        ])
+      })
+    ])
   )
 }
 
@@ -28,6 +31,8 @@ function onActivate(event) {
           return caches.delete(cacheName);
         })
       );
+    }).then(function() {
+      return self.clients.claim();
     })
   );
 }
