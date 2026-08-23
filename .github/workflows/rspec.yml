@@ -45,9 +45,9 @@ jobs:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
-      - name: Install PostgreSQL client
+      - name: Install system dependencies
         run: |
-          sudo apt-get -yqq install libpq-dev
+          sudo apt-get -yqq install imagemagick libpq-dev
 
       - name: Build App
         env:
