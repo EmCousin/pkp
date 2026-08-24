@@ -60,32 +60,18 @@ describe Subscriptions::Invoiceable, type: :model do
     expect(subscription.errors.of_kind?(:billing_invoice, :present)).to be true
   end
 
-  it 'prevents destroying a subscription or adding courses after invoicing is requested' do
+  it 'keeps the invoice snapshot while courses change after invoicing is requested' do
     category = create(:category)
     initial_course = create(:course, category:)
-    added_course = create(:course, category:)
+    replacement_course = create(:course, category:)
     subscription = create(:subscription, courses: [initial_course], paid_at: Time.current)
-    course_subscription = subscription.courses_subscriptions.first
-    added_course_subscription = CoursesSubscription.new(subscription:, course: added_course)
+    invoice = subscription.billing_invoice
+    snapshot = invoice.attributes.slice('amount', 'label', 'description')
 
-    expect(subscription.destroy).to be false
-    expect(course_subscription.destroy).to be false
-    expect(added_course_subscription.save).to be false
-    expect(subscription).to be_persisted
-    expect(course_subscription).to be_persisted
-  end
-
-  it 'prevents collection removal paths after invoicing is requested' do
-    course = create(:course)
-    subscription = create(:subscription, courses: [course], paid_at: Time.current)
-
-    subscription.courses.delete(course)
-
-    expect(subscription.reload.courses).to contain_exactly(course)
-    expect(subscription.errors.of_kind?(:courses, :invoiced)).to be true
-
-    subscription.update(course_ids: [])
-    expect(subscription.reload.courses).to contain_exactly(course)
+    expect { subscription.update!(course_ids: [replacement_course.id]) }
+      .not_to change(Billing::Invoice, :count)
+    expect(subscription.reload.courses).to contain_exactly(replacement_course)
+    expect(invoice.reload.attributes.slice('amount', 'label', 'description')).to eq(snapshot)
   end
 
   it 'prevents changing billing attributes after invoicing is requested' do

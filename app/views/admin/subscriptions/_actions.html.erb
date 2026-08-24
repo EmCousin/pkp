@@ -13,12 +13,10 @@
           class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50",
           data: { turbo_frame: '_top' } %>
 
-      <% unless subscription.billing_invoice %>
-        <%= link_to t('defaults.edit'),
-            [:edit, :admin, subscription],
-            class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50",
-            data: { turbo_frame: '_top' } %>
-      <% end %>
+      <%= link_to t('defaults.edit'),
+          [:edit, :admin, subscription],
+          class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50",
+          data: { turbo_frame: '_top' } %>
 
       <% if subscription.form.attached? %>
         <%= link_to t('admin.subscriptions.show.download_subscription_form'),
