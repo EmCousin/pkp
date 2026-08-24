@@ -55,4 +55,26 @@ describe 'Admin subscriptions', type: :request do
 
     expect(response).to have_http_status(:unprocessable_content)
   end
+
+  it 'lets an admin change the course of an invoiced subscription' do
+    category = create(:category)
+    initial_course = create(:course, category:, weekday: :lundi)
+    replacement_course = create(:course, category:, weekday: :mardi)
+    subscription = create(:subscription, courses: [initial_course], paid_at: Time.current)
+    invoice = subscription.billing_invoice
+
+    get edit_admin_subscription_path(subscription)
+    expect(response).to have_http_status(:ok)
+
+    patch admin_subscription_path(subscription), params: {
+      subscription: {
+        member_id: subscription.member_id,
+        course_ids: [replacement_course.id]
+      }
+    }
+
+    expect(response).to redirect_to(admin_subscription_path(subscription, updated: true))
+    expect(subscription.reload.courses).to contain_exactly(replacement_course)
+    expect(subscription.billing_invoice).to eq(invoice)
+  end
 end

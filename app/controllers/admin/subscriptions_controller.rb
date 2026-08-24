@@ -4,7 +4,6 @@ module Admin
   class SubscriptionsController < BaseController
     before_action :set_subscription!, only: %i[show edit update destroy unlink_course]
     before_action :reject_event_edit!, only: %i[edit update], if: -> { @subscription.event? }
-    before_action :reject_invoiced_edit!, only: %i[edit update unlink_course], if: -> { @subscription.billing_invoice }
 
     def index
       subscriptions = Current.platform.subscriptions.search_and_filter(
@@ -60,7 +59,7 @@ module Admin
     def unlink_course
       @course = @subscription.courses.find(params.expect(:course_id))
       @subscription.with_lock do
-        @subscription.courses_subscriptions.destroy_by(course_id: @course.id) unless @subscription.billing_invoice
+        @subscription.courses_subscriptions.destroy_by(course_id: @course.id)
       end
       redirect_back_or_to(:root, notice: t('.success'))
     end
@@ -90,10 +89,6 @@ module Admin
 
     def reject_event_edit!
       redirect_to [:admin, @subscription], alert: t('.event_not_editable'), status: :see_other
-    end
-
-    def reject_invoiced_edit!
-      redirect_to [:admin, @subscription], alert: t('.invoiced_not_editable'), status: :see_other
     end
   end
 end
