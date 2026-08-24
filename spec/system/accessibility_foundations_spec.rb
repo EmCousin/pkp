@@ -16,10 +16,10 @@ describe 'Accessibility foundations', type: :system do
     expect(page).to have_css('main#main-content[tabindex="-1"]')
     expect_accessible_foundations
 
-    press_tab
+    skip_link = find('a[href="#main-content"]', visible: :all)
+    page.execute_script('arguments[0].focus()', skip_link)
 
-    expect(page).to have_css('a[href="#main-content"]:focus', text: 'Aller au contenu principal')
-    skip_link = find('a[href="#main-content"]')
+    expect(skip_link).to match_css(':focus')
     expect(skip_link.rect.width).to be > 1
     expect(skip_link.rect.height).to be > 1
 

@@ -13,7 +13,7 @@
       <div class="space-y-6">
         <div>
           <%= f.label :email, class: "block text-sm font-medium text-gray-700" %>
-          <%= f.email_field :email, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email),
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email),
               class: "mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
         </div>
 
