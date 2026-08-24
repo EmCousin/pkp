@@ -26,7 +26,7 @@
           <div class="flex items-center gap-2 text-sm">
             <div class="w-3 h-3 border border-gray-300 rounded" style="background-color: <%= attendance_record.member.level %>"></div>
             <span class="text-gray-500">
-              <%= t("activerecord.attributes.member.levels.#{attendance_record.member.level}") %>
+              <%= Member.human_attribute_name(attendance_record.member.level) %>
             </span>
           </div>
         </div>

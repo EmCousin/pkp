@@ -18,6 +18,8 @@ fr:
     are_you_sure: "Vous êtes sûr ?"
     attach: Joindre
     back: Retour
+    cancel: Annuler
+    change: Changer
     close: Fermer
     complete_your_profile: Veuillez compléter votre profil pour continuer.
     confirm: Confirmer
@@ -41,9 +43,10 @@ fr:
     mark_as_not_paid: "Marquer comme non payé"
     mark_as_pending: Mettre en attente
     na: "N/A"
-    no: Non
+    'no': Non
     new: Nouveau %{resource}
     none: Aucun
+    open_menu: Ouvrir le menu
     paid_with_bank_check: "A payé par chèque"
     paid_with_bank_transfer: "A payé par virement"
     paid_with_cash: "A payé en espèces"
@@ -64,7 +67,7 @@ fr:
     upload: Téléverser
     view: Voir
     welcome: Bienvenue
-    yes: Oui
+    'yes': Oui
   custom_error_messages:
     subscription:
       member_id:
@@ -413,6 +416,7 @@ fr:
       index:
         title: "Cours"
         create_attendance_sheet: "Feuille de présence"
+        inactive: Inactif
 
   admin:
     platforms:
@@ -463,6 +467,7 @@ fr:
         open_to_externals: "Ouvert aux externes"
         closed: "Fermé"
       camp:
+        inactive: "Inactif"
         duration_days:
           one: "%{count} jour"
           other: "%{count} jours"
@@ -507,6 +512,7 @@ fr:
           other: "%{current}/%{count} places occupées"
         status: "Statut"
         active: "Visibilité"
+        open: "Inscriptions"
         inactive: "Inactif"
         description: "Description"
         subscriptions: "Inscriptions"
@@ -548,6 +554,8 @@ fr:
           error: "Erreur lors de la désinscription"
 
     categories:
+      category:
+        ages: Âges
       index:
         title: Catégories
         description: Gérez les catégories et leurs grilles tarifaires
@@ -629,6 +637,7 @@ fr:
       course:
         create_attendance_sheet: "Feuille de présence"
         discovery_enabled: "Découverte : %{price} · %{capacity} places"
+        inactive: Inactif
     credit_notes:
       new:
         pennylane_invoice: Cette facture est finalisée dans Pennylane. Créez l'avoir directement dans Pennylane.
@@ -661,6 +670,7 @@ fr:
         csv_export: Exporter au format CSV
         display_levels: Afficher les niveaux
         new_member: Nouvel élève
+        no_members: Aucun membre ne correspond à ces critères.
       show:
         title: "%{member}"
         remove_from_course: Retirer du cours
@@ -670,6 +680,8 @@ fr:
         create_attendance: "Créer une feuille de présence"
         admin_label: "Admin"
         coach_label: "Coach"
+        emergency_contact: Contact d'urgence
+        personal_info: Informations personnelles
       new:
         title: Ajouter un membre
       create:
@@ -682,6 +694,7 @@ fr:
         success: Membre supprimé
         error: Impossible de supprimer un membre ayant une inscription avec un paiement initié, confirmée ou payée
       subscription:
+        invalid_subscription: Inscription invalide
         view_camp: Voir le stage
     payments:
       create:
@@ -693,6 +706,7 @@ fr:
       index:
         title: Inscriptions
         new: Nouvelle inscription
+        no_subscriptions: Aucune inscription ne correspond à ces critères.
         filters:
           title: Filtrer les inscriptions
           description: Combinez les critères pour affiner les résultats.
@@ -855,6 +869,7 @@ fr:
         duration_days:
           one: "%{count} jour"
           other: "%{count} jours"
+        participants: participants
         price: "%{price}"
         capacity:
           one: "%{current}/%{count} place"
@@ -917,6 +932,7 @@ fr:
         upload_payment_proof: Justificatif
         internal_rate: Tarif élève
         external_rate: Tarif externe
+        unsubscribe_confirm: Êtes-vous sûr de vouloir désinscrire %{member} de ce stage ?
         unavailability:
           full: Ce stage est complet.
           externals_only: "Ce stage est réservé aux externes. %{member} possède une inscription annuelle et fait donc partie des élèves."
@@ -965,6 +981,7 @@ fr:
       download_subscription_form: Télécharger le formulaire d'inscription
       upload_signed_form: Retourner le formulaire signé
       upload_medical_certificate: Joindre le certificat médical
+      download_medical_certificate: Télécharger le certificat médical
       change_signed_form: Remplacer le formulaire
       change_medical_certificate: Remplacer le certificat médical
       edit_member: Modifier le profil de l'élève
@@ -1034,6 +1051,9 @@ fr:
       new:
         title: Ajouter un·e élève
         description: "Vous pourrez ensuite l'inscrire aux cours et stages."
+      edit:
+        title: Modifier le profil de l'élève
+        description: Mettez à jour ses informations personnelles et son contact d'urgence.
       form:
         personal_information: Informations personnelles
         personal_information_description: Les informations de base de l'élève
@@ -1151,6 +1171,7 @@ fr:
         L'adresse email de votre compte (%{email}) bloque les emails automatiques provenant de votre service. Cela veut di\re que vous ne pouvez pas recevoir les emails de confirmation d'inscription ou encore de réinitialisation de votre mot de passe. Nous vous conseillons d'utiliser une autre adresse email en allant dans les paramètres de votre compte.
     navbar:
       admin: "Admin"
+      coach: "Coach"
       members: "Membres"
       categories: "Catégories"
       courses: "Cours"

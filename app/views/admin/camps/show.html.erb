@@ -31,7 +31,7 @@
             </div>
             <div>
               <dt class="text-sm font-medium text-gray-500"><%= t('.duration') %></dt>
-              <dd class="mt-1 text-sm text-gray-900"><%= t('.duration_days', count: @camp.duration_days) %></dd>
+              <dd class="mt-1 text-sm text-gray-900"><%= t('admin.camps.camp.duration_days', count: @camp.duration_days) %></dd>
             </div>
             <div>
               <dt class="text-sm font-medium text-gray-500"><%= t('.price') %></dt>
@@ -39,7 +39,7 @@
             </div>
             <div>
               <dt class="text-sm font-medium text-gray-500"><%= t('.capacity') %></dt>
-              <dd class="mt-1 text-sm text-gray-900"><%= t('.capacity', current: @camp.occupied_slots_count, count: @camp.capacity) %></dd>
+              <dd class="mt-1 text-sm text-gray-900"><%= t('admin.camps.camp.capacity', current: @camp.occupied_slots_count, count: @camp.capacity) %></dd>
             </div>
             <div>
               <dt class="text-sm font-medium text-gray-500"><%= t('.active') %></dt>
