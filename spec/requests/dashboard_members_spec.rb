@@ -25,6 +25,13 @@ describe 'Dashboard members', type: :request do
     get dashboard_member_path(member)
     expect(response.body).to include(member.full_name, 'Contact d&#39;urgence', 'Zone de danger')
 
+    get edit_dashboard_member_path(member)
+    expect(response.body).to include(
+      'Modifier le profil de l&#39;élève',
+      'Mettez à jour ses informations personnelles et son contact d&#39;urgence.'
+    )
+    expect(response.body).not_to include('Translation missing')
+
     patch dashboard_member_path(member), params: {
       member: member.attributes.slice(
         'first_name', 'last_name', 'birthdate', 'contact_name', 'contact_phone_number',
