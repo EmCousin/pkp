@@ -17,6 +17,23 @@ describe User, type: :model do
 
   it { is_expected.to validate_acceptance_of(:terms_of_service) }
 
+  describe 'password storage compatibility' do
+    it 'stores native password changes in the Devise column' do
+      user.update!(password: 'native-password', password_confirmation: 'native-password')
+
+      expect(user.reload.password_digest).to eq(user.encrypted_password)
+      expect(user).to be_valid_password('native-password')
+    end
+
+    it 'authenticates a hash written by the previous Devise release' do
+      legacy_hash = BCrypt::Password.create('legacy-password')
+      user.update_column(:encrypted_password, legacy_hash) # rubocop:disable Rails/SkipsModelValidations
+
+      expect(user.reload).to be_valid_password('legacy-password')
+      expect(user.password_digest).to eq(user.encrypted_password)
+    end
+  end
+
   it { is_expected.to validate_presence_of(:first_name).on(:account_setup) }
   it { is_expected.to validate_presence_of(:last_name).on(:account_setup) }
   it { is_expected.to validate_presence_of(:phone_number).on(:account_setup) }

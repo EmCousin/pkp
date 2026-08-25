@@ -7,6 +7,7 @@ module Auth
     include Auth::Lockable
 
     included do
+      alias_attribute :password_digest, :encrypted_password
       has_secure_password
 
       has_many :auth_sessions,
@@ -24,8 +25,8 @@ module Auth
       normalizes :email, with: ->(email) { email.strip.downcase }
 
       before_update :invalidate_reset_password_token, if: :authentication_credentials_changing?
-      before_update :invalidate_auth_sessions, if: :will_save_change_to_password_digest?
-      after_update_commit :notify_password_changed, if: :saved_change_to_password_digest?
+      before_update :invalidate_auth_sessions, if: :will_save_change_to_encrypted_password?
+      after_update_commit :notify_password_changed, if: :saved_change_to_encrypted_password?
       after_update_commit :notify_email_changed, if: :saved_change_to_email?
     end
 
@@ -51,6 +52,10 @@ module Auth
       authenticate(password).present?
     end
 
+    def authentication_fingerprint
+      Digest::SHA256.hexdigest(encrypted_password)
+    end
+
     def update_account(attributes, current_password:)
       with_lock do
         self.current_password = current_password
@@ -74,7 +79,7 @@ module Auth
     end
 
     def authentication_credentials_changing?
-      will_save_change_to_email? || will_save_change_to_password_digest?
+      will_save_change_to_email? || will_save_change_to_encrypted_password?
     end
 
     def invalidate_reset_password_token

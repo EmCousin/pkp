@@ -1,22 +1,16 @@
 # frozen_string_literal: true
 
 class ReplaceDeviseWithAuthentication < ActiveRecord::Migration[8.1]
-  def up
-    rename_column :users, :encrypted_password, :password_digest
+  def change
     create_auth_sessions
-    remove_unused_devise_columns
-    invalidate_old_authentication_tokens
-  end
-
-  def down
-    raise ActiveRecord::IrreversibleMigration, 'Devise authentication tokens and confirmation data were discarded'
   end
 
   private
 
   def create_auth_sessions
     create_table :auth_sessions do |t|
-      t.references :user, null: false, foreign_key: true
+      t.references :user, null: false, foreign_key: { on_delete: :cascade }
+      t.string :credential_fingerprint, null: false
       t.string :ip_address
       t.string :user_agent
       t.datetime :last_seen_at, null: false
@@ -26,23 +20,5 @@ class ReplaceDeviseWithAuthentication < ActiveRecord::Migration[8.1]
       t.index :last_seen_at
       t.index :remembered_until
     end
-  end
-
-  def remove_unused_devise_columns
-    remove_index :users, :confirmation_token, unique: true
-    remove_column :users, :confirmation_token, :string
-    remove_column :users, :confirmed_at, :datetime
-    remove_column :users, :confirmation_sent_at, :datetime
-    remove_column :users, :unconfirmed_email, :string
-    remove_column :users, :remember_created_at, :datetime
-  end
-
-  def invalidate_old_authentication_tokens
-    execute <<~SQL.squish
-      UPDATE users
-      SET reset_password_token = NULL,
-          reset_password_sent_at = NULL,
-          unlock_token = NULL
-    SQL
   end
 end

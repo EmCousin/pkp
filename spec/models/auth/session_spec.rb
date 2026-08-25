@@ -42,6 +42,30 @@ describe Auth::Session, type: :model do # rubocop:disable Metrics/BlockLength
     expect(described_class.resume(auth_session.id)).to be_nil
   end
 
+  it 'rejects a session after the previous Devise release changes the password' do
+    auth_session = create_session(last_seen_at: Time.current)
+    legacy_hash = BCrypt::Password.create('legacy-password')
+    user.update_column(:encrypted_password, legacy_hash) # rubocop:disable Rails/SkipsModelValidations
+
+    expect(described_class.resume(auth_session.id)).to be_nil
+  end
+
+  it 'rejects a session after the previous Devise release locks and unlocks the user' do
+    auth_session = create_session(last_seen_at: Time.current)
+    user.update_column(:locked_at, Time.current) # rubocop:disable Rails/SkipsModelValidations
+    user.update_columns(locked_at: nil, failed_attempts: 0, unlock_token: nil) # rubocop:disable Rails/SkipsModelValidations
+
+    expect(described_class.resume(auth_session.id)).to be_nil
+  end
+
+  it 'is deleted when the previous release deletes its user without callbacks' do
+    auth_session = create_session(last_seen_at: Time.current)
+
+    User.where(id: user.id).delete_all
+
+    expect(described_class).not_to exist(auth_session.id)
+  end
+
   it 'prunes expired normal and remembered sessions' do
     expired_normal = create_session(last_seen_at: 8.days.ago)
     expired_remembered = create_session(last_seen_at: Time.current, remembered_until: 1.minute.ago)

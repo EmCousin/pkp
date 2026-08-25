@@ -10,7 +10,7 @@ module Auth
 
     belongs_to :user, inverse_of: :auth_sessions
 
-    before_validation :copy_authentication_generation, on: :create
+    before_validation :copy_authentication_credentials, on: :create
 
     scope :expired, lambda {
       where(remembered_until: ..Time.current)
@@ -33,6 +33,7 @@ module Auth
 
     def resumable?
       return false if authentication_generation != user.authentication_generation
+      return false if credential_fingerprint != user.authentication_fingerprint
       return false if user.access_locked?
       return remembered_until.future? if remembered_until?
 
@@ -53,8 +54,9 @@ module Auth
 
     private
 
-    def copy_authentication_generation
+    def copy_authentication_credentials
       self.authentication_generation = user.authentication_generation
+      self.credential_fingerprint = user.authentication_fingerprint
     end
   end
 end
