@@ -62,6 +62,7 @@ fr:
     show: Voir
     signup: Inscription
     signin_with: Connexion avec %{provider}
+    skip_to_content: Aller au contenu principal
     to: à
     update: Mettre à jour
     upload: Téléverser
