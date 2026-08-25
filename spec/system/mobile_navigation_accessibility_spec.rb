@@ -19,7 +19,7 @@ describe 'Mobile navigation accessibility', type: :system do
       expect(page.evaluate_script('getComputedStyle(arguments[0]).boxShadow', summary)).not_to eq('none')
       summary.send_keys(:enter)
 
-      expect(details[:open]).not_to be_nil
+      expect(details).to match_css('[open]')
       expect(details).to have_link('Connexion', visible: :visible)
       expect_component_to_be_accessible('nav')
 

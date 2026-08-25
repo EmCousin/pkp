@@ -20,30 +20,33 @@ describe 'Subscription disclosure accessibility', type: :system do
 
   around { |example| with_app_host('http://lvh.me') { example.run } }
 
-  it 'toggles details with a named button and hides collapsed content' do
+  it 'toggles details with a named native control and hides collapsed content' do
     sign_in_as(user)
     card_id = ActionView::RecordIdentifier.dom_id(subscription, :card)
     details_id = ActionView::RecordIdentifier.dom_id(subscription, :details)
     card = find("##{card_id}")
-    button = card.find("button[aria-controls='#{details_id}']")
-    details = card.find("##{details_id}", visible: :all)
+    summary = card.find("summary[aria-controls='#{details_id}']", text: 'Voir les détails')
+    disclosure = summary.find(:xpath, '..')
+    content = card.find("##{details_id}", visible: :all)
 
-    expect(button[:'aria-expanded']).to eq('false')
-    expect(details).not_to be_visible
+    expect(card[:'data-controller']).to be_nil
+    expect(disclosure).not_to match_css('[open]')
+    expect(summary[:'aria-controls']).to eq(details_id)
+    expect(content).not_to be_visible
 
-    page.execute_script('arguments[0].focus()', button)
-    expect(page.evaluate_script('getComputedStyle(arguments[0]).boxShadow', button)).not_to eq('none')
-    button.send_keys(:enter)
+    page.execute_script('arguments[0].focus()', summary)
+    expect(page.evaluate_script('getComputedStyle(arguments[0]).boxShadow', summary)).not_to eq('none')
+    summary.send_keys(:enter)
 
-    expect(button[:'aria-expanded']).to eq('true')
-    expect(button).to have_text('Masquer les détails')
-    expect(details).to be_visible
-    expect(page.evaluate_script('document.activeElement === arguments[0]', button)).to be(true)
+    expect(disclosure).to match_css('[open]')
+    expect(summary).to have_text('Masquer les détails')
+    expect(content).to be_visible
+    expect(page.evaluate_script('document.activeElement === arguments[0]', summary)).to be(true)
     expect_component_to_be_accessible("##{card_id}")
 
-    button.send_keys(:space)
-    expect(button[:'aria-expanded']).to eq('false')
-    expect(details).not_to be_visible
+    summary.send_keys(:space)
+    expect(disclosure).not_to match_css('[open]')
+    expect(content).not_to be_visible
   end
 
   it 'starts expanded when there is only one subscription' do
@@ -52,10 +55,11 @@ describe 'Subscription disclosure accessibility', type: :system do
     card_id = ActionView::RecordIdentifier.dom_id(subscription, :card)
     details_id = ActionView::RecordIdentifier.dom_id(subscription, :details)
     card = find("##{card_id}")
-    button = card.find("button[aria-controls='#{details_id}']")
+    summary = card.find("summary[aria-controls='#{details_id}']")
+    disclosure = summary.find(:xpath, '..')
 
-    expect(button[:'aria-expanded']).to eq('true')
-    expect(button).to have_text('Masquer les détails')
+    expect(disclosure).to match_css('[open]')
+    expect(summary).to have_text('Masquer les détails')
     expect(card.find("##{details_id}")).to be_visible
   end
 end

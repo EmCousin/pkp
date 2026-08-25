@@ -40,6 +40,16 @@ module.exports = {
           '0%': { transform: 'translateX(200%)' },
           '100%': { transform: 'translateX(0)' }
         },
+        'slide-in-up-out-down': {
+          '0%': { transform: 'translateY(100%)', visibility: 'visible' },
+          '5%': { transform: 'translateY(0)', visibility: 'visible' },
+          '95%': { transform: 'translateY(0)', visibility: 'visible' },
+          '100%': { transform: 'translateY(100%)', visibility: 'hidden' }
+        },
+        'hide-after-delay': {
+          '0%': { visibility: 'visible' },
+          '100%': { visibility: 'hidden' }
+        },
         'fade-in-up': {
           'from': {
             opacity: '0',
@@ -84,6 +94,8 @@ module.exports = {
         }
       },
       animation: {
+        'slide-in-up-out-down': 'slide-in-up-out-down 5s ease-in-out forwards',
+        'hide-after-delay': 'hide-after-delay 5s step-end forwards',
         'slide-in-from-left': 'slide-in-from-left var(--animation-duration) both',
         'fade-in-up': 'fade-in-up 0.6s ease-out forwards',
         'slide-in-from-left-custom': 'slide-in-from-left-custom 0.5s ease-out forwards',

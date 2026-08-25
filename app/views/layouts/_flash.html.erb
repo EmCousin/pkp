@@ -1,7 +1,11 @@
 <div id="flash-messages" class="fixed inset-x-0 bottom-0 z-50 space-y-2 md:ml-auto md:w-1/2 md:mb-4 md:mr-4">
   <% if alert.present? %>
-    <div data-controller="flash" class="relative bg-yellow-50 rounded-lg shadow-sm" role="alert">
-      <div class="flex items-center justify-between px-4 py-3">
+    <details open class="group relative min-h-10 animate-slide-in-up-out-down hover:[animation-play-state:paused] focus-within:[animation-play-state:paused] motion-reduce:animate-hide-after-delay">
+      <summary aria-describedby="flash-alert-message" class="absolute right-2 top-2 z-10 cursor-pointer list-none rounded-md px-2 py-1 text-sm font-medium text-yellow-700 hover:bg-yellow-100 focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-offset-2 focus:ring-offset-yellow-50 [&::-webkit-details-marker]:hidden">
+        <span class="group-open:hidden"><%= t('defaults.show') %></span>
+        <span class="hidden group-open:inline"><%= t('defaults.dismiss') %></span>
+      </summary>
+      <div class="flex items-center bg-yellow-50 rounded-lg shadow-sm px-4 py-3 pr-24" role="alert">
         <div class="flex items-center">
           <div class="flex-shrink-0">
             <svg aria-hidden="true" class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -12,16 +16,17 @@
             <p class="text-sm text-yellow-700" id="flash-alert-message"><%= alert %></p>
           </div>
         </div>
-        <button type="button" data-flash-dismiss data-action="click->flash#dismiss" aria-describedby="flash-alert-message" class="ml-4 flex-shrink-0 rounded-md px-2 py-1 text-sm font-medium text-yellow-700 hover:bg-yellow-100 focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-offset-2 focus:ring-offset-yellow-50">
-          <%= t('defaults.dismiss') %>
-        </button>
       </div>
-    </div>
+    </details>
   <% end %>
 
   <% if notice.present? %>
-    <div data-controller="flash" class="relative bg-blue-50 rounded-lg shadow-sm" role="status">
-      <div class="flex items-center justify-between px-4 py-3">
+    <details open class="group relative min-h-10 animate-slide-in-up-out-down hover:[animation-play-state:paused] focus-within:[animation-play-state:paused] motion-reduce:animate-hide-after-delay">
+      <summary aria-describedby="flash-notice-message" class="absolute right-2 top-2 z-10 cursor-pointer list-none rounded-md px-2 py-1 text-sm font-medium text-blue-700 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 focus:ring-offset-blue-50 [&::-webkit-details-marker]:hidden">
+        <span class="group-open:hidden"><%= t('defaults.show') %></span>
+        <span class="hidden group-open:inline"><%= t('defaults.dismiss') %></span>
+      </summary>
+      <div class="flex items-center bg-blue-50 rounded-lg shadow-sm px-4 py-3 pr-24" role="status">
         <div class="flex items-center">
           <div class="flex-shrink-0">
             <svg aria-hidden="true" class="h-5 w-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -32,16 +37,17 @@
             <p class="text-sm text-blue-700" id="flash-notice-message"><%= notice %></p>
           </div>
         </div>
-        <button type="button" data-flash-dismiss data-action="click->flash#dismiss" aria-describedby="flash-notice-message" class="ml-4 flex-shrink-0 rounded-md px-2 py-1 text-sm font-medium text-blue-700 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 focus:ring-offset-blue-50">
-          <%= t('defaults.dismiss') %>
-        </button>
       </div>
-    </div>
+    </details>
   <% end %>
 
   <% if current_user&.invalid_email_provider? %>
-    <div data-controller="flash" class="relative bg-red-50 rounded-lg shadow-sm" role="status">
-      <div class="flex items-center justify-between px-4 py-3">
+    <details open class="group relative min-h-10 animate-slide-in-up-out-down hover:[animation-play-state:paused] focus-within:[animation-play-state:paused] motion-reduce:animate-hide-after-delay">
+      <summary aria-describedby="flash-email-warning-message" class="absolute right-2 top-2 z-10 cursor-pointer list-none rounded-md px-2 py-1 text-sm font-medium text-red-700 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-700 focus:ring-offset-2 focus:ring-offset-red-50 [&::-webkit-details-marker]:hidden">
+        <span class="group-open:hidden"><%= t('defaults.show') %></span>
+        <span class="hidden group-open:inline"><%= t('defaults.dismiss') %></span>
+      </summary>
+      <div class="flex items-center bg-red-50 rounded-lg shadow-sm px-4 py-3 pr-24" role="status">
         <div class="flex items-center">
           <div class="flex-shrink-0">
             <svg aria-hidden="true" class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -52,10 +58,7 @@
             <p class="text-sm text-red-700" id="flash-email-warning-message"><%= t('.invalid_email_provider', email: current_user.email) %></p>
           </div>
         </div>
-        <button type="button" data-flash-dismiss data-action="click->flash#dismiss" aria-describedby="flash-email-warning-message" class="ml-4 flex-shrink-0 rounded-md px-2 py-1 text-sm font-medium text-red-700 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-700 focus:ring-offset-2 focus:ring-offset-red-50">
-          <%= t('defaults.dismiss') %>
-        </button>
       </div>
-    </div>
+    </details>
   <% end %>
 </div>
