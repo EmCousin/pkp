@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 describe 'Recurring discovery sessions', type: :request do
-  include Devise::Test::IntegrationHelpers
-
   let(:user) { create(:user, phone_number: '+33612345678') }
   let!(:member) { create(:member, user:) }
   let(:category) { create(:category, title: 'Adultes') }

@@ -242,7 +242,7 @@ en:
     confirmations:
       destroy:
         success: "Unsubscribed successfully"
-  devise:
+  auth:
     passwords:
       edit:
         title: "Create a new password"
@@ -270,6 +270,7 @@ en:
         current_password_needed: "needed to confirm your changes"
         minimum_characters: "%{length} characters min"
         are_you_sure: "This action is irreversible. Click OK to permanently delete your account."
+        finalized_event_registration: "Your account cannot be deleted while it contains a registration with a started payment, or a confirmed or paid registration."
 
   shared:
     attendance_record: &attendance_record

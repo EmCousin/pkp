@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 describe 'Admin discovery sessions', type: :request do
-  include Devise::Test::IntegrationHelpers
-
   let(:course) { create(:course, :discoverable, weekday: :samedi) }
 
   before { sign_in create(:user, :admin, phone_number: '+33612345679') }

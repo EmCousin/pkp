@@ -358,7 +358,7 @@ fr:
     confirmations:
       destroy:
         success: Désabonnement réussi
-  devise:
+  auth:
     passwords:
       edit:
         title: Créer un nouveau mot de passe
@@ -385,8 +385,6 @@ fr:
         current_password_needed: nécessaire pour confirmer vos modifications
         minimum_characters: "%{length} caractères min"
         are_you_sure: Cette action est irréversible. Cliquez sur OK pour supprimer définivement votre compte.
-        finalized_event_registration: Votre compte ne peut pas être supprimé tant qu'il contient une inscription avec un paiement initié, confirmée ou payée.
-      destroy:
         finalized_event_registration: Votre compte ne peut pas être supprimé tant qu'il contient une inscription avec un paiement initié, confirmée ou payée.
 
   shared:

@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   include CurrentRequest
   include CurrentPlatform
-  include DeviseOverrides
+  include Auth::Authentication
   include ProfileCompletable
   include AccessFilteringHelpers
 
