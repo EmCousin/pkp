@@ -3,11 +3,15 @@
 require 'axe-rspec'
 
 module AccessibilityHelpers
-  WCAG_TAGS = %i[wcag2a wcag2aa wcag21a wcag21aa wcag22aa].freeze
+  WCAG_TAGS = %i[wcag2a wcag2aa wcag21a wcag21aa wcag22a wcag22aa].freeze
   FOUNDATION_RULES = %w[document-title html-has-lang landmark-one-main].freeze
 
   def expect_page_to_be_accessible
     expect(page).to be_axe_clean.according_to(*WCAG_TAGS)
+  end
+
+  def expect_component_to_be_accessible(selector)
+    expect(page).to be_axe_clean.within(selector).according_to(*WCAG_TAGS)
   end
 
   def expect_accessible_foundations
@@ -29,6 +33,13 @@ module AccessibilityHelpers
 
   def press_enter
     page.send_keys(:enter)
+  end
+
+  def sign_in_as(user, password: 'surprise')
+    visit new_user_session_path
+    fill_in 'user_email', with: user.email
+    fill_in 'user_password', with: password
+    click_button 'Connexion'
   end
 
   def with_app_host(host)

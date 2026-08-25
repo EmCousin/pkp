@@ -468,6 +468,7 @@ en:
       invalid_email_provider:
         "The email address of your account (%{email}) blocks automatic emails from your service. This means you cannot receive confirmation emails or password reset instructions. We recommend using another email address in your account settings."
     navbar:
+      main_menu: "Main menu"
       admin: "Admin"
       coach: "Coach"
       members: "Members"
@@ -590,6 +591,8 @@ en:
   dashboard:
     subscription:
       medical_certificate_from_season: "Valid certificate uploaded in %{season}"
+      see_details: "View details"
+      hide_details: "Hide details"
     camps:
       camp:
         audience:

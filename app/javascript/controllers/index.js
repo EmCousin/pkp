@@ -7,6 +7,12 @@ import { application } from "./application"
 import ConfirmController from "./confirm_controller"
 application.register("confirm", ConfirmController)
 
+import DisclosureController from "./disclosure_controller"
+application.register("disclosure", DisclosureController)
+
+import FlashController from "./flash_controller"
+application.register("flash", FlashController)
+
 import FormController from "./form_controller"
 application.register("form", FormController)
 

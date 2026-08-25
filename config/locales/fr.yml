@@ -1008,7 +1008,7 @@ fr:
       additional_subscriptions: "Inscriptions supplémentaires"
       additional_courses: "Cours supplémentaires"
       see_details: "Voir les détails"
-      hide_details: "Masquer"
+      hide_details: "Masquer les détails"
     edit:
       title: Mes informations personnelles
     alumni_accesses:
@@ -1169,8 +1169,9 @@ fr:
   layouts:
     flash:
       invalid_email_provider:
-        L'adresse email de votre compte (%{email}) bloque les emails automatiques provenant de votre service. Cela veut di\re que vous ne pouvez pas recevoir les emails de confirmation d'inscription ou encore de réinitialisation de votre mot de passe. Nous vous conseillons d'utiliser une autre adresse email en allant dans les paramètres de votre compte.
+        L'adresse email de votre compte (%{email}) bloque les emails automatiques provenant de votre service. Cela veut dire que vous ne pouvez pas recevoir les emails de confirmation d'inscription ou encore de réinitialisation de votre mot de passe. Nous vous conseillons d'utiliser une autre adresse email en allant dans les paramètres de votre compte.
     navbar:
+      main_menu: "Menu principal"
       admin: "Admin"
       coach: "Coach"
       members: "Membres"
