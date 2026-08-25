@@ -1,0 +1,5 @@
+<p>Bonjour <%= @user.email %>,</p>
+
+<p>Nous avons bloqué votre compte après plusieurs tentatives de connexion infructueuses.</p>
+
+<p><%= link_to 'Débloquer mon compte', user_unlock_url(unlock_token: @token) %></p>

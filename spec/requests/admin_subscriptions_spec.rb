@@ -3,7 +3,6 @@
 require 'rails_helper'
 
 describe 'Admin subscriptions', type: :request do
-  include Devise::Test::IntegrationHelpers
   include ActiveSupport::Testing::TimeHelpers
 
   before { sign_in create(:user, :admin, phone_number: '+33612345679') }

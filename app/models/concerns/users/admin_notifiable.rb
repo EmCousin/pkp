@@ -5,13 +5,16 @@ module Users
     extend ActiveSupport::Concern
 
     included do
-      before_update :notify_admins, if: :will_save_change_to_email?
+      after_update_commit :notify_admins, if: :saved_change_to_email?
     end
 
     private
 
     def notify_admins
-      AdminMailer.email_changed(email_was, email).deliver_later
+      previous_email, current_email = saved_change_to_email
+      AdminMailer.email_changed(previous_email, current_email).deliver_later
+    rescue StandardError => e
+      Rails.error.report(e, handled: true, context: { user_id: id })
     end
   end
 end

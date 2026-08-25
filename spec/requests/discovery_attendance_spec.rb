@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 describe 'Discovery attendance', type: :request do
-  include Devise::Test::IntegrationHelpers
-
   let(:discovery_session) { create(:discovery_session) }
   let(:subscription) do
     create(

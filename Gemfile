@@ -28,14 +28,13 @@ gem 'propshaft'
 gem 'stimulus-rails'
 gem 'turbo-rails'
 
+gem 'aws-sdk-s3', require: false
+# Use ActiveModel has_secure_password
+gem 'bcrypt', '~> 3.1.7'
+gem 'csv'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-gem 'aws-sdk-s3', require: false
-gem 'csv'
-gem 'devise'
-gem 'devise-i18n'
+gem 'rails-i18n'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 gem 'image_processing', '~> 1.2'

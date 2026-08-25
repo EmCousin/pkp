@@ -6,7 +6,7 @@
 #
 emmanuel:
   email: "emmanuel@hey.com"
-  encrypted_password: <%= User.new.send(:password_digest, 'password123') %>
+  password_digest: <%= User.new(password: 'password123').password_digest %>
   admin: true
   coach: false
   address: "1 rue des Halles"

@@ -4,8 +4,6 @@ require 'rails_helper'
 
 # rubocop:disable Metrics/BlockLength
 describe 'Current platform', type: :request do
-  include Devise::Test::IntegrationHelpers
-
   let(:platform) { Platform.find_by!(domain: 'example.com') }
 
   it 'resolves the platform from the request domain' do

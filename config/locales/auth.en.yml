@@ -1,0 +1,78 @@
+en:
+  auth:
+    failure:
+      already_authenticated: You are already signed in.
+      invalid: Invalid email or password.
+      timeout: Your session expired. Please sign in again.
+      unauthenticated: You need to sign in or sign up before continuing.
+    mailer:
+      email_changed:
+        subject: Email changed
+      password_changed:
+        subject: Password changed
+      reset_password_instructions:
+        subject: Reset password instructions
+      unlock_instructions:
+        subject: Unlock instructions
+    passwords:
+      invalid_token: This password reset link is invalid or has expired. Request a new link.
+      new:
+        title: Forgot your password?
+        submit: Reset my password
+      create:
+        success: If this address exists in our system, you will receive a password reset link.
+      edit:
+        title: Create a new password
+        new_password: New password
+        confirm_new_password: Confirm new password
+        submit: Change my password
+      update:
+        success: Your password has been changed. You are now signed in.
+    registrations:
+      create:
+        success: Welcome! You have signed up successfully.
+      update:
+        success: Your account has been updated.
+      confirm_destroy:
+        title: Delete my account
+        warning: All data associated with your account will be deleted immediately. This cannot be undone.
+        confirm: Permanently delete my account
+      destroy:
+        success: Your account has been deleted.
+        finalized_event_registration: Your account cannot be deleted while it contains a registration with a started payment, or a confirmed or paid registration.
+    sessions:
+      create:
+        success: Signed in.
+      destroy:
+        success: Signed out.
+    shared:
+      links:
+        sign_in: Sign in
+        sign_up: Sign up
+        forgot_your_password: Forgot your password?
+        didnt_receive_unlock_instructions: Didn't receive unlock instructions?
+      minimum_password_length: "%{count} characters minimum"
+    unlocks:
+      new:
+        title: Unlock your account
+        submit: Send instructions
+      create:
+        success: If your account exists and is locked, you will receive unlock instructions.
+      show:
+        success: Your account has been unlocked. Please sign in.
+        invalid: This unlock link is invalid.
+  activerecord:
+    attributes:
+      user:
+        current_password: Current password
+        email: Email
+        email_confirmation: Email confirmation
+        password: Password
+        password_confirmation: Password confirmation
+        remember_me: Remember me
+    errors:
+      models:
+        user:
+          attributes:
+            current_password:
+              invalid: is incorrect
