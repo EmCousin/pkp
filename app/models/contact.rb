@@ -3,7 +3,7 @@
 class Contact < ApplicationRecord
   belongs_to :user
 
-  validates :email, presence: true, format: { with: User::EMAIL_REGEXP }
+  validates :email, presence: true, format: { with: Auth.email_regexp }
 
   after_create :send_email_confirmation_instructions
   before_update :send_email_confirmation_instructions, if: :will_save_change_to_email?

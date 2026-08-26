@@ -2,29 +2,25 @@
 
 module Auth
   class Session < ApplicationRecord
-    self.table_name = 'auth_sessions'
-
-    INACTIVITY_TIMEOUT = 1.week
-    REMEMBER_FOR = 2.weeks
-    LAST_SEEN_TOUCH_INTERVAL = 1.minute
-
-    belongs_to :user, inverse_of: :auth_sessions
+    belongs_to :user
 
     before_validation :copy_authentication_credentials, on: :create
 
     scope :expired, lambda {
       where(remembered_until: ..Time.current)
-        .or(where(remembered_until: nil, last_seen_at: ...INACTIVITY_TIMEOUT.ago))
+        .or(where(remembered_until: nil, last_seen_at: ...Auth.inactivity_timeout.ago))
     }
 
     def self.resume(id)
       return if id.blank?
 
-      session = includes(:user).find_by(id:)
-      return unless session
+      return unless (session = find_by(id:))
 
       session.user.unlock_if_expired!
-      return session.tap(&:touch_last_seen!) if session.resumable?
+      if session.resumable?
+        session.touch_last_seen!
+        return session
+      end
 
       yield session if block_given?
       session.destroy!
@@ -37,17 +33,17 @@ module Auth
       return false if user.access_locked?
       return remembered_until.future? if remembered_until?
 
-      last_seen_at.after?(INACTIVITY_TIMEOUT.ago)
+      last_seen_at.after?(Auth.inactivity_timeout.ago)
     end
 
     def timed_out?
       return !remembered_until.future? if remembered_until?
 
-      last_seen_at.before?(INACTIVITY_TIMEOUT.ago)
+      last_seen_at.before?(Auth.inactivity_timeout.ago)
     end
 
     def touch_last_seen!
-      return unless last_seen_at.before?(LAST_SEEN_TOUCH_INTERVAL.ago)
+      return unless last_seen_at.before?(Auth.last_seen_touch_interval.ago)
 
       update!(last_seen_at: Time.current)
     end

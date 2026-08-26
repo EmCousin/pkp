@@ -62,7 +62,7 @@
 
         <div>
           <%= form.label :password, class: "block text-sm font-medium text-gray-700" %>
-          <%= form.password_field :password, autocomplete: "new-password", maxlength: User::PASSWORD_MAXIMUM_LENGTH,
+          <%= form.password_field :password, autocomplete: "new-password", maxlength: Auth.password_length.end,
                                   class: "mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
           <p class="mt-2 text-sm text-gray-500"><%= t('.leave_blank_if_you_wont_change_it') %></p>
           <%= form.error_for :password, full_messages: true %>

@@ -12,15 +12,14 @@ module Auth
 
       has_many :auth_sessions,
                class_name: 'Auth::Session',
-               inverse_of: :user,
                dependent: :destroy
 
       attr_accessor :current_password
 
-      validates :email, presence: true, format: { with: User::EMAIL_REGEXP }, uniqueness: true
+      validates :email, presence: true, format: { with: Auth.email_regexp }, uniqueness: true
       validates :password,
-                length: { minimum: User::PASSWORD_MINIMUM_LENGTH },
-                if: -> { password.present? }
+                length: { in: Auth.password_length },
+                if: :password
 
       normalizes :email, with: ->(email) { email.strip.downcase }
 
