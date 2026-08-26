@@ -2,6 +2,10 @@
 
 module Auth
   class UnlocksController < BaseController
+    rate_limit to: Auth.recovery_request_limit,
+               within: Auth.recovery_request_period,
+               only: :create
+
     before_action :redirect_authenticated_user, only: %i[new create]
 
     def show
@@ -17,7 +21,7 @@ module Auth
     end
 
     def create
-      enqueue_auth_instructions Auth::SendUnlockInstructionsJob, unlock_params[:email]
+      Auth::SendUnlockInstructionsJob.perform_later(unlock_params[:email])
       redirect_to new_user_session_path, notice: t('.success'), status: :see_other
     end
 

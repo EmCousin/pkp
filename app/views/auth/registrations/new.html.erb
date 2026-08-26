@@ -56,8 +56,8 @@
         <div>
           <%= form.label :password, class: "block text-sm font-medium text-gray-700" %>
           <%= form.password_field :password, autocomplete: "new-password", required: true,
-                                  minlength: User::PASSWORD_MINIMUM_LENGTH,
-                                  maxlength: User::PASSWORD_MAXIMUM_LENGTH,
+                                  minlength: Auth.password_length.begin,
+                                  maxlength: Auth.password_length.end,
                                   class: "mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
           <p class="mt-2 text-sm text-gray-500"><%= t('auth.shared.minimum_password_length', count: @minimum_password_length) %></p>
         </div>

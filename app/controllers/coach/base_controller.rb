@@ -10,9 +10,9 @@ module Coach
     private
 
     def ensure_current_user_is_coach
-      return if current_user.coach?
+      return if Current.user.coach?
 
-      sign_out current_user
+      sign_out Current.user
       redirect_to after_sign_out_path_for(:user)
     end
   end

@@ -5,21 +5,13 @@ module Auth
     extend ActiveSupport::Concern
 
     included do
-      helper_method :current_user, :user_signed_in?
+      before_action :resume_auth_session
     end
 
     private
 
-    def current_user
-      resume_auth_session&.user
-    end
-
-    def user_signed_in?
-      current_user.present?
-    end
-
     def authenticate_user!
-      return if user_signed_in?
+      return if Current.user
 
       store_authentication_location
       failure = session.delete(:auth_timed_out) ? 'timeout' : 'unauthenticated'
@@ -33,7 +25,7 @@ module Auth
     end
 
     def sign_out(_user_or_scope = nil)
-      current_user.auth_sessions.where.not(remembered_until: nil).delete_all if current_user
+      Current.user.auth_sessions.where.not(remembered_until: nil).delete_all if Current.user
       terminate_auth_session
     end
 
@@ -84,7 +76,7 @@ module Auth
         user_agent: request.user_agent,
         ip_address: request.remote_ip,
         last_seen_at: Time.current,
-        remembered_until: (Auth::Session::REMEMBER_FOR.from_now if remember_me)
+        remembered_until: (Auth.remember_for.from_now if remember_me)
       }
     end
 

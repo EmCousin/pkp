@@ -7,6 +7,10 @@ describe Auth::Session, type: :model do # rubocop:disable Metrics/BlockLength
 
   let(:user) { create(:user) }
 
+  it 'uses the authentication table prefix' do
+    expect(described_class.table_name).to eq('auth_sessions')
+  end
+
   it 'resumes an active session' do
     auth_session = create_session(last_seen_at: 2.days.ago)
 
@@ -28,7 +32,7 @@ describe Auth::Session, type: :model do # rubocop:disable Metrics/BlockLength
 
   it 'rejects an active session after the account is locked' do
     auth_session = create_session(last_seen_at: Time.current)
-    user.update_columns(locked_at: Time.current, failed_attempts: User::MAXIMUM_AUTHENTICATION_ATTEMPTS) # rubocop:disable Rails/SkipsModelValidations
+    user.update_columns(locked_at: Time.current, failed_attempts: Auth.maximum_attempts) # rubocop:disable Rails/SkipsModelValidations
 
     expect(described_class.resume(auth_session.id)).to be_nil
   end

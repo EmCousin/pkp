@@ -3,12 +3,6 @@
 class User < ApplicationRecord
   INVALID_EMAIL_PROVIDERS = %w[@wanadoo.fr @orange.fr].freeze
   COUNTRY_CODES = YAML.safe_load_file(Rails.root.join('config/country_codes.yml')).freeze
-  EMAIL_REGEXP = /\A[^@\s]+@[^@\s]+\z/
-  PASSWORD_MINIMUM_LENGTH = 8
-  PASSWORD_MAXIMUM_LENGTH = 72
-  MAXIMUM_AUTHENTICATION_ATTEMPTS = 20
-  LOCK_DURATION = 10.minutes
-  RESET_PASSWORD_WITHIN = 6.hours
 
   include Auth::Authenticatable
   include Users::AdminNotifiable
