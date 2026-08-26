@@ -5,7 +5,7 @@ module Auth
     before_action :authenticate_user!
 
     def show
-      head :not_found unless current_user.admin?
+      head :not_found unless Current.user.admin?
     end
   end
 end

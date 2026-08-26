@@ -19,11 +19,11 @@ module Dashboard
     end
 
     def members
-      @members ||= current_user.members.where(platform: Current.platform).includes(:subscriptions).to_a
+      @members ||= Current.user.members.where(platform: Current.platform).includes(:subscriptions).to_a
     end
 
     def registered_for?(camp)
-      current_user.subscriptions.where(type: CampRegistration.sti_name).joins(:camp).exists?(camps: { id: camp.id })
+      Current.user.subscriptions.where(type: CampRegistration.sti_name).joins(:camp).exists?(camps: { id: camp.id })
     end
   end
 end

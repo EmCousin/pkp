@@ -32,12 +32,12 @@ module Dashboard
       private
 
       def set_parent_subscription
-        @parent_subscription = current_user.subscriptions
-                                           .for_platform(Current.platform)
-                                           .where(type: AnnualSubscription.sti_name)
-                                           .confirmed
-                                           .where(year: @camp.year, parent_subscription_id: nil)
-                                           .find(params.require(:subscription_id))
+        @parent_subscription = Current.user.subscriptions
+                                      .for_platform(Current.platform)
+                                      .where(type: AnnualSubscription.sti_name)
+                                      .confirmed
+                                      .where(year: @camp.year, parent_subscription_id: nil)
+                                      .find(params.require(:subscription_id))
       end
 
       def set_available_camp
@@ -45,12 +45,12 @@ module Dashboard
       end
 
       def set_subscription
-        @subscription = current_user.subscriptions
-                                    .for_platform(Current.platform)
-                                    .where(type: CampRegistration.sti_name)
-                                    .where.not(parent_subscription_id: nil)
-                                    .joins(:camp)
-                                    .find_by!(id: params.expect(:id), camps: { id: params.expect(:camp_id) })
+        @subscription = Current.user.subscriptions
+                               .for_platform(Current.platform)
+                               .where(type: CampRegistration.sti_name)
+                               .where.not(parent_subscription_id: nil)
+                               .joins(:camp)
+                               .find_by!(id: params.expect(:id), camps: { id: params.expect(:camp_id) })
         @camp = @subscription.camp
       end
 

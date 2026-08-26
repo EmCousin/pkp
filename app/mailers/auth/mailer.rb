@@ -2,7 +2,7 @@
 
 module Auth
   class Mailer < ApplicationMailer
-    default from: 'noreply@parkourparis.fr'
+    default from: Auth.mailer_sender
 
     def reset_password_instructions(user, token)
       @user = user

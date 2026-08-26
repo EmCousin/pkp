@@ -7,16 +7,16 @@ module Auth
 
     def new
       @user = User.new
-      @minimum_password_length = User::PASSWORD_MINIMUM_LENGTH
+      @minimum_password_length = Auth.password_length.begin
     end
 
     def edit
-      @user = current_user
+      @user = Current.user
     end
 
     def create
       @user = User.new(sign_up_params)
-      @minimum_password_length = User::PASSWORD_MINIMUM_LENGTH
+      @minimum_password_length = Auth.password_length.begin
 
       if @user.save(context: :sign_up)
         destination = after_authentication_path
@@ -28,7 +28,7 @@ module Auth
     end
 
     def update
-      @user = current_user
+      @user = Current.user
 
       if @user.update_account(account_attributes, current_password:)
         sign_in(@user) if password_changed?
@@ -39,11 +39,11 @@ module Auth
     end
 
     def confirm_destroy
-      @user = current_user
+      @user = Current.user
     end
 
     def destroy
-      user = current_user
+      user = Current.user
       return redirect_to_undeletable_account unless user.destroyable? && user.destroy
 
       sign_out

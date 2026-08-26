@@ -19,7 +19,7 @@
       <%= tag.div class: class_names("flex flex-col sm:flex-row sm:items-center gap-4", "animate-fade-in-up" => @subscription.member.blank?) do %>
         <div class="flex-1">
           <%= f.collection_select(:member_id,
-                                current_user.members.active.where(platform: Current.platform).available,
+                                Current.user.members.active.where(platform: Current.platform).available,
                                 :id,
                                 :full_name,
                                 { include_blank: false },

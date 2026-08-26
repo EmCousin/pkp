@@ -8,7 +8,7 @@ module Auth
       def unlock_by_token(token)
         return if token.blank?
 
-        find_by(unlock_token: token_digest(token))&.tap(&:unlock_access!)
+        find_by(unlock_token: Auth.token_digest(:unlock_token, token))&.tap(&:unlock_access!)
       end
     end
 
@@ -17,7 +17,7 @@ module Auth
     end
 
     def lock_expired?
-      locked_at? && locked_at <= User::LOCK_DURATION.ago
+      locked_at? && Auth.unlock_in.ago.after?(locked_at)
     end
 
     def unlock_if_expired!
@@ -36,12 +36,14 @@ module Auth
 
     def send_unlock_instructions
       unlock_if_expired!
-      return unless access_locked?
+      token, digest = issue_unlock_token
+      return unless token
 
-      token = SecureRandom.urlsafe_base64(32)
-      update_columns(unlock_token: self.class.token_digest(token), updated_at: Time.current) # rubocop:disable Rails/SkipsModelValidations
       Auth::Mailer.unlock_instructions(self, token).deliver_now
       token
+    rescue StandardError
+      clear_undelivered_unlock_token(digest)
+      raise
     end
 
     def register_failed_authentication!
@@ -70,11 +72,28 @@ module Auth
 
     private
 
+    def issue_unlock_token
+      with_lock do
+        next unless access_locked? && unlock_token.blank?
+
+        token = SecureRandom.urlsafe_base64(32)
+        digest = Auth.token_digest(:unlock_token, token)
+        update_columns(unlock_token: digest, updated_at: Time.current) # rubocop:disable Rails/SkipsModelValidations
+        [token, digest]
+      end
+    end
+
+    def clear_undelivered_unlock_token(digest)
+      return unless digest
+
+      self.class.where(id:, unlock_token: digest).update_all(unlock_token: nil) # rubocop:disable Rails/SkipsModelValidations
+    end
+
     def record_failed_authentication
       return if access_locked?
 
       self.failed_attempts += 1
-      newly_locked = failed_attempts >= User::MAXIMUM_AUTHENTICATION_ATTEMPTS
+      newly_locked = failed_attempts >= Auth.maximum_attempts
       lock_access if newly_locked
       save!(validate: false)
       newly_locked

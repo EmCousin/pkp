@@ -6,19 +6,19 @@ module Dashboard
     helper_method :return_path
 
     def index
-      @members = current_user.members.active.where(platform: Current.platform).order(:first_name, :last_name).with_attached_avatar
+      @members = Current.user.members.active.where(platform: Current.platform).order(:first_name, :last_name).with_attached_avatar
     end
 
     def show; end
 
     def new
-      @member = current_user.members.new(platform: Current.platform)
+      @member = Current.user.members.new(platform: Current.platform)
     end
 
     def edit; end
 
     def create
-      @member = current_user.members.new(member_params.merge(platform: Current.platform))
+      @member = Current.user.members.new(member_params.merge(platform: Current.platform))
 
       if @member.save
         redirect_to(return_path || new_dashboard_subscription_path(member_id: @member.id), notice: t('.success'), status: :see_other)
@@ -45,7 +45,7 @@ module Dashboard
     private
 
     def set_member
-      @member = current_user.members.active.find_by!(platform: Current.platform, id: params.expect(:id))
+      @member = Current.user.members.active.find_by!(platform: Current.platform, id: params.expect(:id))
     end
 
     def member_params

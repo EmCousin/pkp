@@ -35,15 +35,15 @@ module Dashboard
       end
 
       def set_member
-        @member = current_user.members.find_by!(platform: Current.platform, id: params.require(:member_id))
+        @member = Current.user.members.find_by!(platform: Current.platform, id: params.require(:member_id))
       end
 
       def set_subscription
-        @subscription = current_user.subscriptions
-                                    .for_platform(Current.platform)
-                                    .where(type: DiscoveryRegistration.sti_name)
-                                    .joins(:discovery_session)
-                                    .find_by!(id: params.expect(:id), discovery_sessions: { id: params.expect(:discovery_session_id) })
+        @subscription = Current.user.subscriptions
+                               .for_platform(Current.platform)
+                               .where(type: DiscoveryRegistration.sti_name)
+                               .joins(:discovery_session)
+                               .find_by!(id: params.expect(:id), discovery_sessions: { id: params.expect(:discovery_session_id) })
         @discovery_session = @subscription.discovery_session
       end
 
