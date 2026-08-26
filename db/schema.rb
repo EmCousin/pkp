@@ -305,17 +305,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_25_130000) do
     t.string "password_digest", default: "", null: false
     t.bigint "pennylane_customer_id"
     t.string "phone_number"
-    t.datetime "reset_password_sent_at", precision: nil
-    t.string "reset_password_token"
     t.string "stripe_customer_id"
     t.boolean "terms_of_service", default: false
-    t.string "unlock_token"
     t.datetime "updated_at", precision: nil, null: false
     t.string "zip_code"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["pennylane_customer_id"], name: "index_users_on_pennylane_customer_id", unique: true
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
