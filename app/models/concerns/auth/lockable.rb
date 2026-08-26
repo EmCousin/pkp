@@ -8,7 +8,7 @@ module Auth
       def unlock_by_token(token)
         return if token.blank?
 
-        find_by(unlock_token: Auth.token_digest(:unlock_token, token))&.tap(&:unlock_access!)
+        find_by_token_for(:unlock, token)&.tap(&:unlock_access!)
       end
     end
 
@@ -28,7 +28,6 @@ module Auth
       update_columns( # rubocop:disable Rails/SkipsModelValidations
         failed_attempts: 0,
         locked_at: nil,
-        unlock_token: nil,
         updated_at: Time.current
       )
       self
@@ -36,14 +35,11 @@ module Auth
 
     def send_unlock_instructions
       unlock_if_expired!
-      token, digest = issue_unlock_token
-      return unless token
+      return unless access_locked?
 
+      token = generate_token_for(:unlock)
       Auth::Mailer.unlock_instructions(self, token).deliver_now
       token
-    rescue StandardError
-      clear_undelivered_unlock_token(digest)
-      raise
     end
 
     def register_failed_authentication!
@@ -60,34 +56,16 @@ module Auth
     end
 
     def reset_failed_authentications!
-      return if failed_attempts.zero? && !locked_at? && unlock_token.blank?
+      return if failed_attempts.zero? && !locked_at?
 
       update_columns( # rubocop:disable Rails/SkipsModelValidations
         failed_attempts: 0,
         locked_at: nil,
-        unlock_token: nil,
         updated_at: Time.current
       )
     end
 
     private
-
-    def issue_unlock_token
-      with_lock do
-        next unless access_locked? && unlock_token.blank?
-
-        token = SecureRandom.urlsafe_base64(32)
-        digest = Auth.token_digest(:unlock_token, token)
-        update_columns(unlock_token: digest, updated_at: Time.current) # rubocop:disable Rails/SkipsModelValidations
-        [token, digest]
-      end
-    end
-
-    def clear_undelivered_unlock_token(digest)
-      return unless digest
-
-      self.class.where(id:, unlock_token: digest).update_all(unlock_token: nil) # rubocop:disable Rails/SkipsModelValidations
-    end
 
     def record_failed_authentication
       return if access_locked?
@@ -101,7 +79,6 @@ module Auth
 
     def lock_access
       self.locked_at = Time.current
-      self.unlock_token = nil
       advance_authentication_generation
     end
   end

@@ -5,7 +5,6 @@ class ReplaceDeviseWithAuthentication < ActiveRecord::Migration[8.1]
     rename_column :users, :encrypted_password, :password_digest
     create_auth_sessions
     remove_unused_devise_columns
-    invalidate_old_authentication_tokens
   end
 
   def down
@@ -35,14 +34,10 @@ class ReplaceDeviseWithAuthentication < ActiveRecord::Migration[8.1]
     remove_column :users, :confirmation_sent_at, :datetime
     remove_column :users, :unconfirmed_email, :string
     remove_column :users, :remember_created_at, :datetime
-  end
-
-  def invalidate_old_authentication_tokens
-    execute <<~SQL.squish
-      UPDATE users
-      SET reset_password_token = NULL,
-          reset_password_sent_at = NULL,
-          unlock_token = NULL
-    SQL
+    remove_index :users, :reset_password_token, unique: true
+    remove_column :users, :reset_password_token, :string
+    remove_column :users, :reset_password_sent_at, :datetime
+    remove_index :users, :unlock_token, unique: true
+    remove_column :users, :unlock_token, :string
   end
 end

@@ -7,7 +7,14 @@ module Auth
     include Auth::Lockable
 
     included do
-      has_secure_password
+      has_secure_password validations: false, reset_token: false
+
+      generates_token_for :password_reset, expires_in: Auth.reset_password_within do
+        [password_salt&.last(10), Digest::SHA256.hexdigest(email)]
+      end
+      generates_token_for :unlock, expires_in: Auth.unlock_in do
+        [locked_at&.to_i, authentication_generation]
+      end
 
       has_many :auth_sessions,
                class_name: 'Auth::Session',
@@ -16,13 +23,14 @@ module Auth
       attr_accessor :current_password
 
       validates :email, presence: true, format: { with: Auth.email_regexp }, uniqueness: true
+      validate :password_digest_present
       validates :password,
+                confirmation: true,
                 length: { in: Auth.password_length },
                 if: :password
 
       normalizes :email, with: ->(email) { email.strip.downcase }
 
-      before_update :invalidate_reset_password_token, if: :authentication_credentials_changing?
       before_update :invalidate_auth_sessions, if: :will_save_change_to_password_digest?
       after_update_commit :notify_password_changed, if: :saved_change_to_password_digest?
       after_update_commit :notify_email_changed, if: :saved_change_to_email?
@@ -72,13 +80,8 @@ module Auth
       enqueue_security_notification Auth::Mailer.password_changed(email)
     end
 
-    def authentication_credentials_changing?
-      will_save_change_to_email? || will_save_change_to_password_digest?
-    end
-
-    def invalidate_reset_password_token
-      self.reset_password_token = nil
-      self.reset_password_sent_at = nil
+    def password_digest_present
+      errors.add(:password, :blank) if password_digest.blank?
     end
 
     def invalidate_auth_sessions
