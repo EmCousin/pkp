@@ -122,8 +122,8 @@
             <%= user_form.password_field :password,
                 autocomplete: "new-password",
                 required: true,
-                minlength: Devise.password_length.min,
-                maxlength: Devise.password_length.max,
+                minlength: Auth.password_length.begin,
+                maxlength: Auth.password_length.end,
                 class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-slate-800 focus:border-slate-800 sm:text-sm" %>
           </div>
         <% end %>

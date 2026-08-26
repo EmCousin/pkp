@@ -3,7 +3,6 @@
 require 'rails_helper'
 
 describe 'Admin categories', type: :request do
-  include Devise::Test::IntegrationHelpers
   include ActiveSupport::Testing::TimeHelpers
 
   let(:pricing_year) { Date.current.year + 1 }

@@ -41,9 +41,27 @@ Rails.application.routes.draw do
 
   get "up" => "rails/health#show", as: :rails_health_check
 
-  devise_for :users, controllers: {
-    registrations: 'registrations'
-  }
+  get 'users/sign_in', to: 'auth/sessions#new', as: :new_user_session
+  post 'users/sign_in', to: 'auth/sessions#create', as: :user_session
+  delete 'users/sign_out', to: 'auth/sessions#destroy', as: :destroy_user_session
+
+  get 'users/sign_up', to: 'auth/registrations#new', as: :new_user_registration
+  post 'users', to: 'auth/registrations#create', as: :user_registration
+  get 'users/edit', to: 'auth/registrations#edit', as: :edit_user_registration
+  get 'users/delete', to: 'auth/registrations#confirm_destroy', as: :delete_user_registration
+  patch 'users', to: 'auth/registrations#update'
+  put 'users', to: 'auth/registrations#update'
+  delete 'users', to: 'auth/registrations#destroy'
+
+  get 'users/password/new', to: 'auth/passwords#new', as: :new_user_password
+  get 'users/password/edit', to: 'auth/passwords#edit', as: :edit_user_password
+  post 'users/password', to: 'auth/passwords#create', as: :user_password
+  patch 'users/password', to: 'auth/passwords#update'
+  put 'users/password', to: 'auth/passwords#update'
+
+  get 'users/unlock/new', to: 'auth/unlocks#new', as: :new_user_unlock
+  get 'users/unlock', to: 'auth/unlocks#show', as: :user_unlock
+  post 'users/unlock', to: 'auth/unlocks#create'
 
   direct :next_completion_step do |subscription|
     next edit_dashboard_subscription_terms_path(subscription) unless subscription.terms_accepted_at?
@@ -56,15 +74,17 @@ Rails.application.routes.draw do
     dashboard_path
   end
 
-  authenticated :user do
+  constraints Auth::AuthenticatedConstraint.new do
     root to: "dashboard#show", as: :authenticated
   end
 
 
-  authenticate :user, ->(user) { user.admin? } do
+  constraints Auth::AuthenticatedConstraint.new(&:admin?) do
     mount MissionControl::Jobs::Engine, at: "/jobs"
     mount PgHero::Engine, at: "/pghero"
   end
+  match '/jobs(/*path)', to: 'auth/protected_routes#show', via: :all
+  match '/pghero(/*path)', to: 'auth/protected_routes#show', via: :all
 
   resources :errors, only: [] do
     collection do
@@ -157,9 +177,7 @@ Rails.application.routes.draw do
 
   resources :legal_mentions, only: %i[index]
 
-  devise_scope :user do
-    root to: "devise/sessions#new"
-  end
+  root to: 'auth/sessions#new'
 
   namespace :coach do
     concerns :courses_manageable

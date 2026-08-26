@@ -15,9 +15,9 @@ module ProfileCompletable
   end
 
   def should_complete_profile?
-    return false if devise_controller?
-    return false unless user_signed_in?
+    return false if auth_controller?
+    return false unless Current.user
 
-    current_user.invalid?(:account_setup)
+    Current.user.invalid?(:account_setup)
   end
 end

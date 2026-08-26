@@ -10,6 +10,9 @@
 #     schedule: at 5am every day
 
 production:
+  prune_expired_auth_sessions:
+    class: Auth::PruneSessionsJob
+    schedule: every day at 3am
   sync_missing_pennylane_invoices:
     class: Pennylane::SyncMissingInvoicesJob
     schedule: every 10 minutes

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_22_120100) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_25_130000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -86,6 +86,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_22_120100) do
     t.datetime "updated_at", null: false
     t.index ["course_id", "date"], name: "index_attendance_sheets_on_course_id_and_date", unique: true
     t.index ["course_id"], name: "index_attendance_sheets_on_course_id"
+  end
+
+  create_table "auth_sessions", force: :cascade do |t|
+    t.bigint "authentication_generation", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.string "ip_address"
+    t.datetime "last_seen_at", null: false
+    t.datetime "remembered_until"
+    t.datetime "updated_at", null: false
+    t.string "user_agent"
+    t.bigint "user_id", null: false
+    t.index ["last_seen_at"], name: "index_auth_sessions_on_last_seen_at"
+    t.index ["remembered_until"], name: "index_auth_sessions_on_remembered_until"
+    t.index ["user_id"], name: "index_auth_sessions_on_user_id"
   end
 
   create_table "billing_invoices", force: :cascade do |t|
@@ -278,35 +292,25 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_22_120100) do
   create_table "users", force: :cascade do |t|
     t.string "address"
     t.boolean "admin", default: false, null: false
+    t.bigint "authentication_generation", default: 0, null: false
     t.string "city"
     t.boolean "coach", default: false, null: false
-    t.datetime "confirmation_sent_at", precision: nil
-    t.string "confirmation_token"
-    t.datetime "confirmed_at", precision: nil
     t.string "country"
     t.datetime "created_at", precision: nil, null: false
     t.string "email", default: "", null: false
-    t.string "encrypted_password", default: "", null: false
     t.integer "failed_attempts", default: 0, null: false
     t.string "first_name", null: false
     t.string "last_name", null: false
     t.datetime "locked_at", precision: nil
+    t.string "password_digest", default: "", null: false
     t.bigint "pennylane_customer_id"
     t.string "phone_number"
-    t.datetime "remember_created_at", precision: nil
-    t.datetime "reset_password_sent_at", precision: nil
-    t.string "reset_password_token"
     t.string "stripe_customer_id"
     t.boolean "terms_of_service", default: false
-    t.string "unconfirmed_email"
-    t.string "unlock_token"
     t.datetime "updated_at", precision: nil, null: false
     t.string "zip_code"
-    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["pennylane_customer_id"], name: "index_users_on_pennylane_customer_id", unique: true
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -314,6 +318,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_22_120100) do
   add_foreign_key "attendance_records", "attendance_sheets"
   add_foreign_key "attendance_records", "members"
   add_foreign_key "attendance_sheets", "courses"
+  add_foreign_key "auth_sessions", "users"
   add_foreign_key "camps", "platforms"
   add_foreign_key "camps_subscriptions", "camps"
   add_foreign_key "camps_subscriptions", "subscriptions"

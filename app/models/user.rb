@@ -4,14 +4,7 @@ class User < ApplicationRecord
   INVALID_EMAIL_PROVIDERS = %w[@wanadoo.fr @orange.fr].freeze
   COUNTRY_CODES = YAML.safe_load_file(Rails.root.join('config/country_codes.yml')).freeze
 
-  devise :database_authenticatable,
-         :registerable,
-         :recoverable,
-         :rememberable,
-         :validatable,
-         :lockable,
-         :timeoutable
-
+  include Auth::Authenticatable
   include Users::AdminNotifiable
   include Users::Chargeable
   include Subscriptions::ProtectsFinalizedRegistrations
@@ -28,8 +21,9 @@ class User < ApplicationRecord
 
   attr_accessor :email_confirmation
 
-  validates :email, confirmation: true, if: :email_confirmation_required?
-  validate :valid_email_provider, if: :email?, on: :create
+  validates :email, confirmation: true, on: :sign_up
+  validates :email_confirmation, presence: true, on: :sign_up
+  validate :valid_email_provider, if: :email?, on: %i[create sign_up]
   validates :terms_of_service, acceptance: true
   validates :first_name, :last_name, presence: true
   validates :country, inclusion: { in: TZInfo::Country.all_codes }, allow_blank: true
@@ -82,10 +76,6 @@ class User < ApplicationRecord
       city:,
       country_alpha2: country
     }
-  end
-
-  def email_confirmation_required?
-    new_record? && email.present? && email_confirmation.present?
   end
 
   def valid_email_provider

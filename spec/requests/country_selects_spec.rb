@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 describe 'Country selects', type: :request do
-  include Devise::Test::IntegrationHelpers
-
   it 'uses country names as labels and ISO codes as values on the account form' do
     sign_in create(:user)
 

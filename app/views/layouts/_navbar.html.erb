@@ -9,8 +9,8 @@
 
       <div class="hidden md:block">
         <div class="ml-10 flex items-baseline space-x-4">
-          <% if user_signed_in? %>
-            <% if current_user.admin? %>
+          <% if Current.user %>
+            <% if Current.user.admin? %>
               <div class="relative">
                 <details class="group">
                   <summary class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer flex items-center">
@@ -32,7 +32,7 @@
               </div>
             <% end %>
 
-            <% if current_user.coach? %>
+            <% if Current.user.coach? %>
               <div class="relative">
                 <details class="group">
                   <summary class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer flex items-center">
@@ -58,13 +58,13 @@
 
       <div class="hidden md:block">
         <div class="ml-4 flex items-center md:ml-6">
-          <% if user_signed_in? %>
+          <% if Current.user %>
             <%= button_to t('defaults.logout'),
                         destroy_user_session_path,
                         method: :delete,
                         class: "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" %>
           <% else %>
-            <%= link_to t('devise.shared.links.sign_in'),
+            <%= link_to t('auth.shared.links.sign_in'),
                       new_user_session_path,
                       class: "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" %>
           <% end %>
@@ -85,8 +85,8 @@
           <div class="grid transition-[grid-template-rows] duration-300 peer-open:grid-rows-[1fr] grid-rows-[0fr] absolute right-0 min-w-[200px]">
             <div class="overflow-hidden">
               <div class="space-y-1 bg-gray-800">
-                <% if user_signed_in? %>
-                  <% if current_user.admin %>
+                <% if Current.user %>
+                  <% if Current.user.admin %>
                     <div class="space-y-1">
                       <p class="text-gray-300 px-3 py-2 text-sm font-medium"><%= t('.admin') %></p>
                       <%= link_to t('.members'), %i[admin members], class: "text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium" %>
@@ -99,7 +99,7 @@
                     </div>
                     <div class="border-t border-gray-700 my-2"></div>
                   <% end %>
-                  <% if current_user.coach? %>
+                  <% if Current.user.coach? %>
                     <div class="space-y-1">
                       <p class="text-gray-300 px-3 py-2 text-sm font-medium"><%= t('.coach') %></p>
                       <%= link_to t('.courses'), %i[coach courses], class: "text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium" %>
@@ -115,7 +115,7 @@
                               method: :delete,
                               class: "text-gray-300 hover:bg-gray-700 hover:text-white block w-full text-left px-3 py-2 rounded-md text-base font-medium" %>
                 <% else %>
-                  <%= link_to t('devise.shared.links.sign_in'),
+                  <%= link_to t('auth.shared.links.sign_in'),
                             new_user_session_path,
                             class: "text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium" %>
                 <% end %>

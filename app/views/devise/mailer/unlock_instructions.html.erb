@@ -1,7 +1,0 @@
-<p>Bonjour <%= @resource.email %>!</p>
-
-<p>Nous avons dû bloquer votre compte pour des raisons de sécurité, suite à un nombre élevé de tentatives de connexion infructueuses.</p>
-
-<p>Pour débloquer votre compte, cliquez sur le lien ci-dessous:</p>
-
-<p><%= link_to 'Débloquer mon compte', unlock_url(@resource, unlock_token: @token) %></p>

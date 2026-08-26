@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 describe 'Medical certificate validity', type: :request do
-  include Devise::Test::IntegrationHelpers
-
   let(:platform) do
     Platform.find_or_create_by!(domain: 'example.com') do |current_platform|
       current_platform.name = 'Parkour Paris'

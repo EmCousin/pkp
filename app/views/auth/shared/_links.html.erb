@@ -1,0 +1,17 @@
+<div class="space-y-4">
+  <% unless controller_name == 'sessions' %>
+    <%= link_to t('auth.shared.links.sign_in'), new_user_session_path, class: "block text-sm text-slate-800 hover:text-slate-900" %>
+  <% end %>
+
+  <% unless controller_name == 'registrations' %>
+    <%= link_to t('auth.shared.links.sign_up'), new_user_registration_path, class: "block text-sm text-slate-800 hover:text-slate-900" %>
+  <% end %>
+
+  <% unless %w[passwords registrations].include?(controller_name) %>
+    <%= link_to t('auth.shared.links.forgot_your_password'), new_user_password_path, class: "block text-sm text-slate-800 hover:text-slate-900" %>
+  <% end %>
+
+  <% unless controller_name == 'unlocks' %>
+    <%= link_to t('auth.shared.links.didnt_receive_unlock_instructions'), new_user_unlock_path, class: "block text-sm text-slate-800 hover:text-slate-900" %>
+  <% end %>
+</div>

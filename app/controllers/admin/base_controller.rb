@@ -18,9 +18,9 @@ module Admin
     end
 
     def ensure_current_user_is_admin!
-      return if current_user.admin?
+      return if Current.user.admin?
 
-      sign_out current_user
+      sign_out Current.user
       redirect_to after_sign_out_path_for(:user)
     end
   end

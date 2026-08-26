@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 describe 'Admin platform settings', type: :request do
-  include Devise::Test::IntegrationHelpers
-
   let(:platform) { Platform.find_by!(domain: 'example.com') }
 
   before { sign_in create(:user, :admin, phone_number: '+33612345679') }

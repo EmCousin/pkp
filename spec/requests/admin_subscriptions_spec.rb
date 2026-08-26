@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 describe 'Admin subscriptions', type: :request do
-  include Devise::Test::IntegrationHelpers
-
   before { sign_in create(:user, :admin, phone_number: '+33612345679') }
 
   it 'uses a Turbo Stream destroy action from the subscriptions list' do
