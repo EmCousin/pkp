@@ -53,7 +53,7 @@ describe 'Authentication', type: :request do
       end
 
       expect(user.reload).to be_access_locked
-      expect(user.unlock_token).to be_present
+      expect(ActionMailer::Base.deliveries.last.to).to contain_exactly(user.email)
       expect(user.authentication_generation).not_to eq(0)
       expect(Auth::Session).not_to exist(previous_session.id)
 
@@ -200,7 +200,7 @@ describe 'Authentication', type: :request do
       end.to have_enqueued_job(Auth::SendResetPasswordInstructionsJob).with('unknown@example.com')
 
       expect([response.status, flash[:notice]]).to eq(known_response)
-      expect(user.reload.reset_password_token).to be_present
+      expect(ActionMailer::Base.deliveries.last.to).to contain_exactly(user.email)
     end
 
     it 'surfaces a failure to enqueue reset instructions' do
@@ -226,28 +226,24 @@ describe 'Authentication', type: :request do
       expect(response).to have_http_status(:too_many_requests)
     end
 
-    it 'does not replace recently sent reset instructions' do
-      token = user.send_reset_password_instructions
-      digest = user.reload.reset_password_token
+    it 'keeps previously sent reset instructions valid' do
+      first_token = user.send_reset_password_instructions
+      user.send_reset_password_instructions
 
-      expect do
-        expect(user.send_reset_password_instructions).to be_nil
-      end.not_to change(ActionMailer::Base.deliveries, :count)
-      expect(user.reload.reset_password_token).to eq(digest)
-      expect(User.from_reset_password_token(token)).to eq(user)
+      expect(User.from_reset_password_token(first_token)).to eq(user)
     end
 
-    it 'clears reset instructions when delivery fails so the job can retry' do
+    it 'can retry reset instruction delivery after a mail failure' do
       message = instance_double(ActionMailer::MessageDelivery)
       allow(Auth::Mailer).to receive(:reset_password_instructions).and_return(message)
       allow(message).to receive(:deliver_now).and_raise(Net::SMTPServerBusy, 'mail unavailable')
 
       expect { user.send_reset_password_instructions }.to raise_error(Net::SMTPServerBusy)
-      expect(user.reload.reset_password_token).to be_nil
-      expect(user.reset_password_sent_at).to be_nil
+      allow(message).to receive(:deliver_now).and_return(true)
+      expect(user.send_reset_password_instructions).to be_present
     end
 
-    it 'uses the same reset token digest as Devise' do
+    it 'stores a Devise-compatible digest for a signed reset token' do
       token = user.send_reset_password_instructions
 
       expect(user.reload.reset_password_token).to eq(devise_token_digest(:reset_password_token, token))
@@ -285,9 +281,18 @@ describe 'Authentication', type: :request do
 
     it 'rejects an expired reset token' do
       token = user.send_reset_password_instructions
-      user.update_column(:reset_password_sent_at, Auth.reset_password_within.ago - 1.minute) # rubocop:disable Rails/SkipsModelValidations
 
-      get edit_user_password_path(reset_password_token: token)
+      travel Auth.reset_password_within + 1.second do
+        get edit_user_password_path(reset_password_token: token)
+      end
+
+      expect(response).to redirect_to(new_user_password_path)
+    end
+
+    it 'rejects a modified reset token' do
+      token = user.send_reset_password_instructions
+
+      get edit_user_password_path(reset_password_token: "#{token}modified")
 
       expect(response).to redirect_to(new_user_password_path)
     end
@@ -301,7 +306,7 @@ describe 'Authentication', type: :request do
 
       expect(response).to have_http_status(:unprocessable_content)
       expect(user.reload).to be_valid_password(password)
-      expect(user.reset_password_token).to be_present
+      expect(User.from_reset_password_token(token)).to eq(user)
       expect(user.auth_sessions).to be_empty
     end
 
@@ -344,6 +349,7 @@ describe 'Authentication', type: :request do
   describe 'unlocks' do
     it 'unlocks an account from its emailed token' do
       user.update_columns(locked_at: Time.current, failed_attempts: Auth.maximum_attempts) # rubocop:disable Rails/SkipsModelValidations
+      user.reload
       token = user.send_unlock_instructions
 
       get user_unlock_path(unlock_token: token)
@@ -375,30 +381,30 @@ describe 'Authentication', type: :request do
       expect(response).to have_http_status(:too_many_requests)
     end
 
-    it 'does not replace existing unlock instructions' do
+    it 'keeps previously sent unlock instructions valid' do
       user.update_columns(locked_at: Time.current, failed_attempts: Auth.maximum_attempts) # rubocop:disable Rails/SkipsModelValidations
-      token = user.send_unlock_instructions
-      digest = user.reload.unlock_token
+      user.reload
+      first_token = user.send_unlock_instructions
+      user.send_unlock_instructions
 
-      expect do
-        expect(user.send_unlock_instructions).to be_nil
-      end.not_to change(ActionMailer::Base.deliveries, :count)
-      expect(user.reload.unlock_token).to eq(digest)
-      expect(User.unlock_by_token(token)).to eq(user)
+      expect(User.unlock_by_token(first_token)).to eq(user)
     end
 
-    it 'clears unlock instructions when delivery fails so the job can retry' do
+    it 'can retry unlock instruction delivery after a mail failure' do
       user.update_columns(locked_at: Time.current, failed_attempts: Auth.maximum_attempts) # rubocop:disable Rails/SkipsModelValidations
+      user.reload
       message = instance_double(ActionMailer::MessageDelivery)
       allow(Auth::Mailer).to receive(:unlock_instructions).and_return(message)
       allow(message).to receive(:deliver_now).and_raise(Net::SMTPServerBusy, 'mail unavailable')
 
       expect { user.send_unlock_instructions }.to raise_error(Net::SMTPServerBusy)
-      expect(user.reload.unlock_token).to be_nil
+      allow(message).to receive(:deliver_now).and_return(true)
+      expect(user.send_unlock_instructions).to be_present
     end
 
-    it 'uses the same unlock token digest as Devise' do
+    it 'stores a Devise-compatible digest for a signed unlock token' do
       user.update_columns(locked_at: Time.current, failed_attempts: Auth.maximum_attempts) # rubocop:disable Rails/SkipsModelValidations
+      user.reload
       token = user.send_unlock_instructions
 
       expect(user.reload.unlock_token).to eq(devise_token_digest(:unlock_token, token))
@@ -416,6 +422,17 @@ describe 'Authentication', type: :request do
 
       expect(response).to redirect_to(new_user_session_path)
       expect(user.reload).not_to be_access_locked
+    end
+
+    it 'rejects a modified unlock token' do
+      user.update_columns(locked_at: Time.current, failed_attempts: Auth.maximum_attempts) # rubocop:disable Rails/SkipsModelValidations
+      user.reload
+      token = user.send_unlock_instructions
+
+      get user_unlock_path(unlock_token: "#{token}modified")
+
+      expect(response).to redirect_to(new_user_unlock_path)
+      expect(user.reload).to be_access_locked
     end
 
     it 'does not disclose whether an account exists' do

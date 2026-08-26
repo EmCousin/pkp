@@ -8,7 +8,10 @@ module Auth
       def unlock_by_token(token)
         return if token.blank?
 
-        find_by(unlock_token: Auth.token_digest(:unlock_token, token))&.tap(&:unlock_access!)
+        user = find_by_token_for(:unlock, token) || find_by(
+          unlock_token: Auth.devise_token_digest(:unlock_token, token)
+        )
+        user&.unlock_access!
       end
     end
 
@@ -36,9 +39,11 @@ module Auth
 
     def send_unlock_instructions
       unlock_if_expired!
-      token, digest = issue_unlock_token
-      return unless token
+      return unless access_locked?
 
+      token = generate_token_for(:unlock)
+      digest = Auth.devise_token_digest(:unlock_token, token)
+      update_columns(unlock_token: digest, updated_at: Time.current) # rubocop:disable Rails/SkipsModelValidations
       Auth::Mailer.unlock_instructions(self, token).deliver_now
       token
     rescue StandardError
@@ -71,17 +76,6 @@ module Auth
     end
 
     private
-
-    def issue_unlock_token
-      with_lock do
-        next unless access_locked? && unlock_token.blank?
-
-        token = SecureRandom.urlsafe_base64(32)
-        digest = Auth.token_digest(:unlock_token, token)
-        update_columns(unlock_token: digest, updated_at: Time.current) # rubocop:disable Rails/SkipsModelValidations
-        [token, digest]
-      end
-    end
 
     def clear_undelivered_unlock_token(digest)
       return unless digest

@@ -42,6 +42,30 @@ describe User, type: :model do
   it { is_expected.to validate_presence_of(:city).on(:account_setup) }
   it { is_expected.to validate_presence_of(:country).on(:account_setup) }
 
+  describe 'password validation' do
+    it 'accepts the configured 128-character maximum' do
+      password = 'p' * 128
+      user.password = user.password_confirmation = password
+
+      expect(user.save).to be true
+      expect(user.reload).to be_valid_password(password)
+    end
+
+    it 'rejects passwords longer than the configured maximum' do
+      user.password = user.password_confirmation = 'p' * 129
+
+      expect(user).not_to be_valid
+      expect(user.errors.of_kind?(:password, :too_long)).to be true
+    end
+
+    it 'requires a password digest' do
+      user.password_digest = nil
+
+      expect(user).not_to be_valid
+      expect(user.errors.of_kind?(:password, :blank)).to be true
+    end
+  end
+
   it 'normalizes the billing country to an ISO code' do
     user.country = 'France'
 

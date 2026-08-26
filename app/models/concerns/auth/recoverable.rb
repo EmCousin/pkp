@@ -8,17 +8,16 @@ module Auth
       def from_reset_password_token(token)
         return if token.blank?
 
-        find_by(
+        find_by_token_for(:password_reset, token) || find_by(
           reset_password_sent_at: Auth.reset_password_within.ago..,
-          reset_password_token: Auth.token_digest(:reset_password_token, token)
+          reset_password_token: Auth.devise_token_digest(:reset_password_token, token)
         )
       end
     end
 
     def send_reset_password_instructions
-      token, digest = issue_reset_password_token
-      return unless token
-
+      token = generate_token_for(:password_reset)
+      digest = store_devise_reset_password_token(token)
       Auth::Mailer.reset_password_instructions(self, token).deliver_now
       token
     rescue StandardError
@@ -37,18 +36,13 @@ module Auth
 
     private
 
-    def issue_reset_password_token
-      with_lock do
-        next if reset_password_sent_at&.after?(Auth.recovery_delivery_cooldown.ago)
-
-        token = SecureRandom.urlsafe_base64(32)
-        digest = Auth.token_digest(:reset_password_token, token)
-        update_columns( # rubocop:disable Rails/SkipsModelValidations
-          reset_password_token: digest,
-          reset_password_sent_at: Time.current
-        )
-        [token, digest]
-      end
+    def store_devise_reset_password_token(token)
+      digest = Auth.devise_token_digest(:reset_password_token, token)
+      update_columns( # rubocop:disable Rails/SkipsModelValidations
+        reset_password_token: digest,
+        reset_password_sent_at: Time.current
+      )
+      digest
     end
 
     def clear_undelivered_reset_password_token(digest)
@@ -61,12 +55,7 @@ module Auth
     end
 
     def valid_reset_password_token?(token)
-      reset_password_token.present? &&
-        reset_password_sent_at&.after?(Auth.reset_password_within.ago) &&
-        ActiveSupport::SecurityUtils.secure_compare(
-          reset_password_token,
-          Auth.token_digest(:reset_password_token, token.to_s)
-        )
+      self.class.from_reset_password_token(token) == self
     end
 
     def valid_reset_password_change?(token, password, password_confirmation)

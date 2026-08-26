@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'digest'
 require 'openssl'
 require 'uri/mailto'
 
@@ -11,7 +12,6 @@ module Auth
                   :mailer_sender,
                   :maximum_attempts,
                   :password_length,
-                  :recovery_delivery_cooldown,
                   :recovery_request_limit,
                   :recovery_request_period,
                   :remember_for,
@@ -22,16 +22,16 @@ module Auth
       yield self
     end
 
-    def token_digest(column, token)
+    def devise_token_digest(column, token)
       return if token.blank?
 
-      OpenSSL::HMAC.hexdigest('SHA256', token_key_generator.generate_key("Devise #{column}"), token.to_s)
+      OpenSSL::HMAC.hexdigest('SHA256', devise_token_key_generator.generate_key("Devise #{column}"), token.to_s)
     end
 
     private
 
-    def token_key_generator
-      @token_key_generator ||= ActiveSupport::CachingKeyGenerator.new(
+    def devise_token_key_generator
+      @devise_token_key_generator ||= ActiveSupport::CachingKeyGenerator.new(
         ActiveSupport::KeyGenerator.new(Rails.application.secret_key_base)
       )
     end
@@ -42,8 +42,7 @@ module Auth
   self.last_seen_touch_interval = 1.minute
   self.mailer_sender = 'noreply@example.com'
   self.maximum_attempts = 5
-  self.password_length = 6..72
-  self.recovery_delivery_cooldown = 1.minute
+  self.password_length = 6..128
   self.recovery_request_limit = 10
   self.recovery_request_period = 3.minutes
   self.remember_for = 2.weeks
