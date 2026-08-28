@@ -56,25 +56,31 @@ describe 'Admin subscriptions', type: :request do
     expect(response).to have_http_status(:unprocessable_content)
   end
 
-  it 'lets an admin change the course of an invoiced subscription' do
+  it 'lets an admin add a course without regenerating the invoice' do
     category = create(:category)
+    create(:pricing, category:, prices: [280, 420])
     initial_course = create(:course, category:, weekday: :lundi)
-    replacement_course = create(:course, category:, weekday: :mardi)
+    additional_course = create(:course, category:, weekday: :mardi)
     subscription = create(:subscription, courses: [initial_course], paid_at: Time.current)
     invoice = subscription.billing_invoice
+    invoiced_fee = subscription.fee
 
     get edit_admin_subscription_path(subscription)
     expect(response).to have_http_status(:ok)
 
-    patch admin_subscription_path(subscription), params: {
-      subscription: {
-        member_id: subscription.member_id,
-        course_ids: [replacement_course.id]
+    expect do
+      patch admin_subscription_path(subscription), params: {
+        subscription: {
+          member_id: subscription.member_id,
+          course_ids: [initial_course.id, additional_course.id]
+        }
       }
-    }
+    end.not_to have_enqueued_job(Pennylane::CreateInvoiceJob)
 
     expect(response).to redirect_to(admin_subscription_path(subscription, updated: true))
-    expect(subscription.reload.courses).to contain_exactly(replacement_course)
+    expect(subscription.reload.courses).to contain_exactly(initial_course, additional_course)
+    expect(subscription.fee).to eq(invoiced_fee)
     expect(subscription.billing_invoice).to eq(invoice)
+    expect(Billing::Invoice.where(invoiceable: subscription)).to contain_exactly(invoice)
   end
 end
