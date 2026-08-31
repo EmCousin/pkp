@@ -700,6 +700,9 @@ fr:
     payments:
       create:
         success: Inscription mise à jour
+    payment_proofs:
+      destroy:
+        success: Justificatif de paiement supprimé
     statuses:
       update:
         success: Inscription mise à jour
@@ -745,6 +748,8 @@ fr:
         paid: Payé
         not_paid: Non payé
         payment_proof_awaiting_review: Justificatif à vérifier
+        delete_payment_proof: Supprimer le justificatif
+        delete_payment_proof_confirmation: Êtes-vous sûr·e de vouloir supprimer ce justificatif de paiement ?
         invoicing: Facturation
         invalid_subscription: Inscription invalide
       new:

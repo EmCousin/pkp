@@ -114,6 +114,7 @@ Rails.application.routes.draw do
 
     resources :subscriptions do
       resource :payment, only: [:create, :destroy]
+      resource :payment_proof, only: :destroy
       resource :status, only: [:update]
       member do
         delete :unlink_course
