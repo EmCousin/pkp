@@ -12,7 +12,7 @@ module Admin
     private
 
     def set_subscription!
-      @subscription = Current.platform.subscriptions.where(paid_at: nil).find(params.expect(:subscription_id))
+      @subscription = Current.platform.subscriptions.find_by!(paid_at: nil, id: params.expect(:subscription_id))
     end
   end
 end
