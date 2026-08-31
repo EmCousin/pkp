@@ -388,9 +388,16 @@
           <span class="text-gray-700 font-semibold">✅ <%= t('.paid') %></span>
         <% elsif @subscription.payment_proof.attached? %>
           <span class="text-yellow-700 font-semibold">⚠️ <%= t('.payment_proof_awaiting_review') %></span>
-          <%= link_to t('defaults.download'),
-                          rails_blob_path(@subscription.payment_proof, disposition: "attachment"),
-                          class: "text-yellow-700 text-sm font-medium hover:underline mt-2" %>
+          <div class="flex items-center gap-3 mt-2">
+            <%= link_to t('defaults.download'),
+                        rails_blob_path(@subscription.payment_proof, disposition: "attachment"),
+                        class: "text-yellow-700 text-sm font-medium hover:underline" %>
+            <%= button_to t('.delete_payment_proof'),
+                          admin_subscription_payment_proof_path(@subscription),
+                          method: :delete,
+                          data: { turbo_confirm: t('.delete_payment_proof_confirmation') },
+                          class: "text-red-600 text-sm font-medium hover:underline" %>
+          </div>
         <% else %>
           <span class="text-red-600 font-semibold"><%= t('.not_paid') %></span>
         <% end %>
