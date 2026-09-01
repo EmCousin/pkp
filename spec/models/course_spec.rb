@@ -56,7 +56,7 @@ describe Course, type: :model do
     end
 
     it 'includes the final day of the season' do
-      course = build(:course, :discoverable, weekday: :samedi)
+      course = build(:course, :discoverable, weekday: :dimanche)
       date = Date.new(2027, 7, 11)
 
       expect(course.discovery_date_available?(date, today: date)).to be true
