@@ -13,10 +13,17 @@
           class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50",
           data: { turbo_frame: '_top' } %>
 
-      <%= link_to t('defaults.edit'),
-          [:edit, :admin, subscription],
-          class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50",
-          data: { turbo_frame: '_top' } %>
+      <% if subscription.is_a?(DiscoveryRegistration) %>
+        <%= link_to t('admin.subscriptions.show.transfer_discovery_session'),
+            new_admin_subscription_discovery_session_transfer_path(subscription),
+            class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50",
+            data: { turbo_frame: '_top' } %>
+      <% elsif !subscription.event? %>
+        <%= link_to t('defaults.edit'),
+            [:edit, :admin, subscription],
+            class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50",
+            data: { turbo_frame: '_top' } %>
+      <% end %>
 
       <% if subscription.form.attached? %>
         <%= link_to t('admin.subscriptions.show.download_subscription_form'),
