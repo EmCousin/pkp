@@ -116,6 +116,7 @@ Rails.application.routes.draw do
       resource :payment, only: [:create, :destroy]
       resource :payment_proof, only: :destroy
       resource :status, only: [:update]
+      resource :discovery_session_transfer, only: %i[new create]
       member do
         delete :unlink_course
       end
