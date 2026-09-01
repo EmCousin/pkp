@@ -119,7 +119,7 @@ describe DiscoverySession, type: :model do
   end
 
   it 'keeps an automatic occurrence available throughout its date' do
-    travel_to Time.zone.local(2026, 8, 8, 18) do
+    travel_to Time.zone.local(2026, 9, 12, 18) do
       course = create(:course, :discoverable, weekday: :samedi)
       discovery_session = described_class.find_or_create_for_course!(course:, occurs_on: Date.current)
 
