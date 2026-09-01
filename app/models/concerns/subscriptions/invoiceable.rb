@@ -14,7 +14,7 @@ module Subscriptions
       before_validation :reload_billing_invoice, on: :update
       validates :billing_invoice, absence: true, on: :update, if: :billing_attributes_changed?
 
-      attr_accessor :credit_note_amount
+      attr_accessor :credit_note_amount, :transferring_event
     end
 
     def request_billing_invoice!
@@ -53,7 +53,9 @@ module Subscriptions
     private
 
     def billing_attributes_changed?
-      changes_to_save.keys.intersect?(%w[fee member_id paid_at year parent_subscription_id discovery_session_id type])
+      protected_attributes = %w[fee member_id paid_at year parent_subscription_id discovery_session_id type]
+      protected_attributes.delete('discovery_session_id') if transferring_event
+      changes_to_save.keys.intersect?(protected_attributes)
     end
 
     def reload_billing_invoice

@@ -30,7 +30,40 @@ class DiscoveryRegistration < EventRegistration
     SubscriptionMailer.confirm_discovery_subscription(self).deliver_later
   end
 
+  def transfer_to(target_session)
+    errors.clear
+    return false unless same_course?(target_session)
+
+    target_session.with_lock { transfer_to_available_session(target_session) }
+  rescue ActiveRecord::RecordNotUnique
+    add_transfer_error(:unavailable)
+    false
+  ensure
+    self.transferring_event = false
+  end
+
   private
+
+  def add_transfer_error(error)
+    errors.add(:discovery_session, error)
+  end
+
+  def same_course?(target_session)
+    return true if target_session.course_id == discovery_session.course_id
+
+    add_transfer_error(:different_course)
+    false
+  end
+
+  def transfer_to_available_session(target_session)
+    unless member.can_subscribe_to_discovery?(target_session)
+      add_transfer_error(:unavailable)
+      return false
+    end
+
+    self.transferring_event = true
+    update(discovery_session: target_session, year: target_session.year, attendance_status: nil)
+  end
 
   def calculated_fee
     discovery_session&.price

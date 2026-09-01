@@ -156,6 +156,7 @@ fr:
               required_for_camp: "Une inscription parent est requise pour un stage"
               invalid: "doit être une inscription annuelle confirmée de la même saison"
             discovery_session:
+              different_course: doit concerner le même cours
               unavailable: "n'est plus disponible pour ce participant"
               wrong_platform: doit appartenir à la même plateforme que le membre
             year:
@@ -718,6 +719,7 @@ fr:
           courses: Cours annuels
       show:
         title: Inscription n°%{id}
+        transfer_discovery_session: Déplacer vers une autre date
         payment: Paiement
         paid: Payé
         not_paid_yet: En attente de paiement
@@ -819,6 +821,16 @@ fr:
         uploaded_payment_proof: Justificatif
         payment_method: A payé avec %{payment_method}
         stripe_payment_intent_url: "Voir le paiement sur Stripe"
+    discovery_session_transfers:
+      new:
+        title: Déplacer une inscription découverte
+        current_date: "Date actuelle : %{date}"
+        payment_preserved: Le tarif sera conservé. Si l'inscription est déjà payée ou facturée, le paiement et la facture seront aussi conservés.
+        new_date: Nouvelle date
+        submit: Déplacer l'inscription
+        no_available_dates: Aucune autre date n'est actuellement disponible pour ce cours.
+      create:
+        success: L'inscription a été déplacée vers la nouvelle date.
   dashboard:
     discovery_sessions:
       index:
