@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe 'Recurring discovery sessions', type: :request do
   include Devise::Test::IntegrationHelpers
+  include ActiveSupport::Testing::TimeHelpers
 
   let(:user) { create(:user, phone_number: '+33612345678') }
   let!(:member) { create(:member, user:) }
@@ -22,12 +23,15 @@ describe 'Recurring discovery sessions', type: :request do
   end
 
   it 'only offers dates matching the selected course weekday' do
-    get dashboard_discovery_sessions_path(category_id: category.id, course_id: course.id)
+    travel_to Time.zone.local(2026, 9, 1) do
+      get dashboard_discovery_sessions_path(category_id: category.id, course_id: course.id)
 
-    options = Nokogiri::HTML(response.body).css('select[name="occurs_on"] option').pluck('value')
-    expected_dates = course.next_discovery_date.step(course.discovery_season_end, 7).map(&:iso8601)
+      options = response.parsed_body.css('select[name="occurs_on"] option').pluck('value')
+      expected_dates = course.next_discovery_date.step(course.discovery_season_end, 7).map(&:iso8601)
 
-    expect(options).to eq(expected_dates)
+      expect(options).to eq(expected_dates)
+      expect(options.first).to eq('2026-09-12')
+    end
   end
 
   it 'creates an occurrence for a valid course date' do

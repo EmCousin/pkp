@@ -4,6 +4,7 @@ class Course < ApplicationRecord
   VACATION_MONTHS = (7..8).to_a.freeze
   VACATION_START_DAY = 12
   ALUMNI_MONTHS = VACATION_MONTHS[-1..].freeze
+  DISCOVERY_START_DATE = Date.new(2026, 9, 7)
 
   include Courses::Available
 
@@ -40,12 +41,13 @@ class Course < ApplicationRecord
   end
 
   def next_discovery_date(from: Date.current)
-    date = from + ((self.class.weekdays.fetch(weekday) - from.cwday) % 7)
+    start_date = [from, DISCOVERY_START_DATE].max
+    date = start_date + ((self.class.weekdays.fetch(weekday) - start_date.cwday) % 7)
     date if date <= discovery_season_end(from)
   end
 
   def discovery_date_available?(date, today: Date.current)
-    active? && discovery_enabled? && date.between?(today, discovery_season_end(today)) &&
+    active? && discovery_enabled? && date.between?([today, DISCOVERY_START_DATE].max, discovery_season_end(today)) &&
       date.cwday == self.class.weekdays.fetch(weekday)
   end
 

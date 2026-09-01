@@ -831,7 +831,7 @@ fr:
         choose_category: 1. Choisissez une catégorie
         choose_course: 2. Choisissez un créneau
         choose_date: "3. Choisissez une date pour %{course}"
-        date_hint: "Le calendrier propose les prochains %{weekday}s jusqu'à la fin de la saison."
+        date_hint: "Les cours découverte commencent le 7 septembre. Le calendrier propose les prochains %{weekday}s jusqu'à la fin de la saison."
         date_label: Date du cours découverte
         continue: Continuer
         no_dates: Aucune autre date n'est disponible cette saison pour ce créneau.
