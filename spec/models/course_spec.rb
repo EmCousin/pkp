@@ -44,7 +44,15 @@ describe Course, type: :model do
     it 'finds the next date matching its ISO weekday' do
       course = build(:course, :discoverable, weekday: :dimanche)
 
-      expect(course.next_discovery_date(from: Date.new(2026, 8, 3))).to eq(Date.new(2026, 8, 9))
+      expect(course.next_discovery_date(from: Date.new(2026, 9, 14))).to eq(Date.new(2026, 9, 20))
+    end
+
+    it 'does not offer discovery dates before September 7, 2026' do
+      course = build(:course, :discoverable, weekday: :samedi)
+
+      expect(course.next_discovery_date(from: Date.new(2026, 9, 1))).to eq(Date.new(2026, 9, 12))
+      expect(course.discovery_date_available?(Date.new(2026, 9, 5), today: Date.new(2026, 9, 1))).to be false
+      expect(course.discovery_date_available?(Date.new(2026, 9, 12), today: Date.new(2026, 9, 1))).to be true
     end
 
     it 'includes the final day of the season' do
