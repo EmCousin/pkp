@@ -13,6 +13,7 @@ module Pennylane
     def call
       return unless invoice.processing?
       raise Error, 'Le paiement de la facture a été annulé' unless subscription.paid?
+      raise Error, I18n.t('pennylane.errors.placeholder_customer_name') if user&.placeholder_name?
 
       external_invoice = synchronize_invoice
       return unless external_invoice
