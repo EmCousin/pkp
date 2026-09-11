@@ -121,6 +121,15 @@ describe Pennylane::CreateInvoice, type: :service do
     expect { create_invoice.call }.to raise_error(Pennylane::Error, 'Le paiement de la facture a été annulé')
   end
 
+  it 'refuses synchronization when the account still has a placeholder name' do
+    user.update!(first_name: User::PLACEHOLDER_FIRST_NAME, last_name: User::PLACEHOLDER_LAST_NAME)
+
+    expect { create_invoice.call }.to raise_error(
+      Pennylane::Error, "Le nom du client n'a pas été complété, la facture ne peut pas être synchronisée"
+    )
+    expect(client).not_to have_received(:create_invoice)
+  end
+
   it 'finishes a queued invoice after its member is tombstoned' do
     invoice
     member.deactivate!

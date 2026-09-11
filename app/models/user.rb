@@ -3,6 +3,8 @@
 class User < ApplicationRecord
   INVALID_EMAIL_PROVIDERS = %w[@wanadoo.fr @orange.fr].freeze
   COUNTRY_CODES = YAML.safe_load_file(Rails.root.join('config/country_codes.yml')).freeze
+  PLACEHOLDER_FIRST_NAME = 'Compte'
+  PLACEHOLDER_LAST_NAME = 'A Completer'
 
   devise :database_authenticatable,
          :registerable,
@@ -25,6 +27,10 @@ class User < ApplicationRecord
     confirmed.where(type: AnnualSubscription.sti_name, year: Subscription.current_year, parent_subscription: nil)
   }, through: :members, source: :subscriptions
   has_many :courses, through: :subscriptions
+
+  scope :with_placeholder_name, lambda {
+    where(first_name: PLACEHOLDER_FIRST_NAME, last_name: PLACEHOLDER_LAST_NAME)
+  }
 
   attr_accessor :email_confirmation
 
@@ -71,6 +77,10 @@ class User < ApplicationRecord
 
   def invalid_email_provider?
     INVALID_EMAIL_PROVIDERS.any? { |provider| email.ends_with?(provider) }
+  end
+
+  def placeholder_name?
+    first_name == PLACEHOLDER_FIRST_NAME && last_name == PLACEHOLDER_LAST_NAME
   end
 
   private
