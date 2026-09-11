@@ -122,10 +122,10 @@ describe Pennylane::CreateInvoice, type: :service do
   end
 
   it 'refuses synchronization when the account still has a placeholder name' do
-    user.update!(first_name: User::PLACEHOLDER_FIRST_NAME, last_name: User::PLACEHOLDER_LAST_NAME)
+    user.update!(first_name: Users::Tombstonable::PLACEHOLDER_FIRST_NAME, last_name: Users::Tombstonable::PLACEHOLDER_LAST_NAME)
 
     expect { create_invoice.call }.to raise_error(
-      Pennylane::Error, "Le nom du client n'a pas été complété, la facture ne peut pas être synchronisée"
+      Pennylane::Error, I18n.t('pennylane.errors.placeholder_customer_name')
     )
     expect(client).not_to have_received(:create_invoice)
   end
