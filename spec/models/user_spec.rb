@@ -75,5 +75,27 @@ describe User, type: :model do
     expect(user).to be_persisted
     expect(subscription.reload).to be_persisted
   end
+
+  describe '#placeholder_name?' do
+    it 'is true for an account still carrying the backfilled placeholder name' do
+      user.update!(first_name: User::PLACEHOLDER_FIRST_NAME, last_name: User::PLACEHOLDER_LAST_NAME)
+
+      expect(user).to be_placeholder_name
+    end
+
+    it 'is false once the account has a real name' do
+      expect(user).not_to be_placeholder_name
+    end
+  end
+
+  describe '.with_placeholder_name' do
+    it 'finds accounts still carrying the backfilled placeholder name' do
+      user.update!(first_name: User::PLACEHOLDER_FIRST_NAME, last_name: User::PLACEHOLDER_LAST_NAME)
+      other_user = create(:user)
+
+      expect(described_class.with_placeholder_name).to contain_exactly(user)
+      expect(described_class.with_placeholder_name).not_to include(other_user)
+    end
+  end
 end
 # rubocop:enable Metrics/BlockLength
