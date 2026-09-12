@@ -284,6 +284,24 @@ en:
       empty: "No confirmed participants."
 
   coach:
+    camps:
+      index:
+        title: Camps
+        participants:
+          zero: No participants
+          one: 1 participant
+          other: "%{count} participants"
+        empty: No upcoming camps
+      show:
+        participants:
+          zero: No participants
+          one: 1 participant
+          other: "%{count} participants"
+        last_name: Last name
+        first_name: First name
+        email: Email
+        phone: Phone
+        empty: No registrations for this camp
     attendance_sheets:
       show:
         title: "Attendance Sheet for %{course_title} - %{date}"
