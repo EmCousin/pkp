@@ -118,6 +118,37 @@ describe DiscoverySession, type: :model do
     end
   end
 
+  describe '#session_attendance_records' do
+    let(:discovery_session) { create(:discovery_session) }
+    let(:confirmed_member) { create(:member, platform: discovery_session.platform) }
+    let(:other_member) { create(:member, platform: discovery_session.platform) }
+
+    before do
+      create(:discovery_registration, discovery_session:, member: confirmed_member, status: :confirmed)
+      create(:discovery_registration, discovery_session:, member: other_member, status: :archived)
+      # Create attendance records for the course (as the sheet does via upsert_all)
+      AttendanceSheet.find_or_create_for_course(discovery_session.course, discovery_session.occurrence_date)
+    end
+
+    it 'returns only attendance records for confirmed session members' do
+      records = discovery_session.session_attendance_records
+
+      expect(records.map(&:member)).to contain_exactly(confirmed_member)
+    end
+
+    it 'excludes members from other sessions on the same course' do
+      # Another member has an attendance record on the sheet (via annual subscription)
+      # but is not registered for this discovery session
+      sheet = AttendanceSheet.find_or_create_for_course(discovery_session.course, discovery_session.occurrence_date)
+      outsider = create(:member, platform: discovery_session.platform)
+      AttendanceRecord.create!(attendance_sheet: sheet, member: outsider)
+
+      records = discovery_session.session_attendance_records
+
+      expect(records.map(&:member)).not_to include(outsider)
+    end
+  end
+
   it 'keeps an automatic occurrence available throughout its date' do
     travel_to Time.zone.local(2026, 9, 12, 18) do
       course = create(:course, :discoverable, weekday: :samedi)
