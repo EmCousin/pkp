@@ -57,6 +57,14 @@ class DiscoverySession < ApplicationRecord
     end
   end
 
+  def session_attendance_records
+    sheet = AttendanceSheet.find_or_create_for_course(course, occurrence_date)
+    member_ids = subscriptions.confirmed.pluck(:member_id)
+    sheet.attendance_records
+         .where(member_id: member_ids)
+         .includes(member: :avatar_attachment)
+  end
+
   def closed?
     !open_for_registration?
   end

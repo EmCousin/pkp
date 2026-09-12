@@ -164,6 +164,8 @@ en:
               wrong_platform: "must belong to this platform"
               locked: "cannot be changed after the registration is created"
             discovery_session:
+              different_course: "must be for the same course"
+              unavailable: "is no longer available for this participant"
               wrong_platform: "must belong to the same platform as the member"
         courses_subscription:
           attributes:
@@ -386,6 +388,7 @@ en:
         new: "New Subscription"
       show:
         title: "Subscription No.%{id}"
+        transfer_discovery_session: "Move to another date"
         payment: "Payment"
         paid: "Paid"
         not_paid_yet: "Pending payment"
@@ -441,6 +444,16 @@ en:
         courses_count:
           one: "course"
           other: "courses"
+    discovery_session_transfers:
+      new:
+        title: "Move a discovery registration"
+        current_date: "Current date: %{date}"
+        payment_preserved: "The price will be preserved. If the registration has already been paid or invoiced, the payment and invoice will also be preserved."
+        new_date: "New date"
+        submit: "Move registration"
+        no_available_dates: "No other dates are currently available for this course."
+      create:
+        success: "The registration was moved to the new date."
     invoices:
       show:
         title: "Pennylane invoice"
