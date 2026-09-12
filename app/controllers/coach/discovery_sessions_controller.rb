@@ -10,7 +10,10 @@ module Coach
 
     def show
       @attendance_sheet = AttendanceSheet.find_or_create_for_course(@discovery_session.course, @discovery_session.occurrence_date)
-      @attendance_records = @attendance_sheet.attendance_records.includes(member: :avatar_attachment)
+      session_member_ids = @discovery_session.subscriptions.confirmed.select(:member_id)
+      @attendance_records = @attendance_sheet.attendance_records
+                                             .where(member_id: session_member_ids)
+                                             .includes(member: :avatar_attachment)
     end
 
     private

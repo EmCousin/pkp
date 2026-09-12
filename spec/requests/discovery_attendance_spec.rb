@@ -45,6 +45,20 @@ describe 'Discovery attendance', type: :request do
     expect(response.body).to include(discovery_session.course.title)
   end
 
+  it 'hides a transferred student from the original session' do
+    sign_in create(:user, coach: true, phone_number: '+33612345678')
+    member = subscription.member
+    target_session = create(:discovery_session, course: discovery_session.course, starts_at: 2.weeks.from_now)
+
+    subscription.transfer_to(target_session)
+
+    get coach_discovery_session_path(discovery_session)
+    expect(response.body).not_to include(member.full_name)
+
+    get coach_discovery_session_path(target_session)
+    expect(response.body).to include(member.full_name)
+  end
+
   it 'does not update a registration through another discovery session' do
     sign_in create(:user, :admin, phone_number: '+33612345678')
     other_session = create(:discovery_session, course: discovery_session.course, starts_at: 2.weeks.from_now)
