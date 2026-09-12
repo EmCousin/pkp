@@ -19,6 +19,7 @@ describe 'Admin payment proofs', type: :system do
     fill_in 'user_email', with: admin.email
     fill_in 'user_password', with: 'surprise'
     click_button 'Connexion'
+    expect(page).to have_text('Bienvenue')
 
     visit admin_subscription_path(subscription)
     expect(page).to have_text('Justificatif à vérifier')
