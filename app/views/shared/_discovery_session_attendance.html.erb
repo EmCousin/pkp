@@ -20,7 +20,7 @@
             </div>
           </div>
           <% attendance_path = namespace == :admin ? admin_discovery_session_subscription_path(discovery_session, subscription) : coach_discovery_session_subscription_path(discovery_session, subscription) %>
-          <%= form_with model: subscription, url: attendance_path, method: :patch, data: { controller: 'form' }, class: 'w-full sm:w-auto' do |form| %>
+          <%= form_with model: subscription, url: attendance_path, method: :patch, namespace: dom_id(subscription), data: { controller: 'form' }, class: 'w-full sm:w-auto' do |form| %>
             <div class="grid grid-cols-4 gap-1 sm:flex sm:gap-0" role="group" aria-label="<%= t('.attendance_status') %>">
               <%= form.radio_button :attendance_status, '', class: 'sr-only peer', data: { action: 'form#submit' } %>
               <%= form.label :attendance_status, value: '',
