@@ -25,6 +25,7 @@ describe 'Admin camp filters', type: :system do
     fill_in 'user_email', with: admin.email
     fill_in 'user_password', with: 'surprise'
     click_button 'Connexion'
+    expect(page).to have_text('Bienvenue')
 
     visit admin_camps_path
 
