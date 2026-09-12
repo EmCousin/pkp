@@ -1,12 +1,18 @@
+<% subscriptions = @camp.subscriptions
+                       .confirmed
+                       .includes(member: %i[user avatar_attachment])
+                       .joins(:member)
+                       .order('members.last_name', 'members.first_name') %>
+
 <div class="max-w-5xl mx-auto px-4 py-8">
   <div class="mb-6">
     <h1 class="text-2xl font-bold text-gray-900"><%= @camp.title %></h1>
     <p class="mt-1 text-sm text-gray-600"><%= l(@camp.starts_at, format: :long) %> — <%= l(@camp.ends_at, format: :long) %></p>
-    <p class="mt-2 text-sm text-gray-500"><%= t('.participants', count: @subscriptions.size) %></p>
+    <p class="mt-2 text-sm text-gray-500"><%= t('.participants', count: subscriptions.size) %></p>
   </div>
 
   <div class="bg-white shadow sm:rounded-lg overflow-hidden">
-    <% if @subscriptions.any? %>
+    <% if subscriptions.any? %>
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
           <tr>
@@ -17,7 +23,7 @@
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
-          <% @subscriptions.each do |subscription| %>
+          <% subscriptions.each do |subscription| %>
             <tr>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><%= subscription.member.last_name %></td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><%= subscription.member.first_name %></td>

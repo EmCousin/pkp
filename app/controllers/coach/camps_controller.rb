@@ -8,11 +8,6 @@ module Coach
 
     def show
       @camp = Current.platform.camps.find(params.expect(:id))
-      @subscriptions = @camp.subscriptions
-                            .confirmed
-                            .includes(member: %i[user avatar_attachment])
-                            .joins(:member)
-                            .order('members.last_name', 'members.first_name')
     end
   end
 end
