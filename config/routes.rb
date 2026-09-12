@@ -164,6 +164,7 @@ Rails.application.routes.draw do
 
   namespace :coach do
     concerns :courses_manageable
+    resources :camps, only: %i[index show]
     resources :discovery_sessions, only: %i[index show] do
       resources :subscriptions, only: :update, controller: 'discovery_sessions/subscriptions'
     end

@@ -402,6 +402,24 @@ fr:
       empty: Aucun participant confirmé.
 
   coach:
+    camps:
+      index:
+        title: Stages
+        participants:
+          zero: Aucun participant
+          one: 1 participant
+          other: "%{count} participants"
+        empty: Aucun stage à venir
+      show:
+        participants:
+          zero: Aucun participant
+          one: 1 participant
+          other: "%{count} participants"
+        last_name: Nom
+        first_name: Prénom
+        email: Email
+        phone: Téléphone
+        empty: Aucun inscrit pour ce stage
     discovery_sessions:
       index:
         title: Cours découverte programmés
