@@ -11,8 +11,8 @@ module Coach
       @subscriptions = @camp.subscriptions
                             .confirmed
                             .includes(member: %i[user avatar_attachment])
-                            .joins(member: :user)
-                            .order('users.last_name', 'users.first_name')
+                            .joins(:member)
+                            .order('members.last_name', 'members.first_name')
     end
   end
 end
