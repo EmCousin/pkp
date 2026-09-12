@@ -26,6 +26,7 @@ describe 'Coach camps', type: :request do
   describe 'GET /coach/camps/:id' do
     it 'shows camp participants with contact details' do
       camps_sub = create(:camps_subscription, camp:)
+      camps_sub.subscription.update!(status: :confirmed)
       member = camps_sub.subscription.member
 
       get coach_camp_path(camp)
