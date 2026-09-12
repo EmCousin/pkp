@@ -23,7 +23,7 @@ describe 'Coach attendance', type: :request do
           params: { attendance_record: { status: 'present' } }
 
     expect(response).to redirect_to(coach_attendance_sheet_path(sheet))
-    expect(record_b.reload).to be_present
-    expect(record_a.reload.status).to eq('absent')
+    expect(record_b.reload.status).to eq('present')
+    expect(record_a.reload.status).to be_nil
   end
 end
