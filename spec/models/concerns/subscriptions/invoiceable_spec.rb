@@ -41,7 +41,7 @@ describe Subscriptions::Invoiceable, type: :model do
     expect { subscription.update!(status: :confirmed) }.not_to change(Billing::Invoice, :count)
   end
 
-  it 'keeps an attachment staged in the same save that triggers the invoice request' do
+  it 'keeps a medical certificate staged in the same save that triggers the invoice request' do
     file = Rack::Test::UploadedFile.new(Rails.root.join('spec/support/file_examples/avatar.jpg'))
 
     subscription = create(
@@ -51,8 +51,33 @@ describe Subscriptions::Invoiceable, type: :model do
       paid_at: Time.current,
       medical_certificate: file
     )
+    subscription.reload
 
-    expect(subscription.reload.medical_certificate).to be_attached
+    expect(subscription.medical_certificate).to be_attached
+    expect(subscription.medical_certificate.blob.service.exist?(subscription.medical_certificate.blob.key)).to be true
+  end
+
+  it 'keeps a payment proof uploaded in the same save that triggers the invoice request' do
+    # payment_proof is declared (in Payable) before Invoiceable is included in Subscription, so its
+    # after_save attachment callback runs, and persists the ActiveStorage::Attachment row, before the
+    # with_lock reload in request_billing_invoice!. That made the previous regression test's
+    # `be_attached` assertion pass even on unfixed code: the DB row survives, but the after_commit
+    # callback that actually uploads the blob to the storage service runs later, after every after_save
+    # callback, and finds the reloaded attachment_changes wiped out, so the file is silently never
+    # uploaded. Asserting on blob content in the storage service, not just `attached?`, catches that.
+    file = Rack::Test::UploadedFile.new(Rails.root.join('spec/support/file_examples/avatar.jpg'))
+
+    subscription = create(
+      :subscription,
+      courses: [create(:course)],
+      paid_at: Time.current,
+      payment_method: :bank_transfer,
+      payment_proof: file
+    )
+    subscription.reload
+
+    expect(subscription.payment_proof).to be_attached
+    expect(subscription.payment_proof.blob.service.exist?(subscription.payment_proof.blob.key)).to be true
   end
 
   it 'does not reserve an invoice before payment' do
