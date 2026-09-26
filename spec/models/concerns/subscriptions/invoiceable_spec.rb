@@ -41,6 +41,20 @@ describe Subscriptions::Invoiceable, type: :model do
     expect { subscription.update!(status: :confirmed) }.not_to change(Billing::Invoice, :count)
   end
 
+  it 'keeps an attachment staged in the same save that triggers the invoice request' do
+    file = Rack::Test::UploadedFile.new(Rails.root.join('spec/support/file_examples/avatar.jpg'))
+
+    subscription = create(
+      :subscription,
+      courses: [create(:course)],
+      doctor_certified_at: Time.current,
+      paid_at: Time.current,
+      medical_certificate: file
+    )
+
+    expect(subscription.reload.medical_certificate).to be_attached
+  end
+
   it 'does not reserve an invoice before payment' do
     subscription = create(:discovery_registration, discovery_session: create(:discovery_session))
 
