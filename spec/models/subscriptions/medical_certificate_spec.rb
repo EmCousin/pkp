@@ -86,5 +86,33 @@ describe Subscriptions::MedicalCertificate, type: :model do
 
     expect(described_class.new(subscription:)).to be_valid
   end
+
+  describe '#validated?' do
+    it 'is false when no source is found' do
+      expect(medical_certificate).not_to be_validated
+    end
+
+    it 'is false when the source has not been validated by an admin yet' do
+      subscription.update!(doctor_certified_at: Time.current, medical_certificate: file)
+
+      expect(medical_certificate).not_to be_validated
+    end
+
+    it 'is true once the source has been validated by an admin' do
+      subscription.update!(
+        doctor_certified_at: Time.current,
+        medical_certificate: file,
+        medical_certificate_validated_at: Time.current
+      )
+
+      expect(medical_certificate).to be_validated
+    end
+
+    it 'reflects the validation state of an inherited source' do
+      create_source(current_year - 1, medical_certificate_validated_at: Time.current)
+
+      expect(medical_certificate).to be_validated
+    end
+  end
 end
 # rubocop:enable Metrics/BlockLength

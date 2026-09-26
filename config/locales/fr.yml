@@ -721,6 +721,11 @@ fr:
     payment_proofs:
       destroy:
         success: Justificatif de paiement supprimé
+    medical_certificates:
+      update:
+        success: Certificat médical validé
+      destroy:
+        success: Certificat médical supprimé
     statuses:
       update:
         success: Inscription mise à jour
@@ -763,6 +768,10 @@ fr:
         doctor_not_certified: Non confirmé
         medical_certificate_missing: Manquant
         medical_certificate_missing_explanation: L'élève a indiqué avoir un certificat médical, mais il ne l'a pas encore joint.
+        medical_certificate_pending_validation: Certificat à valider
+        validate_medical_certificate: Valider le certificat
+        delete_medical_certificate: Supprimer le certificat
+        delete_medical_certificate_confirmation: Êtes-vous sûr·e de vouloir supprimer ce certificat médical ?
         paid: Payé
         not_paid: Non payé
         payment_proof_awaiting_review: Justificatif à vérifier
@@ -1008,6 +1017,9 @@ fr:
       download_medical_certificate: Télécharger le certificat médical
       change_signed_form: Remplacer le formulaire
       change_medical_certificate: Remplacer le certificat médical
+      delete_medical_certificate: Supprimer le certificat médical
+      delete_medical_certificate_confirmation: Êtes-vous sûr·e de vouloir supprimer ce certificat médical ?
+      medical_certificate_pending_validation: Certificat en cours de vérification
       edit_member: Modifier le profil de l'élève
       accept_terms: Accepter les conditions
       conditions_inscription: Conditions d'inscription
@@ -1152,6 +1164,8 @@ fr:
       update:
         success: Inscription mise à jour
         already_certified: Vous avez déjà indiqué avoir un certificat médical pour cette inscription.
+      destroy:
+        success: Certificat médical supprimé
     vacations:
       show:
         i_am_alumni: Je suis un·e ancien·ne élève
