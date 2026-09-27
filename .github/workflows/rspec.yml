@@ -47,6 +47,7 @@ jobs:
 
       - name: Install system dependencies
         run: |
+          sudo apt-get update -yqq
           sudo apt-get -yqq install imagemagick libpq-dev
 
       - name: Build App
