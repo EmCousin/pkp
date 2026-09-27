@@ -45,6 +45,22 @@ describe 'Discovery attendance', type: :request do
     expect(response.body).to include(discovery_session.course.title)
   end
 
+  it 'marks one discovery participant without affecting another' do
+    sign_in create(:user, coach: true, phone_number: '+33612345678')
+    other_subscription = create(
+      :discovery_registration,
+      discovery_session:,
+      member: create(:member),
+      status: :confirmed
+    )
+
+    patch coach_discovery_session_subscription_path(discovery_session, subscription),
+          params: { subscription: { attendance_status: 'present' } }
+
+    expect(subscription.reload).to be_attendance_present
+    expect(other_subscription.reload.attendance_status).to be_nil
+  end
+
   it 'does not update a registration through another discovery session' do
     sign_in create(:user, :admin, phone_number: '+33612345678')
     other_session = create(:discovery_session, course: discovery_session.course, starts_at: 2.weeks.from_now)
