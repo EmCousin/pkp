@@ -79,10 +79,13 @@ fr:
         blank: doit être rempli
         invalid: invalide
         required: est requise
+        unavailable: "n'est plus disponible pour ce participant"
     attributes:
       alumni_access:
         username: Identifiant
         password: Mot de passe
+      discovery_session_transfer:
+        occurs_on: Nouvelle date
 
   activerecord:
     errors:

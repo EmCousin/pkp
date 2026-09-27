@@ -103,10 +103,13 @@ en:
         blank: "can't be blank"
         invalid: "is invalid"
         required: "is required"
+        unavailable: "is no longer available"
     attributes:
       alumni_access:
         username: "Username"
         password: "Password"
+      discovery_session_transfer:
+        occurs_on: "New date"
 
   activerecord:
     errors:
