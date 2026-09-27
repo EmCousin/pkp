@@ -18,12 +18,20 @@ module Subscriptions
     end
 
     def request_billing_invoice!
+      # with_lock reloads the record, which would silently drop any attachment
+      # (e.g. medical_certificate, payment_proof) staged earlier in the same save
+      # but not yet persisted, since Active Storage clears pending attachment
+      # changes on reload.
+      pending_attachment_changes = attachment_changes.dup
+
       with_lock do
         next billing_invoice if billing_invoice
         next unless paid?
 
         create_billing_invoice!(billing_invoice_attributes)
       end
+    ensure
+      attachment_changes.merge!(pending_attachment_changes)
     end
 
     def invoice_document
