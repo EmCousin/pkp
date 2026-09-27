@@ -18,6 +18,15 @@ module Dashboard
     end
 
     def destroy
+      if @subscription.confirmed?
+        return redirect_to edit_dashboard_subscription_medical_certificate_path(@subscription), alert: t('.confirmed'), status: :see_other
+      end
+
+      medical_certificate = Subscriptions::MedicalCertificate.new(subscription: @subscription)
+      if medical_certificate.source_in_use?
+        return redirect_to edit_dashboard_subscription_medical_certificate_path(@subscription), alert: t('.in_use'), status: :see_other
+      end
+
       @subscription.medical_certificate.purge
       @subscription.update!(medical_certificate_validated_at: nil)
       redirect_to edit_dashboard_subscription_medical_certificate_path(@subscription), notice: t('.success'), status: :see_other

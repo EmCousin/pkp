@@ -18,6 +18,8 @@ module Subscriptions
     end
 
     def confirm!
+      return if confirmed? || archived?
+
       confirmed!
       notify_confirmation!
     end
