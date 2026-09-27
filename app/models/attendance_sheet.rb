@@ -22,13 +22,13 @@ class AttendanceSheet < ApplicationRecord
     end
 
     def create_attendance_records(sheet, course)
+      member_ids = course.subscriptions.confirmed.filter_by_year(Subscription.current_year(sheet.date)).pluck(:member_id)
+      member_ids |= DiscoveryRegistration.confirmed
+                                         .where(discovery_session: course.discovery_sessions.on_date(sheet.date))
+                                         .pluck(:member_id)
+
       AttendanceRecord.upsert_all( # rubocop:disable Rails/SkipsModelValidations
-        course.subscriptions.confirmed.filter_by_year(Subscription.current_year(sheet.date)).map do |subscription|
-          {
-            attendance_sheet_id: sheet.id,
-            member_id: subscription.member_id
-          }
-        end,
+        member_ids.map { |member_id| { attendance_sheet_id: sheet.id, member_id: } },
         unique_by: %i[attendance_sheet_id member_id]
       )
     end

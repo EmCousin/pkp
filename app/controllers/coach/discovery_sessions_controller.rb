@@ -9,6 +9,7 @@ module Coach
     end
 
     def show
+      @attendance_sheet = @discovery_session.attendance_sheet
       @attendance_records = @discovery_session.session_attendance_records
     end
 
