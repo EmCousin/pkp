@@ -4,8 +4,6 @@ require 'rails_helper'
 
 # rubocop:disable Metrics/BlockLength
 describe 'Admin medical certificates', type: :request do
-  include Devise::Test::IntegrationHelpers
-
   let(:file) do
     Rack::Test::UploadedFile.new(Rails.root.join('spec/support/file_examples/avatar.jpg'))
   end

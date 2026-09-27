@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 describe 'Admin payment proofs', type: :request do
-  include Devise::Test::IntegrationHelpers
-
   before { sign_in create(:user, :admin, phone_number: '+33612345679') }
 
   it 'lets an admin remove an erroneous payment proof' do
