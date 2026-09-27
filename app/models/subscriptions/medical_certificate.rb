@@ -26,6 +26,10 @@ module Subscriptions
       source.present? && source != subscription
     end
 
+    def validated?
+      source.present? && source.medical_certificate_validated_at?
+    end
+
     def source_in_use?
       return false if subscription.destroyed_by_association
       return false unless own_certificate_valid? && subscription.member&.platform

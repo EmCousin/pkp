@@ -728,6 +728,14 @@ fr:
     payment_proofs:
       destroy:
         success: Justificatif de paiement supprimé
+    medical_certificates:
+      update:
+        success: Certificat médical validé
+        no_source: Il n'y a aucun certificat médical à valider pour cette inscription.
+      destroy:
+        success: Certificat médical supprimé
+        confirmed: Le certificat médical d'une inscription déjà confirmée ne peut pas être supprimé.
+        in_use: Ce certificat médical ne peut pas être supprimé car il est utilisé par une inscription d'une saison ultérieure.
     statuses:
       update:
         success: Inscription mise à jour
@@ -771,6 +779,11 @@ fr:
         doctor_not_certified: Non confirmé
         medical_certificate_missing: Manquant
         medical_certificate_missing_explanation: L'élève a indiqué avoir un certificat médical, mais il ne l'a pas encore joint.
+        medical_certificate_pending_validation: Certificat à valider
+        medical_certificate_pending_validation_from_season: Ce certificat provient de la saison %{season}.
+        validate_medical_certificate: Valider le certificat
+        delete_medical_certificate: Supprimer le certificat
+        delete_medical_certificate_confirmation: Êtes-vous sûr·e de vouloir supprimer ce certificat médical ?
         paid: Payé
         not_paid: Non payé
         payment_proof_awaiting_review: Justificatif à vérifier
@@ -1026,6 +1039,9 @@ fr:
       download_medical_certificate: Télécharger le certificat médical
       change_signed_form: Remplacer le formulaire
       change_medical_certificate: Remplacer le certificat médical
+      delete_medical_certificate: Supprimer le certificat médical
+      delete_medical_certificate_confirmation: Êtes-vous sûr·e de vouloir supprimer ce certificat médical ?
+      medical_certificate_pending_validation: Certificat en cours de vérification
       edit_member: Modifier le profil de l'élève
       accept_terms: Accepter les conditions
       conditions_inscription: Conditions d'inscription
@@ -1170,6 +1186,10 @@ fr:
       update:
         success: Inscription mise à jour
         already_certified: Vous avez déjà indiqué avoir un certificat médical pour cette inscription.
+      destroy:
+        success: Certificat médical supprimé
+        confirmed: Vous ne pouvez pas supprimer le certificat médical d'une inscription déjà confirmée. Contactez-nous si besoin.
+        in_use: Ce certificat médical ne peut pas être supprimé car il est utilisé par une inscription d'une saison ultérieure.
     vacations:
       show:
         i_am_alumni: Je suis un·e ancien·ne élève

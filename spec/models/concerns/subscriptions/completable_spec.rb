@@ -25,7 +25,8 @@ describe Subscriptions::Completable, type: :model do
         payment_method: :cash,
         doctor_certified_at: Time.current,
         terms_accepted_at: Time.current,
-        medical_certificate: file
+        medical_certificate: file,
+        medical_certificate_validated_at: Time.current
       )
     end
 
@@ -50,6 +51,14 @@ describe Subscriptions::Completable, type: :model do
     context 'when medical certificate is not attached' do
       before do
         subscription.update(medical_certificate: nil)
+      end
+
+      it { expect(subscription.completed?).to be false }
+    end
+
+    context 'when the medical certificate has not been validated by an admin' do
+      before do
+        subscription.update(medical_certificate_validated_at: nil)
       end
 
       it { expect(subscription.completed?).to be false }
@@ -85,7 +94,8 @@ describe Subscriptions::Completable, type: :model do
         courses: [course],
         year:,
         doctor_certified_at: Time.current,
-        medical_certificate: file
+        medical_certificate: file,
+        medical_certificate_validated_at: Time.current
       )
     end
 

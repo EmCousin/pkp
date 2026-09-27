@@ -115,6 +115,7 @@ Rails.application.routes.draw do
     resources :subscriptions do
       resource :payment, only: [:create, :destroy]
       resource :payment_proof, only: :destroy
+      resource :medical_certificate, only: [:update, :destroy]
       resource :status, only: [:update]
       resource :discovery_session_transfer, only: %i[new create]
       member do
@@ -137,7 +138,7 @@ Rails.application.routes.draw do
     resources :members
     resources :subscriptions, only: [:show, :new, :create] do
       resource :term, as: :terms, only: [:edit, :update]
-      resource :medical_certificate, only: [:edit, :update]
+      resource :medical_certificate, only: [:edit, :update, :destroy]
       resource :payment_proof, only: [:edit, :update]
       resource :payment, only: [:show, :new]
     end

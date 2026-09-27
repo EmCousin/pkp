@@ -255,6 +255,10 @@ feature "Subscription Workflow", type: :feature do
     expect(page).to have_text('Date du paiement')
     expect(page).to have_text('Carte bancaire')
 
+    # An admin must validate the medical certificate before the subscription is confirmed
+    subscription.reload.update!(medical_certificate_validated_at: Time.current)
+    subscription.confirm! if subscription.completed?
+
     # Navigate back to dashboard to verify subscription is confirmed
     click_link 'Retour au tableau de bord'
     expect(page).to have_text('Bienvenue !')

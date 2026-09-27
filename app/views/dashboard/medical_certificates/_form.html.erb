@@ -28,6 +28,15 @@
       <p class="text-xs text-gray-500 mt-1">
         <%= t('.you_can_upload_it_later') %>
       </p>
+      <% if subscription.medical_certificate.attached? %>
+        <p class="mt-2">
+          <%= button_to t('dashboard.subscription.delete_medical_certificate'),
+              dashboard_subscription_medical_certificate_path(subscription),
+              method: :delete,
+              data: { turbo_confirm: t('dashboard.subscription.delete_medical_certificate_confirmation') },
+              class: "bg-transparent text-red-600 hover:underline text-sm p-0" %>
+        </p>
+      <% end %>
     </div>
 
     <div class="flex flex-col sm:flex-row gap-3 w-full justify-center">
