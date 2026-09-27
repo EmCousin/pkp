@@ -14,6 +14,7 @@ class User < ApplicationRecord
 
   include Users::AdminNotifiable
   include Users::Chargeable
+  include Users::Tombstonable
   include Subscriptions::ProtectsFinalizedRegistrations
 
   has_many :contacts, dependent: :destroy

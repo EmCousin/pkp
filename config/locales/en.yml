@@ -41,6 +41,9 @@ en:
       internal_rate: Internal rate
       participant: "Participant: %{name}"
       season: "Season: %{start_year}-%{end_year}"
+  pennylane:
+    errors:
+      placeholder_customer_name: "The customer's name has not been completed yet; the invoice cannot be synced"
   defaults:
     added: "Added"
     attach: "Attach"
