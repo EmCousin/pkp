@@ -1,0 +1,76 @@
+fr:
+  auth:
+    failure:
+      already_authenticated: Vous êtes déjà connecté·e.
+      invalid: E-mail ou mot de passe incorrect.
+      timeout: Votre session a expiré. Veuillez vous reconnecter.
+      unauthenticated: Vous devez vous connecter ou vous inscrire pour continuer.
+    mailer:
+      email_changed:
+        subject: Adresse e-mail mise à jour
+      password_changed:
+        subject: Mot de passe modifié
+      reset_password_instructions:
+        subject: Instructions pour réinitialiser votre mot de passe
+      unlock_instructions:
+        subject: Instructions pour débloquer votre compte
+    passwords:
+      invalid_token: Ce lien de réinitialisation est invalide ou a expiré. Demandez un nouveau lien.
+      new:
+        title: Mot de passe oublié ?
+        submit: Réinitialiser mon mot de passe
+      create:
+        success: Si cette adresse existe dans notre système, vous allez recevoir un lien pour réinitialiser votre mot de passe.
+      edit:
+        title: Créer un nouveau mot de passe
+        new_password: Nouveau mot de passe
+        confirm_new_password: Confirmer le nouveau mot de passe
+        submit: Changer mon mot de passe
+      update:
+        success: Votre mot de passe a bien été modifié. Vous êtes désormais connecté·e.
+    registrations:
+      create:
+        success: Inscription réussie. Bienvenue !
+      update:
+        success: Vos modifications ont bien été enregistrées.
+      confirm_destroy:
+        title: Supprimer mon compte
+        warning: Toutes les données liées à votre compte seront immédiatement supprimées. Cette action est irréversible.
+        confirm: Supprimer définitivement mon compte
+      destroy:
+        success: Votre compte a bien été supprimé. À bientôt !
+        finalized_event_registration: Votre compte ne peut pas être supprimé tant qu'il contient une inscription avec un paiement initié, confirmée ou payée.
+    sessions:
+      create:
+        success: Connecté·e.
+      destroy:
+        success: Déconnecté·e.
+    shared:
+      links:
+        sign_in: Se connecter
+        sign_up: S'inscrire
+        forgot_your_password: Mot de passe oublié ?
+        didnt_receive_unlock_instructions: Vous n'avez pas reçu les instructions pour débloquer votre compte ?
+      minimum_password_length: "%{count} caractères minimum"
+    unlocks:
+      new:
+        title: Débloquer votre compte
+        submit: Envoyer les instructions
+      create:
+        success: Si votre compte existe et est bloqué, vous allez recevoir des instructions pour le débloquer.
+      show:
+        success: Votre compte est débloqué. Veuillez vous connecter pour continuer.
+        invalid: Ce lien de déblocage est invalide.
+  activerecord:
+    attributes:
+      user:
+        current_password: Mot de passe actuel
+        password: Mot de passe
+        password_confirmation: Confirmation du mot de passe
+        remember_me: Se souvenir de moi
+    errors:
+      models:
+        user:
+          attributes:
+            current_password:
+              invalid: est incorrect

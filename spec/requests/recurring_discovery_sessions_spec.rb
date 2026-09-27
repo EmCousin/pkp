@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 describe 'Recurring discovery sessions', type: :request do
-  include Devise::Test::IntegrationHelpers
   include ActiveSupport::Testing::TimeHelpers
 
   let(:user) { create(:user, phone_number: '+33612345678') }

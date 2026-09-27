@@ -4,8 +4,6 @@ require 'rails_helper'
 
 # rubocop:disable Metrics/BlockLength
 describe 'Admin camps', type: :request do
-  include Devise::Test::IntegrationHelpers
-
   before { sign_in create(:user, :admin, phone_number: '+33612345679') }
 
   it 'searches and filters camps' do

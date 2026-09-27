@@ -4,8 +4,6 @@ require 'rails_helper'
 
 # rubocop:disable Metrics/BlockLength
 describe 'Dashboard medical certificates', type: :request do
-  include Devise::Test::IntegrationHelpers
-
   let(:user) { create(:user) }
   let(:member) { create(:member, user:) }
   let(:course) { create(:course, category: create(:category)) }

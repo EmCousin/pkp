@@ -3,13 +3,13 @@
     {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
-      "fingerprint": "f54f4b9533d5a62fcfcc7b75c46e97594e32c246dd18c5b9b66d20dd5b047b75",
+      "fingerprint": "caf118b89e54a77b18d4d0efdf84d996e5455a2b9a17ef73370a1a74ac56e48f",
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/dashboard/subscriptions/show.html.erb",
       "line": 5,
       "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
-      "code": "current_user.subscriptions.for_platform(Current.platform).not_archived.find_by(:id => params[:id]).qr_code_svg",
+      "code": "Current.user.subscriptions.for_platform(Current.platform).not_archived.find_by(:id => params[:id]).qr_code_svg",
       "render_path": [
         {
           "type": "controller",
@@ -27,8 +27,8 @@
         "type": "template",
         "template": "dashboard/subscriptions/show"
       },
-      "user_input": "current_user.subscriptions.for_platform(Current.platform)",
-      "confidence": "Weak",
+      "user_input": null,
+      "confidence": "Medium",
       "cwe_id": [
         79
       ],
@@ -79,5 +79,5 @@
       "note": ""
     }
   ],
-  "brakeman_version": "8.0.4"
+  "brakeman_version": "8.0.6"
 }

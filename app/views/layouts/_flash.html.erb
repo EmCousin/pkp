@@ -45,7 +45,7 @@
     </div>
   <% end %>
 
-  <% if current_user&.invalid_email_provider? %>
+  <% if Current.user&.invalid_email_provider? %>
     <div class="relative">
       <%= check_box_tag "email-warning-dismiss", "1", false, class: "absolute inset-0 opacity-0 w-full h-full cursor-pointer peer" %>
       <div class="bg-red-50 rounded-lg shadow-sm peer-checked:hidden" role="alert">
@@ -57,7 +57,7 @@
               </svg>
             </div>
             <div class="ml-3">
-              <p class="text-sm text-red-700"><%= t('.invalid_email_provider', email: current_user.email) %></p>
+              <p class="text-sm text-red-700"><%= t('.invalid_email_provider', email: Current.user.email) %></p>
             </div>
           </div>
           <div class="ml-4 text-red-500 hover:text-red-600">

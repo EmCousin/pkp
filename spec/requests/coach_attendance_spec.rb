@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 describe 'Coach attendance', type: :request do
-  include Devise::Test::IntegrationHelpers
-
   let(:coach) { create(:user, coach: true, phone_number: '+33612345678') }
   let(:course) { create(:course) }
   let(:member_a) { create(:member) }

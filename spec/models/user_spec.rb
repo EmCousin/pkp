@@ -10,6 +10,7 @@ describe User, type: :model do
 
   it { is_expected.to have_many(:members).dependent(:destroy) }
   it { is_expected.to have_many(:contacts).dependent(:destroy) }
+  it { is_expected.to have_many(:auth_sessions).dependent(:destroy) }
   it { is_expected.to accept_nested_attributes_for(:contacts).allow_destroy(true) }
   it { is_expected.to have_many(:subscriptions).through(:members) }
   it { is_expected.to have_many(:courses).through(:subscriptions) }
@@ -23,6 +24,30 @@ describe User, type: :model do
   it { is_expected.to validate_presence_of(:zip_code).on(:account_setup) }
   it { is_expected.to validate_presence_of(:city).on(:account_setup) }
   it { is_expected.to validate_presence_of(:country).on(:account_setup) }
+
+  describe 'password validation' do
+    it 'accepts the configured 128-character maximum' do
+      password = 'p' * 128
+      user.password = user.password_confirmation = password
+
+      expect(user.save).to be true
+      expect(user.reload).to be_valid_password(password)
+    end
+
+    it 'rejects passwords longer than the configured maximum' do
+      user.password = user.password_confirmation = 'p' * 129
+
+      expect(user).not_to be_valid
+      expect(user.errors.of_kind?(:password, :too_long)).to be true
+    end
+
+    it 'requires a password digest' do
+      user.password_digest = nil
+
+      expect(user).not_to be_valid
+      expect(user.errors.of_kind?(:password, :blank)).to be true
+    end
+  end
 
   it 'normalizes the billing country to an ISO code' do
     user.country = 'France'
@@ -51,7 +76,7 @@ describe User, type: :model do
     it { is_expected.to respond_to :email_confirmation }
     it { is_expected.to respond_to 'email_confirmation=' }
 
-    it { is_expected.to validate_confirmation_of :email }
+    it { is_expected.to validate_confirmation_of(:email).on(:sign_up) }
 
     context 'when the user is persisted' do
       let(:user) { create :user, email: email, email_confirmation: email_confirmation }
@@ -62,7 +87,10 @@ describe User, type: :model do
     context 'when the email confirmation is blank' do
       let(:email_confirmation) { nil }
 
-      it { is_expected.to be_valid }
+      it 'rejects signup' do
+        expect(user).not_to be_valid(:sign_up)
+        expect(user.errors.of_kind?(:email_confirmation, :blank)).to be true
+      end
     end
   end
 

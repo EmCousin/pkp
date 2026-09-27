@@ -6,7 +6,7 @@ module Dashboard
       protected
 
       def set_subscription!
-        @subscription = current_user.subscriptions.for_platform(Current.platform).not_archived.find(params.expect(:subscription_id))
+        @subscription = Current.user.subscriptions.for_platform(Current.platform).not_archived.find(params.expect(:subscription_id))
         raise ActiveRecord::RecordNotFound unless @subscription.completion_open?
       end
     end
