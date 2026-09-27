@@ -6,8 +6,14 @@ class DiscoverySessionTransfer
   attr_accessor :subscription
   attr_reader :occurs_on
 
+  delegate :course, to: 'subscription.discovery_session'
+
   validates :occurs_on, presence: true
-  validate :occurs_on_must_be_available, if: -> { occurs_on }
+  validates :occurs_on, inclusion: {
+    in: ->(transfer) { transfer.available_dates },
+    message: :unavailable,
+    allow_nil: true
+  }
 
   def occurs_on=(value)
     @occurs_on = value.is_a?(String) ? Date.iso8601(value) : value
@@ -15,12 +21,8 @@ class DiscoverySessionTransfer
     @occurs_on = nil
   end
 
-  def course
-    subscription.discovery_session.course
-  end
-
   def available_dates
-    course.available_discovery_dates(excluding: subscription.discovery_session.occurrence_date)
+    @available_dates ||= course.available_discovery_dates(excluding: subscription.discovery_session.occurrence_date)
   end
 
   def perform
@@ -34,11 +36,5 @@ class DiscoverySessionTransfer
   rescue ActiveRecord::RecordInvalid
     errors.add(:occurs_on, :unavailable)
     false
-  end
-
-  private
-
-  def occurs_on_must_be_available
-    errors.add(:occurs_on, :unavailable) unless available_dates.include?(occurs_on)
   end
 end

@@ -36,7 +36,7 @@ class DiscoveryRegistration < EventRegistration
 
     target_session.with_lock { transfer_to_available_session(target_session) }
   rescue ActiveRecord::RecordNotUnique
-    add_transfer_error(:unavailable)
+    errors.add(:discovery_session, :unavailable)
     false
   ensure
     self.transferring_event = false
@@ -44,20 +44,16 @@ class DiscoveryRegistration < EventRegistration
 
   private
 
-  def add_transfer_error(error)
-    errors.add(:discovery_session, error)
-  end
-
   def same_course?(target_session)
     return true if target_session.course_id == discovery_session.course_id
 
-    add_transfer_error(:different_course)
+    errors.add(:discovery_session, :different_course)
     false
   end
 
   def transfer_to_available_session(target_session)
     unless member.can_subscribe_to_discovery?(target_session)
-      add_transfer_error(:unavailable)
+      errors.add(:discovery_session, :unavailable)
       return false
     end
 

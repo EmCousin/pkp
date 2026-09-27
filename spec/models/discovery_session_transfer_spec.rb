@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 
+# rubocop:disable Metrics/BlockLength
 describe DiscoverySessionTransfer, type: :model do
   include ActiveSupport::Testing::TimeHelpers
 
@@ -47,7 +48,7 @@ describe DiscoverySessionTransfer, type: :model do
       transfer.occurs_on = target_date + 1.day
 
       expect(transfer).not_to be_valid
-      expect(transfer.errors.of_kind?(:occurs_on, :unavailable)).to be true
+      expect(transfer.errors[:occurs_on]).to include("n'est plus disponible pour ce participant")
     end
 
     it 'rejects a date whose session is already full' do
@@ -56,7 +57,7 @@ describe DiscoverySessionTransfer, type: :model do
       create(:discovery_registration, discovery_session: full_session)
 
       expect(transfer).not_to be_valid
-      expect(transfer.errors.of_kind?(:occurs_on, :unavailable)).to be true
+      expect(transfer.errors[:occurs_on]).to include("n'est plus disponible pour ce participant")
     end
   end
 
@@ -74,3 +75,4 @@ describe DiscoverySessionTransfer, type: :model do
     end
   end
 end
+# rubocop:enable Metrics/BlockLength
