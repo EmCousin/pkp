@@ -36,6 +36,7 @@
       <div class="flex-shrink-0">
         <%= form_with model: attendance_record,
                       url: polymorphic_path([namespace, @attendance_sheet, attendance_record]),
+                      namespace: dom_id(attendance_record),
                       data: { controller: "form" },
                       class: "flex flex-row" do |f| %>
           <%= f.collection_radio_buttons :status,
