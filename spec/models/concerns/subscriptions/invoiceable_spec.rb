@@ -110,7 +110,7 @@ describe Subscriptions::Invoiceable, type: :model do
   end
 
   it 'snapshots discovery session details in the discovery model' do
-    session = create(:discovery_session, starts_at: Time.zone.local(2026, 9, 12, 14))
+    session = create(:discovery_session, starts_at: 1.month.from_now.change(hour: 14))
     subscription = create(:discovery_registration, discovery_session: session, paid_at: Time.current)
 
     expect(subscription.billing_invoice.description).to include(I18n.l(session.occurrence_date, format: :long))

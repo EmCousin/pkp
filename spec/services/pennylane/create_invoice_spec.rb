@@ -8,7 +8,7 @@ describe Pennylane::CreateInvoice, type: :service do
   let(:client) { instance_double(Pennylane::Client) }
   let(:user) { create(:user) }
   let(:member) { create(:member, user:) }
-  let(:discovery_session) { create(:discovery_session, starts_at: Time.zone.local(2026, 9, 12, 14), price: 36) }
+  let(:discovery_session) { create(:discovery_session, starts_at: 1.month.from_now.change(hour: 14), price: 36) }
   let(:subscription) do
     create(
       :discovery_registration,
