@@ -653,7 +653,7 @@ DEPENDENCIES
   propshaft
   puma (~> 7)
   rack-cors
-  rails (~> 8.1.3)
+  rails (~> 8.1.4)
   rails-controller-testing
   rollbar
   rqrcode
@@ -683,7 +683,7 @@ DEPENDENCIES
   yabeda-rails
 
 RUBY VERSION
-  ruby 4.0.6p0
+  ruby 4.0.9
 
 BUNDLED WITH
-  4.0.17
+  4.0.23

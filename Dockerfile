@@ -8,7 +8,9 @@
 # For a containerized dev environment, see Dev Containers: https://guides.rubyonrails.org/getting_started_with_devcontainer.html
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version
-ARG RUBY_VERSION=4.0.6
+ARG RUBY_VERSION=4.0.9
+ARG NODE_VERSION=24.22.1
+FROM docker.io/library/node:$NODE_VERSION-slim AS node
 FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 
 # Rails app lives here
@@ -28,10 +30,13 @@ ENV RAILS_ENV="production" \
 # Throw-away build stage to reduce size of final image
 FROM base AS build
 
+# Install the Node.js LTS runtime used to build JavaScript assets
+COPY --from=node /usr/local/ /usr/local/
+COPY --from=node /opt/yarn-v1.22.22/ /opt/yarn-v1.22.22/
+
 # Install packages needed to build gems and JavaScript assets
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libpq-dev pkg-config nodejs npm && \
-    npm install -g yarn && \
+    apt-get install --no-install-recommends -y build-essential git libpq-dev pkg-config && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install application gems
@@ -40,6 +45,10 @@ RUN bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
     bundle exec bootsnap precompile --gemfile
 
+# Install JavaScript dependencies before copying the rest of the application
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
+
 # Copy application code
 COPY . .
 
@@ -47,7 +56,7 @@ COPY . .
 RUN bundle exec bootsnap precompile app/ lib/
 
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+RUN SECRET_KEY_BASE_DUMMY=1 SKIP_YARN_INSTALL=1 ./bin/rails assets:precompile
 
 # Final stage for app image
 FROM base
