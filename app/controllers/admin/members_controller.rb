@@ -4,7 +4,7 @@ module Admin
   class MembersController < BaseController
     before_action :set_member, only: %i[show edit update destroy]
 
-    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable-next Metrics/AbcSize
     def index
       members = Current.platform.members.active.search_and_filter(params.to_unsafe_h.slice(:q, :level, :subscription_year, :course_ids, :camp_ids))
       @members = members.includes(:user, :contacts).with_attached_avatar
@@ -17,7 +17,6 @@ module Admin
         end
       end
     end
-    # rubocop:enable Metrics/AbcSize
 
     def show; end
 
