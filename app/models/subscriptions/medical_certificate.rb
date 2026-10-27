@@ -45,7 +45,7 @@ module Subscriptions
       subscription.doctor_certified_at? && subscription.medical_certificate.attached?
     end
 
-    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable-next Metrics/AbcSize
     def previous_source
       return unless history_available?
       return loaded_source if subscription.member.subscriptions.loaded?
@@ -58,7 +58,6 @@ module Subscriptions
                   .order(year: :desc, id: :desc)
                   .first
     end
-    # rubocop:enable Metrics/AbcSize
 
     def history_available?
       subscription.medical_certificate_required? && subscription.persisted? && subscription.member&.platform
