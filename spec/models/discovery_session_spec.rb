@@ -118,6 +118,39 @@ describe DiscoverySession, type: :model do
     end
   end
 
+  describe '#update_with_course_locks' do
+    it 'serializes a course change behind both course locks', :concurrent do
+      source_course = create(:course)
+      target_course = create(:course, category: source_course.category)
+
+      [source_course, target_course].each do |locked_course|
+        session = create(:discovery_session, course: source_course)
+        locked = Queue.new
+        release = Queue.new
+        locker = Thread.new do
+          ActiveRecord::Base.connection_pool.with_connection do
+            Course.find(locked_course.id).with_lock do
+              locked << true
+              release.pop
+            end
+          end
+        end
+        locked.pop
+
+        expect do
+          ActiveRecord::Base.connection.execute("SET lock_timeout = '100ms'")
+          described_class.find(session.id).update_with_course_locks(course_id: target_course.id)
+        end.to raise_error(ActiveRecord::LockWaitTimeout)
+        expect(session.reload.course).to eq(source_course)
+      ensure
+        release << true if release && locker&.alive?
+        locker&.join
+        ActiveRecord::Base.connection.execute('SET lock_timeout = DEFAULT')
+        session&.destroy!
+      end
+    end
+  end
+
   describe '#session_attendance_records' do
     let(:discovery_session) { create(:discovery_session) }
     let(:confirmed_member) { create(:member, platform: discovery_session.platform) }

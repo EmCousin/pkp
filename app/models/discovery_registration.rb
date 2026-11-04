@@ -31,9 +31,15 @@ class DiscoveryRegistration < EventRegistration
   end
 
   def save_with_registration_locks
-    discovery_session.course.with_lock do
-      discovery_session.with_lock { save }
-    end
+    with_registration_locks { save }
+  end
+
+  def confirm!
+    with_registration_locks { confirm_without_lock! }
+  end
+
+  def update_status_with_registration_locks(status)
+    with_registration_locks { update(status:) }
   end
 
   def transfer_to(target_session)
@@ -51,6 +57,18 @@ class DiscoveryRegistration < EventRegistration
   end
 
   private
+
+  def with_registration_locks(&block)
+    discovery_session.course.with_lock do
+      discovery_session.with_lock do
+        persisted? ? with_lock(&block) : block.yield
+      end
+    end
+  end
+
+  def with_payment_reconciliation_locks(&)
+    with_registration_locks(&)
+  end
 
   def same_course?(target_session)
     return true if target_session.course_id == discovery_session.course_id

@@ -35,10 +35,7 @@
       <% @course_unavailability_period.course_ids.each do |course_id| %>
         <%= hidden_field_tag 'course_unavailability_period[course_ids][]', course_id %>
       <% end %>
-      <%= hidden_field_tag :confirm_conflicts, '1' %>
-      <% @course_unavailability_period.conflicting_discovery_sessions.each do |session| %>
-        <%= hidden_field_tag 'confirmed_conflict_ids[]', session.id %>
-      <% end %>
+      <%= hidden_field_tag :conflict_confirmation_token, @course_unavailability_period.conflict_confirmation_token %>
       <%= form.submit t('.confirm'), class: "rounded-md bg-amber-700 px-4 py-2 text-white hover:bg-amber-800" %>
     <% end %>
   </div>

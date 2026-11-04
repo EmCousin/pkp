@@ -24,7 +24,7 @@ module Admin
       @course_unavailability_period = Current.platform.course_unavailability_periods.new(course_unavailability_period_params)
       if @course_unavailability_period.save_with_course_locks(**conflict_confirmation)
         redirect_to [:admin, @course_unavailability_period], notice: t('.success'), status: :see_other
-      elsif @course_unavailability_period.conflicting_discovery_sessions.any?
+      elsif @course_unavailability_period.conflict_confirmation_required?
         render :confirm, status: :unprocessable_content
       else
         render :new, status: :unprocessable_content
@@ -34,7 +34,7 @@ module Admin
     def update
       if @course_unavailability_period.update_with_course_locks(course_unavailability_period_params, **conflict_confirmation)
         redirect_to [:admin, @course_unavailability_period], notice: t('.success'), status: :see_other
-      elsif @course_unavailability_period.conflicting_discovery_sessions.any?
+      elsif @course_unavailability_period.conflict_confirmation_required?
         render :confirm, status: :unprocessable_content
       else
         render :edit, status: :unprocessable_content
@@ -67,10 +67,7 @@ module Admin
     end
 
     def conflict_confirmation
-      return { confirm_conflicts: false, confirmed_conflict_ids: [] } unless params[:confirm_conflicts] == '1'
-
-      confirmed_ids = Current.platform.discovery_sessions.where(id: Array(params[:confirmed_conflict_ids])).ids
-      { confirm_conflicts: true, confirmed_conflict_ids: confirmed_ids }
+      { conflict_confirmation_token: params[:conflict_confirmation_token] }
     end
   end
 end

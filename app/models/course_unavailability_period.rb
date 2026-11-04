@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CourseUnavailabilityPeriod < ApplicationRecord
-  attr_reader :conflicting_discovery_sessions
+  attr_reader :conflicting_discovery_sessions, :conflict_confirmation_token
 
   belongs_to :platform
   has_many :course_unavailabilities, dependent: :destroy
@@ -12,9 +12,9 @@ class CourseUnavailabilityPeriod < ApplicationRecord
   validate :ends_on_cannot_precede_starts_on
   validate :courses_must_belong_to_platform
 
-  def save_with_course_locks(confirm_conflicts: false, confirmed_conflict_ids: [])
+  def save_with_course_locks(conflict_confirmation_token: nil)
     with_course_locks do
-      save_after_conflict_check(confirm_conflicts:, confirmed_conflict_ids:)
+      save_after_conflict_check(conflict_confirmation_token:)
     end
   end
 
@@ -22,34 +22,71 @@ class CourseUnavailabilityPeriod < ApplicationRecord
     with_course_locks { destroy }
   end
 
-  def update_with_course_locks(attributes, confirm_conflicts: false, confirmed_conflict_ids: [])
+  def update_with_course_locks(attributes, conflict_confirmation_token: nil)
     target_course_ids = Array(attributes[:course_ids]).compact_blank.map(&:to_i)
     saved = false
 
     transaction do
       lock_courses(course_ids | target_course_ids)
       assign_attributes(attributes)
-      saved = save_after_conflict_check(confirm_conflicts:, confirmed_conflict_ids:)
+      saved = save_after_conflict_check(conflict_confirmation_token:)
       raise ActiveRecord::Rollback unless saved
     end
 
     saved
   end
 
+  def conflict_confirmation_required?
+    @conflict_confirmation_required
+  end
+
   private
 
-  def save_after_conflict_check(confirm_conflicts:, confirmed_conflict_ids:)
+  def save_after_conflict_check(conflict_confirmation_token:)
     @conflicting_discovery_sessions = []
+    @conflict_confirmation_required = false
     return false unless valid?
 
     @conflicting_discovery_sessions = discovery_session_conflicts.to_a
-    confirmed_ids = Array(confirmed_conflict_ids).map(&:to_i)
-    conflicts_need_confirmation = conflicting_discovery_sessions.any? do |session|
-      !confirm_conflicts || confirmed_ids.exclude?(session.id)
-    end
-    return false if conflicts_need_confirmation
+    snapshot = conflict_snapshot
+    return false unless conflict_confirmation_matches?(conflict_confirmation_token, snapshot)
 
     save
+  end
+
+  def conflict_confirmation_matches?(token, snapshot)
+    return true if confirmation_matches?(token, snapshot)
+
+    @conflict_confirmation_required = true
+    @conflict_confirmation_token = conflict_confirmation_verifier.generate(
+      { platform_id:, conflicts: snapshot },
+      purpose: :course_unavailability_conflicts
+    )
+    false
+  end
+
+  def confirmation_matches?(token, snapshot)
+    return snapshot.empty? if token.blank?
+
+    conflict_confirmation_verifier.verified(token, purpose: :course_unavailability_conflicts) == {
+      platform_id:,
+      conflicts: snapshot
+    }
+  end
+
+  def conflict_snapshot
+    conflicting_discovery_sessions.map do |session|
+      {
+        session_id: session.id,
+        course_id: session.course_id,
+        occurrence_date: session.occurrence_date.iso8601,
+        confirmed_registration_count: session.subscriptions.count(&:confirmed?)
+      }
+    end
+  end
+
+  def conflict_confirmation_verifier
+    Rails.application.message_verifier(:course_unavailability_conflicts)
   end
 
   def discovery_session_conflicts

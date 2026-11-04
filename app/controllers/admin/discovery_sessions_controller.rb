@@ -26,7 +26,7 @@ module Admin
     def create
       @discovery_session = DiscoverySession.new(discovery_session_params)
 
-      if @discovery_session.save
+      if @discovery_session.save_with_course_locks
         redirect_to [:admin, @discovery_session], notice: t('.success'), status: :see_other
       else
         render :new, status: :unprocessable_content
@@ -34,7 +34,7 @@ module Admin
     end
 
     def update
-      if @discovery_session.update(discovery_session_params)
+      if @discovery_session.update_with_course_locks(discovery_session_params)
         redirect_to [:admin, @discovery_session], notice: t('.success'), status: :see_other
       else
         render :edit, status: :unprocessable_content

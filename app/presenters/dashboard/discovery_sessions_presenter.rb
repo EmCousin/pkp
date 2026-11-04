@@ -31,9 +31,13 @@ module Dashboard
     def legacy_discovery_sessions
       sessions = @platform.discovery_sessions.available
       sessions.where(occurs_on: nil)
-              .includes(:course, :subscriptions)
+              .includes(:subscriptions, course: :course_unavailability_periods)
               .order(:starts_at)
-              .reject { |session| session.course.unavailable_on?(session.occurrence_date) }
+              .reject do |session|
+        session.course.course_unavailability_periods.any? do |period|
+          session.occurrence_date.between?(period.starts_on, period.ends_on)
+        end
+      end
     end
   end
 end

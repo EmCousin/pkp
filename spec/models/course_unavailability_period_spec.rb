@@ -81,7 +81,7 @@ describe CourseUnavailabilityPeriod, type: :model do
     expect(period.conflicting_discovery_sessions).to contain_exactly(session, legacy_session)
     expect(period.conflicting_discovery_sessions.first.subscriptions.count(&:confirmed?)).to eq(1)
 
-    confirmed_ids = [session.id, legacy_session.id]
-    expect(period.save_with_course_locks(confirm_conflicts: true, confirmed_conflict_ids: confirmed_ids)).to be true
+    confirmation_token = period.conflict_confirmation_token
+    expect(period.save_with_course_locks(conflict_confirmation_token: confirmation_token)).to be true
   end
 end
