@@ -69,6 +69,7 @@ en:
     skip_to_content: "Skip to main content"
     send_reset_password_instructions: "Reset my password"
     are_you_sure: "Are you sure?"
+    cancel: "Cancel"
     save: "Save"
     welcome: "Welcome"
     select: "Select"
@@ -220,6 +221,8 @@ en:
               locked: "cannot be changed while the session has registrations"
               platform_locked: "cannot move a session to another platform"
               wrong_platform: "must belong to this platform"
+            starts_at:
+              unavailable: "is not available for this course"
         course:
           attributes:
             category:
@@ -230,6 +233,10 @@ en:
               wrong_platform: "must belong to this platform"
             ends_on:
               before_starts_on: "must be on or after the start date"
+    models:
+      course_unavailability_period:
+        one: "Course unavailability period"
+        other: "Course unavailability periods"
     attributes:
       user:
         first_name: "Account holder's first name"
@@ -521,6 +528,7 @@ en:
       coach: "Coach"
       members: "Members"
       courses: "Courses"
+      course_unavailability_periods: "Unavailability periods"
       subscriptions: "Subscriptions"
       platform_settings: "Settings"
       my_account: "My Account"
@@ -590,6 +598,16 @@ en:
 
   admin:
     course_unavailability_periods:
+      index:
+        title: "Course unavailability"
+        description: "Block discovery sessions and new attendance sheets for a date range."
+        new: "New period"
+        dates: "%{starts_on} to %{ends_on}"
+        empty: "No unavailability periods."
+      new:
+        title: "New unavailability period"
+      edit:
+        title: "Edit unavailability period"
       confirm:
         title: Discovery sessions are already scheduled
         description: This period will make existing sessions unavailable. Review their registrations before you continue.
@@ -598,6 +616,14 @@ en:
           other: "%{course}, %{date}: %{count} confirmed registrations"
         edit: Edit the period
         confirm: Confirm unavailability
+      show:
+        title: "Unavailability period"
+      create:
+        success: "Course unavailability period created"
+      update:
+        success: "Course unavailability period updated"
+      destroy:
+        success: "Course unavailability period deleted"
     platforms:
       edit:
         title: "Platform settings"

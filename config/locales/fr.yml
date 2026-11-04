@@ -182,6 +182,7 @@ fr:
               unavailable: ne correspond pas à une date disponible pour ce cours
             starts_at:
               taken: a déjà une séance programmée pour ce cours à cette date
+              unavailable: n'est pas disponible pour ce cours
         invoice:
           attributes:
             subscription:

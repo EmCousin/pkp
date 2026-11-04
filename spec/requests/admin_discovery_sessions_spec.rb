@@ -56,6 +56,27 @@ describe 'Admin discovery sessions', type: :request do
     expect(response).to have_http_status(:unprocessable_content)
   end
 
+  it 'explains an unavailable date in English' do
+    custom_date = course.next_discovery_date.tomorrow
+    create(:course_unavailability_period, platform: course.platform, courses: [course], starts_on: custom_date, ends_on: custom_date)
+
+    I18n.with_locale(:en) do
+      post admin_discovery_sessions_path, params: {
+        discovery_session: {
+          course_id: course.id,
+          starts_at: custom_date.in_time_zone.iso8601,
+          capacity: 6,
+          price: 20,
+          active: '1',
+          open: '1'
+        }
+      }
+    end
+
+    expect(response).to have_http_status(:unprocessable_content)
+    expect(response.parsed_body.text).to include('Starts at is not available for this course')
+  end
+
   it 'rejects activating a custom session on an unavailable date' do
     custom_date = course.next_discovery_date.tomorrow
     session = create(:discovery_session, course:, starts_at: custom_date.in_time_zone, active: false)

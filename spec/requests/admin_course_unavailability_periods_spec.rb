@@ -63,6 +63,66 @@ describe 'Admin course unavailability periods', type: :request do
     expect(response.body).to include('Date de fin', 'Cours concernés')
   end
 
+  context 'in English' do
+    around { |example| I18n.with_locale(:en) { example.run } }
+
+    it 'renders the complete admin flow' do
+      get admin_course_unavailability_periods_path
+      expect(response.parsed_body.text).to include(
+        'Course unavailability',
+        'Block discovery sessions and new attendance sheets for a date range.',
+        'New period',
+        'Unavailability periods'
+      )
+
+      get new_admin_course_unavailability_period_path
+      expect(response.parsed_body.text).to include('New unavailability period', 'Start date', 'End date', 'Courses', 'Cancel')
+      expect(response.parsed_body.css('input[type="submit"]').map { |input| input['value'] }).to include('Save')
+
+      post admin_course_unavailability_periods_path, params: {
+        course_unavailability_period: {
+          starts_on: '2027-01-05',
+          ends_on: '2027-01-04',
+          course_ids: []
+        }
+      }
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(response.parsed_body.text).to include('Course unavailability period', 'End date', 'Courses')
+
+      post admin_course_unavailability_periods_path, params: {
+        course_unavailability_period: {
+          starts_on: '2026-12-21',
+          ends_on: '2027-01-04',
+          course_ids: [course.id]
+        }
+      }
+      period = CourseUnavailabilityPeriod.last
+      follow_redirect!
+      expect(response.parsed_body.text).to include('Course unavailability period created', 'Unavailability period', 'Start date', 'End date', 'Courses')
+
+      get admin_course_unavailability_periods_path
+      expect(response.parsed_body.text).to include('21 December 2026 to 04 January 2027', 'Edit')
+      expect(response.parsed_body.css('input[type="submit"]').map { |input| input['value'] }).to include('Delete')
+
+      get edit_admin_course_unavailability_period_path(period)
+      expect(response.parsed_body.text).to include('Edit unavailability period')
+
+      patch admin_course_unavailability_period_path(period), params: {
+        course_unavailability_period: {
+          starts_on: '2026-12-22',
+          ends_on: '2027-01-05',
+          course_ids: [course.id]
+        }
+      }
+      follow_redirect!
+      expect(response.parsed_body.text).to include('Course unavailability period updated')
+
+      delete admin_course_unavailability_period_path(period)
+      follow_redirect!
+      expect(response.parsed_body.text).to include('Course unavailability period deleted', 'No unavailability periods.')
+    end
+  end
+
   it 'rejects a forged course from another platform' do
     other_platform = create(:platform, name: 'Other platform')
     other_course = create(:course, title: 'Other course', category: create(:category, platform: other_platform, title: 'Other category'))
