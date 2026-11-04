@@ -18,15 +18,28 @@ class CourseUnavailabilityPeriod < ApplicationRecord
     with_course_locks { destroy }
   end
 
+  def update_with_course_locks(attributes)
+    target_course_ids = Array(attributes[:course_ids]).compact_blank.map(&:to_i)
+
+    transaction do
+      lock_courses(course_ids | target_course_ids)
+      assign_attributes(attributes)
+      save
+    end
+  end
+
   private
 
   def with_course_locks
     transaction do
       locked_course_ids = course_ids
-      locked_course_ids |= course_unavailabilities.persisted.pluck(:course_id) if persisted?
-      Course.where(id: locked_course_ids).order(:id).lock.load
+      lock_courses(locked_course_ids)
       yield
     end
+  end
+
+  def lock_courses(course_ids)
+    Course.where(id: course_ids).order(:id).lock.load
   end
 
   def ends_on_cannot_precede_starts_on

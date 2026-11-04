@@ -1,0 +1,42 @@
+<%= form_with model: [:admin, course_unavailability_period], class: "space-y-6" do |form| %>
+  <% if course_unavailability_period.errors.any? %>
+    <div class="rounded-md border border-red-300 bg-red-50 p-4 text-red-800" role="alert">
+      <h2 class="font-semibold"><%= t('errors.template.header', count: course_unavailability_period.errors.count, model: course_unavailability_period.model_name.human) %></h2>
+      <ul class="mt-2 list-disc pl-5">
+        <% course_unavailability_period.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid gap-6 sm:grid-cols-2">
+    <div>
+      <%= form.label :starts_on, class: "block text-sm font-medium text-gray-700" %>
+      <%= form.date_field :starts_on, required: true, class: "mt-1 block w-full rounded-md border-gray-300" %>
+    </div>
+    <div>
+      <%= form.label :ends_on, class: "block text-sm font-medium text-gray-700" %>
+      <%= form.date_field :ends_on, required: true, class: "mt-1 block w-full rounded-md border-gray-300" %>
+    </div>
+  </div>
+
+  <fieldset class="rounded-lg border border-gray-200 p-5">
+    <legend class="px-2 font-semibold text-gray-900"><%= CourseUnavailabilityPeriod.human_attribute_name(:courses) %></legend>
+    <div class="mt-2 grid gap-3 sm:grid-cols-2">
+      <% @courses.each do |course| %>
+        <label class="flex items-start gap-3">
+          <%= check_box_tag 'course_unavailability_period[course_ids][]', course.id,
+                            course_unavailability_period.course_ids.include?(course.id),
+                            id: "course_unavailability_period_course_ids_#{course.id}" %>
+          <span><%= course.title %> <span class="text-sm text-gray-500"><%= course.category.title %></span></span>
+        </label>
+      <% end %>
+    </div>
+  </fieldset>
+
+  <div class="flex items-center justify-end gap-4">
+    <%= link_to t('defaults.cancel'), admin_course_unavailability_periods_path, class: "text-gray-700 hover:underline" %>
+    <%= form.submit t('defaults.save'), class: "rounded-md bg-slate-800 px-4 py-2 text-white hover:bg-slate-900" %>
+  </div>
+<% end %>

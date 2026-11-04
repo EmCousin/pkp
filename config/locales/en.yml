@@ -222,6 +222,12 @@ en:
           attributes:
             category:
               platform_locked: "cannot move a course to another platform"
+        course_unavailability_period:
+          attributes:
+            courses:
+              wrong_platform: "must belong to this platform"
+            ends_on:
+              before_starts_on: "must be on or after the start date"
     attributes:
       user:
         first_name: "Account holder's first name"
@@ -241,6 +247,10 @@ en:
       platform:
         name: "Name"
         medical_certificate_validity_seasons: "Medical certificate validity in seasons"
+      course_unavailability_period:
+        starts_on: "Start date"
+        ends_on: "End date"
+        courses: "Courses"
       subscription:
         statuses:
           confirmed_bank_transfer: "Paid by bank transfer"
