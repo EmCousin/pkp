@@ -66,7 +66,8 @@ class CourseUnavailabilityPeriod < ApplicationRecord
   end
 
   def confirmation_matches?(token, snapshot)
-    return snapshot.empty? if token.blank?
+    return true if snapshot.empty?
+    return false if token.blank?
 
     conflict_confirmation_verifier.verified(token, purpose: :course_unavailability_conflicts) == {
       platform_id:,

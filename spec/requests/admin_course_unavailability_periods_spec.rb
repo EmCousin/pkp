@@ -189,7 +189,7 @@ describe 'Admin course unavailability periods', type: :request do
     expect(conflict_confirmation_token).not_to eq(confirmation_token)
   end
 
-  it 'warns again when a conflict disappears after the warning' do
+  it 'creates the period when every conflict disappears after the warning' do
     discovery_session = create(:discovery_session, course:, starts_at: Time.zone.local(2026, 12, 22, 12))
     attributes = { starts_on: '2026-12-21', ends_on: '2027-01-04', course_ids: [course.id] }
     post admin_course_unavailability_periods_path, params: { course_unavailability_period: attributes }
@@ -202,9 +202,8 @@ describe 'Admin course unavailability periods', type: :request do
         course_unavailability_period: attributes,
         conflict_confirmation_token: confirmation_token
       }
-    end.not_to change(CourseUnavailabilityPeriod, :count)
-    expect(response).to have_http_status(:unprocessable_content)
-    expect(conflict_confirmation_token).not_to eq(confirmation_token)
+    end.to change(CourseUnavailabilityPeriod, :count).by(1)
+    expect(response).to have_http_status(:see_other)
   end
 
   it 'warns again when a conflict course changes after the warning' do
