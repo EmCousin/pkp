@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_26_180000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_04_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -160,6 +160,27 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_26_180000) do
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_contacts_on_user_id"
+  end
+
+  create_table "course_unavailabilities", force: :cascade do |t|
+    t.bigint "course_unavailability_period_id", null: false
+    t.bigint "course_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_course_unavailabilities_on_course_id"
+    t.index ["course_unavailability_period_id", "course_id"], name: "index_course_unavailabilities_on_period_and_course", unique: true
+    t.index ["course_unavailability_period_id"], name: "idx_on_course_unavailability_period_id_6cb66baea8"
+  end
+
+  create_table "course_unavailability_periods", force: :cascade do |t|
+    t.bigint "platform_id", null: false
+    t.date "starts_on", null: false
+    t.date "ends_on", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["platform_id", "starts_on", "ends_on"], name: "index_course_unavailability_periods_on_platform_and_dates"
+    t.index ["platform_id"], name: "index_course_unavailability_periods_on_platform_id"
+    t.check_constraint "starts_on <= ends_on", name: "course_unavailability_periods_valid_dates"
   end
 
   create_table "courses", force: :cascade do |t|
@@ -320,6 +341,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_26_180000) do
   add_foreign_key "camps_subscriptions", "subscriptions"
   add_foreign_key "categories", "platforms"
   add_foreign_key "contacts", "users"
+  add_foreign_key "course_unavailabilities", "course_unavailability_periods"
+  add_foreign_key "course_unavailabilities", "courses"
+  add_foreign_key "course_unavailability_periods", "platforms"
   add_foreign_key "courses", "categories"
   add_foreign_key "courses_subscriptions", "courses"
   add_foreign_key "courses_subscriptions", "subscriptions"

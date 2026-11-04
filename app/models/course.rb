@@ -25,6 +25,8 @@ class Course < ApplicationRecord
   has_many :attendance_sheets, dependent: :destroy
   has_many :attendance_records, through: :attendance_sheets
   has_many :discovery_sessions, dependent: :restrict_with_error
+  has_many :course_unavailabilities, dependent: :destroy
+  has_many :course_unavailability_periods, through: :course_unavailabilities
 
   enum :weekday, lundi: 1, mardi: 2, mercredi: 3, jeudi: 4, vendredi: 5, samedi: 6, dimanche: 7
 
@@ -48,7 +50,11 @@ class Course < ApplicationRecord
 
   def discovery_date_available?(date, today: Date.current)
     active? && discovery_enabled? && date.between?([today, DISCOVERY_START_DATE].max, discovery_season_end(today)) &&
-      date.cwday == self.class.weekdays.fetch(weekday)
+      date.cwday == self.class.weekdays.fetch(weekday) && !unavailable_on?(date)
+  end
+
+  def unavailable_on?(date)
+    course_unavailability_periods.where(starts_on: ..date, ends_on: date..).exists?
   end
 
   private
