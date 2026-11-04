@@ -30,6 +30,12 @@ class DiscoveryRegistration < EventRegistration
     SubscriptionMailer.confirm_discovery_subscription(self).deliver_later
   end
 
+  def save_with_registration_locks
+    discovery_session.course.with_lock do
+      discovery_session.with_lock { save }
+    end
+  end
+
   def transfer_to(target_session)
     errors.clear
     return false unless same_course?(target_session)

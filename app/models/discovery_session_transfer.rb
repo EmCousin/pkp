@@ -26,17 +26,21 @@ class DiscoverySessionTransfer
   end
 
   def perform
-    course.with_lock do
-      @available_dates = nil
-      return false unless valid?
-
-      target_session = DiscoverySession.find_or_create_for_course!(course:, occurs_on:)
-      return true if subscription.transfer_to(target_session)
-    end
-
+    course.with_lock { perform_with_locked_course? }
+  rescue ActiveRecord::RecordInvalid
     errors.add(:occurs_on, :unavailable)
     false
-  rescue ActiveRecord::RecordInvalid
+  end
+
+  private
+
+  def perform_with_locked_course?
+    @available_dates = nil
+    return false unless valid?
+
+    target_session = DiscoverySession.find_or_create_for_course!(course:, occurs_on:)
+    return true if subscription.transfer_to(target_session)
+
     errors.add(:occurs_on, :unavailable)
     false
   end

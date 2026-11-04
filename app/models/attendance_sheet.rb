@@ -12,17 +12,7 @@ class AttendanceSheet < ApplicationRecord
   class << self
     def find_or_create_for_regular_course(course, date = Date.current)
       course.with_lock do
-        sheet = find_by(course:, date:)
-        return populate_records(sheet, course) if sheet
-
-        sheet = new(course:, date:)
-        if course.unavailable_on?(date)
-          sheet.errors.add(:date, :unavailable)
-          return sheet
-        end
-
-        sheet.save!
-        populate_records(sheet, course)
+        find_or_create_regular_sheet(course, date)
       end
     end
 
@@ -34,6 +24,18 @@ class AttendanceSheet < ApplicationRecord
     end
 
     private
+
+    def find_or_create_regular_sheet(course, date)
+      sheet = find_by(course:, date:)
+      return populate_records(sheet, course) if sheet
+      return unavailable_sheet(course, date) if course.unavailable_on?(date)
+
+      populate_records(create!(course:, date:), course)
+    end
+
+    def unavailable_sheet(course, date)
+      new(course:, date:).tap { |sheet| sheet.errors.add(:date, :unavailable) }
+    end
 
     def populate_records(sheet, course)
       create_attendance_records(sheet, course)

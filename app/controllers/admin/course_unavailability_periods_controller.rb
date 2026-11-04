@@ -6,9 +6,8 @@ module Admin
     before_action :set_courses, only: %i[new create edit update]
 
     def index
-      @course_unavailability_periods = Current.platform.course_unavailability_periods
-                                                      .includes(:courses)
-                                                      .order(starts_on: :desc, created_at: :desc)
+      periods = Current.platform.course_unavailability_periods
+      @course_unavailability_periods = periods.includes(:courses).order(starts_on: :desc, created_at: :desc)
     end
 
     def show; end

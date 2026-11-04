@@ -54,7 +54,7 @@ class Course < ApplicationRecord
   end
 
   def unavailable_on?(date)
-    course_unavailability_periods.where(starts_on: ..date, ends_on: date..).exists?
+    course_unavailability_periods.exists?(starts_on: ..date, ends_on: date..)
   end
 
   private
