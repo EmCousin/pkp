@@ -13,23 +13,29 @@ module Admin
     def show; end
 
     def new
-      @course_unavailability_period = Current.platform.course_unavailability_periods.new
+      @course_unavailability_period = Current.platform.course_unavailability_periods.new(period_attributes_from_query)
     end
 
-    def edit; end
+    def edit
+      @course_unavailability_period.assign_attributes(period_attributes_from_query)
+    end
 
     def create
       @course_unavailability_period = Current.platform.course_unavailability_periods.new(course_unavailability_period_params)
-      if @course_unavailability_period.save_with_course_locks
+      if @course_unavailability_period.save_with_course_locks(**conflict_confirmation)
         redirect_to [:admin, @course_unavailability_period], notice: t('.success'), status: :see_other
+      elsif @course_unavailability_period.conflicting_discovery_sessions.any?
+        render :confirm, status: :unprocessable_content
       else
         render :new, status: :unprocessable_content
       end
     end
 
     def update
-      if @course_unavailability_period.update_with_course_locks(course_unavailability_period_params)
+      if @course_unavailability_period.update_with_course_locks(course_unavailability_period_params, **conflict_confirmation)
         redirect_to [:admin, @course_unavailability_period], notice: t('.success'), status: :see_other
+      elsif @course_unavailability_period.conflicting_discovery_sessions.any?
+        render :confirm, status: :unprocessable_content
       else
         render :edit, status: :unprocessable_content
       end
@@ -52,6 +58,19 @@ module Admin
 
     def course_unavailability_period_params
       params.expect(course_unavailability_period: [:starts_on, :ends_on, { course_ids: [] }])
+    end
+
+    def period_attributes_from_query
+      return {} unless params[:course_unavailability_period]
+
+      course_unavailability_period_params
+    end
+
+    def conflict_confirmation
+      return { confirm_conflicts: false, confirmed_conflict_ids: [] } unless params[:confirm_conflicts] == '1'
+
+      confirmed_ids = Current.platform.discovery_sessions.where(id: Array(params[:confirmed_conflict_ids])).ids
+      { confirm_conflicts: true, confirmed_conflict_ids: confirmed_ids }
     end
   end
 end

@@ -589,6 +589,15 @@ en:
         title: "Attendance sheet for %{course_title} - %{date}"
 
   admin:
+    course_unavailability_periods:
+      confirm:
+        title: Discovery sessions are already scheduled
+        description: This period will make existing sessions unavailable. Review their registrations before you continue.
+        conflict:
+          one: "%{course}, %{date}: %{count} confirmed registration"
+          other: "%{course}, %{date}: %{count} confirmed registrations"
+        edit: Edit the period
+        confirm: Confirm unavailability
     platforms:
       edit:
         title: "Platform settings"

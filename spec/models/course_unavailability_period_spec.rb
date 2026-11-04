@@ -59,4 +59,29 @@ describe CourseUnavailabilityPeriod, type: :model do
     expect(period).not_to be_valid
     expect(period.errors.of_kind?(:courses, :wrong_platform)).to be true
   end
+
+  it 'requires confirmation for active discovery sessions in the period' do
+    course.update!(active: true, discovery_enabled: true, discovery_price: 25, discovery_capacity: 12, weekday: :samedi)
+    session = create(:discovery_session,
+                     course:,
+                     occurs_on: Date.new(2027, 1, 2),
+                     starts_at: Time.zone.local(2027, 1, 2, 12))
+    legacy_session = create(:discovery_session, course:, starts_at: Time.zone.local(2027, 1, 3, 12))
+    create(:discovery_registration, discovery_session: session, status: :confirmed)
+    create(:discovery_registration, discovery_session: session, status: :archived)
+    create(:discovery_session, course:, starts_at: Time.zone.local(2027, 1, 4, 12), active: false)
+    period = build(:course_unavailability_period,
+                   platform:,
+                   courses: [course],
+                   starts_on: Date.new(2027, 1, 1),
+                   ends_on: Date.new(2027, 1, 4))
+
+    expect(period.save_with_course_locks).to be false
+    expect(period).not_to be_persisted
+    expect(period.conflicting_discovery_sessions).to contain_exactly(session, legacy_session)
+    expect(period.conflicting_discovery_sessions.first.subscriptions.count(&:confirmed?)).to eq(1)
+
+    confirmed_ids = [session.id, legacy_session.id]
+    expect(period.save_with_course_locks(confirm_conflicts: true, confirmed_conflict_ids: confirmed_ids)).to be true
+  end
 end

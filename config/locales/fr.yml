@@ -468,6 +468,14 @@ fr:
         title: Nouvelle période d'indisponibilité
       edit:
         title: Modifier la période d'indisponibilité
+      confirm:
+        title: Des cours découverte sont déjà programmés
+        description: Cette période rendra indisponibles des séances déjà créées. Vérifiez les inscriptions avant de continuer.
+        conflict:
+          one: "%{course}, le %{date} : %{count} inscription confirmée"
+          other: "%{course}, le %{date} : %{count} inscriptions confirmées"
+        edit: Modifier la période
+        confirm: Confirmer l'indisponibilité
       show:
         title: Période d'indisponibilité
       create:
