@@ -76,6 +76,23 @@ describe 'Admin course unavailability periods', type: :request do
     expect(response).to have_http_status(:unprocessable_content)
   end
 
+  it 'does not replace courses with a forged course from another platform' do
+    period = create(:course_unavailability_period, platform:, courses: [course])
+    other_platform = create(:platform, name: 'Other platform')
+    other_course = create(:course, category: create(:category, platform: other_platform, title: 'Other category'))
+
+    patch admin_course_unavailability_period_path(period), params: {
+      course_unavailability_period: {
+        starts_on: period.starts_on,
+        ends_on: period.ends_on,
+        course_ids: [other_course.id]
+      }
+    }
+
+    expect(response).to have_http_status(:unprocessable_content)
+    expect(period.reload.courses).to contain_exactly(course)
+  end
+
   it 'does not expose another platform period' do
     other_platform = create(:platform, name: 'Other platform')
     other_course = create(:course, category: create(:category, platform: other_platform, title: 'Other category'))

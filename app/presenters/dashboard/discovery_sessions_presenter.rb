@@ -25,8 +25,7 @@ module Dashboard
     end
 
     def available_discovery_dates
-      first_date = course&.next_discovery_date
-      first_date ? first_date.step(course.discovery_season_end, 7).to_a : []
+      course&.available_discovery_dates || []
     end
 
     def legacy_discovery_sessions
@@ -34,6 +33,7 @@ module Dashboard
       sessions.where(occurs_on: nil)
               .includes(:course, :subscriptions)
               .order(:starts_at)
+              .reject { |session| session.course.unavailable_on?(session.occurrence_date) }
     end
   end
 end

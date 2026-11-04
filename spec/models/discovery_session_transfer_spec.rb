@@ -59,6 +59,17 @@ describe DiscoverySessionTransfer, type: :model do
       expect(transfer).not_to be_valid
       expect(transfer.errors[:occurs_on]).to include("n'est plus disponible pour ce participant")
     end
+
+    it 'rejects an unavailable date' do
+      create(:course_unavailability_period,
+             platform: course.platform,
+             courses: [course],
+             starts_on: target_date,
+             ends_on: target_date)
+
+      expect(transfer).not_to be_valid
+      expect(transfer.errors.of_kind?(:occurs_on, :inclusion)).to be true
+    end
   end
 
   describe '#perform' do
@@ -69,6 +80,17 @@ describe DiscoverySessionTransfer, type: :model do
 
     it 'does not transfer and returns false when invalid' do
       transfer.occurs_on = target_date + 1.day
+
+      expect(transfer.perform).to be false
+      expect(subscription.reload.discovery_session).to eq(source_session)
+    end
+
+    it 'rejects a forged unavailable target date' do
+      create(:course_unavailability_period,
+             platform: course.platform,
+             courses: [course],
+             starts_on: target_date,
+             ends_on: target_date)
 
       expect(transfer.perform).to be false
       expect(subscription.reload.discovery_session).to eq(source_session)

@@ -45,6 +45,22 @@ describe 'Discovery attendance', type: :request do
     expect(response.body).to include(discovery_session.course.title)
   end
 
+  it 'keeps discovery attendance accessible during an unavailable period' do
+    sign_in create(:user, :admin, phone_number: '+33612345678')
+    subscription
+    date = discovery_session.occurrence_date
+    create(:course_unavailability_period,
+           platform: discovery_session.platform,
+           courses: [discovery_session.course],
+           starts_on: date,
+           ends_on: date)
+
+    get admin_discovery_session_path(discovery_session)
+
+    expect(response).to have_http_status(:ok)
+    expect(response.body).to include(subscription.member.full_name)
+  end
+
   it 'marks one discovery participant without affecting another' do
     sign_in create(:user, coach: true, phone_number: '+33612345678')
     other_subscription = create(

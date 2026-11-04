@@ -189,6 +189,8 @@ en:
               wrong_platform: "must belong to the same platform as the course"
         attendance_sheet:
           attributes:
+            date:
+              unavailable: "is not available for this course"
             course:
               locked: "cannot be changed while the sheet has attendance records"
               platform_locked: "cannot move an attendance sheet to another platform"

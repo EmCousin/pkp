@@ -13,7 +13,11 @@ module Dashboard
           year: @discovery_session.year
         )
 
-        if @discovery_session.with_lock { @subscription.save }
+        saved = @discovery_session.course.with_lock do
+          @discovery_session.with_lock { @subscription.save }
+        end
+
+        if saved
           redirect_to next_completion_step_path(@subscription), status: :see_other
         else
           redirect_back_or_to [:dashboard, @discovery_session], alert: @subscription.errors.full_messages.to_sentence

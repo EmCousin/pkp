@@ -212,6 +212,8 @@ fr:
               wrong_platform: doit appartenir à la même plateforme que le cours
         attendance_sheet:
           attributes:
+            date:
+              unavailable: n'est pas disponible pour ce cours
             course:
               locked: ne peut pas être modifié lorsque la feuille contient des présences
               platform_locked: ne peut pas déplacer une feuille de présence vers une autre plateforme

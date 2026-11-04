@@ -58,7 +58,7 @@ class DiscoverySession < ApplicationRecord
   end
 
   def attendance_sheet
-    @attendance_sheet ||= AttendanceSheet.find_or_create_for_course(course, occurrence_date)
+    @attendance_sheet ||= AttendanceSheet.find_or_create_for_discovery_session(self)
   end
 
   def session_attendance_records
@@ -86,6 +86,7 @@ class DiscoverySession < ApplicationRecord
 
   def open_for_registration?
     return false unless active? && open? && registration_open?
+    return false if course.unavailable_on?(occurrence_date)
 
     occurs_on.nil? || (course.active? && course.discovery_enabled?)
   end

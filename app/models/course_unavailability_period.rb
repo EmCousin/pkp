@@ -20,12 +20,16 @@ class CourseUnavailabilityPeriod < ApplicationRecord
 
   def update_with_course_locks(attributes)
     target_course_ids = Array(attributes[:course_ids]).compact_blank.map(&:to_i)
+    saved = false
 
     transaction do
       lock_courses(course_ids | target_course_ids)
       assign_attributes(attributes)
-      save
+      saved = save
+      raise ActiveRecord::Rollback unless saved
     end
+
+    saved
   end
 
   private

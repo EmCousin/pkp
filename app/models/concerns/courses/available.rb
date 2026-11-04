@@ -39,7 +39,7 @@ module Courses
       dates = first_date.step(discovery_season_end, 7).to_a
       dates.delete(excluding)
       sessions_by_date = discovery_sessions.starting_from(Time.current).index_by(&:occurrence_date)
-      dates.select { |date| discovery_date_open?(sessions_by_date[date]) }
+      dates.select { |date| !unavailable_on?(date) && discovery_date_open?(sessions_by_date[date]) }
     end
 
     private

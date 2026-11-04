@@ -10,12 +10,32 @@ class AttendanceSheet < ApplicationRecord
   validate :course_cannot_change_with_records, if: :will_save_change_to_course_id?
 
   class << self
-    def find_or_create_for_course(course, date = Time.current.to_date)
-      sheet = find_or_create_by!(
-        course:,
-        date:
-      )
+    def find_or_create_for_regular_course(course, date = Date.current)
+      course.with_lock do
+        sheet = find_by(course:, date:)
+        return populate_records(sheet, course) if sheet
 
+        sheet = new(course:, date:)
+        if course.unavailable_on?(date)
+          sheet.errors.add(:date, :unavailable)
+          return sheet
+        end
+
+        sheet.save!
+        populate_records(sheet, course)
+      end
+    end
+
+    def find_or_create_for_discovery_session(discovery_session)
+      course = discovery_session.course
+      sheet = find_or_create_by!(course:, date: discovery_session.occurrence_date)
+
+      populate_records(sheet, course)
+    end
+
+    private
+
+    def populate_records(sheet, course)
       create_attendance_records(sheet, course)
 
       sheet

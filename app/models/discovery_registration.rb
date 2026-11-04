@@ -34,7 +34,9 @@ class DiscoveryRegistration < EventRegistration
     errors.clear
     return false unless same_course?(target_session)
 
-    target_session.with_lock { transfer_to_available_session(target_session) }
+    target_session.course.with_lock do
+      target_session.with_lock { transfer_to_available_session(target_session) }
+    end
   rescue ActiveRecord::RecordNotUnique
     errors.add(:discovery_session, :unavailable)
     false

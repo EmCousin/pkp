@@ -26,10 +26,13 @@ class DiscoverySessionTransfer
   end
 
   def perform
-    return false unless valid?
+    course.with_lock do
+      @available_dates = nil
+      return false unless valid?
 
-    target_session = DiscoverySession.find_or_create_for_course!(course:, occurs_on:)
-    return true if subscription.transfer_to(target_session)
+      target_session = DiscoverySession.find_or_create_for_course!(course:, occurs_on:)
+      return true if subscription.transfer_to(target_session)
+    end
 
     errors.add(:occurs_on, :unavailable)
     false
