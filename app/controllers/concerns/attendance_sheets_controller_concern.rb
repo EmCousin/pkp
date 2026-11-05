@@ -21,7 +21,7 @@ module AttendanceSheetsControllerConcern
     else
       redirect_to polymorphic_path([namespace, :courses]),
                   alert: @attendance_sheet.errors.full_messages.to_sentence,
-                  status: :see_other
+                  status: :found
     end
   end
 

@@ -40,6 +40,7 @@ describe 'Coach attendance', type: :request do
       post coach_course_attendance_sheets_path(course)
     end.not_to change(AttendanceSheet, :count)
 
+    expect(response).to have_http_status(:found)
     expect(response).to redirect_to(coach_courses_path)
   end
 

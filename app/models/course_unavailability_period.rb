@@ -10,7 +10,9 @@ class CourseUnavailabilityPeriod < ApplicationRecord
   validates :starts_on, :ends_on, presence: true
   validates :ends_on, comparison: { greater_than_or_equal_to: :starts_on }, allow_nil: true, if: :starts_on?
   validates :courses, presence: true
-  validate :courses_must_belong_to_platform, if: :platform_id?
+  validates_each :courses, if: :platform do |period, attribute, courses|
+    period.errors.add(attribute, :wrong_platform) unless courses.all? { |course| course.platform == period.platform }
+  end
 
   def conflicting_discovery_sessions
     return DiscoverySession.none unless platform && starts_on && ends_on
@@ -27,9 +29,5 @@ class CourseUnavailabilityPeriod < ApplicationRecord
     legacy_sessions = sessions.where(occurs_on: nil, starts_at: legacy_times)
 
     scheduled_sessions.or(legacy_sessions)
-  end
-
-  def courses_must_belong_to_platform
-    errors.add(:courses, :wrong_platform) unless courses.all? { |course| course.platform == platform }
   end
 end
