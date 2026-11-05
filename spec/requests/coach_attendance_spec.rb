@@ -15,7 +15,7 @@ describe 'Coach attendance', type: :request do
   end
 
   it 'updates only the targeted attendance record' do
-    sheet = AttendanceSheet.find_or_create_for_course(course)
+    sheet = AttendanceSheet.find_or_create_for_regular_course(course)
     record_a = sheet.attendance_records.find_by(member: member_a)
     record_b = sheet.attendance_records.find_by(member: member_b)
     record_a.update!(status: :excused)
@@ -26,5 +26,34 @@ describe 'Coach attendance', type: :request do
     expect(response).to redirect_to(coach_attendance_sheet_path(sheet))
     expect(record_b.reload.status).to eq('absent')
     expect(record_a.reload.status).to eq('excused')
+  end
+
+  it 'rejects a new regular attendance sheet on an unavailable date' do
+    course.update!(features_attendance_sheet: true)
+    create(:course_unavailability_period,
+           platform: course.platform,
+           courses: [course],
+           starts_on: Date.current,
+           ends_on: Date.current)
+
+    expect do
+      post coach_course_attendance_sheets_path(course)
+    end.not_to change(AttendanceSheet, :count)
+
+    expect(response).to have_http_status(:found)
+    expect(response).to redirect_to(coach_courses_path)
+  end
+
+  it 'keeps an existing regular attendance sheet accessible on an unavailable date' do
+    sheet = AttendanceSheet.create!(course:, date: Date.current)
+    create(:course_unavailability_period,
+           platform: course.platform,
+           courses: [course],
+           starts_on: Date.current,
+           ends_on: Date.current)
+
+    get coach_attendance_sheet_path(sheet)
+
+    expect(response).to have_http_status(:ok)
   end
 end

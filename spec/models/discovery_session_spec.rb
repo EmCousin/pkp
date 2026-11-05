@@ -127,7 +127,7 @@ describe DiscoverySession, type: :model do
       create(:discovery_registration, discovery_session:, member: confirmed_member, status: :confirmed)
       create(:discovery_registration, discovery_session:, member: other_member, status: :archived)
       # Create attendance records for the course (as the sheet does via upsert_all)
-      AttendanceSheet.find_or_create_for_course(discovery_session.course, discovery_session.occurrence_date)
+      AttendanceSheet.find_or_create_for_discovery_session(discovery_session)
     end
 
     it 'returns only attendance records for confirmed session members' do
@@ -139,7 +139,7 @@ describe DiscoverySession, type: :model do
     it 'excludes members from other sessions on the same course' do
       # Another member has an attendance record on the sheet (via annual subscription)
       # but is not registered for this discovery session
-      sheet = AttendanceSheet.find_or_create_for_course(discovery_session.course, discovery_session.occurrence_date)
+      sheet = AttendanceSheet.find_or_create_for_discovery_session(discovery_session)
       outsider = create(:member, platform: discovery_session.platform)
       AttendanceRecord.create!(attendance_sheet: sheet, member: outsider)
 

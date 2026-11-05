@@ -1,0 +1,42 @@
+<div class="mx-auto max-w-3xl space-y-6">
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900"><%= t('.title') %></h1>
+    <p class="mt-2 text-gray-700"><%= t('.description') %></p>
+  </div>
+
+  <div class="rounded-md border border-amber-300 bg-amber-50 p-4 text-amber-900" role="alert">
+    <ul class="list-disc space-y-2 pl-5">
+      <% @conflicting_discovery_sessions.each do |session| %>
+        <li>
+          <%= t('.conflict', course: session.course.title, date: l(session.occurrence_date, format: :long),
+                             count: session.subscriptions.count(&:confirmed?)) %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+
+  <div class="flex items-center justify-end gap-4">
+    <% period_attributes = {
+         starts_on: @course_unavailability_period.starts_on,
+         ends_on: @course_unavailability_period.ends_on,
+         course_ids: @course_unavailability_period.course_ids
+       } %>
+    <% edit_path = if @course_unavailability_period.persisted?
+                     edit_admin_course_unavailability_period_path(@course_unavailability_period,
+                                                                  course_unavailability_period: period_attributes)
+                   else
+                     new_admin_course_unavailability_period_path(course_unavailability_period: period_attributes)
+                   end %>
+    <%= link_to t('.edit'), edit_path, class: "text-gray-700 hover:underline" %>
+
+    <%= form_with model: [:admin, @course_unavailability_period] do |form| %>
+      <%= form.hidden_field :starts_on %>
+      <%= form.hidden_field :ends_on %>
+      <% @course_unavailability_period.course_ids.each do |course_id| %>
+        <%= form.hidden_field :course_ids, value: course_id, multiple: true %>
+      <% end %>
+      <%= form.hidden_field :conflict_confirmation, value: true %>
+      <%= form.submit t('.confirm'), class: "rounded-md bg-amber-700 px-4 py-2 text-white hover:bg-amber-800" %>
+    <% end %>
+  </div>
+</div>

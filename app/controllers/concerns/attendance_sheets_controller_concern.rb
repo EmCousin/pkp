@@ -15,8 +15,14 @@ module AttendanceSheetsControllerConcern
   end
 
   def create
-    @attendance_sheet = AttendanceSheet.find_or_create_for_course(@course)
-    redirect_to polymorphic_path([namespace, @attendance_sheet]), status: :see_other
+    @attendance_sheet = AttendanceSheet.find_or_create_for_regular_course(@course)
+    if @attendance_sheet.persisted?
+      redirect_to polymorphic_path([namespace, @attendance_sheet]), status: :see_other
+    else
+      redirect_to polymorphic_path([namespace, :courses]),
+                  alert: @attendance_sheet.errors.full_messages.to_sentence,
+                  status: :found
+    end
   end
 
   def update

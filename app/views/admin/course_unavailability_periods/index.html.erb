@@ -1,0 +1,33 @@
+<div class="max-w-5xl mx-auto px-4 py-8">
+  <div class="flex items-center justify-between gap-4 mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900"><%= t('.title') %></h1>
+      <p class="mt-1 text-gray-600"><%= t('.description') %></p>
+    </div>
+    <%= link_to t('.new'), new_admin_course_unavailability_period_path,
+                class: "inline-flex items-center px-4 py-2 rounded-md bg-slate-800 text-white hover:bg-slate-900" %>
+  </div>
+
+  <div class="space-y-4">
+    <% @course_unavailability_periods.each do |period| %>
+      <article class="bg-white border border-gray-200 rounded-lg p-5 flex items-start justify-between gap-4">
+        <div>
+          <h2 class="font-semibold text-gray-900">
+            <%= link_to t('.dates', starts_on: l(period.starts_on, format: :long), ends_on: l(period.ends_on, format: :long)),
+                        [:admin, period], class: "hover:underline" %>
+          </h2>
+          <p class="mt-2 text-sm text-gray-600"><%= period.courses.map(&:title).to_sentence %></p>
+        </div>
+        <div class="flex items-center gap-3">
+          <%= link_to t('defaults.edit'), [:edit, :admin, period], class: "text-sm text-blue-700 hover:underline" %>
+          <%= button_to t('defaults.destroy'), [:admin, period], method: :delete,
+                        class: "text-sm text-red-700 hover:underline" %>
+        </div>
+      </article>
+    <% end %>
+
+    <% if @course_unavailability_periods.empty? %>
+      <p class="bg-white border border-gray-200 rounded-lg p-5 text-gray-600"><%= t('.empty') %></p>
+    <% end %>
+  </div>
+</div>

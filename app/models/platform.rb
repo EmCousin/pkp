@@ -10,6 +10,7 @@ class Platform < ApplicationRecord
   has_many :attendance_sheets, through: :courses
   has_many :attendance_records, through: :attendance_sheets
   has_many :camps, dependent: :restrict_with_error
+  has_many :course_unavailability_periods, dependent: :destroy
 
   validates :name, presence: true, uniqueness: true
   validates :domain, presence: true, uniqueness: true

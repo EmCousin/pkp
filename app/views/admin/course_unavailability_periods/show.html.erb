@@ -1,0 +1,26 @@
+<div class="max-w-4xl mx-auto px-4 py-8">
+  <div class="bg-white border border-gray-200 rounded-lg p-6">
+    <h1 class="text-2xl font-bold text-gray-900"><%= t('.title') %></h1>
+    <dl class="mt-6 space-y-4">
+      <div>
+        <dt class="text-sm font-medium text-gray-500"><%= CourseUnavailabilityPeriod.human_attribute_name(:starts_on) %></dt>
+        <dd class="text-gray-900"><%= l(@course_unavailability_period.starts_on, format: :long) %></dd>
+      </div>
+      <div>
+        <dt class="text-sm font-medium text-gray-500"><%= CourseUnavailabilityPeriod.human_attribute_name(:ends_on) %></dt>
+        <dd class="text-gray-900"><%= l(@course_unavailability_period.ends_on, format: :long) %></dd>
+      </div>
+      <div>
+        <dt class="text-sm font-medium text-gray-500"><%= CourseUnavailabilityPeriod.human_attribute_name(:courses) %></dt>
+        <dd class="text-gray-900"><%= @course_unavailability_period.courses.map(&:title).to_sentence %></dd>
+      </div>
+    </dl>
+
+    <div class="mt-8 flex items-center gap-4">
+      <%= link_to t('defaults.back'), admin_course_unavailability_periods_path, class: "text-gray-700 hover:underline" %>
+      <%= link_to t('defaults.edit'), [:edit, :admin, @course_unavailability_period], class: "text-blue-700 hover:underline" %>
+      <%= button_to t('defaults.destroy'), [:admin, @course_unavailability_period], method: :delete,
+                    class: "text-red-700 hover:underline" %>
+    </div>
+  </div>
+</div>
