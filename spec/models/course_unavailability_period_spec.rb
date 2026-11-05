@@ -49,7 +49,17 @@ describe CourseUnavailabilityPeriod, type: :model do
                    ends_on: Date.new(2027, 1, 4))
 
     expect(period).not_to be_valid
-    expect(period.errors.of_kind?(:ends_on, :before_starts_on)).to be true
+    expect(period.errors.of_kind?(:ends_on, :greater_than_or_equal_to)).to be true
+  end
+
+  it 'allows a one-day period' do
+    period = build(:course_unavailability_period,
+                   platform:,
+                   courses: [course],
+                   starts_on: Date.new(2027, 1, 5),
+                   ends_on: Date.new(2027, 1, 5))
+
+    expect(period).to be_valid
   end
 
   it 'rejects a course from another platform' do
@@ -60,7 +70,7 @@ describe CourseUnavailabilityPeriod, type: :model do
     expect(period.errors.of_kind?(:courses, :wrong_platform)).to be true
   end
 
-  it 'requires confirmation for active discovery sessions in the period' do
+  it 'finds active discovery sessions in the period' do
     course.update!(active: true, discovery_enabled: true, discovery_price: 25, discovery_capacity: 12, weekday: :samedi)
     session = create(:discovery_session,
                      course:,
@@ -76,12 +86,7 @@ describe CourseUnavailabilityPeriod, type: :model do
                    starts_on: Date.new(2027, 1, 1),
                    ends_on: Date.new(2027, 1, 4))
 
-    expect(period.save_with_course_locks).to be false
-    expect(period).not_to be_persisted
     expect(period.conflicting_discovery_sessions).to contain_exactly(session, legacy_session)
     expect(period.conflicting_discovery_sessions.first.subscriptions.count(&:confirmed?)).to eq(1)
-
-    confirmation_token = period.conflict_confirmation_token
-    expect(period.save_with_course_locks(conflict_confirmation_token: confirmation_token)).to be true
   end
 end

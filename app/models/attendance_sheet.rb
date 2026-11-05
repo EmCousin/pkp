@@ -11,9 +11,7 @@ class AttendanceSheet < ApplicationRecord
 
   class << self
     def find_or_create_for_regular_course(course, date = Date.current)
-      course.with_lock do
-        find_or_create_regular_sheet(course, date)
-      end
+      course.with_lock { find_or_create_regular_sheet(course, date) }
     end
 
     def find_or_create_for_discovery_session(discovery_session)

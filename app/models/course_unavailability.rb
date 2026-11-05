@@ -5,14 +5,10 @@ class CourseUnavailability < ApplicationRecord
   belongs_to :course
 
   validates :course_id, uniqueness: { scope: :course_unavailability_period_id }
-  validate :course_must_belong_to_period_platform
+  validates :course_platform,
+            comparison: { equal_to: :course_unavailability_period_platform, message: :wrong_platform },
+            if: %i[course_platform course_unavailability_period_platform]
 
-  private
-
-  def course_must_belong_to_period_platform
-    return unless course && course_unavailability_period
-    return if course.platform == course_unavailability_period.platform
-
-    errors.add(:course, :wrong_platform)
-  end
+  delegate :platform, to: :course, prefix: true, allow_nil: true, private: true
+  delegate :platform, to: :course_unavailability_period, prefix: true, allow_nil: true, private: true
 end

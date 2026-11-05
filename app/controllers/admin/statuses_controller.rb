@@ -5,7 +5,7 @@ module Admin
     before_action :set_subscription!
 
     def update
-      if update_status
+      if @subscription.update(status: status_param)
         @subscription.notify_confirmation! if @subscription.confirmed?
         redirect_back_or_to [:admin, @subscription], notice: t('.success'), status: :see_other
       else
@@ -14,12 +14,6 @@ module Admin
     end
 
     private
-
-    def update_status
-      return @subscription.update(status: status_param) unless @subscription.is_a?(DiscoveryRegistration)
-
-      @subscription.update_status_with_registration_locks(status_param)
-    end
 
     def set_subscription!
       @subscription = Current.platform.subscriptions.find(params.expect(:subscription_id))

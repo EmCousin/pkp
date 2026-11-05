@@ -223,7 +223,7 @@ fr:
             courses:
               wrong_platform: doivent appartenir à cette plateforme
             ends_on:
-              before_starts_on: doit être postérieure ou égale à la date de début
+              greater_than_or_equal_to: doit être postérieure ou égale à la date de début
     models:
       tombstoned_member: "Membre supprimé #%{id}"
       camp:

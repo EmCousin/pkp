@@ -232,7 +232,7 @@ en:
             courses:
               wrong_platform: "must belong to this platform"
             ends_on:
-              before_starts_on: "must be on or after the start date"
+              greater_than_or_equal_to: "must be on or after the start date"
     models:
       course_unavailability_period:
         one: "Course unavailability period"

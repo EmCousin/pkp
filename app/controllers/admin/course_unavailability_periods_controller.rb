@@ -22,27 +22,24 @@ module Admin
 
     def create
       @course_unavailability_period = Current.platform.course_unavailability_periods.new(course_unavailability_period_params)
-      if @course_unavailability_period.save_with_course_locks(**conflict_confirmation)
-        redirect_to [:admin, @course_unavailability_period], notice: t('.success'), status: :see_other
-      elsif @course_unavailability_period.conflict_confirmation_required?
-        render :confirm, status: :unprocessable_content
-      else
-        render :new, status: :unprocessable_content
-      end
+      respond_to_persistence(persistence_outcome, :new)
     end
 
     def update
-      if @course_unavailability_period.update_with_course_locks(course_unavailability_period_params, **conflict_confirmation)
-        redirect_to [:admin, @course_unavailability_period], notice: t('.success'), status: :see_other
-      elsif @course_unavailability_period.conflict_confirmation_required?
-        render :confirm, status: :unprocessable_content
-      else
-        render :edit, status: :unprocessable_content
+      outcome = nil
+      CourseUnavailabilityPeriod.transaction do
+        @course_unavailability_period.assign_attributes(course_unavailability_period_params)
+        outcome = persistence_outcome
+        raise ActiveRecord::Rollback unless outcome == :saved
       end
+      respond_to_persistence(outcome, :edit)
+    rescue ActiveRecord::RecordNotSaved
+      @course_unavailability_period.errors.add(:courses, :wrong_platform)
+      respond_to_persistence(:invalid, :edit)
     end
 
     def destroy
-      @course_unavailability_period.destroy_with_course_locks
+      @course_unavailability_period.destroy
       redirect_to admin_course_unavailability_periods_path, notice: t('.success'), status: :see_other
     end
 
@@ -57,7 +54,7 @@ module Admin
     end
 
     def course_unavailability_period_params
-      params.expect(course_unavailability_period: [:starts_on, :ends_on, { course_ids: [] }])
+      params.expect(course_unavailability_period: [:starts_on, :ends_on, :conflict_confirmation, { course_ids: [] }])
     end
 
     def period_attributes_from_query
@@ -66,8 +63,25 @@ module Admin
       course_unavailability_period_params
     end
 
-    def conflict_confirmation
-      { conflict_confirmation_token: params[:conflict_confirmation_token] }
+    def persistence_outcome
+      return :invalid unless @course_unavailability_period.valid?
+
+      @conflicting_discovery_sessions = @course_unavailability_period.conflicting_discovery_sessions.to_a
+      return :confirmation_required if @conflicting_discovery_sessions.any? &&
+                                       !@course_unavailability_period.conflict_confirmation?
+
+      @course_unavailability_period.save ? :saved : :invalid
+    end
+
+    def respond_to_persistence(outcome, form_action)
+      case outcome
+      when :saved
+        redirect_to [:admin, @course_unavailability_period], notice: t('.success'), status: :see_other
+      when :confirmation_required
+        render :confirm, status: :unprocessable_content
+      else
+        render form_action, status: :unprocessable_content
+      end
     end
   end
 end

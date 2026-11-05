@@ -18,16 +18,11 @@ module Subscriptions
     end
 
     def confirm!
-      confirm_without_lock!
-    end
-
-    def confirm_without_lock!
       return if confirmed? || archived?
 
       confirmed!
       notify_confirmation!
     end
-    private :confirm_without_lock!
 
     def notify_confirmation!
       SubscriptionMailer.confirm_subscription(self).deliver_later

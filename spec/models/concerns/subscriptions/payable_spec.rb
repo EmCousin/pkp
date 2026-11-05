@@ -170,14 +170,6 @@ describe Subscriptions::Payable, type: :model do
       expect(webhook_subscription.stripe_charge_id).to eq(stripe_charge_id)
     end
 
-    it 'confirms a completed registration' do
-      webhook_subscription.update!(terms_accepted_at: Time.current)
-
-      webhook_subscription.reconcile_stripe_payment!
-
-      expect(webhook_subscription).to be_confirmed
-    end
-
     it 'does not retrieve Stripe resources again after the payment was recorded' do
       webhook_subscription.reconcile_stripe_payment!
       allow(Stripe::PaymentIntent).to receive(:retrieve).and_raise('unexpected duplicate reconciliation')

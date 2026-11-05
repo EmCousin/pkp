@@ -5,7 +5,7 @@ module Subscriptions
     extend ActiveSupport::Concern
 
     def verify_stripe_payment!(payment_intent_id:, payment_intent_client_secret:, redirect_status:)
-      with_payment_reconciliation_locks do
+      with_lock do
         next if paid?
         next unless stripe_payment_intent_id?
 
@@ -18,7 +18,7 @@ module Subscriptions
     end
 
     def reconcile_stripe_payment!
-      with_payment_reconciliation_locks do
+      with_lock do
         next if paid?
         next unless stripe_payment_intent_id?
 
@@ -51,11 +51,7 @@ module Subscriptions
       return unless valid_charge?(charge)
 
       update!(paid_at: Time.zone.at(charge.created), payment_method: :credit_card, stripe_charge_id: charge.id)
-      confirm_without_lock! if completed? && !archived?
-    end
-
-    def with_payment_reconciliation_locks(&)
-      with_lock(&)
+      confirm! if completed? && !archived?
     end
   end
 end

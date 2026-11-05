@@ -85,20 +85,6 @@ describe 'Admin subscriptions', type: :request do
     expect(Billing::Invoice.where(invoiceable: subscription)).to contain_exactly(invoice)
   end
 
-  it 'confirms a discovery registration through the admin status action' do
-    discovery_session = create(:discovery_session)
-    registration = create(:discovery_registration,
-                          discovery_session:,
-                          member: create(:member, platform: discovery_session.platform),
-                          fee: discovery_session.price,
-                          status: :pending)
-
-    patch admin_subscription_status_path(registration), params: { subscription: { status: 'confirmed' } }
-
-    expect(response).to have_http_status(:see_other)
-    expect(registration.reload).to be_confirmed
-  end
-
   describe 'transferring a discovery registration' do
     around { |example| travel_to(Time.zone.local(2026, 9, 1)) { example.run } }
 

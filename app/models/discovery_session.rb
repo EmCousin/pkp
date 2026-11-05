@@ -58,23 +58,6 @@ class DiscoverySession < ApplicationRecord
     end
   end
 
-  def save_with_course_locks
-    transaction do
-      lock_courses([course_id])
-      save
-    end
-  end
-
-  def update_with_course_locks(attributes)
-    target_course_id = attributes[:course_id].presence&.to_i
-
-    transaction do
-      lock_courses([course_id, target_course_id].compact)
-      lock!
-      update(attributes)
-    end
-  end
-
   def attendance_sheet
     @attendance_sheet ||= AttendanceSheet.find_or_create_for_discovery_session(self)
   end
@@ -119,10 +102,6 @@ class DiscoverySession < ApplicationRecord
   end
 
   private
-
-  def lock_courses(course_ids)
-    Course.where(id: course_ids).order(:id).lock.load
-  end
 
   def course_must_be_available
     return unless course && starts_at

@@ -6,7 +6,7 @@
 
   <div class="rounded-md border border-amber-300 bg-amber-50 p-4 text-amber-900" role="alert">
     <ul class="list-disc space-y-2 pl-5">
-      <% @course_unavailability_period.conflicting_discovery_sessions.each do |session| %>
+      <% @conflicting_discovery_sessions.each do |session| %>
         <li>
           <%= t('.conflict', course: session.course.title, date: l(session.occurrence_date, format: :long),
                              count: session.subscriptions.count(&:confirmed?)) %>
@@ -33,9 +33,9 @@
       <%= form.hidden_field :starts_on %>
       <%= form.hidden_field :ends_on %>
       <% @course_unavailability_period.course_ids.each do |course_id| %>
-        <%= hidden_field_tag 'course_unavailability_period[course_ids][]', course_id %>
+        <%= form.hidden_field :course_ids, value: course_id, multiple: true %>
       <% end %>
-      <%= hidden_field_tag :conflict_confirmation_token, @course_unavailability_period.conflict_confirmation_token %>
+      <%= form.hidden_field :conflict_confirmation, value: true %>
       <%= form.submit t('.confirm'), class: "rounded-md bg-amber-700 px-4 py-2 text-white hover:bg-amber-800" %>
     <% end %>
   </div>
