@@ -30,6 +30,6 @@ class CourseUnavailabilityPeriod < ApplicationRecord
   end
 
   def courses_must_belong_to_platform
-    errors.add(:courses, :wrong_platform) unless courses.all? { |course| course.platform_id == platform_id }
+    errors.add(:courses, :wrong_platform) unless courses.all? { |course| course.platform == platform }
   end
 end
