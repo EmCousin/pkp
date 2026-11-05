@@ -7,14 +7,14 @@
   },
   "resolutions": {
     "@rails/actioncable": "8.1.400",
-    "@rails/activestorage": "8.1.400"
+    "@rails/activestorage": "8.1.401"
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.23",
     "@rails/actioncable": "^8.1.400",
     "@rails/actiontext": "^8.1.400",
-    "@rails/activestorage": "^8.1.400",
+    "@rails/activestorage": "^8.1.401",
     "@stripe/stripe-js": "^1.54.1",
     "esbuild": "^0.28.2",
     "file-loader": "^6.2.0",
