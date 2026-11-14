@@ -22,7 +22,7 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   username: rails
   host: <%= ENV['DOCKER'] ? 'db' : ENV.fetch('DATABASE_HOST', 'localhost') %>
-  port: 5432
+  port: <%= ENV.fetch('DATABASE_PORT', 5432) %>
 
 sqlite: &sqlite
   adapter: sqlite3

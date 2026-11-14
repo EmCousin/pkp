@@ -253,7 +253,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_26_180000) do
     t.bigint "discovery_session_id"
     t.datetime "doctor_certified_at"
     t.decimal "fee", null: false
-    t.datetime "medical_certificate_validated_at"
     t.bigint "member_id"
     t.datetime "paid_at"
     t.bigint "parent_subscription_id"
@@ -265,6 +264,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_26_180000) do
     t.string "type", default: "AnnualSubscription", null: false
     t.datetime "updated_at", precision: nil, null: false
     t.integer "year", null: false
+    t.datetime "medical_certificate_validated_at"
     t.index ["created_at"], name: "index_subscriptions_on_created_at", order: :desc
     t.index ["discovery_session_id", "member_id"], name: "index_one_subscription_per_discovery_session_and_member", unique: true, where: "(discovery_session_id IS NOT NULL)"
     t.index ["discovery_session_id"], name: "index_subscriptions_on_discovery_session_id"
