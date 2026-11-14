@@ -36,10 +36,11 @@ module Courses
       first_date = next_discovery_date
       return [] unless first_date
 
-      dates = first_date.step(discovery_season_end, 7).to_a
-      dates.delete(excluding)
       sessions_by_date = discovery_sessions.starting_from(Time.current).index_by(&:occurrence_date)
-      dates.select { |date| discovery_date_open?(sessions_by_date[date]) }
+      unavailable_ranges = course_unavailability_periods.pluck(:starts_on, :ends_on)
+      first_date.step(discovery_season_end, 7).to_a
+                .without(excluding)
+                .select { |date| discovery_date_open_on?(date, sessions_by_date, unavailable_ranges) }
     end
 
     private
@@ -51,7 +52,12 @@ module Courses
     end
 
     def discovery_date_open?(session)
-      session.nil? || (session.open_for_registration? && !session.fully_booked?)
+      session.nil? || (session.open_for_registration_on_available_course? && !session.fully_booked?)
+    end
+
+    def discovery_date_open_on?(date, sessions_by_date, unavailable_ranges)
+      unavailable = unavailable_ranges.any? { |starts_on, ends_on| date.between?(starts_on, ends_on) }
+      !unavailable && discovery_date_open?(sessions_by_date[date])
     end
   end
 end

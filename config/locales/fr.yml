@@ -182,6 +182,7 @@ fr:
               unavailable: ne correspond pas à une date disponible pour ce cours
             starts_at:
               taken: a déjà une séance programmée pour ce cours à cette date
+              unavailable: n'est pas disponible pour ce cours
         invoice:
           attributes:
             subscription:
@@ -212,9 +213,17 @@ fr:
               wrong_platform: doit appartenir à la même plateforme que le cours
         attendance_sheet:
           attributes:
+            date:
+              unavailable: n'est pas disponible pour ce cours
             course:
               locked: ne peut pas être modifié lorsque la feuille contient des présences
               platform_locked: ne peut pas déplacer une feuille de présence vers une autre plateforme
+        course_unavailability_period:
+          attributes:
+            courses:
+              wrong_platform: doivent appartenir à cette plateforme
+            ends_on:
+              greater_than_or_equal_to: doit être postérieure ou égale à la date de début
     models:
       tombstoned_member: "Membre supprimé #%{id}"
       camp:
@@ -353,6 +362,10 @@ fr:
         annual: Cours annuels
         discovery: Cours découverte
         attendance_status: Présence
+      course_unavailability_period:
+        starts_on: Date de début
+        ends_on: Date de fin
+        courses: Cours concernés
 
   helpers:
     submit:
@@ -445,6 +458,33 @@ fr:
         inactive: Inactif
 
   admin:
+    course_unavailability_periods:
+      index:
+        title: Indisponibilités des cours
+        description: Bloquez les cours découverte et les nouvelles feuilles de présence pendant une période.
+        new: Nouvelle période
+        dates: Du %{starts_on} au %{ends_on}
+        empty: Aucune période d'indisponibilité.
+      new:
+        title: Nouvelle période d'indisponibilité
+      edit:
+        title: Modifier la période d'indisponibilité
+      confirm:
+        title: Des cours découverte sont déjà programmés
+        description: Cette période rendra indisponibles des séances déjà créées. Vérifiez les inscriptions avant de continuer.
+        conflict:
+          one: "%{course}, le %{date} : %{count} inscription confirmée"
+          other: "%{course}, le %{date} : %{count} inscriptions confirmées"
+        edit: Modifier la période
+        confirm: Confirmer l'indisponibilité
+      show:
+        title: Période d'indisponibilité
+      create:
+        success: Période d'indisponibilité créée
+      update:
+        success: Période d'indisponibilité mise à jour
+      destroy:
+        success: Période d'indisponibilité supprimée
     platforms:
       edit:
         title: Configuration de la plateforme
@@ -1239,6 +1279,7 @@ fr:
       courses: "Cours"
       camps: "Stages"
       discovery_sessions: "Cours découverte"
+      course_unavailability_periods: "Indisponibilités"
       subscriptions: "Inscriptions"
       platform_settings: "Configuration"
       my_account: "Mon compte"

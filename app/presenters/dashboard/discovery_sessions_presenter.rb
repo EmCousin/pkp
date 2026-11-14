@@ -25,15 +25,19 @@ module Dashboard
     end
 
     def available_discovery_dates
-      first_date = course&.next_discovery_date
-      first_date ? first_date.step(course.discovery_season_end, 7).to_a : []
+      course&.available_discovery_dates || []
     end
 
     def legacy_discovery_sessions
       sessions = @platform.discovery_sessions.available
       sessions.where(occurs_on: nil)
-              .includes(:course, :subscriptions)
+              .includes(:subscriptions, course: :course_unavailability_periods)
               .order(:starts_at)
+              .reject do |session|
+        session.course.course_unavailability_periods.any? do |period|
+          session.occurrence_date.between?(period.starts_on, period.ends_on)
+        end
+      end
     end
   end
 end

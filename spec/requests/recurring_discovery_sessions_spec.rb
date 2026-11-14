@@ -34,6 +34,24 @@ describe 'Recurring discovery sessions', type: :request do
     end
   end
 
+  it 'does not offer dates in an unavailable period, including both boundaries' do
+    travel_to Time.zone.local(2026, 9, 1) do
+      first_blocked_date = Date.new(2026, 9, 19)
+      last_blocked_date = Date.new(2026, 9, 26)
+      create(:course_unavailability_period,
+             platform: course.platform,
+             courses: [course],
+             starts_on: first_blocked_date,
+             ends_on: last_blocked_date)
+
+      get dashboard_discovery_sessions_path(category_id: category.id, course_id: course.id)
+
+      options = response.parsed_body.css('select[name="occurs_on"] option').pluck('value')
+      expect(options).not_to include(first_blocked_date.iso8601, last_blocked_date.iso8601)
+      expect(options).to include('2026-09-12', '2026-10-03')
+    end
+  end
+
   it 'creates an occurrence for a valid course date' do
     occurs_on = course.next_discovery_date
 
@@ -77,6 +95,86 @@ describe 'Recurring discovery sessions', type: :request do
     end.not_to change(DiscoverySession, :count)
 
     expect(response).to redirect_to(dashboard_discovery_sessions_path(category_id: category.id, course_id: course.id))
+  end
+
+  it 'rejects a forged unavailable date' do
+    occurs_on = course.next_discovery_date
+    create(:course_unavailability_period,
+           platform: course.platform,
+           courses: [course],
+           starts_on: occurs_on,
+           ends_on: occurs_on)
+
+    expect do
+      post dashboard_discovery_sessions_path, params: { course_id: course.id, occurs_on: occurs_on.iso8601 }
+    end.not_to change(DiscoverySession, :count)
+  end
+
+  it 'rejects registration for an existing automatic session that becomes unavailable' do
+    discovery_session = DiscoverySession.find_or_create_for_course!(course:, occurs_on: course.next_discovery_date)
+    create(:course_unavailability_period,
+           platform: course.platform,
+           courses: [course],
+           starts_on: discovery_session.occurrence_date,
+           ends_on: discovery_session.occurrence_date)
+
+    expect do
+      post dashboard_discovery_session_subscriptions_path(discovery_session), params: { member_id: member.id }
+    end.not_to change(DiscoveryRegistration, :count)
+  end
+
+  it 'rejects registration for an existing legacy session that becomes unavailable' do
+    occurs_on = course.next_discovery_date
+    discovery_session = create(:discovery_session,
+                               course:,
+                               occurs_on: nil,
+                               starts_at: Time.zone.local(occurs_on.year, occurs_on.month, occurs_on.day, 18),
+                               active: true,
+                               open: true)
+    create(:course_unavailability_period,
+           platform: course.platform,
+           courses: [course],
+           starts_on: occurs_on,
+           ends_on: occurs_on)
+
+    expect do
+      post dashboard_discovery_session_subscriptions_path(discovery_session), params: { member_id: member.id }
+    end.not_to change(DiscoveryRegistration, :count)
+  end
+
+  it 'hides an existing legacy session that becomes unavailable' do
+    occurs_on = course.next_discovery_date
+    discovery_session = create(:discovery_session,
+                               course:,
+                               occurs_on: nil,
+                               starts_at: Time.zone.local(occurs_on.year, occurs_on.month, occurs_on.day, 18),
+                               active: true,
+                               open: true)
+    create(:course_unavailability_period,
+           platform: course.platform,
+           courses: [course],
+           starts_on: occurs_on,
+           ends_on: occurs_on)
+
+    get dashboard_discovery_sessions_path
+
+    expect(response.body).not_to include(dashboard_discovery_session_path(discovery_session))
+  end
+
+  it 'does not change annual enrollment availability' do
+    travel_to Time.zone.local(2026, 9, 1) do
+      create(:pricing, category:, starts_at: Date.current, ends_at: Date.current + 1.year)
+      create(:course_unavailability_period,
+             platform: course.platform,
+             courses: [course],
+             starts_on: Date.current,
+             ends_on: Date.current + 1.month)
+
+      expect do
+        post dashboard_subscriptions_path,
+             params: { subscription: { member_id: member.id, category_id: category.id, course_ids: [course.id] } }
+      end.to change(AnnualSubscription, :count).by(1)
+    end
   end
 
   it 'blocks new registrations after automatic discovery is disabled' do
